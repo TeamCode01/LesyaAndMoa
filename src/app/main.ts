@@ -22,5 +22,5 @@ createApp(App)
         lang: quasarLang,
         iconSet: quasarIconSet,
     })
-    .mount('#app');
-    .component('MaskInput', MaskInput)
+    .mount('#app')
+    .component('MaskInput', MaskInput);
