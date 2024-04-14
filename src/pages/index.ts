@@ -1,1 +1,1 @@
-export * as HomePage from './HomePage';
+export * as MainPage from './MainPage';
