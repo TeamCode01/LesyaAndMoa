@@ -57,13 +57,12 @@
     </footer>
 </template>
 <script setup></script>
-<style lang="scss">
+<style lang="scss" scoped>
 .footer {
     padding: 28px 0px 55px 0px;
     background-color: $footer;
     width: 100%;
-    position: absolute;
-    bottom: 0;
+    margin-top: auto;
     &__logo {
         &_main {
             height: 40px;
@@ -120,7 +119,7 @@
 }
 .creator {
     @media (max-width: 1024px) {
-       max-width: 301px;
+        max-width: 301px;
     }
 }
 </style>
