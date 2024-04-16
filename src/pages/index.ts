@@ -1,3 +1,2 @@
-export * as HomePage from './HomePage';
-
 export * as LoginPage from './LoginPage';
+export * as MainPage from './MainPage';
