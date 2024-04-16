@@ -24,6 +24,7 @@
             </div>
             <a class="form-question-link form-link-reg">Зарегистрироваться</a>
         </div>
+        <img class="img-auth" src="@app/assets/img/auth/Moa.png" alt="" />
     </div>
 </template>
 
@@ -31,9 +32,12 @@
 <style lang="scss" scoped>
 .d-flex {
     display: flex;
+    row-gap: 50px;
     justify-content: center;
+    position: relative;
 }
 .Login {
+    margin: 50px 0 200px 0;
     display: flex;
     flex-direction: column;
     max-width: 500px;
@@ -94,5 +98,10 @@
 }
 .form-link-reg {
     align-self: center;
+}
+.img-auth {
+    position: absolute;
+    right: -15px;
+    top: 100px;
 }
 </style>

@@ -56,3 +56,22 @@ const updateValue = (event) => {
     console.log('textt', event.target.value);
 };
 </script>
+<style lang="scss" scoped>
+input {
+    font: normal;
+}
+
+.form-input input {
+    font-size: 16px;
+    width: 100%;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+}
+
+.form-input input::placeholder {
+    font-size: 16px;
+    font-family: 'Nunito', sans-serif;
+}
+</style>
