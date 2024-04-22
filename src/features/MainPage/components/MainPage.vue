@@ -8,7 +8,7 @@
                 Интерактивные задания и увлекательные сценарии помогают
                 развивать ключевые навыки чтения и письма
             </p>
-            <router-link to="reg" class="link">
+            <router-link to="Registration" class="link">
                 <Button label="Зарегистрироваться" class="btn_primary main__btn"></Button></router-link>
         </div>
     </div>
@@ -111,9 +111,14 @@
                 </p>
             </div>
         </div>
-        <router-link to="reg" class="link">
-            <Button label="Зарегистрироваться" class="btn_primary main__btn"></Button></router-link>
+        <router-link to="Registration" class="link">
+            <Button label="Зарегистрироваться" class="btn_primary main__btn"></Button>
+        </router-link>
     </div>
+
+
+    <Button @click="showTask = true" label="show" class="btn_primary main__btn"></Button>
+    <FirstTask @close="close" v-if="showTask"></FirstTask>
     <div class="news">
         <h2 class="title-h2 news__title">Новости</h2>
         <Carousel :data="slideItems"></Carousel>
@@ -123,6 +128,7 @@
 import { ref } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Carousel } from '@shared/components/carousel';
+import { FirstTask } from '@features/FirstTask/components';
 import news from "@app/assets/backgrounds/news.png";
 
 const slideItems = ref([
@@ -157,6 +163,12 @@ const slideItems = ref([
         date: '22.12.2023'
     },
 ])
+
+const showTask = ref(false);
+
+const close = () => {
+    showTask.value = false;
+};
 </script>
 <style lang="scss" scoped>
 .main {
