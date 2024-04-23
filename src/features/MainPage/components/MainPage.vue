@@ -117,7 +117,7 @@
     </div>
 
 
-    <Button @click="showTask = true" label="show" class="btn_primary main__btn"></Button>
+    <!-- <Button @click="showTask = true" label="show" class="btn_primary main__btn"></Button> -->
     <FirstTask @close="close" v-if="showTask"></FirstTask>
     <div class="news">
         <h2 class="title-h2 news__title">Новости</h2>
