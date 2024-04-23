@@ -11,6 +11,7 @@
         @click="clickOnButton"
     >
         <span>{{ label }}</span>
+        <img v-if="isImage === true" :src="image" alt="img">
     </button>
 </template>
 <script setup>
@@ -43,6 +44,18 @@ const props = defineProps({
         type: String,
         default: 'normal',
     },
+    disabled: {
+        type: Boolean,
+        required: false,
+    },
+    image: {
+        type: String,
+        required: false,
+    },
+    isImage: {
+        type: Boolean,
+        required: false,
+    }
 });
 
 const emit = defineEmits(['click']);

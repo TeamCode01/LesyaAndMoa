@@ -40,7 +40,6 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/RegisterPage/components/RegisterPage.vue'),
             },
-
             {
                 path: '/AboutProject',
                 name: 'AboutProject',
@@ -60,6 +59,14 @@ const routes: RouteRecordRaw[] = [
                 name: 'PolicyPage',
                 component: () =>
                     import('@pages/PolicyPage/components/PolicyPage.vue'),
+            },
+            {
+
+                path: '/Game',
+                name: 'Game',
+                component: () =>
+                    import('@pages/StartGamePage/components/StartGamePage.vue'),
+
             },
         ],
     },
