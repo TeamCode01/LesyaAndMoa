@@ -10,6 +10,7 @@
 </template>
 <script setup>
 import { Sidebar } from "@widgets/SideBarGame";
+
 </script>
 <style lang="scss" scoped>
 .game {

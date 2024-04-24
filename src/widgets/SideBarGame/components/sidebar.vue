@@ -10,7 +10,8 @@
       </div>
 
     </div>
-    <Button class="start" :isImage="true" :image="arrow" label="Старт" />
+    <Button class="start" :isImage="true" @click="openTask(1)" :image="arrow" label="Старт" />
+    <FirstTask @close="close" :open="showTask"></FirstTask>
   </div>
 
 
@@ -19,6 +20,7 @@
 import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
 import { ref } from 'vue';
+import { FirstTask } from '@features/FirstTask/components';
 
 const tasks = ref([
   { id: 1, name: 'Задание 1', disabled: false, done: false },
@@ -32,6 +34,16 @@ const tasks = ref([
   { id: 9, name: 'Задание 9', disabled: true, done: false },
   { id: 10, name: 'Задание 10', disabled: true, done: false },
 ])
+
+const showTask = ref(false);
+
+const close = () => {
+  showTask.value = false;
+};
+
+const openTask = (task) => {
+  showTask.value = true;
+}
 </script>
 <style lang="scss" scoped>
 .sidebar {
