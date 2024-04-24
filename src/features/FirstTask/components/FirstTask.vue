@@ -1,5 +1,5 @@
 <template>
-  <div class="FirstTask">
+  <div class="FirstTask" v-if="open">
 
     <div class="FirstTask__wrapper">
       <div class="close" @click="hide">
@@ -36,6 +36,14 @@ import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next'
 const emit = defineEmits(['close']);
 
+const props = defineProps({
+  open: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+});
+
 const hide = () => {
   emit('close');
 };
@@ -44,14 +52,19 @@ const words = ref(['медведи и зайцы', 'Вместе они сост
 const words_two = ref(['В нашем языке', 'в леса и поля', 'есть иероглифы', 'и складываются']);
 const words_three = ref(['явления и предметы', 'есть буквы.', 'Все вместе они образуют МОЗАИКУ']);
 const answer = ref('');
-
+const dropIndex = ref(-1);
 const drag = (event) => {
   event.dataTransfer.setData("text", event.target.value);
+  dropIndex.value = event.target.dataset.index;
 }
 
 const drop = (event) => {
+  if (dropIndex.value !== -1) {
+    words.value.splice(dropIndex.value, 1);
+    dropIndex.value = -1;
+  }
   event.target.value += event.dataTransfer.getData("text");
-  answer.value = event.target.value;
+  answer.value = event.target.value + " " + answer.value;
   // words.value.splice(index.oldIndex, 1);
   // words.value.splice(index.newIndex, 0, words.value.splice(index.oldIndex, 1)[0]);
 }
@@ -66,7 +79,7 @@ const allowDrop = (event) => {
   position: absolute;
   left: 0;
   right: 0;
-  top: 0;
+  top: 17.4%;
   bottom: 0;
   background-color: white;
   z-index: 999;
@@ -107,6 +120,8 @@ const allowDrop = (event) => {
       border-radius: 20px;
       margin-top: 68px;
       border: none;
+      resize: none;
+      height: 100px;
     }
   }
 
