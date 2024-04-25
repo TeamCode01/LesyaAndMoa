@@ -9,7 +9,7 @@
       <div class="draggable-list ">
         <div class="list-group FirstTask__wrapper_block">
           <q-btn v-for="(item, index) in words" :key="index" class="list-group-item item" draggable="true"
-            @dragstart="drag($event)" @dragover.prevent :value="item">
+            @dragstart="drag($event, index)" @dragover.prevent :value="item">
             {{ item }}
           </q-btn>
         </div>
@@ -52,21 +52,19 @@ const words = ref(['медведи и зайцы', 'Вместе они сост
 const words_two = ref(['В нашем языке', 'в леса и поля', 'есть иероглифы', 'и складываются']);
 const words_three = ref(['явления и предметы', 'есть буквы.', 'Все вместе они образуют МОЗАИКУ']);
 const answer = ref('');
-const dropIndex = ref(-1);
-const drag = (event) => {
+
+// const all = [...words.value, ...words_two.value, ...words_three.value];
+const dropIndex = ref(words.value.length - 1);
+const arr = ref();
+const drag = (event, index) => {
   event.dataTransfer.setData("text", event.target.value);
-  dropIndex.value = event.target.dataset.index;
+  dropIndex.value = index;
 }
 
 const drop = (event) => {
-  if (dropIndex.value !== -1) {
     words.value.splice(dropIndex.value, 1);
-    dropIndex.value = -1;
-  }
-  event.target.value += event.dataTransfer.getData("text");
-  answer.value = event.target.value + " " + answer.value;
-  // words.value.splice(index.oldIndex, 1);
-  // words.value.splice(index.newIndex, 0, words.value.splice(index.oldIndex, 1)[0]);
+    answer.value += " " + event.dataTransfer.getData("text");
+  // answer.value = event.target.value += "  " + ;
 }
 
 const allowDrop = (event) => {
