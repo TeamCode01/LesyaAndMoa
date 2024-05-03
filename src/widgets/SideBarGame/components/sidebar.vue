@@ -5,13 +5,15 @@
       <div class="sidebar__bg">
         <div :class="{ disabled: item.disabled === true }" class="task" v-for="item in tasks" :key="item.id">{{
           item.name
-        }} <img v-if="item.disabled === false && item.done === false" src="@app/assets/icons/play.svg" /><img
+          }} <img class="icon" v-if="item.disabled === false && item.done === false"
+            src="@app/assets/icons/play.svg" /><img class="icon"
             v-else-if="item.disabled === true && item.done === false" src="@app/assets/icons/block.svg" /></div>
       </div>
 
     </div>
-    <Button class="start" :isImage="true" @click="openTask(1)" :image="arrow" label="Старт" />
-    <FirstTask @close="close" :open="showTask"></FirstTask>
+    <Button class="start" :isImage="true" @click="openTask(3)" :image="arrow" label="Старт" />
+    <!-- <FirstTask @close="close" :open="showTask"></FirstTask> -->
+    <ThirdTask @close="close" :open="showTask"></ThirdTask>
   </div>
 
 
@@ -21,6 +23,7 @@ import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
 import { ref } from 'vue';
 import { FirstTask } from '@features/FirstTask/components';
+import { ThirdTask } from '@features/ThirdTask/components'
 
 const tasks = ref([
   { id: 1, name: 'Задание 1', disabled: false, done: false },
@@ -36,6 +39,7 @@ const tasks = ref([
 ])
 
 const showTask = ref(false);
+const showTaskThird = ref(false);
 
 const close = () => {
   showTask.value = false;
@@ -43,9 +47,17 @@ const close = () => {
 
 const openTask = (task) => {
   showTask.value = true;
+  console.log("its");
 }
 </script>
 <style lang="scss" scoped>
+.icon {
+  @media (max-width: 1024px) {
+    max-width: 10px;
+    width: 100%;
+  }
+}
+
 .sidebar {
   background-color: $pink;
   border-radius: 20px 0px 0px 20px;
@@ -54,12 +66,22 @@ const openTask = (task) => {
   max-width: 362px;
   height: 600px;
 
+  @media (max-width: 1024px) {
+    height: 470px;
+    max-width: 292px;
+    padding: 40px;
+  }
+
   &__wrapper {
     padding: 16px;
     background-color: white;
     border-radius: 20px;
     margin: 40px auto;
     max-height: 312px;
+
+    @media (max-width: 1024px) {
+      max-height: 270px;
+    }
   }
 
   &__title {
@@ -67,6 +89,10 @@ const openTask = (task) => {
     color: $text-primary;
     font-family: 'Nunito', sans-serif;
     font-weight: 500;
+
+    @media (max-width: 1024px) {
+      font-size: 22px;
+    }
   }
 
   &__bg {
@@ -76,6 +102,11 @@ const openTask = (task) => {
     height: 255px;
     padding: 8px 0;
     overflow-y: scroll;
+
+    @media (max-width: 1024px) {
+      height: 185px;
+      padding: 0px;
+    }
   }
 }
 
@@ -94,6 +125,12 @@ const openTask = (task) => {
   display: flex;
   justify-content: space-between;
   cursor: pointer;
+
+  @media (max-width: 1024px) {
+    max-width: 180px;
+    height: 38px;
+    font-size: 18px;
+  }
 }
 
 .start {
@@ -104,6 +141,12 @@ const openTask = (task) => {
   justify-content: center;
   align-items: center;
   column-gap: 32px;
+
+  @media (max-width: 1024px) {
+    max-width: 212px;
+    height: 48px;
+    column-gap: 28px;
+  }
 }
 
 .disabled {
@@ -124,6 +167,15 @@ const openTask = (task) => {
   cursor: pointer;
   max-height: 148px;
   width: 8px;
+
+  @media (max-width: 1024px) {
+    background: white;
+    border-radius: 0px;
+    cursor: pointer;
+    max-height: 0px;
+    width: 0px;
+  }
+
 }
 
 .sidebar__bg::-webkit-scrollbar-thumb:hover {

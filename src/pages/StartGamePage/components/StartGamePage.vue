@@ -17,4 +17,12 @@ import { Sidebar } from "@widgets/SideBarGame";
   display: flex;
   padding: 60px 0px;
 }
+
+img {
+  @media (max-width: 1024px) {
+    height: 470px;
+    max-width: 565px;
+    width: 100%;
+  }
+}
 </style>
