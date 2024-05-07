@@ -1,5 +1,5 @@
 <template>
-  <div class="FirstTask" v-if="open">
+  <div class="FirstTask">
 
     <div class="FirstTask__wrapper" >
       <div class="close" @click="hide">
@@ -35,14 +35,6 @@
 import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next'
 const emit = defineEmits(['close']);
-
-const props = defineProps({
-  open: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-});
 
 const hide = () => {
   emit('close');
