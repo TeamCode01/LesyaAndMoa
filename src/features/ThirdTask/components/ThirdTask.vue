@@ -1,5 +1,5 @@
 <template>
-  <div class="ThirdTask" v-if="open">
+  <div class="ThirdTask">
 
     <div class="ThirdTask__wrapper">
       <div class="close" @click="hide">
@@ -10,15 +10,21 @@
       <div class="draggable-list ">
         <div class="list-group ThirdTask__wrapper_block">
           <q-btn v-for="(item, index) in letters" :key="index" class="list-group-item item" draggable="true"
-            @dragstart="drag($event, index)" @dragover.prevent :value="item">
+            @dragstart="drag($event, index)">
             {{ item }}
           </q-btn>
         </div>
       </div>
       <div class="ThirdTask__answer">
-        <div class="box" @drop="drop($event)" @dragover="allowDrop($event)"></div>
-        <div class="box2" @drop="dropTwo($event)" @dragover="allowDrop($event)"></div>
-        <div class="box3" @drop="dropThree($event)" @dragover="allowDrop($event)"></div>
+        <div class="box" id="box" @drop="drop($event, array)" @dragover="allowDrop($event)">
+          <div class="letter__item" v-for="item in array">{{ item }}</div>
+        </div>
+        <div class="box2" id="box2" @drop="drop($event, array_two)" @dragover="allowDrop($event)">
+          <div class="letter__item" v-for="item in array_two">{{ item }}</div>
+        </div>
+        <div class="box3" id="box3" @drop="drop($event, array_three)" @dragover="allowDrop($event)">
+          <div class="letter__item" v-for="item in array_three">{{ item }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -28,52 +34,64 @@ import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next'
 const emit = defineEmits(['close']);
 
-const props = defineProps({
-  open: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-});
-
 const hide = () => {
   emit('close');
 };
 
 const letters = ref(['к', 'ч', 'с', 'о', 'ф', 'з', 'и', 'г', 'д']);
 const answer = ref('');
+const array = ref([]);
+const array_two = ref([]);
+const array_three = ref([]);
 const dropIndex = ref(letters.value.length - 1);
 const drag = (event, index) => {
-  event.dataTransfer.setData("text", event.target.value);
+  event.dataTransfer.setData("text", event.target.innerText);
   dropIndex.value = index;
 }
 
-const drop = (event) => {
+const drop = (event, arr) => {
+  const letter = event.dataTransfer.getData("text");
   letters.value.splice(dropIndex.value, 1);
-  answer.value += " " + event.dataTransfer.getData("text");
+  arr.push(letter);
 }
 
 const allowDrop = (event) => {
   event.preventDefault();
 }
+
 </script>
 <style lang="scss" scoped>
 .box {
   background-image: url('@app/assets/creatures/box1.png');
   width: 279px;
   height: 226px;
+  display: grid;
+  grid-template-columns: 55px 2px;
+  row-gap: 4px;
+  padding: 110px 40px;
+  z-index: 999;
 }
 
-.box2{
+.box2 {
   background-image: url('@app/assets/creatures/box2.png');
   width: 279px;
   height: 226px;
+  display: grid;
+  grid-template-columns: 55px 2px;
+  row-gap: 4px;
+  padding: 110px 40px;
+  z-index: 999;
 }
 
 .box3 {
   background-image: url('@app/assets/creatures/box3.png');
   width: 279px;
   height: 226px;
+  display: grid;
+  grid-template-columns: 55px 2px;
+  row-gap: 4px;
+  padding: 110px 40px;
+  z-index: 999;
 }
 
 .ThirdTask {
@@ -132,5 +150,19 @@ const allowDrop = (event) => {
 
 .close {
   cursor: pointer;
+}
+
+.letter__item {
+  width: 48px;
+  height: 48px;
+  border: 1.5px solid #A8664A;
+  font-family: 'Nunito', sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+  color: #A8664A;
+  padding: 7.5px 15px;
+  z-index: 998;
+  border-radius: 6px;
+
 }
 </style>

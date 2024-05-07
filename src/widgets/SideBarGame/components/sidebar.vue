@@ -3,7 +3,7 @@
     <p class="sidebar__title">Выбери задание!</p>
     <div class="sidebar__wrapper">
       <div class="sidebar__bg">
-        <div :class="{ disabled: item.disabled === true }" class="task" v-for="item in tasks" :key="item.id">{{
+        <div @click="switchTask(item.id, item.open)" :class="{ disabled: item.disabled === true }" class="task" v-for="item in tasks" :key="item.id">{{
           item.name
           }} <img class="icon" v-if="item.disabled === false && item.done === false"
             src="@app/assets/icons/play.svg" /><img class="icon"
@@ -11,9 +11,9 @@
       </div>
 
     </div>
-    <Button class="start" :isImage="true" @click="openTask(3)" :image="arrow" label="Старт" />
-    <!-- <FirstTask @close="close" :open="showTask"></FirstTask> -->
-    <ThirdTask @close="close" :open="showTask"></ThirdTask>
+    <Button class="start" :isImage="true" @click="openTask(taskId, SeeTask)" :image="arrow" label="Старт" />
+    <FirstTask @close="close()" v-show="SeeTask && taskId === 1"></FirstTask>
+    <ThirdTask @close="close()" v-show="SeeTask && taskId === 3"></ThirdTask>
   </div>
 
 
@@ -26,29 +26,38 @@ import { FirstTask } from '@features/FirstTask/components';
 import { ThirdTask } from '@features/ThirdTask/components'
 
 const tasks = ref([
-  { id: 1, name: 'Задание 1', disabled: false, done: false },
-  { id: 2, name: 'Задание 2', disabled: true, done: false },
-  { id: 3, name: 'Задание 3', disabled: true, done: false },
-  { id: 4, name: 'Задание 4', disabled: true, done: false },
-  { id: 5, name: 'Задание 5', disabled: true, done: false },
-  { id: 6, name: 'Задание 6', disabled: true, done: false },
-  { id: 7, name: 'Задание 7', disabled: true, done: false },
-  { id: 8, name: 'Задание 8', disabled: true, done: false },
-  { id: 9, name: 'Задание 9', disabled: true, done: false },
-  { id: 10, name: 'Задание 10', disabled: true, done: false },
+  { id: 1, name: 'Задание 1', disabled: false, done: false, open: false },
+  { id: 2, name: 'Задание 2', disabled: false, done: false, open: false },
+  { id: 3, name: 'Задание 3', disabled: false, done: false, open: false },
+  { id: 4, name: 'Задание 4', disabled: true, done: false, open: false },
+  { id: 5, name: 'Задание 5', disabled: true, done: false, open: false },
+  { id: 6, name: 'Задание 6', disabled: true, done: false, open: false },
+  { id: 7, name: 'Задание 7', disabled: true, done: false, open: false },
+  { id: 8, name: 'Задание 8', disabled: true, done: false, open: false },
+  { id: 9, name: 'Задание 9', disabled: true, done: false, open: false },
+  { id: 10, name: 'Задание 10', disabled: true, done: false, open: false },
 ])
 
-const showTask = ref(false);
-const showTaskThird = ref(false);
+ const SeeTask = ref(null);
+ const taskId = ref(null);
 
-const close = () => {
-  showTask.value = false;
-};
+ const close = () => {
+  SeeTask.value = false;
+ };
 
-const openTask = (task) => {
-  showTask.value = true;
-  console.log("its");
+const switchTask = (id, openId) => {
+  taskId.value = id;
+  SeeTask.value = openId;
+  // console.log('goo', id, openId);
 }
+
+const openTask = (taskId) => {
+  SeeTask.value = true;
+  // console.log("woo", taskId);
+}
+
+
+
 </script>
 <style lang="scss" scoped>
 .icon {
