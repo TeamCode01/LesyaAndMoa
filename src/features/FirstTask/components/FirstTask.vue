@@ -1,13 +1,14 @@
 <template>
   <div class="FirstTask">
 
-    <div class="FirstTask__wrapper" >
+    <div class="FirstTask__wrapper">
       <div class="close" @click="hide">
         <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
       </div>
+      <Timer :time="5"></Timer>
       <h4 class="title-h4 FirstTask__title"> Составь рассказ про АЛФАВИТ из подходящих фраз.</h4>
       <div class="draggable-list ">
-        <div class="list-group FirstTask__wrapper_block">
+        <!-- <div class="list-group FirstTask__wrapper_block">
           <q-btn v-for="(item, index) in words" :key="index" class="list-group-item item" draggable="true"
             @dragstart="drag($event, index)" @dragover.prevent :value="item">
             {{ item }}
@@ -25,34 +26,42 @@
           @dragstart="drag($event, index)" @dragover.prevent :value="item">
           {{ item }}
         </q-btn>
+      </div> -->
+        <q-btn v-for="(item, index) in words" :key="index" class="list-group-item item" draggable="true"
+          @dragstart="drag($event, index)" @dragover.prevent :value="item">
+          {{ item }}
+        </q-btn>
+        </div>
+        <textarea @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
+          class="FirstTask__wrapper_answer"></textarea>
       </div>
-      <textarea @drop="drop($event, arr)" @dragover="allowDrop($event)" v-model="answer"
-        class="FirstTask__wrapper_answer"></textarea>
     </div>
-  </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import { VueDraggableNext } from 'vue-draggable-next'
+import { VueDraggableNext } from 'vue-draggable-next';
+import { Timer } from '@shared/components/timer';
 const emit = defineEmits(['close']);
 
 const hide = () => {
   emit('close');
 };
 
-const words = ref(['медведи и зайцы', 'Вместе они составляют АЛФАВИТ', 'в слоги и в слова.']);
-const words_two = ref([ 'В нашем языке', 'в леса и поля', 'есть иероглифы', 'и складываются']);
-const words_three = ref(['явления и предметы', 'есть буквы.', 'Все вместе они образуют МОЗАИКУ']);
+const words = ref(['медведи и зайцы', 'Вместе они составляют АЛФАВИТ', 'в слоги и в слова.', 'В нашем языке', 'в леса и поля', 'есть иероглифы', 'и складываются', 'явления и предметы', 'есть буквы.', 'Все вместе они образуют МОЗАИКУ']);
+const words_two = ref([]);
+const words_three = ref([]);
 const answer = ref('');
-const dropIndex = ref(words.value.length - 1);
+const dropIndex = ref(words.value.length -1);
 const drag = (event, index) => {
   event.dataTransfer.setData("text", event.target.value);
   dropIndex.value = index;
 }
 
-const drop = (event, arr) => {
+
+const drop = (event) => {
   words.value.splice(dropIndex.value, 1);
-  answer.value += " " + event.dataTransfer.getData("text");
+  answer.value += ' ';
+
 }
 
 const allowDrop = (event) => {
@@ -61,6 +70,17 @@ const allowDrop = (event) => {
 
 </script>
 <style lang="scss" scoped>
+
+.draggable-list {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 133px;
+  justify-content: center;
+  row-gap: 48px;
+  width: 100%;
+  max-width: 1020px;
+  margin: 48px auto;
+}
 .FirstTask {
   position: absolute;
   left: 0;
@@ -81,7 +101,7 @@ const allowDrop = (event) => {
   }
 
   &__wrapper {
-    padding: 30px 67px 60px 60px;
+    padding: 30px 60px 67px 60px;
 
     &_block {
       display: flex;
@@ -104,7 +124,7 @@ const allowDrop = (event) => {
       font-weight: 700;
       font-family: 'Nunito', sans-serif;
       border-radius: 20px;
-      margin-top: 68px;
+      margin-top: 20px;
       border: none;
       resize: none;
       overflow-y: hidden;
