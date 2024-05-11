@@ -5,7 +5,7 @@
       <div class="close" @click="hide">
         <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
       </div>
-      <Timer :time="5"></Timer>
+      <Timer :time="15"></Timer>
       <h4 class="title-h4 FirstTask__title"> Составь рассказ про АЛФАВИТ из подходящих фраз.</h4>
       <div class="draggable-list ">
         <!-- <div class="list-group FirstTask__wrapper_block">
@@ -61,7 +61,6 @@ const drag = (event, index) => {
 const drop = (event) => {
   words.value.splice(dropIndex.value, 1);
   answer.value += ' ';
-
 }
 
 const allowDrop = (event) => {
