@@ -4,6 +4,7 @@
       <div class="close" @click="hide">
         <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
       </div>
+      <Timer :time="15"></Timer>
       <h4 class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</h4>
       <div class="SecondTask__wrapper_block">
         <div class="SecondTask__wrapper_block_item"><img src="@app/assets/backgrounds/english.png" alt="english"></div>

@@ -15,6 +15,7 @@
     <FirstTask @close="close()" v-show="SeeTask && taskId === 1"></FirstTask>
     <SecondTask @close="close()" v-show="SeeTask && taskId === 2"></SecondTask>
     <ThirdTask @close="close()" v-show="SeeTask && taskId === 3"></ThirdTask>
+    <ThirteenthTask @close="close()" v-show="SeeTask && taskId === 13"></ThirteenthTask>
   </div>
 
 
@@ -26,6 +27,7 @@ import { ref } from 'vue';
 import { FirstTask } from '@features/FirstTask/components';
 import { ThirdTask } from '@features/ThirdTask/components'
 import { SecondTask } from '@features/SecondTask';
+import { ThirteenthTask } from '@features/ThirteenthTask';
 
 const tasks = ref([
   { id: 1, name: 'Задание 1', disabled: false, done: false, open: false },
@@ -40,7 +42,7 @@ const tasks = ref([
   { id: 10, name: 'Задание 10', disabled: true, done: false, open: false },
   { id: 11, name: 'Задание 11', disabled: true, done: false, open: false },
   { id: 12, name: 'Задание 12', disabled: true, done: false, open: false },
-  { id: 13, name: 'Задание 13', disabled: true, done: false, open: false },
+  { id: 13, name: 'Задание 13', disabled: false, done: false, open: false },
   { id: 14, name: 'Задание 14', disabled: true, done: false, open: false },
   { id: 15, name: 'Задание 15', disabled: true, done: false, open: false },
   { id: 16, name: 'Задание 16', disabled: true, done: false, open: false },

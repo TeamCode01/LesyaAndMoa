@@ -5,6 +5,7 @@
       <div class="close" @click="hide">
         <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
       </div>
+      <Timer :time="15"></Timer>
       <h4 class="title-h4 ThirdTask__title"> Распредели звуки по коробкам на образуемые с помощью только шума, голоса
         и шума, только голоса.</h4>
       <div class="draggable-list ">
