@@ -1,0 +1,1 @@
+export { default as TestTask } from './components/TestTask.vue';

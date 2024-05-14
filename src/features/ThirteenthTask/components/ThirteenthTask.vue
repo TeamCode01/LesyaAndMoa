@@ -5,7 +5,7 @@
       <div class="close" @click="hide">
         <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
       </div>
-      <Timer :time="35"></Timer>
+      <Timer :time="5"></Timer>
       <h4 class="title-h4 ThirteenthTask__title"> Дополни предложения недостающими словами.</h4>
       <div class="draggable-list ">
         <q-btn v-for="(item, index) in words" :key="index" class="list-group-item item" draggable="true"
@@ -13,19 +13,22 @@
           {{ item }}
         </q-btn>
       </div>
-      <div v-show="answer === ''" class="ThirteenthTask__wrapper_answer">
+      <div class="ThirteenthTask__wrapper_answer" v-show="answer === ''">
         Мы очень
-        <input :class="{correct: answer === 'РАДЫ'}" @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer" type="text">
+        <input :class="{ correct: answer_drop === 'РАДЫ' }" @drop="drop($event)" @dragover="allowDrop($event)"
+          v-model="answer_drop" type="text">
         с вами познакомиться.
       </div>
-      <div v-show="answer === 'РАДЫ' && answer_two !== 'ОБЩАТЬСЯ'" class="ThirteenthTask__wrapper_answer">
+      <div v-show="answer === 'РАДЫ'" class="ThirteenthTask__wrapper_answer">
         Нам нравится
-        <input :class="{correct: answer_two === 'ОБЩАТЬСЯ'}" @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer_two" type="text">
+        <input :class="{ correct: answer_drop === 'ОБЩАТЬСЯ' }" @drop="drop($event)" @dragover="allowDrop($event)"
+          v-model="answer_drop" type="text">
         с вами.
       </div>
-      <div v-show="answer_two === 'ОБЩАТЬСЯ'" class="ThirteenthTask__wrapper_answer">
+      <div v-show="answer === 'ОБЩАТЬСЯ'" class="ThirteenthTask__wrapper_answer">
         Приходите чаще на
-        <input :class="{correct: answer_three === 'ДЕТСКУЮ'}" @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer_three" type="text">
+        <input :class="{ correct: answer_drop === 'ДЕТСКУЮ' }" @drop="drop($event)" @dragover="allowDrop($event)"
+          v-model="answer_drop" type="text">
         площадку.
       </div>
 
@@ -33,7 +36,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 
@@ -44,21 +47,34 @@ const hide = () => {
 };
 
 const words = ref(['РАДЫ', 'РАССТРОЕНЫ', 'ДЕТСКУЮ', 'ВЗРОСЛУЮ', 'ОБЩАТЬСЯ', 'РУГАТЬСЯ']);
+const answer_drop = ref('?');
 const answer = ref('');
 const answer_two = ref('');
 const answer_three = ref('');
 const dropIndex = ref(words.value.length - 1);
 const drag = (event, index) => {
   event.dataTransfer.setData("text", event.target.value);
+  console.log(event.target.value);
   dropIndex.value = index;
 }
 
 
+
 const drop = (event) => {
-  words.value.splice(dropIndex.value, 1);
-  answer.value += ' ' + event.getData("text", event.target.value);
-  answer_two.value = '';
-  answer_three.value = '';
+  event.preventDefault();
+  let text = event.dataTransfer.getData("text");
+
+  if ((answer.value === '' && text === 'РАДЫ') || (answer.value === 'РАДЫ' && text === 'ОБЩАТЬСЯ') || (answer.value === 'ОБЩАТЬСЯ' && text === 'ДЕТСКУЮ')) {
+    words.value.splice(dropIndex.value, 1);
+    answer_drop.value = text;
+    setTimeout(() => {
+      answer.value = text
+      answer_drop.value = '?';
+    }, 2000);
+  } else {
+    return false;
+  }
+
 }
 
 const allowDrop = (event) => {
@@ -67,8 +83,6 @@ const allowDrop = (event) => {
 
 </script>
 <style lang="scss" scoped>
-
-
 .draggable-list {
   display: flex;
   flex-wrap: wrap;

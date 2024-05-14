@@ -12,6 +12,23 @@
                 <Button label="Зарегистрироваться" class="btn_primary main__btn"></Button></router-link>
         </div>
     </div>
+    <div class="Test">
+        <p class="title-h2 Test__title">Тестовое задание</p>
+        <div class="wrap">
+            <div class="Test__wrapper">
+                <p class="Test__wrapper_title">Дорогие друзья!</p>
+                <p class="Test__wrapper_text">Мы услышали речь увиденных нами странных героев. Но как нам понять друг
+                    друга? Пройди задание и
+                    присоединяйся к тем, кто помогает инопланетянам понять нас. </p>
+                <Button @click="openTest()" class="Test__wrapper_btn" :isImage="true" :image="arrow" label="Начать"></Button>
+            </div>
+            <div class="Test__img">
+                <img src="@app/assets/backgrounds/animals.jpg" alt="game">
+            </div>
+        </div>
+
+    </div>
+    <TestTask  @close="close()" v-show="isOpen == true"></TestTask>
     <div class="about">
         <h2 class="title-h2 about__title">О методике</h2>
         <div class="about__wrapper">
@@ -120,13 +137,15 @@
         <h2 class="title-h2 news__title">Новости</h2>
         <Carousel :data="slideItems"></Carousel>
     </div>
+
 </template>
 <script setup>
 import { ref } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Carousel } from '@shared/components/carousel';
-import { FirstTask } from '@features/FirstTask/components';
 import news from "@app/assets/backgrounds/news.png";
+import arrow from '@app/assets/icons/Arrow.svg';
+import { TestTask } from '@features/TestTask';
 
 const slideItems = ref([
     {
@@ -160,6 +179,16 @@ const slideItems = ref([
         date: '22.12.2023'
     },
 ])
+
+const isOpen = ref(false);
+
+const close = () => {
+    isOpen.value = false;
+}
+
+const openTest = () => {
+    isOpen.value = true;
+}
 
 </script>
 <style lang="scss" scoped>
@@ -200,6 +229,74 @@ const slideItems = ref([
         margin: 40px auto;
         margin-bottom: 0px;
     }
+}
+
+.Test {
+    padding-top: 100px;
+
+    &__title {
+        font-size: 32px;
+        text-align: center;
+        font-family: 'Nunito';
+        font-weight: medium;
+        color: #313131;
+        margin-bottom: 40px;
+    }
+
+    &__img {
+        img {
+            height: 580px;
+
+            @media (max-width: 1024px) {
+                height: 470px;
+                max-width: 565px;
+                width: 100%;
+            }
+        }
+    }
+
+    &__wrapper {
+        background-color: #FAE6F2;
+        border-radius: 20px 0px 0px 20px;
+        height: 580px;
+        padding: 40px 40px 90px 40px;
+
+        &_title {
+            font-size: 32px;
+            font-family: 'Nunito';
+            font-weight: medium;
+            color: #313131;
+        }
+
+        &_text {
+            font-size: 16px;
+            color: #313131;
+            font-family: 'Nunito';
+            margin-top: 40px;
+            max-width: 280px;
+        }
+
+        &_btn {
+            margin-top: 200px;
+            max-width: 280px;
+            width: 100%;
+            height: 56px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            column-gap: 32px;
+
+            @media (max-width: 1024px) {
+                max-width: 212px;
+                height: 48px;
+                column-gap: 28px;
+            }
+        }
+    }
+}
+
+.wrap {
+    display: flex;
 }
 
 .about {
