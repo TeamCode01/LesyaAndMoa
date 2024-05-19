@@ -3,11 +3,14 @@
 
     <div class="ThirdTask__wrapper">
       <div class="close" @click="hide">
-        <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+        <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
       </div>
-      <Timer :time="15"></Timer>
-      <h4 class="title-h4 ThirdTask__title"> Распредели звуки по коробкам на образуемые с помощью только шума, голоса
-        и шума, только голоса.</h4>
+      <div class="time">
+        <Timer :time="15"></Timer>
+        <p class="title-h4 ThirdTask__title"> Распредели звуки по коробкам на образуемые с помощью только шума, голоса
+          и шума, только голоса.</p>
+      </div>
+
       <div class="draggable-list ">
         <div class="list-group ThirdTask__wrapper_block">
           <q-btn v-for="(item, index) in letters" :key="index" class="list-group-item item" draggable="true"
@@ -33,6 +36,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next'
+import { Timer } from '@shared/components/timer';
 const emit = defineEmits(['close']);
 
 const hide = () => {
@@ -62,6 +66,13 @@ const allowDrop = (event) => {
 
 </script>
 <style lang="scss" scoped>
+.time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 28px;
+}
+
 .box {
   background-image: url('@app/assets/creatures/box1.png');
   width: 279px;
@@ -113,7 +124,6 @@ const allowDrop = (event) => {
     font-weight: 500;
     font-family: 'Nunito', sans-serif;
     max-width: 700px;
-    margin: 0px auto;
   }
 
   &__answer {

@@ -6,13 +6,13 @@
       </div>
       <p class="title-h4 TestTask__title"> Вставь пропущенные слова.</p>
       <div class="TestTask__task">
-        Необыкновенные пришельцы Леся и Моа, не знающие нашего<br> <input class="answer_input" v-model="answer" type="text"
+        Необыкновенные пришельцы Леся и Моа, не знающие нашего<br> <input class="answer_input" v-model="answer" maxlength="5" type="text"
           placeholder="_ _ _ _ _">, оказались на нашей планете. Они, словно немые <input class="answer_input"
-          v-model="answer_two" type="text" placeholder="_ _ _ _ _">,<br> не могут объяснить нам на своём языке, который для
-        нас звучит,<br> как <input class="answer_input" v-model="answer_three" type="text" placeholder="_ _ _ _ _ _">,
-        чего же они хотят. Мы постараемся <input class="answer_input" v-model="answer_four" type="text"
+          v-model="answer_two" type="text"  maxlength="5" placeholder="_ _ _ _ _">,<br> не могут объяснить нам на своём языке, который для
+        нас звучит,<br> как <input class="answer_input" v-model="answer_three" type="text"  maxlength="6" placeholder="_ _ _ _ _ _">,
+        чего же они хотят. Мы постараемся <input class="answer_input" v-model="answer_four"  maxlength="7" type="text"
           placeholder="_ _ _ _ _ _ _"> стекло<br> недопонимания между нами и <input class="answer_input"
-          v-model="answer_five" type="text" placeholder="_ _ _ _ _ _ "> им.
+          v-model="answer_five" type="text"  maxlength="6" placeholder="_ _ _ _ _ _ "> им.
       </div>
       <Button class="TestTask__btn" :isImage="true" :image="arrow" label="Ответить" />
     </div>
@@ -62,7 +62,7 @@ const answer_five = ref('');
     color: #4E3B7F;
     font-size: 24px;
     font-family: 'Nunito';
-    font-weight: SemiBold;
+    font-weight: 600;
      max-width: 870px;
     line-height: 40px;
 
@@ -95,7 +95,7 @@ const answer_five = ref('');
   color: #4E3B7F;
   font-size: 24px;
   font-family: 'Nunito';
-  font-weight: SemiBold;
+  font-weight: 600;
   max-width: 90px;
   line-height: 40px;
   height: 20px;

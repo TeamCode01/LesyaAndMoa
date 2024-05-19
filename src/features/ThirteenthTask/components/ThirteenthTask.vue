@@ -3,10 +3,13 @@
 
     <div class="ThirteenthTask__wrapper">
       <div class="close" @click="hide">
-        <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+        <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
       </div>
-      <Timer :time="5"></Timer>
-      <h4 class="title-h4 ThirteenthTask__title"> Дополни предложения недостающими словами.</h4>
+      <div class="time">
+        <Timer :time="15"></Timer>
+        <p class="title-h4 ThirteenthTask__title"> Дополни предложения недостающими словами.</p>
+      </div>
+
       <div class="draggable-list ">
         <q-btn v-for="(item, index) in words" :key="index" class="list-group-item item" draggable="true"
           @dragstart="drag($event, index)" @dragover.prevent :value="item">
@@ -83,6 +86,12 @@ const allowDrop = (event) => {
 
 </script>
 <style lang="scss" scoped>
+.time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 28px;
+}
 .draggable-list {
   display: flex;
   flex-wrap: wrap;
@@ -128,6 +137,7 @@ const allowDrop = (event) => {
       font-family: 'Nunito';
       border-radius: 20px;
       border: none;
+
       resize: none;
       overflow-y: hidden;
       height: 100px;
@@ -141,6 +151,7 @@ const allowDrop = (event) => {
         color: #4E3B7F;
         font-size: 22px;
         font-weight: 700;
+        outline: none;
         font-family: 'Nunito';
         text-align: center;
       }

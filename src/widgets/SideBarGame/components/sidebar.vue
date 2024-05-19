@@ -16,6 +16,7 @@
     <SecondTask @close="close()" v-show="SeeTask && taskId === 2"></SecondTask>
     <ThirdTask @close="close()" v-show="SeeTask && taskId === 3"></ThirdTask>
     <ThirteenthTask @close="close()" v-show="SeeTask && taskId === 13"></ThirteenthTask>
+    <EighthteenTask @close="close()" v-show="SeeTask && taskId === 18"></EighthteenTask>
   </div>
 
 
@@ -28,6 +29,7 @@ import { FirstTask } from '@features/FirstTask/components';
 import { ThirdTask } from '@features/ThirdTask/components'
 import { SecondTask } from '@features/SecondTask';
 import { ThirteenthTask } from '@features/ThirteenthTask';
+import { EighthteenTask } from '@features/EighthteenTask';
 
 const tasks = ref([
   { id: 1, name: 'Задание 1', disabled: false, done: false, open: false },
@@ -47,7 +49,7 @@ const tasks = ref([
   { id: 15, name: 'Задание 15', disabled: true, done: false, open: false },
   { id: 16, name: 'Задание 16', disabled: true, done: false, open: false },
   { id: 17, name: 'Задание 17', disabled: true, done: false, open: false },
-  { id: 18, name: 'Задание 18', disabled: true, done: false, open: false },
+  { id: 18, name: 'Задание 18', disabled: false, done: false, open: false },
 ])
 
  const SeeTask = ref(null);
