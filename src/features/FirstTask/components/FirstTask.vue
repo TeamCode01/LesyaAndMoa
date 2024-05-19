@@ -3,10 +3,13 @@
 
     <div class="FirstTask__wrapper">
       <div class="close" @click="hide">
-        <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+        <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
       </div>
-      <Timer :time="15"></Timer>
-      <h4 class="title-h4 FirstTask__title"> Составь рассказ про АЛФАВИТ из подходящих фраз.</h4>
+      <div class="time">
+        <Timer :time="15"></Timer>
+        <p class="title-h4 FirstTask__title"> Составь рассказ про АЛФАВИТ из подходящих фраз.</p>
+      </div>
+
       <div class="draggable-list ">
         <!-- <div class="list-group FirstTask__wrapper_block">
           <q-btn v-for="(item, index) in words" :key="index" class="list-group-item item" draggable="true"
@@ -31,11 +34,11 @@
           @dragstart="drag($event, index)" @dragover.prevent :value="item">
           {{ item }}
         </q-btn>
-        </div>
-        <textarea @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
-          class="FirstTask__wrapper_answer"></textarea>
       </div>
+      <textarea @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
+        class="FirstTask__wrapper_answer"></textarea>
     </div>
+  </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -51,7 +54,7 @@ const words = ref(['медведи и зайцы', 'Вместе они сост
 const words_two = ref([]);
 const words_three = ref([]);
 const answer = ref('');
-const dropIndex = ref(words.value.length -1);
+const dropIndex = ref(words.value.length - 1);
 const drag = (event, index) => {
   event.dataTransfer.setData("text", event.target.value);
   dropIndex.value = index;
@@ -70,6 +73,13 @@ const allowDrop = (event) => {
 </script>
 <style lang="scss" scoped>
 
+.time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 28px;
+}
+
 .draggable-list {
   display: flex;
   flex-wrap: wrap;
@@ -80,6 +90,7 @@ const allowDrop = (event) => {
   max-width: 1020px;
   margin: 48px auto;
 }
+
 .FirstTask {
   position: absolute;
   left: 0;
@@ -125,6 +136,7 @@ const allowDrop = (event) => {
       border-radius: 20px;
       margin-top: 20px;
       border: none;
+      outline: none;
       resize: none;
       overflow-y: hidden;
       height: 100px;

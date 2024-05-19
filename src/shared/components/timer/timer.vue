@@ -1,7 +1,7 @@
 <template>
 
-  <div class="get-hourglass">
-    <!-- <img src="@app/assets/icons/TimerIcon.svg" alt="time"> -->
+
+
     <svg width="30px" height="52px" viewBox="0 0 14 18">
       <defs>
       </defs>
@@ -49,7 +49,6 @@
         </g>
       </g>
     </svg>
-  </div>
 
 
 </template>
@@ -72,11 +71,4 @@ const timerDown = setInterval(() => {
 
 </script>
 <style lang="scss" scoped>
-.get-hourglass {
-  position: absolute;
-  top: 12%;
-  left: 27%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
 </style>

@@ -1,0 +1,1 @@
+export { default as EighthteenTask } from './components/EighthteenTask.vue';

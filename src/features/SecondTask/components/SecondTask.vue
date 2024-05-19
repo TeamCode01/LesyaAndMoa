@@ -2,10 +2,12 @@
   <div class="SecondTask">
     <div class="SecondTask__wrapper">
       <div class="close" @click="hide">
-        <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+        <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
       </div>
-      <Timer :time="15"></Timer>
-      <h4 class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</h4>
+      <div class="time">
+        <Timer :time="15"></Timer>
+        <p class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</p>
+      </div>
       <div class="SecondTask__wrapper_block">
         <div class="SecondTask__wrapper_block_item"><img src="@app/assets/backgrounds/english.png" alt="english"></div>
         <div class="SecondTask__wrapper_block_item"><img src="@app/assets/backgrounds/russian.png" alt="russian"></div>
@@ -16,7 +18,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-
+import { Timer } from '@shared/components/timer';
 const emit = defineEmits(['close']);
 
 const hide = () => {
@@ -25,6 +27,13 @@ const hide = () => {
 
 </script>
 <style lang="scss" scoped>
+.time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 28px;
+}
+
 .SecondTask {
   position: absolute;
   left: 0;
@@ -43,7 +52,6 @@ const hide = () => {
     font-weight: 500;
     font-family: 'Nunito', sans-serif;
     max-width: 700px;
-    margin: 0px auto;
   }
 
   .close {
@@ -59,17 +67,19 @@ const hide = () => {
       align-items: center;
       column-gap: 41px;
       margin-top: 68px;
+
       &_item {
         background-color: #D2EFFF;
         border-radius: 20px;
-       width: 316px;
-       height: 256px;
-       padding: 45.5px 60px;
-       cursor: pointer;
-       img {
-        display: block;
-        margin: 0px auto;
-       }
+        width: 316px;
+        height: 256px;
+        padding: 45.5px 60px;
+        cursor: pointer;
+
+        img {
+          display: block;
+          margin: 0px auto;
+        }
       }
     }
   }
