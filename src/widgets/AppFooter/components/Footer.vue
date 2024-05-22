@@ -20,10 +20,10 @@
                 <div class="footer__wrapper_info">
                     <div class="footer__wrapper_phone">8 (900) 123-45-45</div>
                     <div class="footer__wrapper_links">
-                        <router-link class="link-small" to="policy"
+                        <router-link class="link-small" to="/PolicyPage"
                             >Политика конфиденциональности</router-link
                         >
-                        <router-link class="link-small" to="confirm"
+                        <router-link class="link-small" to="/PolicyPage"
                             >Пользовательское соглашение</router-link
                         >
                     </div>

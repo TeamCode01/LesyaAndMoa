@@ -13,7 +13,9 @@
                 </div>
 
                 <ul class="header__wrapper_links">
-                    <li><a href="#" class="link-small">О проекте</a></li>
+                    <li>
+                        <a href="/AboutProject" class="link-small">О проекте</a>
+                    </li>
                     <li><a href="#" class="link-small">Новости</a></li>
                     <li><a href="#" class="link-small">Контакты</a></li>
                     <li>

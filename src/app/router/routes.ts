@@ -40,6 +40,27 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/RegisterPage/components/RegisterPage.vue'),
             },
+
+            {
+                path: '/AboutProject',
+                name: 'AboutProject',
+                component: () =>
+                    import(
+                        '@pages/AboutProjectPage/components/AboutProjectPage.vue'
+                    ),
+            },
+            {
+                path: ':catchAll(.*)*',
+                name: '404',
+                component: () =>
+                    import('@pages/404Page/components/404Page.vue'),
+            },
+            {
+                path: '/PolicyPage',
+                name: 'PolicyPage',
+                component: () =>
+                    import('@pages/PolicyPage/components/PolicyPage.vue'),
+            },
         ],
     },
 ];
