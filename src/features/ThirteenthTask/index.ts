@@ -1,0 +1,1 @@
+export { default as ThirteenthTask } from './components/ThirteenthTask.vue';

@@ -1,0 +1,1 @@
+export { default as SecondTask } from './components/SecondTask.vue';
