@@ -17,6 +17,8 @@
     <ThirdTask @close="close()" v-show="SeeTask && taskId === 3"></ThirdTask>
     <ThirteenthTask @close="close()" v-show="SeeTask && taskId === 13"></ThirteenthTask>
     <EighthteenTask @close="close()" v-show="SeeTask && taskId === 18"></EighthteenTask>
+    <NineTask @close="close()" v-show="SeeTask && taskId === 9"></NineTask>
+
   </div>
 
 
@@ -30,6 +32,7 @@ import { ThirdTask } from '@features/ThirdTask/components'
 import { SecondTask } from '@features/SecondTask';
 import { ThirteenthTask } from '@features/ThirteenthTask';
 import { EighthteenTask } from '@features/EighthteenTask';
+import { NineTask } from '@features/NineTask';
 
 const tasks = ref([
   { id: 1, name: 'Задание 1', disabled: false, done: false, open: false },
@@ -40,7 +43,7 @@ const tasks = ref([
   { id: 6, name: 'Задание 6', disabled: true, done: false, open: false },
   { id: 7, name: 'Задание 7', disabled: true, done: false, open: false },
   { id: 8, name: 'Задание 8', disabled: true, done: false, open: false },
-  { id: 9, name: 'Задание 9', disabled: true, done: false, open: false },
+  { id: 9, name: 'Задание 9', disabled: false, done: false, open: false },
   { id: 10, name: 'Задание 10', disabled: true, done: false, open: false },
   { id: 11, name: 'Задание 11', disabled: true, done: false, open: false },
   { id: 12, name: 'Задание 12', disabled: true, done: false, open: false },
@@ -84,7 +87,7 @@ const openTask = (taskId) => {
 .sidebar {
   background-color: $pink;
   border-radius: 20px 0px 0px 20px;
-  padding: 40px 40px 60px 48px;
+  padding: 40px 40px 0px 48px;
   width: 100%;
   max-width: 362px;
   height: 600px;
@@ -99,7 +102,7 @@ const openTask = (taskId) => {
     padding: 16px;
     background-color: white;
     border-radius: 20px;
-    margin: 40px auto;
+    margin: 45px auto;
     max-height: 312px;
 
     @media (max-width: 1024px) {
