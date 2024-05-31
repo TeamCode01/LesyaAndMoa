@@ -18,6 +18,7 @@
     <ThirteenthTask @close="close()" v-show="SeeTask && taskId === 13"></ThirteenthTask>
     <EighthteenTask @close="close()" v-show="SeeTask && taskId === 18"></EighthteenTask>
     <NineTask @close="close()" v-show="SeeTask && taskId === 9"></NineTask>
+    <ElevenTask @close="close()" v-show="SeeTask && taskId === 11"></ElevenTask>
 
   </div>
 
@@ -33,6 +34,7 @@ import { SecondTask } from '@features/SecondTask';
 import { ThirteenthTask } from '@features/ThirteenthTask';
 import { EighthteenTask } from '@features/EighthteenTask';
 import { NineTask } from '@features/NineTask';
+import { ElevenTask } from '@features/ElevenTask';
 
 const tasks = ref([
   { id: 1, name: 'Задание 1', disabled: false, done: false, open: false },
@@ -45,7 +47,7 @@ const tasks = ref([
   { id: 8, name: 'Задание 8', disabled: true, done: false, open: false },
   { id: 9, name: 'Задание 9', disabled: false, done: false, open: false },
   { id: 10, name: 'Задание 10', disabled: true, done: false, open: false },
-  { id: 11, name: 'Задание 11', disabled: true, done: false, open: false },
+  { id: 11, name: 'Задание 11', disabled: false, done: false, open: false },
   { id: 12, name: 'Задание 12', disabled: true, done: false, open: false },
   { id: 13, name: 'Задание 13', disabled: false, done: false, open: false },
   { id: 14, name: 'Задание 14', disabled: true, done: false, open: false },
