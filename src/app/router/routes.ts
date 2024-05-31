@@ -60,6 +60,7 @@ const routes: RouteRecordRaw[] = [
                 name: 'PolicyPage',
                 component: () =>
                     import('@pages/PolicyPage/components/PolicyPage.vue'),
+            },
             {
                 path: '/Game',
                 name: 'Game',
