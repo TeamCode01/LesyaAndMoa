@@ -1,0 +1,1 @@
+export { default as ElevenTask } from './components/ElevenTask.vue';
