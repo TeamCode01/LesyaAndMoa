@@ -9,6 +9,7 @@
                         placeholder="Введите логин"
                         name="login"
                         class="form-input"
+                        v-model:value="form.email"
                     ></Input>
                 </div>
                 <div class="login-input-pass">
@@ -17,6 +18,7 @@
                         placeholder="Введите пароль"
                         name="password"
                         class="form-input"
+                        v-model="form.password"
                     ></Input>
                 </div>
                 <div class="login-input-pass">
@@ -25,21 +27,33 @@
                         placeholder="Введите пароль"
                         name="password"
                         class="form-input"
+                        v-model="form.re_password"
                     ></Input>
                 </div>
-                <select class="select-education">
-                    <option>Выберите формат занятий</option>
-                    <option value="">Групповые занятия</option>
-                    <option value="">Индивидуальные занятия</option>
-                </select>
+                <SelectSort
+                    v-model="form.tasks_type"
+                    :options="tasksChoose"
+                    class="invents-select"
+                    clearable
+                    placeholder="Выберите формат занятий"
+                    variant="outlined"
+                    :sorts-boolean="false"
+                />
                 <div class="regCheck">
-                    <input type="checkbox" />
+                    <input
+                        type="checkbox"
+                        v-model="form.data_processing_agreement"
+                    />
                     <div class="regCheck_text">
                         даю согласие на обработку персональных данных
                         и ознакомлен с политикой конфиденциальности
                     </div>
                 </div>
-                <Button class="form-btn">Зарегистрироваться</Button>
+                <Button
+                    label="Зарегистрироваться"
+                    class="form-btn"
+                    @click="RegisterUser"
+                ></Button>
                 <div class="form-question">
                     Уже есть аккаунт?&nbsp;<a class="form-question-link"
                         >Войти</a
@@ -50,7 +64,43 @@
         <img class="img-auth" src="@app/assets/img/auth/Lesya.png" alt="" />
     </div>
 </template>
-<script setup lang="ts"></script>
+<script setup>
+import { ref } from 'vue';
+import { HTTP } from '@app/http';
+import { Input } from '@shared/components/inputs';
+import { Button } from '@shared/components/buttons';
+import { SelectSort } from '@shared/components/selects';
+
+const tasksChoose = ref([
+    { value: 'Групповые занятия', name: 'Групповые занятия' },
+    { value: 'Индивидуальные занятия', name: 'Индивидуальные занятия' },
+]);
+
+const isError = ref([]);
+const form = ref({
+    email: '',
+    password: '',
+    re_password: '',
+    tasks_type: null,
+    data_processing_agreement: false,
+});
+
+const RegisterUser = async () => {
+    try {
+        const response = await HTTP.post('/users/', form.value, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        form.value = response.data;
+        console.log(response.data);
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+    }
+};
+</script>
 <style lang="scss" scoped>
 .d-flex {
     display: flex;
