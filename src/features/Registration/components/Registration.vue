@@ -32,13 +32,19 @@
                 </div>
                 <SelectSort
                     v-model="form.tasks_type"
+                    :items="tasksChoose"
+                    name="select_position"
+                    id="select-position"
                     :options="tasksChoose"
                     class="invents-select"
                     clearable
                     placeholder="Выберите формат занятий"
                     variant="outlined"
                     :sorts-boolean="false"
+                    @update:value="changeOption"
+                    v-bind="props"
                 />
+
                 <div class="regCheck">
                     <input
                         type="checkbox"
