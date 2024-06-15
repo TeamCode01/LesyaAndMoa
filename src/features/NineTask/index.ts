@@ -1,0 +1,1 @@
+export { default as NineTask } from './components/NineTask.vue';
