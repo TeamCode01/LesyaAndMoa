@@ -11,31 +11,12 @@
       </div>
 
       <div class="draggable-list ">
-        <!-- <div class="list-group FirstTask__wrapper_block">
-          <q-btn v-for="(item, index) in words" :key="index" class="list-group-item item" draggable="true"
-            @dragstart="drag($event, index)" @dragover.prevent :value="item">
-            {{ item }}
-          </q-btn>
-        </div>
-      </div>
-      <div class="FirstTask__wrapper_content">
-        <q-btn v-for="(item, index) in words_two" :key="index" class="list-group-item item" draggable="true"
-          @dragstart="drag($event, index)" @dragover.prevent :value="item">
-          {{ item }}
+        <q-btn v-for="(item, index) in words" :key="index.id" class="list-group-item item" draggable="true"
+          @dragstart="drag($event, item.name, index)" @dragover.prevent :value="item.name">
+          {{ item.name }}
         </q-btn>
       </div>
-      <div class="FirstTask__wrapper_block">
-        <q-btn v-for="(item, index) in words_three" :key="index" class="list-group-item item" draggable="true"
-          @dragstart="drag($event, index)" @dragover.prevent :value="item">
-          {{ item }}
-        </q-btn>
-      </div> -->
-        <q-btn v-for="(item, index) in words" :key="index" class="list-group-item item" draggable="true"
-          @dragstart="drag($event, index)" @dragover.prevent :value="item">
-          {{ item }}
-        </q-btn>
-      </div>
-      <textarea @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
+      <textarea @drop="drop($event)" @dragover="allowDrop($event)" 
         class="FirstTask__wrapper_answer"></textarea>
     </div>
   </div>
@@ -50,20 +31,30 @@ const hide = () => {
   emit('close');
 };
 
-const words = ref(['медведи и зайцы', 'Вместе они составляют АЛФАВИТ', 'в слоги и в слова.', 'В нашем языке', 'в леса и поля', 'есть иероглифы', 'и складываются', 'явления и предметы', 'есть буквы.', 'Все вместе они образуют МОЗАИКУ']);
-const words_two = ref([]);
-const words_three = ref([]);
+// const words = ref(['медведи и зайцы', 'Вместе они составляют АЛФАВИТ', 'в слоги и в слова.', 'В нашем языке', 'в леса и поля', 'есть иероглифы', 'и складываются', 'явления и предметы', 'есть буквы.', 'Все вместе они образуют МОЗАИКУ']);
+const words = ref([{ id: 1, name: 'медведи и зайцы', index: 11 }, { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2 }, { id: 3, name: 'в слоги и в слова.', index: 5 }, { id: 4, name: 'В нашем языке', index: 0 }, { id: 5, name: 'в леса и поля', index: 22 }, { id: 6, name: 'есть иероглифы', index: 81 }, { id: 7, name: 'и складываются', index: 3 }, { id: 8, name: 'явления и предметы', index: 7 }, { id: 9, name: 'есть буквы.', index: 1}, { id: 10, name: 'Все вместе они образуют МОЗАИКУ', index: 9 }])
+const wordsAnswer = ref([{ id: 1, name: 'В нашем языке', index: 0 }, { id: 2, name: 'есть буквы.', index: 1 }, { id: 3, name: 'Вместе они составляют АЛФАВИТ', index: 2 }, { id: 4, name: 'и складываются', index: 3 }, { id: 5, name: 'в слоги и в слова.', index: 4 }]);
 const answer = ref('');
 const dropIndex = ref(words.value.length - 1);
-const drag = (event, index) => {
-  event.dataTransfer.setData("text", event.target.value);
+const drag = (event, word, index) => {
+  event.dataTransfer.setData("text", word);
   dropIndex.value = index;
 }
 
-
-const drop = (event) => {
-  words.value.splice(dropIndex.value, 1);
-  answer.value += ' ';
+const drop = (event, word) => {
+  event.preventDefault();
+  let text = event.dataTransfer.getData("text");
+  console.log(text);
+  let correct = wordsAnswer.value.find((item) => item.name == text)
+  console.log(correct)
+  // console.log(wordsAnswer.value.name, 'sss')
+  if (correct) {
+    event.target.value = text;
+    words.value.splice(dropIndex.value, 1);
+    // answer.value += ' ';
+  } else {
+    return false;
+  }
 }
 
 const allowDrop = (event) => {
@@ -72,7 +63,6 @@ const allowDrop = (event) => {
 
 </script>
 <style lang="scss" scoped>
-
 .time {
   display: flex;
   justify-content: center;

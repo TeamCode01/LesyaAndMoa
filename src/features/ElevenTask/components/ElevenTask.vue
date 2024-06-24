@@ -13,7 +13,8 @@
       </div>
       <div class="ElevenTask__content">
         <div class="fairy_tales__wrapper hide">
-          <div class="fairy_tales__item" v-for="item in fairytails" :key="item"> <span>«{{ item }}»</span> </div>
+          <div class="fairy_tales__item" @click="chooseFairyTail()" v-for="item in fairytails" :key="item"> <span>«{{
+            item.name }}»</span> </div>
         </div>
 
         <div class="draggable-list">
@@ -66,7 +67,7 @@ const drag = (event, syllable, index) => {
   dropIndex.value = index;
 }
 const finish_answers = ref([]);
-const fairytails = ref(['ТРИ МЕДВЕДЯ', 'ТЕРЕМОК', 'РЕПКА', 'КОЛОБОК', 'ГУСИ-ЛЕБЕДИ']);
+const fairytails = ref([{ id: 1, name: 'ТРИ МЕДВЕДЯ', correct: false }, { id: 2, name: 'ТЕРЕМОК', correct: true }, { id: 3, name: 'РЕПКА', correct: false }, { id: 4, name: 'КОЛОБОК', correct: false }, { id: 5, name: 'ГУСИ-ЛЕБЕДИ', correct: false }]);
 
 const answers = ref(['зайчик', 'мышка', 'лягушка', 'лисичка', 'медведь', 'волчок']);
 
@@ -87,18 +88,12 @@ const drop = (event, part, row) => {
     event.target.value = text;
     syllables.value.splice(dropIndex.value, 1);
     event.target.classList.add('item')
-    // setTimeout(() => {
-    //   event.target.classList.remove('check')
-    //   event.target.classList.add('item');
-    // }, 1000)
   } else {
     let word = part == 1 ? (text + element.value) : (element.value + text);
 
     if (answers.value.includes(word.toLowerCase())) {
       event.target.value = text;
       finish_answers.value.push(word.toLowerCase());
-
-      console.log(finish_answers.value);
       syllables.value.splice(dropIndex.value, 1);
       event.target.classList.add('check')
       setTimeout(() => {
@@ -115,7 +110,16 @@ const drop = (event, part, row) => {
   }
 }
 
-
+const chooseFairyTail = () => {
+  const correct = fairytails.value.find((item) => item.correct == true)
+  if (correct) {
+    setTimeout(() => {
+      fairytails.value = fairytails.value.filter((item) => item.correct == true);
+    }, 1000)
+  } else {
+    return false;
+  }
+}
 const allowDrop = (event) => {
   event.preventDefault();
 }

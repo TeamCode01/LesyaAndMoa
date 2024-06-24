@@ -81,7 +81,6 @@ const drop = (event, word, letter) => {
   if (arr.value[word][letter].answer === text.toLowerCase()) {
     event.target.value = text;
     letterss.value.splice(dropIndex.value, 1);
-    console.log(text);
     event.target.classList.add(arr.value[word][letter].className)
   } else {
     return false;
