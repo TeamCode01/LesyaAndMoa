@@ -1,1 +1,1 @@
-export { default as AboutProjectPage } from './components/AboutProjectPage.vue';
+// export { default as AboutProjectPage } from './components/AboutProjectPage.vue';
