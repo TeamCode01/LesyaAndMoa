@@ -9,26 +9,94 @@
                         placeholder="Введите email"
                         name="email"
                         class="form-input"
+                        v-model:value="data.email"
                     ></Input>
                 </div>
                 <div class="login-input-pass">
                     <label>Пароль</label>
-                    <Input
+                    <InputPass
                         placeholder="Введите пароль"
                         name="password"
                         class="form-input"
-                    ></Input>
+                        type="password"
+                        v-model:value="data.password"
+                    ></InputPass>
                 </div>
-                <a class="form-question-link">Забыли пароль?</a>
-                <Button class="form-btn">Войти</Button>
+                <a class="form-question-link" href="/change-password"
+                    >Забыли пароль?</a
+                >
+                <Button
+                    class="form-btn"
+                    @click="LoginUser"
+                    label="Войти"
+                ></Button>
             </div>
-            <a class="form-question-link form-link-reg">Зарегистрироваться</a>
+            <a class="form-question-link form-link-reg" href="/Registration"
+                >Зарегистрироваться</a
+            >
         </div>
         <img class="img-auth" src="@app/assets/img/auth/Moa.png" alt="" />
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup>
+import { ref, inject } from 'vue';
+import { Button } from '@shared/components/buttons';
+import { Input } from '@shared/components/inputs';
+import { InputPass } from '@shared/components/inputs';
+import { HTTP } from '@app/http';
+import { useRouter } from 'vue-router';
+
+const swal = inject('$swal');
+const data = ref({
+    email: '',
+    password: '',
+});
+const isLoading = ref(false);
+const isError = ref([]);
+const router = useRouter();
+
+const LoginUser = async () => {
+    try {
+        isLoading.value = true;
+        const response = await HTTP.post('/token/login/', data.value);
+        data.value = response.data;
+        localStorage.setItem('Token', response.data.auth_token);
+        isLoading.value = false;
+        HTTP.get(`/users/me/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        router.push({
+            name: 'profile',
+            params: { id: response.data.id },
+        });
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        isLoading.value = false;
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
+    }
+};
+</script>
 <style lang="scss" scoped>
 .d-flex {
     display: flex;
@@ -86,6 +154,7 @@
     font-family: 'Nunito', sans-serif;
     text-decoration: underline;
     margin-bottom: 20px;
+    color: #35383f;
 }
 .form-btn {
     border: none;

@@ -1,2 +1,3 @@
 import Input from './Input.vue';
-export { Input };
+import InputPass from './InputPass.vue';
+export { Input, InputPass };

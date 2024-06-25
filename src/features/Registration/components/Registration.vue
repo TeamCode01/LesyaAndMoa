@@ -18,7 +18,8 @@
                         placeholder="Введите пароль"
                         name="password"
                         class="form-input"
-                        v-model="form.password"
+                        v-model:value="form.password"
+                        type="password"
                     ></Input>
                 </div>
                 <div class="login-input-pass">
@@ -27,7 +28,8 @@
                         placeholder="Введите пароль"
                         name="password"
                         class="form-input"
-                        v-model="form.re_password"
+                        v-model:value="form.re_password"
+                        type="password"
                     ></Input>
                 </div>
                 <SelectSort
@@ -61,7 +63,9 @@
                     @click="RegisterUser"
                 ></Button>
                 <div class="form-question">
-                    Уже есть аккаунт?&nbsp;<a class="form-question-link"
+                    Уже есть аккаунт?&nbsp;<a
+                        class="form-question-link"
+                        href="/Login"
                         >Войти</a
                     >
                 </div>
@@ -71,17 +75,20 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { HTTP } from '@app/http';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { SelectSort } from '@shared/components/selects';
+import { useRouter } from 'vue-router';
 
 const tasksChoose = ref([
     { value: 'Групповые занятия', name: 'Групповые занятия' },
     { value: 'Индивидуальные занятия', name: 'Индивидуальные занятия' },
 ]);
 
+const router = useRouter();
+const swal = inject('$swal');
 const isError = ref([]);
 const form = ref({
     email: '',
@@ -100,10 +107,30 @@ const RegisterUser = async () => {
         });
         form.value = response.data;
         console.log(response.data);
+        router.push({
+            name: 'profile',
+            params: { id: response.data.id },
+        });
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
         console.error('There was an error!', error);
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        }
     }
 };
 </script>
@@ -219,5 +246,10 @@ const RegisterUser = async () => {
     border: none;
     background-color: white;
     font-family: 'Nunito', sans-serif;
+}
+.form-question-link {
+    color: #35383f;
+    font-family: 'Nunito', sans-serif !important;
+    font-size: 16px;
 }
 </style>

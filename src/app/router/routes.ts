@@ -8,7 +8,7 @@ const routes: RouteRecordRaw[] = [
         children: [
             {
                 path: '',
-                name: 'MainPage',
+                name: 'main-page',
                 component: () =>
                     import('@pages/MainPage/components/MainPage.vue'),
             },
@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/LoginPage/components/LoginPage.vue'),
             },
             {
-                path: '/ChangePassword',
+                path: '/change-password',
                 name: 'ChangePassword',
                 component: () =>
                     import(
@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
                     ),
             },
             {
-                path: '/CreatePassword',
+                path: '/create-password',
                 name: 'CreatePassword',
                 component: () =>
                     import(
@@ -42,8 +42,8 @@ const routes: RouteRecordRaw[] = [
             },
 
             {
-                path: '/AboutProject',
-                name: 'AboutProject',
+                path: '/about-project',
+                name: 'about-project',
                 component: () =>
                     import(
                         '@pages/AboutProjectPage/components/AboutProjectPage.vue'
@@ -56,8 +56,8 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/404Page/components/404Page.vue'),
             },
             {
-                path: '/PolicyPage',
-                name: 'PolicyPage',
+                path: '/policy-page',
+                name: 'policy-page',
                 component: () =>
                     import('@pages/PolicyPage/components/PolicyPage.vue'),
             },
@@ -66,6 +66,12 @@ const routes: RouteRecordRaw[] = [
                 name: 'Game',
                 component: () =>
                     import('@pages/StartGamePage/components/StartGamePage.vue'),
+            },
+            {
+                path: '/profile-page',
+                name: 'profile-page',
+                component: () =>
+                    import('@pages/ProfilePage/components/ProfilePage.vue'),
             },
         ],
     },
