@@ -154,10 +154,7 @@ const LoginUser = async () => {
     font-family: 'Nunito', sans-serif;
     text-decoration: underline;
     margin-bottom: 20px;
-<<<<<<< HEAD
     color: #35383f;
-=======
->>>>>>> da9f36cd33f26530dae58710d3562086746c7658
 }
 .form-btn {
     border: none;
@@ -177,4 +174,6 @@ const LoginUser = async () => {
     top: 100px;
 }
 </style>
-<<<<<<< HEAD ======= >>>>>>> da9f36cd33f26530dae58710d3562086746c7658
+<<<<<<< HEAD <<<<<<< HEAD ======= >>>>>>>
+da9f36cd33f26530dae58710d3562086746c7658 ======= >>>>>>>
+f4b7a95a0661c29901fa561f9cee2b8e5eb4eee3

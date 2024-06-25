@@ -3,8 +3,9 @@
     <p class="sidebar__title">Выбери задание!</p>
     <div class="sidebar__wrapper">
       <div class="sidebar__bg">
-        <div @click="switchTask(item.id, item.open)" :class="{ disabled: item.disabled === true }" class="task"
-          v-for="item in tasks" :key="item.id">{{
+
+        <div @click="switchTask(item.id, item.open, item.time)" :class="{ disabled: item.disabled === true }"
+          class="task" v-for="item in tasks" :key="item.id">{{
             item.name
           }} <img class="icon" v-if="item.disabled === false && item.done === false"
             src="@app/assets/icons/play.svg" /><img class="icon"
@@ -14,8 +15,9 @@
     </div>
     <Button class="start" :isImage="true" @click="openTask(taskId, SeeTask)" :image="arrow" label="Старт" />
     <div class="overlay" v-if="SeeTask"></div>
-    <FirstTask @close="close()" v-show="SeeTask && taskId === 1"></FirstTask>
-    <SecondTask @close="close()" v-show="SeeTask && taskId === 2"></SecondTask>
+
+    <FirstTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 1"></FirstTask>
+    <SecondTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 2"></SecondTask>
     <ThirdTask @close="close()" v-show="SeeTask && taskId === 3"></ThirdTask>
     <ThirteenthTask @close="close()" v-show="SeeTask && taskId === 13"></ThirteenthTask>
     <EighthteenTask @close="close()" v-show="SeeTask && taskId === 18"></EighthteenTask>
@@ -23,8 +25,6 @@
     <ElevenTask @close="close()" v-show="SeeTask && taskId === 11"></ElevenTask>
 
   </div>
-
-
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
@@ -39,42 +39,54 @@ import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 
 const tasks = ref([
-  { id: 1, name: 'Задание 1', disabled: false, done: false, open: false },
-  { id: 2, name: 'Задание 2', disabled: false, done: false, open: false },
-  { id: 3, name: 'Задание 3', disabled: false, done: false, open: false },
-  { id: 4, name: 'Задание 4', disabled: true, done: false, open: false },
-  { id: 5, name: 'Задание 5', disabled: true, done: false, open: false },
-  { id: 6, name: 'Задание 6', disabled: true, done: false, open: false },
-  { id: 7, name: 'Задание 7', disabled: true, done: false, open: false },
-  { id: 8, name: 'Задание 8', disabled: true, done: false, open: false },
-  { id: 9, name: 'Задание 9', disabled: false, done: false, open: false },
-  { id: 10, name: 'Задание 10', disabled: true, done: false, open: false },
-  { id: 11, name: 'Задание 11', disabled: false, done: false, open: false },
-  { id: 12, name: 'Задание 12', disabled: true, done: false, open: false },
-  { id: 13, name: 'Задание 13', disabled: false, done: false, open: false },
-  { id: 14, name: 'Задание 14', disabled: true, done: false, open: false },
-  { id: 15, name: 'Задание 15', disabled: true, done: false, open: false },
-  { id: 16, name: 'Задание 16', disabled: true, done: false, open: false },
-  { id: 17, name: 'Задание 17', disabled: true, done: false, open: false },
-  { id: 18, name: 'Задание 18', disabled: false, done: false, open: false },
+
+  { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 10, end: false },
+  { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 5, end: false },
+  { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false },
+  { id: 4, name: 'Задание 4', disabled: true, done: false, open: false, time: 15, end: false },
+  { id: 5, name: 'Задание 5', disabled: true, done: false, open: false, time: 15, end: false },
+  { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 15, end: false },
+  { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 15, end: false },
+  { id: 8, name: 'Задание 8', disabled: true, done: false, open: false, time: 15, end: false },
+  { id: 9, name: 'Задание 9', disabled: false, done: false, open: false, time: 15, end: false },
+  { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 15, end: false },
+  { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 15, end: false },
+  { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 15, end: false },
+  { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 15, end: false },
+  { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 15, end: false },
+  { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 15, end: false },
+  { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 15, end: false },
+  { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 15, end: false },
+  { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 15, end: false },
 ])
 
 const SeeTask = ref(null);
 const taskId = ref(null);
 
+const timeVal = ref(15);
+const endTime = ref(false);
+
+
+
 const close = () => {
   SeeTask.value = false;
+  endTime.value = false;
 };
 
-const switchTask = (id, openId) => {
+const switchTask = (id, openId, time) => {
   taskId.value = id;
   SeeTask.value = openId;
-  // console.log('goo', id, openId);
+  timeVal.value = time;
+  endTime.value = false;
+  console.log(timeVal.value)
 }
 
 const openTask = (taskId) => {
   SeeTask.value = true;
-  // console.log("woo", taskId);
+  setTimeout(() => {
+    endTime.value = true;
+  }, timeVal.value * 1000);
+  console.log("woo", timeVal.value);
 }
 
 
