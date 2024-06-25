@@ -3,7 +3,7 @@
     <p class="sidebar__title">Выбери задание!</p>
     <div class="sidebar__wrapper">
       <div class="sidebar__bg">
-        <div @click="switchTask(item.id, item.open)" :class="{ disabled: item.disabled === true }" class="task"
+        <div @click="switchTask(item.id, item.open, item.time)" :class="{ disabled: item.disabled === true }" class="task"
           v-for="item in tasks" :key="item.id">{{
             item.name
           }} <img class="icon" v-if="item.disabled === false && item.done === false"
@@ -37,44 +37,51 @@ import { ThirteenthTask } from '@features/ThirteenthTask';
 import { EighthteenTask } from '@features/EighthteenTask';
 import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
+import { timer, end } from '@entities/timer';
 
 const tasks = ref([
-  { id: 1, name: 'Задание 1', disabled: false, done: false, open: false },
-  { id: 2, name: 'Задание 2', disabled: false, done: false, open: false },
-  { id: 3, name: 'Задание 3', disabled: false, done: false, open: false },
-  { id: 4, name: 'Задание 4', disabled: true, done: false, open: false },
-  { id: 5, name: 'Задание 5', disabled: true, done: false, open: false },
-  { id: 6, name: 'Задание 6', disabled: true, done: false, open: false },
-  { id: 7, name: 'Задание 7', disabled: true, done: false, open: false },
-  { id: 8, name: 'Задание 8', disabled: true, done: false, open: false },
-  { id: 9, name: 'Задание 9', disabled: false, done: false, open: false },
-  { id: 10, name: 'Задание 10', disabled: true, done: false, open: false },
-  { id: 11, name: 'Задание 11', disabled: false, done: false, open: false },
-  { id: 12, name: 'Задание 12', disabled: true, done: false, open: false },
-  { id: 13, name: 'Задание 13', disabled: false, done: false, open: false },
-  { id: 14, name: 'Задание 14', disabled: true, done: false, open: false },
-  { id: 15, name: 'Задание 15', disabled: true, done: false, open: false },
-  { id: 16, name: 'Задание 16', disabled: true, done: false, open: false },
-  { id: 17, name: 'Задание 17', disabled: true, done: false, open: false },
-  { id: 18, name: 'Задание 18', disabled: false, done: false, open: false },
+  { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 5 },
+  { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 15 },
+  { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15 },
+  { id: 4, name: 'Задание 4', disabled: true, done: false, open: false, time: 15 },
+  { id: 5, name: 'Задание 5', disabled: true, done: false, open: false, time: 15 },
+  { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 15 },
+  { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 15 },
+  { id: 8, name: 'Задание 8', disabled: true, done: false, open: false, time: 15 },
+  { id: 9, name: 'Задание 9', disabled: false, done: false, open: false, time: 15 },
+  { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 15 },
+  { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 15 },
+  { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 15 },
+  { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 15 },
+  { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 15 },
+  { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 15 },
+  { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 15 },
+  { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 15 },
+  { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 15 },
 ])
 
 const SeeTask = ref(null);
 const taskId = ref(null);
+const timeVal = ref(15);
 
 const close = () => {
   SeeTask.value = false;
 };
 
-const switchTask = (id, openId) => {
+const switchTask = (id, openId, time) => {
   taskId.value = id;
   SeeTask.value = openId;
+  timeVal.value = time;
+  console.log(timeVal.value)
   // console.log('goo', id, openId);
 }
 
 const openTask = (taskId) => {
   SeeTask.value = true;
-  // console.log("woo", taskId);
+  timer(timeVal)
+  console.log('goo', end);
+
+  console.log("woo", timeVal.value);
 }
 
 

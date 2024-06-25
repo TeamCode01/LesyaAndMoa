@@ -6,7 +6,7 @@
         <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
       </div>
       <div class="time">
-        <Timer :time="5"></Timer>
+        <Timer></Timer>
         <p class="title-h4 FirstTask__title"> Составь рассказ про АЛФАВИТ из подходящих фраз.</p>
       </div>
 
