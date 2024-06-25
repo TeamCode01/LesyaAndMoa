@@ -5,7 +5,7 @@
         <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
       </div>
       <div class="time">
-        <Timer :time="15"></Timer>
+        <Timer :end="end"></Timer>
         <p class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</p>
       </div>
       <div class="SecondTask__wrapper_block">
@@ -20,7 +20,12 @@
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
 const emit = defineEmits(['close']);
-
+const props = defineProps({
+  end: {
+    type: Boolean,
+    required: false,
+  },
+})
 const hide = () => {
   emit('close');
 };
