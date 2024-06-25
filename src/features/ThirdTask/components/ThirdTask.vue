@@ -82,7 +82,13 @@ const allowDrop = (event) => {
   row-gap: 4px;
   padding: 110px 40px;
   z-index: 999;
+
+  @media (max-width: 1024px) {
+    width: 250px;
+    height: 186px;
+  }
 }
+
 
 .box2 {
   background-image: url('@app/assets/creatures/box2.png');
@@ -93,6 +99,11 @@ const allowDrop = (event) => {
   row-gap: 4px;
   padding: 110px 40px;
   z-index: 999;
+
+  @media (max-width: 1024px) {
+    width: 250px;
+    height: 186px;
+  }
 }
 
 .box3 {
@@ -104,19 +115,32 @@ const allowDrop = (event) => {
   row-gap: 4px;
   padding: 110px 40px;
   z-index: 999;
+
+  @media (max-width: 1024px) {
+    width: 250px;
+    height: 186px;
+  }
 }
 
 .ThirdTask {
   position: absolute;
-  left: 0;
+  left: 12%;
   right: 0;
-  top: 17.4%;
+  top: 23.5%;
   bottom: 0;
   background-color: white;
   z-index: 999;
   border-radius: 20px;
   background-color: #fff;
-  max-height: 600px;
+  max-width: 1200px;
+  width: 100%;
+  height: 600px;
+
+  @media (max-width: 1024px) {
+    height: 470px;
+    max-width: 944px;
+    width: 100%;
+  }
 
   &__title {
     text-align: center;
@@ -124,16 +148,28 @@ const allowDrop = (event) => {
     font-weight: 500;
     font-family: 'Nunito', sans-serif;
     max-width: 700px;
+
+    @media (max-width: 1024px) {
+      font-size: 20px;
+    }
   }
 
   &__answer {
     display: flex;
     justify-content: center;
     column-gap: 50px;
+    @media (max-width: 1024px) {
+    column-gap: 25px;
+    }
   }
 
   &__wrapper {
-    padding: 30px 67px 60px 60px;
+    padding: 30px 133px 58px 133px;
+    position: relative;
+
+    @media (max-width: 1024px) {
+      padding: 30px 0px;
+    }
 
     &_block {
       display: flex;
@@ -141,6 +177,11 @@ const allowDrop = (event) => {
       column-gap: 40px;
       margin-top: 60px;
       margin-bottom: 88px;
+
+      @media (max-width: 1024px) {
+        margin-top: 32px;
+        margin-bottom: 64px;
+      }
     }
   }
 
@@ -160,6 +201,9 @@ const allowDrop = (event) => {
 }
 
 .close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
   cursor: pointer;
 }
 

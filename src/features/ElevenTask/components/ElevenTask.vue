@@ -180,8 +180,8 @@ const allowDrop = (event) => {
 
 .close-icon {
   position: absolute;
-  top: 10px;
   right: 20px;
+  top: 20px;
   cursor: pointer;
 }
 
@@ -215,15 +215,21 @@ const allowDrop = (event) => {
 
 .ElevenTask {
   position: absolute;
-  left: 0;
+  left: 12%;
   right: 0;
-  top: 17.4%;
+  top: 23.5%;
   bottom: 0;
   background-color: white;
   z-index: 999;
   border-radius: 20px;
-  background-color: #fff;
-  max-height: 600px;
+  width: 100%;
+  max-width: 1200px;
+  height: 600px;
+  @media (max-width: 1024px) {
+    height: 470px;
+    max-width: 944px;
+    width: 100%;
+  }
 
   &__title {
     text-align: center;
@@ -231,14 +237,22 @@ const allowDrop = (event) => {
     font-weight: 500;
     font-family: "Nunito", sans-serif;
     max-width: 450px;
+    @media (max-width: 1024px) {
+      font-size: 20px;
+    }
   }
 
   &__content {
-    margin-top: 48px;
+    margin-top: 40px;
     display: flex;
     justify-content: center;
+    width: 100%;
     column-gap: 160px;
     align-items: center;
+    @media (max-width: 1024px) {
+      margin-top: 30px;
+      column-gap: 120px;
+    }
   }
 
   .close {
@@ -247,7 +261,6 @@ const allowDrop = (event) => {
 
   &__wrapper {
     padding: 30px 76px 76px 76px;
-    height: 494px;
   }
 }
 

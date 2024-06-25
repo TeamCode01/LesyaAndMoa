@@ -103,7 +103,7 @@ const allowDrop = (event) => {
 
 .close-icon {
   position: absolute;
-  top: 10px;
+  top: 20px;
   right: 20px;
   cursor: pointer;
 }
@@ -135,15 +135,21 @@ const allowDrop = (event) => {
 
 .NineTask {
   position: absolute;
-  left: 0;
+  left: 12%;
   right: 0;
-  top: 17.4%;
+  top: 23.5%;
   bottom: 0;
   background-color: white;
   z-index: 999;
   border-radius: 20px;
-  background-color: #fff;
-  max-height: 600px;
+  height: 600px;
+  width: 100%;
+  max-width: 1200px;
+  @media (max-width: 1024px) {
+    height: 470px;
+    max-width: 944px;
+    width: 100%;
+  }
 
   &__title {
     text-align: center;
@@ -151,6 +157,9 @@ const allowDrop = (event) => {
     font-weight: 500;
     font-family: "Nunito", sans-serif;
     max-width: 700px;
+    @media (max-width: 1024px) {
+      font-size: 20px;
+    }
   }
 
   &__content {
@@ -163,7 +172,9 @@ const allowDrop = (event) => {
 
   &__wrapper {
     padding: 30px 76px 76px 76px;
-    height: 494px;
+    @media (max-width: 1024px) {
+      padding: 30px 32px 32px 42px;
+    }
   }
 }
 
