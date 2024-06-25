@@ -16,8 +16,7 @@
           {{ item.name }}
         </q-btn>
       </div>
-      <textarea @drop="drop($event)" @dragover="allowDrop($event)" 
-        class="FirstTask__wrapper_answer"></textarea>
+      <textarea @drop="drop($event)" @dragover="allowDrop($event)" class="FirstTask__wrapper_answer"></textarea>
     </div>
   </div>
 </template>
@@ -32,7 +31,7 @@ const hide = () => {
 };
 
 // const words = ref(['медведи и зайцы', 'Вместе они составляют АЛФАВИТ', 'в слоги и в слова.', 'В нашем языке', 'в леса и поля', 'есть иероглифы', 'и складываются', 'явления и предметы', 'есть буквы.', 'Все вместе они образуют МОЗАИКУ']);
-const words = ref([{ id: 1, name: 'медведи и зайцы', index: 11 }, { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2 }, { id: 3, name: 'в слоги и в слова.', index: 5 }, { id: 4, name: 'В нашем языке', index: 0 }, { id: 5, name: 'в леса и поля', index: 22 }, { id: 6, name: 'есть иероглифы', index: 81 }, { id: 7, name: 'и складываются', index: 3 }, { id: 8, name: 'явления и предметы', index: 7 }, { id: 9, name: 'есть буквы.', index: 1}, { id: 10, name: 'Все вместе они образуют МОЗАИКУ', index: 9 }])
+const words = ref([{ id: 1, name: 'медведи и зайцы', index: 11 }, { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2 }, { id: 3, name: 'в слоги и в слова.', index: 5 }, { id: 4, name: 'В нашем языке', index: 0 }, { id: 5, name: 'в леса и поля', index: 22 }, { id: 6, name: 'есть иероглифы', index: 81 }, { id: 7, name: 'и складываются', index: 3 }, { id: 8, name: 'явления и предметы', index: 7 }, { id: 9, name: 'есть буквы.', index: 1 }, { id: 10, name: 'Все вместе они образуют МОЗАИКУ', index: 9 }])
 const wordsAnswer = ref([{ id: 1, name: 'В нашем языке', index: 0 }, { id: 2, name: 'есть буквы.', index: 1 }, { id: 3, name: 'Вместе они составляют АЛФАВИТ', index: 2 }, { id: 4, name: 'и складываются', index: 3 }, { id: 5, name: 'в слоги и в слова.', index: 4 }]);
 const answer = ref('');
 const dropIndex = ref(words.value.length - 1);
@@ -83,30 +82,52 @@ const allowDrop = (event) => {
 
 .FirstTask {
   position: absolute;
-  left: 0;
+  left: 12%;
   right: 0;
-  top: 17.4%;
+  top: 23.5%;
   bottom: 0;
-  background-color: white;
+  // background-color: white;
   z-index: 999;
   border-radius: 20px;
   background-color: #fff;
-  max-height: 600px;
+  height: 600px;
+  width: 100%;
+  max-width: 1200px;
+
+  @media (max-width: 1024px) {
+    height: 470px;
+    max-width: 944px;
+    width: 100%;
+  }
 
   &__title {
     text-align: center;
     font-size: 24px;
     font-weight: 500;
     font-family: 'Nunito', sans-serif;
+
+    @media (max-width: 1024px) {
+      font-size: 20px;
+    }
   }
 
   &__wrapper {
     padding: 30px 60px 67px 60px;
+    position: relative;
+    height: 600px;
+
+    @media (max-width: 1024px) {
+      padding: 30px 20px 43px 20px;
+    }
 
     &_block {
       display: flex;
       justify-content: space-around;
       margin-top: 48px;
+
+      @media (max-width: 1024px) {
+        margin-top: 28px;
+      }
     }
 
     &_content {
@@ -148,6 +169,9 @@ const allowDrop = (event) => {
 }
 
 .close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
   cursor: pointer;
 }
 </style>

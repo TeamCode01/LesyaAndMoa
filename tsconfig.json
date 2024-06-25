@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
+        "allowJs": true,
         "paths": {
             "@app/*": ["./src/app/*"],
             "@processes/*": ["./src/processes/*"],

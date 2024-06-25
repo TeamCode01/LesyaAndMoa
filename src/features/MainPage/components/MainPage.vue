@@ -26,9 +26,9 @@
                 <img src="@app/assets/backgrounds/animals.jpg" alt="game">
             </div>
         </div>
-
+        <TestTask  @close="close()" v-show="isOpen == true"></TestTask>
     </div>
-    <TestTask  @close="close()" v-show="isOpen == true"></TestTask>
+
     <div class="about">
         <h2 class="title-h2 about__title">О методике</h2>
         <div class="about__wrapper">
