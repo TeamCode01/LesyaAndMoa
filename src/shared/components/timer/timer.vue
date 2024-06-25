@@ -1,6 +1,7 @@
 <template>
 
   <img src="@app/assets/icons/gifTimer.gif" v-show="end == false">
+  <!-- <p>{{ props.time }}</p> -->
   <img src="@app/assets/icons/endTimer.png" v-show="end == true" alt="timer">
 
   <!-- <svg width="30px" height="52px" viewBox="0 0 14 18">
@@ -54,7 +55,7 @@
 
 </template>
 <script setup>
-import { ref, computed, onBeforeUnmount} from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 
 const props = defineProps({
@@ -69,29 +70,22 @@ let end = ref(false);
 let timerIcon = ref('');
 
 // const timerDown = setInterval(() => {
-//   timerIcon.value = '@app/assets/icons/gifTimer.gif'
-//     props.time --
 //   if (props.time <= 0) {
-
 //     clearInterval(timerDown);
-//     console.log('finish');
-//     timerIcon.value = '@app/assets/icons/endTimer.png'
+//     end.value = true;
 //   }
+//   props.time --;
 // }, 1000);
 
 function timer(time, message) {
-    setTimeout(() => {
-        console.log(message);
-        end.value = true;
-    }, time * 1000);
+  setTimeout(() => {
+    console.log(message);
+    end.value = true;
+  }, time * 1000);
 }
 
-timer(props.time, 'finish')
-
-// onBeforeUnmount = () => {
-//   clearInterval(timer);
-// }
-
-
+onMounted(() => {
+  timer(props.time, 'finish')
+})
 </script>
 <style lang="scss" scoped></style>
