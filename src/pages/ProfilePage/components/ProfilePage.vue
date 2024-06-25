@@ -22,8 +22,8 @@
                 <div class="child__scale">
                     <v-progress-linear
                         v-model="skill"
-                        color="white"
-                        height="25"
+                        height="30"
+                        class="scale"
                     >
                         <template v-slot:default="{ value }">
                             <strong>{{ Math.ceil(value) }}%</strong>
@@ -34,12 +34,17 @@
                     label="Перейти к обучению"
                     class="profile__btn"
                 ></Button>
-                <Button
-                    label="Добавить ребенка"
-                    class="profile__btn add-children"
-                ></Button>
             </div>
         </div>
+        <Button
+            label="Добавить ребенка"
+            class="profile__btn add-children"
+        ></Button>
+        <img
+            class="profile-child__img"
+            src="@app/assets/img/Profile/LesyaMoa.png"
+            alt=""
+        />
     </div>
 </template>
 <script setup>
@@ -89,19 +94,50 @@ const skill = ref(0);
 }
 .profile-child {
     position: relative;
-    height: 640px;
-    margin: 60px auto;
-    width: 937px;
+    min-height: 640px;
+    margin: 60px auto 0 auto;
+    max-width: 1200px;
 
     &__wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
+        background-color: #b3cdf9;
+        border-radius: 20px;
+        padding: 20px;
     }
     &__text {
         font-size: 28px;
         font-family: 'Nunito', sans-serif;
         font-weight: normal;
     }
+}
+.child__form {
+    width: 1050px;
+    text-align: center;
+}
+.delete-profile {
+    align-self: flex-end;
+}
+.child__name {
+    font-size: 28px;
+}
+.child__school {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+.v-progress-linear__background {
+    color: white;
+}
+.scale {
+    // color: #5ccf54;
+    color: white;
+    border-radius: 8px;
+}
+.scale strong {
+    color: black;
+}
+.profile-child__img {
+    margin: 0 45px -120px 45px;
 }
 </style>
