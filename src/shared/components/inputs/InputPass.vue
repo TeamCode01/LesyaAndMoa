@@ -1,7 +1,7 @@
 <template>
     <div class="form-input" :style="{ width: width }">
         <input
-            :type="type"
+            :type="inputType"
             :name="name"
             :value="value"
             :id="name"
@@ -12,10 +12,24 @@
             @input="updateValue"
             v-bind="$attrs"
         />
+
+        <img
+            v-if="inputType === 'password'"
+            @click="togglePassword"
+            class="password-control"
+            src="@app/assets/icons/eye-hidden.svg"
+        />
+        <img
+            v-if="inputType === 'text'"
+            @click="togglePassword"
+            class="password-control"
+            src="@app/assets/icons/eye-show.svg"
+        />
     </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 defineOptions({
     inheritAttrs: false,
 });
@@ -55,6 +69,11 @@ const updateValue = (event) => {
     emit('update:value', event.target.value);
     console.log('textt', event.target.value);
 };
+const inputType = ref('password');
+
+function togglePassword() {
+    inputType.value = inputType.value === 'password' ? 'text' : 'password';
+}
 </script>
 <style lang="scss" scoped>
 input {
@@ -65,6 +84,7 @@ input:focus {
 }
 .form-input {
     padding: 12px 0 !important;
+    position: relative;
 }
 .form-input input {
     text-indent: 20px;
@@ -80,5 +100,10 @@ input:focus {
 .form-input input::placeholder {
     font-size: 16px;
     font-family: 'Nunito', sans-serif;
+}
+.password-control {
+    position: absolute;
+    right: 7%;
+    top: 35%;
 }
 </style>

@@ -33,7 +33,9 @@
         </div>
     </div>
 </template>
-<script setup lang="ts"></script>
+<script setup>
+import { Input } from '@shared/components/inputs';
+</script>
 <style lang="scss" scoped>
 .AuthWrapper {
     background-size: cover;

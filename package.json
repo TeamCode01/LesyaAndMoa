@@ -20,7 +20,9 @@
         "vue-interactjs": "^0.1.10",
         "vue-router": "^4.3.0",
         "vue-slick-carousel": "^1.0.6",
-        "vuedraggable": "^2.24.3"
+        "vue-sweetalert2": "^5.0.11",
+        "vuedraggable": "^2.24.3",
+        "vuetify": "^3.3.22"
     },
     "devDependencies": {
         "@quasar/vite-plugin": "^1.6.0",

@@ -4,14 +4,19 @@
             <div class="header__wrapper">
                 <div class="header__logo">
                     <a href="#" target="_blank">
-                        <img class="header__logo_main" src="@app/assets/icons/LogoLesya.png"
-                            alt="Логотип сайта Леся и Моа" />
+                        <img
+                            class="header__logo_main"
+                            src="@app/assets/icons/LogoLesya.png"
+                            alt="Логотип сайта Леся и Моа"
+                        />
                     </a>
                 </div>
 
                 <ul class="header__wrapper_links">
                     <li>
-                        <a href="/AboutProject" class="link-small">О проекте</a>
+                        <a href="/about-project" class="link-small"
+                            >О проекте</a
+                        >
                     </li>
                     <li><a href="#" class="link-small">Новости</a></li>
                     <li><a href="#" class="link-small">Контакты</a></li>
@@ -21,39 +26,61 @@
                 </ul>
                 <div class="header__wrapper_adaptive">
                     <div class="header__wrapper_avatar">
-                        <img src="@app/assets/icons/avatar.png" alt="Аватарка" />
+                        <img
+                            src="@app/assets/icons/avatar.png"
+                            alt="Аватарка"
+                        />
                         <div @click="showModalMini = true">
-                            <img class="header__wrapper_avatar_arrow" src="@app/assets/icons/icons-chevron.svg"
-                                alt="arrow" />
+                            <img
+                                class="header__wrapper_avatar_arrow"
+                                src="@app/assets/icons/icons-chevron.svg"
+                                alt="arrow"
+                            />
                         </div>
                     </div>
-                    <div class="header__wrapper_burger" @click="showModal = true">
-                        <img src="@app/assets/icons/burger.png" alt="Бургер меню" />
+                    <div
+                        class="header__wrapper_burger"
+                        @click="showModal = true"
+                    >
+                        <img
+                            src="@app/assets/icons/burger.png"
+                            alt="Бургер меню"
+                        />
                     </div>
                 </div>
                 <div class="header__wrapper_other">
                     <div class="header__logo">
                         <a href="#" target="_blank">
-                            <img class="header__logo_yt" src="@app/assets/icons/YouTube.svg" alt="Ютуб" />
+                            <img
+                                class="header__logo_yt"
+                                src="@app/assets/icons/YouTube.svg"
+                                alt="Ютуб"
+                            />
                         </a>
                     </div>
-                    <router-link class="link" :to="{name: 'Login' }">
+                    <router-link class="link" :to="{ name: 'Login' }">
                         <Button class="btn_info" label="Войти"></Button>
                     </router-link>
-
                 </div>
             </div>
         </div>
     </header>
     <div class="modal" v-if="showModal">
         <div class="close" @click="showModal = false">
-            <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+            <img
+                class="close-icon"
+                src="@app/assets/icons/icon-close.svg"
+                alt="крест"
+            />
         </div>
         <div class="modal__wrapper">
             <div class="header__logo">
                 <a href="#" target="_blank">
-                    <img class="header__logo_modal" src="@app/assets/icons/LogoLesya.png"
-                        alt="Логотип сайта Леся и Моа" />
+                    <img
+                        class="header__logo_modal"
+                        src="@app/assets/icons/LogoLesya.png"
+                        alt="Логотип сайта Леся и Моа"
+                    />
                 </a>
             </div>
             <ul class="header__wrapper_links modal__menu">
@@ -66,14 +93,22 @@
             </ul>
             <div class="header__logo">
                 <a href="#" target="_blank">
-                    <img class="header__logo_yt" src="@app/assets/icons/YouTube.svg" alt="Ютуб" />
+                    <img
+                        class="header__logo_yt"
+                        src="@app/assets/icons/YouTube.svg"
+                        alt="Ютуб"
+                    />
                 </a>
             </div>
         </div>
     </div>
     <div class="modal-mini" v-if="showModalMini">
         <div class="close" @click="showModalMini = false">
-            <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+            <img
+                class="close-icon"
+                src="@app/assets/icons/icon-close.svg"
+                alt="крест"
+            />
         </div>
         <div class="modal__wrapper_mini">
             <div class="modal__wrapper_mini_info">

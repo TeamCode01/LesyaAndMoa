@@ -6,7 +6,7 @@
         <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
       </div>
       <div class="time">
-        <Timer :time="15"></Timer>
+        <Timer :end="end"></Timer>
         <p class="title-h4 FirstTask__title"> Составь рассказ про АЛФАВИТ из подходящих фраз.</p>
       </div>
 
@@ -16,7 +16,7 @@
           {{ item.name }}
         </q-btn>
       </div>
-      <textarea @drop="drop($event)" @dragover="allowDrop($event)" class="FirstTask__wrapper_answer"></textarea>
+      <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer" class="FirstTask__wrapper_answer"></input>
     </div>
   </div>
 </template>
@@ -25,12 +25,16 @@ import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 const emit = defineEmits(['close']);
-
+const props = defineProps({
+  end: {
+    type: Boolean,
+    required: false,
+  },
+})
 const hide = () => {
   emit('close');
 };
 
-// const words = ref(['медведи и зайцы', 'Вместе они составляют АЛФАВИТ', 'в слоги и в слова.', 'В нашем языке', 'в леса и поля', 'есть иероглифы', 'и складываются', 'явления и предметы', 'есть буквы.', 'Все вместе они образуют МОЗАИКУ']);
 const words = ref([{ id: 1, name: 'медведи и зайцы', index: 11 }, { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2 }, { id: 3, name: 'в слоги и в слова.', index: 5 }, { id: 4, name: 'В нашем языке', index: 0 }, { id: 5, name: 'в леса и поля', index: 22 }, { id: 6, name: 'есть иероглифы', index: 81 }, { id: 7, name: 'и складываются', index: 3 }, { id: 8, name: 'явления и предметы', index: 7 }, { id: 9, name: 'есть буквы.', index: 1 }, { id: 10, name: 'Все вместе они образуют МОЗАИКУ', index: 9 }])
 const wordsAnswer = ref([{ id: 1, name: 'В нашем языке', index: 0 }, { id: 2, name: 'есть буквы.', index: 1 }, { id: 3, name: 'Вместе они составляют АЛФАВИТ', index: 2 }, { id: 4, name: 'и складываются', index: 3 }, { id: 5, name: 'в слоги и в слова.', index: 4 }]);
 const answer = ref('');
@@ -43,14 +47,10 @@ const drag = (event, word, index) => {
 const drop = (event, word) => {
   event.preventDefault();
   let text = event.dataTransfer.getData("text");
-  console.log(text);
-  let correct = wordsAnswer.value.find((item) => item.name == text)
-  console.log(correct)
-  // console.log(wordsAnswer.value.name, 'sss')
+  let correct = wordsAnswer.value.find((item) => item.name === text)
   if (correct) {
-    event.target.value = text;
     words.value.splice(dropIndex.value, 1);
-    // answer.value += ' ';
+   answer.value += text + ' ';
   } else {
     return false;
   }
@@ -147,6 +147,7 @@ const allowDrop = (event) => {
       border-radius: 20px;
       margin-top: 20px;
       border: none;
+      text-shadow: 0 0 0 black;
       outline: none;
       resize: none;
       overflow-y: hidden;
