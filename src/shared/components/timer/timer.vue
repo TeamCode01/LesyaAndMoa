@@ -1,10 +1,12 @@
 <template>
+    <img src="@app/assets/icons/gifTimer.gif" v-show="end == false" />
+    <img
+        src="@app/assets/icons/endTimer.png"
+        v-show="end == true"
+        alt="timer"
+    />
 
-  <img src="@app/assets/icons/gifTimer.gif" v-show="end == false">
-  <!-- <p>{{ props.time }}</p> -->
-  <img src="@app/assets/icons/endTimer.png" v-show="end == true" alt="timer">
-
-  <!-- <svg width="30px" height="52px" viewBox="0 0 14 18">
+    <!-- <svg width="30px" height="52px" viewBox="0 0 14 18">
       <defs>
       </defs>
       <g id="sandclock" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
@@ -51,41 +53,43 @@
         </g>
       </g>
     </svg> -->
-
-
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-
+import { ref, computed, onBeforeUnmount } from 'vue';
 
 const props = defineProps({
-  time: {
-    type: Number,
-    required: true
-  }
-})
+    time: {
+        type: Number,
+        required: true,
+    },
+});
 
 let end = ref(false);
 
 let timerIcon = ref('');
 
 // const timerDown = setInterval(() => {
+//   timerIcon.value = '@app/assets/icons/gifTimer.gif'
+//     props.time --
 //   if (props.time <= 0) {
+
 //     clearInterval(timerDown);
-//     end.value = true;
+//     console.log('finish');
+//     timerIcon.value = '@app/assets/icons/endTimer.png'
 //   }
-//   props.time --;
 // }, 1000);
 
 function timer(time, message) {
-  setTimeout(() => {
-    console.log(message);
-    end.value = true;
-  }, time * 1000);
+    setTimeout(() => {
+        console.log(message);
+        end.value = true;
+    }, time * 1000);
 }
 
-onMounted(() => {
-  timer(props.time, 'finish')
-})
+timer(props.time, 'finish');
+
+// onBeforeUnmount = () => {
+//   clearInterval(timer);
+// }
 </script>
 <style lang="scss" scoped></style>
