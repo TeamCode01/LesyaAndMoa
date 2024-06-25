@@ -1,8 +1,10 @@
 <template>
 
+  <img src="@app/assets/icons/gifTimer.gif" v-show="end == false">
+  <!-- <p>{{ props.time }}</p> -->
+  <img src="@app/assets/icons/endTimer.png" v-show="end == true" alt="timer">
 
-
-    <svg width="30px" height="52px" viewBox="0 0 14 18">
+  <!-- <svg width="30px" height="52px" viewBox="0 0 14 18">
       <defs>
       </defs>
       <g id="sandclock" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
@@ -48,12 +50,13 @@
           </path>
         </g>
       </g>
-    </svg>
+    </svg> -->
 
 
 </template>
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+
 
 const props = defineProps({
   time: {
@@ -62,13 +65,27 @@ const props = defineProps({
   }
 })
 
-const timerDown = setInterval(() => {
-  // props.time--;
-  if (props.time <= 0) {
-    clearInterval(timerDown);
-  }
-}, 1000);
+let end = ref(false);
 
+let timerIcon = ref('');
+
+// const timerDown = setInterval(() => {
+//   if (props.time <= 0) {
+//     clearInterval(timerDown);
+//     end.value = true;
+//   }
+//   props.time --;
+// }, 1000);
+
+function timer(time, message) {
+  setTimeout(() => {
+    console.log(message);
+    end.value = true;
+  }, time * 1000);
+}
+
+onMounted(() => {
+  timer(props.time, 'finish')
+})
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

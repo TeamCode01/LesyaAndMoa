@@ -36,15 +36,22 @@ const hide = () => {
 
 .SecondTask {
   position: absolute;
-  left: 0;
+  left: 12%;
   right: 0;
-  top: 17.4%;
+  top: 23.5%;
   bottom: 0;
   background-color: white;
   z-index: 999;
   border-radius: 20px;
   background-color: #fff;
-  max-height: 600px;
+  width: 100%;
+  max-width: 1200px;
+  height: 600px;
+  @media (max-width: 1024px) {
+    height: 470px;
+    max-width: 944px;
+    width: 100%;
+  }
 
   &__title {
     text-align: center;
@@ -52,14 +59,25 @@ const hide = () => {
     font-weight: 500;
     font-family: 'Nunito', sans-serif;
     max-width: 700px;
+
+    @media (max-width: 1024px) {
+      font-size: 20px;
+    }
   }
 
   .close {
+    right: 20px;
+    top: 20px;
+    position: absolute;
     cursor: pointer;
   }
 
   &__wrapper {
-    padding: 30px 67px 60px 60px;
+    padding: 30px 100px;
+    position: relative;
+    @media (max-width: 1024px) {
+      padding: 30px 60px;
+    }
 
     &_block {
       display: flex;

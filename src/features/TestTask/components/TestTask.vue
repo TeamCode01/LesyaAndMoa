@@ -38,21 +38,30 @@ const answer_five = ref('');
 <style lang="scss" scoped>
 .TestTask {
   position: absolute;
-  left: 0;
+  left: 12%;
   right: 0;
-  top: 17.4%;
+  top: 100%;
   bottom: 0;
   background-color: white;
   z-index: 999;
   border-radius: 20px;
-  background-color: #fff;
-  max-height: 600px;
+  height: 600px;
+  width: 100%;
+  max-width: 1200px;
+  @media (max-width: 1024px) {
+    height: 470px;
+    max-width: 944px;
+    width: 100%;
+  }
 
   &__title {
     text-align: center;
     font-size: 24px;
     font-weight: medium;
     font-family: 'Nunito';
+    @media (max-width: 1024px) {
+      font-size: 20px;
+    }
   }
 
   &__task {
@@ -69,7 +78,11 @@ const answer_five = ref('');
   }
 
   &__wrapper {
-    padding: 30px 60px 67px 60px;
+    padding: 30px 0px 73px 0px;
+    position: relative;
+    @media (max-width: 1024px) {
+      padding: 30px 0px 45px 0px;
+    }
   }
 
   &__btn {
@@ -100,5 +113,12 @@ const answer_five = ref('');
   line-height: 40px;
   height: 20px;
   outline: none;
+}
+
+.close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
 }
 </style>

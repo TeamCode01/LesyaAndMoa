@@ -3,8 +3,9 @@
     <p class="sidebar__title">Выбери задание!</p>
     <div class="sidebar__wrapper">
       <div class="sidebar__bg">
-        <div @click="switchTask(item.id, item.open)" :class="{ disabled: item.disabled === true }" class="task" v-for="item in tasks" :key="item.id">{{
-          item.name
+        <div @click="switchTask(item.id, item.open)" :class="{ disabled: item.disabled === true }" class="task"
+          v-for="item in tasks" :key="item.id">{{
+            item.name
           }} <img class="icon" v-if="item.disabled === false && item.done === false"
             src="@app/assets/icons/play.svg" /><img class="icon"
             v-else-if="item.disabled === true && item.done === false" src="@app/assets/icons/block.svg" /></div>
@@ -12,6 +13,7 @@
 
     </div>
     <Button class="start" :isImage="true" @click="openTask(taskId, SeeTask)" :image="arrow" label="Старт" />
+    <div class="overlay" v-if="SeeTask"></div>
     <FirstTask @close="close()" v-show="SeeTask && taskId === 1"></FirstTask>
     <SecondTask @close="close()" v-show="SeeTask && taskId === 2"></SecondTask>
     <ThirdTask @close="close()" v-show="SeeTask && taskId === 3"></ThirdTask>
@@ -57,12 +59,12 @@ const tasks = ref([
   { id: 18, name: 'Задание 18', disabled: false, done: false, open: false },
 ])
 
- const SeeTask = ref(null);
- const taskId = ref(null);
+const SeeTask = ref(null);
+const taskId = ref(null);
 
- const close = () => {
+const close = () => {
   SeeTask.value = false;
- };
+};
 
 const switchTask = (id, openId) => {
   taskId.value = id;
@@ -84,6 +86,19 @@ const openTask = (taskId) => {
     max-width: 10px;
     width: 100%;
   }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 998;
 }
 
 .sidebar {
@@ -190,7 +205,7 @@ const openTask = (taskId) => {
 
 
 .sidebar__bg::-webkit-scrollbar-thumb {
-  background: #4D65E5;
+  background-color: #4D65E5;
   border-radius: 7px;
   cursor: pointer;
   max-height: 148px;

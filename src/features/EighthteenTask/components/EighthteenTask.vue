@@ -14,6 +14,7 @@
       </div>
       <input class="EighthteenTask__answer" v-model="answer">
       </input>
+      <Button class="send" :isImage="true" :image="arrow" label="Ответить" />
     </div>
   </div>
 </template>
@@ -37,23 +38,51 @@ const answer = ref('');
   align-items: center;
   column-gap: 28px;
 }
+
+.send {
+  max-width: 280px;
+  width: 100%;
+  margin: 0px auto;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 32px;
+
+  @media (max-width: 1024px) {
+    max-width: 212px;
+    height: 48px;
+    column-gap: 28px;
+  }
+}
+
 .EighthteenTask {
   position: absolute;
-  left: 0;
+  left: 12%;
   right: 0;
-  top: 17.4%;
+  top: 23.5%;
   bottom: 0;
-  background-color: white;
   z-index: 999;
+  max-width: 1200px;
+  width: 100%;
   border-radius: 20px;
   background-color: #fff;
-  max-height: 600px;
+  height: 600px;
+  @media (max-width: 1024px) {
+    height: 470px;
+    max-width: 944px;
+    width: 100%;
+  }
 
   &__title {
     text-align: center;
     font-size: 24px;
     font-weight: medium;
     font-family: 'Nunito';
+
+    @media (max-width: 1024px) {
+      font-size: 20px;
+    }
   }
 
   &__task {
@@ -65,13 +94,18 @@ const answer = ref('');
   }
 
   &__wrapper {
-    padding: 30px 60px 67px 60px;
+    padding: 30px 60px 57px 60px;
+    @media (max-width: 1024px) {
+     padding: 30px 20px 50px 20px;
+    }
+
   }
 
   &__answer {
     background-color: $blueGame;
     width: 100%;
     padding: 20px 100px;
+    margin-bottom: 40px;
     color: #4E3B7F;
     font-size: 22px;
     font-weight: 700;
@@ -104,6 +138,9 @@ const answer = ref('');
 }
 
 .close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
   cursor: pointer;
 }
 </style>
