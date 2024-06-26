@@ -5,7 +5,7 @@
         <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
       </div>
       <div class="time">
-        <Timer :time="15"></Timer>
+        <Timer :end="end"></Timer>
         <p class="title-h4 EighthteenTask__title">Прочитай текст, запиши его в поле ответа.</p>
       </div>
 
@@ -28,6 +28,13 @@ const emit = defineEmits(['close']);
 const hide = () => {
   emit('close');
 };
+
+const props = defineProps({
+  end: {
+    type: Boolean,
+    required: false,
+  },
+})
 
 const answer = ref('');
 </script>

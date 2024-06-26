@@ -6,7 +6,7 @@
         <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
       </div>
       <div class="time">
-        <Timer :time="15"></Timer>
+        <Timer :end="end"></Timer>
         <p class="title-h4 ThirdTask__title"> Распредели звуки по коробкам на образуемые с помощью только шума, голоса
           и шума, только голоса.</p>
       </div>
@@ -42,6 +42,13 @@ const emit = defineEmits(['close']);
 const hide = () => {
   emit('close');
 };
+
+const props = defineProps({
+  end: {
+    type: Boolean,
+    required: false
+  }
+})
 
 const letters = ref(['к', 'ч', 'с', 'о', 'ф', 'з', 'и', 'г', 'д']);
 const answer = ref('');

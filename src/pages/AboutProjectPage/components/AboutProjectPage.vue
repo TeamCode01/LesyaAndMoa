@@ -108,7 +108,6 @@
         </div>
     </div>
 </template>
-<script></script>
 <style lang="scss" scoped>
 .container {
     margin: 0 auto;

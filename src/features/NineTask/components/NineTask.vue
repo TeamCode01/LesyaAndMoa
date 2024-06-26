@@ -5,7 +5,7 @@
       <img @click="hide" class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
 
       <div class="time">
-        <Timer :time="15"></Timer>
+        <Timer :end="end"></Timer>
         <p class="title-h4 NineTask__title">
           Собери из букв одинакового размера названия предметов, которые встретились
           героям на детской площадке.
@@ -59,6 +59,13 @@ const emit = defineEmits(["close"]);
 const hide = () => {
   emit("close");
 };
+
+const props = defineProps({
+  end: {
+    type: Boolean,
+    required: false,
+  },
+})
 
 
 const letterss = ref([{ id: 'L', name: 'Л' }, { id: 'B', name: 'Б' }, { id: 'G', name: 'Г' }, { id: 'm', name: 'М' }, { id: 'E', name: 'Е' }, { id: 'r', name: 'Р' }, { id: 'O', name: 'О' }, { id: 'C', name: 'С' }, { id: 'y', name: 'У' }, { id: 'R', name: 'Р' }, { id: 'e', name: 'Е' }, { id: 'c', name: 'С' }, { id: 'i', name: 'Ь' }, { id: 'ya', name: 'Я' }, { id: 'N', name: 'Н' }, { id: 'YA', name: 'Я' }, { id: 'k', name: 'К' }, { id: 'K', name: 'К' }, { id: 'a', name: 'А' }, { id: 'ch', name: 'Ч' }, { id: 'A', name: 'А' }]);

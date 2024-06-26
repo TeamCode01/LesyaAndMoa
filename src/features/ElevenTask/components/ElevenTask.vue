@@ -5,7 +5,7 @@
       <img @click="hide" class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
 
       <div class="time">
-        <Timer :time="15"></Timer>
+        <Timer :end="end"></Timer>
         <p class="title-h4 ElevenTask__title">
           Собери слова из двух частей, угадай,
           из какой сказки эти герои.
@@ -59,6 +59,12 @@ const hide = () => {
   emit("close");
 };
 
+const props = defineProps({
+  end: {
+    type: Boolean,
+    required: false,
+  },
+})
 
 const syllables = ref([{ id: 1, name: 'МЫШ', part: 1 }, { id: 2, name: 'ГУШКА', part: 2 }, { id: 3, name: 'ЛЯ', part: 1 }, { id: 4, name: 'ЧИК', part: 2 }, { id: 5, name: 'ЗАЙ', part: 1 }, { id: 6, name: 'СИЧКА', part: 2 }, { id: 7, name: 'ЛИ', part: 1 }, { id: 8, name: 'КА', part: 2 }, { id: 9, name: 'ВОЛ', part: 1 }, { id: 10, name: 'ВЕДЬ', part: 2 }, { id: 11, name: 'МЕД', part: 1 }, { id: 12, name: 'ЧОК', part: 2 }]);
 const dropIndex = ref(syllables.value.length - 1);

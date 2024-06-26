@@ -6,7 +6,7 @@
         <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
       </div>
       <div class="time">
-        <Timer :time="15"></Timer>
+        <Timer :end="end"></Timer>
         <p class="title-h4 ThirteenthTask__title"> Дополни предложения недостающими словами.</p>
       </div>
 
@@ -48,6 +48,13 @@ const emit = defineEmits(['close']);
 const hide = () => {
   emit('close');
 };
+
+const props = defineProps({
+  end: {
+    type: Boolean,
+    required: false,
+  },
+})
 
 const words = ref(['РАДЫ', 'РАССТРОЕНЫ', 'ДЕТСКУЮ', 'ВЗРОСЛУЮ', 'ОБЩАТЬСЯ', 'РУГАТЬСЯ']);
 const answer_drop = ref('?');

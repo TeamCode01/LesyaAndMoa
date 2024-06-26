@@ -18,11 +18,11 @@
 
     <FirstTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 1"></FirstTask>
     <SecondTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 2"></SecondTask>
-    <ThirdTask @close="close()" v-show="SeeTask && taskId === 3"></ThirdTask>
-    <ThirteenthTask @close="close()" v-show="SeeTask && taskId === 13"></ThirteenthTask>
-    <EighthteenTask @close="close()" v-show="SeeTask && taskId === 18"></EighthteenTask>
-    <NineTask @close="close()" v-show="SeeTask && taskId === 9"></NineTask>
-    <ElevenTask @close="close()" v-show="SeeTask && taskId === 11"></ElevenTask>
+    <ThirdTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 3"></ThirdTask>
+    <ThirteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 13"></ThirteenthTask>
+    <EighthteenTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 18"></EighthteenTask>
+    <NineTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 9"></NineTask>
+    <ElevenTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 11"></ElevenTask>
 
   </div>
 </template>
@@ -40,24 +40,24 @@ import { ElevenTask } from '@features/ElevenTask';
 
 const tasks = ref([
 
-  { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 10, end: false },
-  { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 5, end: false },
+  { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 15, end: false },
+  { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 15, end: false },
   { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false },
   { id: 4, name: 'Задание 4', disabled: true, done: false, open: false, time: 15, end: false },
   { id: 5, name: 'Задание 5', disabled: true, done: false, open: false, time: 15, end: false },
-  { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 15, end: false },
-  { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 15, end: false },
-  { id: 8, name: 'Задание 8', disabled: true, done: false, open: false, time: 15, end: false },
-  { id: 9, name: 'Задание 9', disabled: false, done: false, open: false, time: 15, end: false },
-  { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 15, end: false },
-  { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 15, end: false },
-  { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 15, end: false },
-  { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 15, end: false },
-  { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 15, end: false },
-  { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 15, end: false },
-  { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 15, end: false },
-  { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 15, end: false },
-  { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 15, end: false },
+  { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 20, end: false },
+  { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false },
+  { id: 8, name: 'Задание 8', disabled: true, done: false, open: false, time: 30, end: false },
+  { id: 9, name: 'Задание 9', disabled: false, done: false, open: false, time: 30, end: false },
+  { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 30, end: false },
+  { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 35, end: false },
+  { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 35, end: false },
+  { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false },
+  { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false },
+  { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false },
+  { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 60, end: false },
+  { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false },
+  { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 120, end: false },
 ])
 
 const SeeTask = ref(null);
