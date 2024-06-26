@@ -131,9 +131,10 @@ const allowDrop = (event) => {
 
 .ThirdTask {
   position: absolute;
-  left: 12%;
+  left: 50%;
   right: 0;
-  top: 23.5%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   bottom: 0;
   background-color: white;
   z-index: 999;
@@ -165,8 +166,9 @@ const allowDrop = (event) => {
     display: flex;
     justify-content: center;
     column-gap: 50px;
+
     @media (max-width: 1024px) {
-    column-gap: 25px;
+      column-gap: 25px;
     }
   }
 

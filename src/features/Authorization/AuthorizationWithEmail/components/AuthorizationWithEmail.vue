@@ -70,7 +70,7 @@ const LoginUser = async () => {
             },
         });
         router.push({
-            name: 'profile',
+            name: 'profile-page',
             params: { id: response.data.id },
         });
         swal.fire({

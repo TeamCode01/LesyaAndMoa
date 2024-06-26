@@ -41,17 +41,16 @@ const hide = () => {
 
 .SecondTask {
   position: absolute;
-  left: 12%;
-  right: 0;
-  top: 23.5%;
-  bottom: 0;
-  background-color: white;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   z-index: 999;
   border-radius: 20px;
   background-color: #fff;
   width: 100%;
   max-width: 1200px;
   height: 600px;
+
   @media (max-width: 1024px) {
     height: 470px;
     max-width: 944px;
@@ -80,6 +79,7 @@ const hide = () => {
   &__wrapper {
     padding: 30px 100px;
     position: relative;
+
     @media (max-width: 1024px) {
       padding: 30px 60px;
     }
@@ -94,10 +94,17 @@ const hide = () => {
       &_item {
         background-color: #D2EFFF;
         border-radius: 20px;
-        width: 316px;
+        max-width: 316px;
+        width: 100%;
         height: 256px;
         padding: 45.5px 60px;
         cursor: pointer;
+
+        @media (max-width: 1024px) {
+          max-width: 276px;
+          height: 215px;
+          padding: 32px 40px;
+        }
 
         img {
           display: block;

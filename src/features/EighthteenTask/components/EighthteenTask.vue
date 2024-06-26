@@ -65,10 +65,9 @@ const answer = ref('');
 
 .EighthteenTask {
   position: absolute;
-  left: 12%;
-  right: 0;
-  top: 23.5%;
-  bottom: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   z-index: 999;
   max-width: 1200px;
   width: 100%;

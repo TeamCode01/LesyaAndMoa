@@ -38,10 +38,9 @@ const answer_five = ref('');
 <style lang="scss" scoped>
 .TestTask {
   position: absolute;
-  left: 12%;
-  right: 0;
+  left: 50%;
   top: 100%;
-  bottom: 0;
+  transform: translate(-50%, -50%);
   background-color: white;
   z-index: 999;
   border-radius: 20px;

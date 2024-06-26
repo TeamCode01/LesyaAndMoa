@@ -221,10 +221,9 @@ const allowDrop = (event) => {
 
 .ElevenTask {
   position: absolute;
-  left: 12%;
-  right: 0;
-  top: 23.5%;
-  bottom: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   background-color: white;
   z-index: 999;
   border-radius: 20px;
