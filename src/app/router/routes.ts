@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/MainPage/components/MainPage.vue'),
             },
             {
-                path: '/Login',
+                path: '/login',
                 name: 'Login',
                 component: () =>
                     import('@pages/LoginPage/components/LoginPage.vue'),
@@ -35,7 +35,7 @@ const routes: RouteRecordRaw[] = [
                     ),
             },
             {
-                path: '/Registration',
+                path: '/registration',
                 name: 'Registration',
                 component: () =>
                     import('@pages/RegisterPage/components/RegisterPage.vue'),
@@ -62,7 +62,7 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/PolicyPage/components/PolicyPage.vue'),
             },
             {
-                path: '/Game',
+                path: '/game',
                 name: 'Game',
                 component: () =>
                     import('@pages/StartGamePage/components/StartGamePage.vue'),
