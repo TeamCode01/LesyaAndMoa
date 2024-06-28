@@ -101,11 +101,23 @@ title {
         --v-field-input-padding-top: 12px;
         --v-field-input-padding-bottom: 12px;
         --v-input-control-height: 28px;
+        --v-high-emphasis-opacity: none;
+        --v-field-padding-start: 20px;
     }
     .v-field__input input {
         font-family: 'Nunito', sans-serif;
     }
-    .v-field__input input::placeholder {
-        color: black;
+
+    .v-field__input input::placeholder,
+    input.v-field__input::placeholder,
+    textarea.v-field__input::placeholder {
+        color: #787a7f;
+        --v-disabled-opacity: none;
     }
+}
+.v-progress-linear__background {
+    --v-border-opacity: none;
+}
+.v-progress-linear__determinate {
+    color: #5ccf54;
 }
