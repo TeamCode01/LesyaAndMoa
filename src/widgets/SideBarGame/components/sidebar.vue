@@ -19,6 +19,7 @@
     <FirstTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 1"></FirstTask>
     <SecondTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 2"></SecondTask>
     <ThirdTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 3"></ThirdTask>
+    <ForthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 4"></ForthTask>
     <ThirteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 13"></ThirteenthTask>
     <EighthteenTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 18"></EighthteenTask>
     <NineTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 9"></NineTask>
@@ -31,7 +32,8 @@ import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
 import { ref } from 'vue';
 import { FirstTask } from '@features/FirstTask/components';
-import { ThirdTask } from '@features/ThirdTask/components'
+import { ThirdTask } from '@features/ThirdTask/components';
+import { ForthTask } from '@features/ForthTask/components';
 import { SecondTask } from '@features/SecondTask';
 import { ThirteenthTask } from '@features/ThirteenthTask';
 import { EighthteenTask } from '@features/EighthteenTask';
@@ -43,7 +45,7 @@ const tasks = ref([
   { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 15, end: false },
   { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 15, end: false },
   { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false },
-  { id: 4, name: 'Задание 4', disabled: true, done: false, open: false, time: 15, end: false },
+  { id: 4, name: 'Задание 4', disabled: false, done: false, open: false, time: 15, end: false },
   { id: 5, name: 'Задание 5', disabled: true, done: false, open: false, time: 15, end: false },
   { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 20, end: false },
   { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false },

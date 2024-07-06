@@ -1,0 +1,3 @@
+<template>
+    Здорово! Отлично!
+</template>
