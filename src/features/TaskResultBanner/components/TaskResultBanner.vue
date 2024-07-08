@@ -9,7 +9,8 @@
                 />
             </div>
             <div class="left-result">
-                <div>
+                <div class="left-result__greetings">
+                    <h4 class="left-result__title-h4">Здорово!</h4>
                     <img
                         class="left-result__flowers"
                         src="@app\assets\backgrounds\flowers.png"
@@ -96,13 +97,35 @@ const hide = () => {
     gap: 48px;
 }
 
-.left-result__flowers {
+.left-result__greetings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 203px;
     height: 260px;
+    gap: 28px;
     @media (max-width: 1024px) {
         height: 217px;
         width: 164px;
+        gap: 24px;
     }
+}
+
+.left-result__flowers {
+    width: 203px;
+    height: 198px;
+    @media (max-width: 1024px) {
+        height: 160px;
+        width: 164px;
+    }
+}
+
+.left-result__title-h4 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: $darkBlue;
 }
 
 .left-result__button {

@@ -1,7 +1,6 @@
 <template>
     <div class="FourthTask task_block">
         <div class="task_block__wrapper">
-           
             <template v-if="false">
                 <div class="task_block__close" @click="hide">
                     <img
@@ -160,14 +159,14 @@ const hide = () => {
     width: 271px;
     height: 48px;
     background-color: #fff;
-    color: #0d47aa;
+    color: $darkBlue;
     font-family: 'Nunito', sans-serif;
     font-size: 20px;
     letter-spacing: 0;
     border-radius: 30px;
     font-weight: 400;
     line-height: 48px;
-    border: 1.5px solid #0d47aa;
+    border: 1.5px solid $darkBlue;
 }
 
 .draggable-list__button-speaker,
