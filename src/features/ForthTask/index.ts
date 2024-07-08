@@ -1,1 +1,0 @@
-export { default as ForthTask } from './components/ForthTask.vue';
