@@ -82,12 +82,12 @@ const tasks = ref([
   { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 30, end: false, img: '@app/assets/backgrounds/task10.jpg'  },
   { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 35, end: false, img: '@app/assets/backgrounds/animals.jpg'  },
   { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 35, end: false, img: '@app/assets/backgrounds/task12.jpg'  },
-  { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false, img: '@app/assets/backgrounds/task13.jpg'  },
+  { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task13.jpg'  },
   { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false, img: '@app/assets/backgrounds/animals.jpg'  },
   { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: '@app/assets/backgrounds/task15.jpg'  },
   { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 60, end: false, img: '@app/assets/backgrounds/animals.jpg'  },
   { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: '@app/assets/backgrounds/animals.jpg'  },
-  { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 120, end: false, img: '@app/assets/backgrounds/animals.jpg'  },
+  { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 120, end: false, img: '/assets/backgrounds/animals.jpg'  },
 ])
 
 const SeeTask = ref(null);

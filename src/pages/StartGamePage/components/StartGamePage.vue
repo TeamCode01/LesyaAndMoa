@@ -8,7 +8,7 @@
         <div class="game_icons_item"><img src="@app/assets/icons/playGame.svg" alt="play"></div>
       </div>
       <div class="game_img">
-        <img class="game_img_bg" :src="imageUrl" alt="game">
+        <img class="game_img_bg" id="background-banner"  alt="game">
       </div>
     </div>
   </div>
@@ -19,13 +19,12 @@ import { ref, onMounted } from 'vue';
 
 let img = ref('');
 
+
 const sendImg = (image) => {
     img.value = image;
-    console.log(img.value, image);
-  }
+    document.getElementById('background-banner').src = image
+}
 
-  const imageUrl = new URL(`@app/assets/backgrounds/${img.value}.jpg`, import.meta.url).href
-  console.log('img', imageUrl, img.value);
 onMounted(() => {
 
 
