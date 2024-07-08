@@ -41,9 +41,9 @@
 </template>
 
 <script setup>
-const emit = defineEmits(['close']);
+const emit = defineEmits(['hide']);
 const hide = () => {
-    emit('close');
+    emit('hide');
 };
 </script>
 

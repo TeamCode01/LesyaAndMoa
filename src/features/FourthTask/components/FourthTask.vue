@@ -1,14 +1,15 @@
 <template>
     <div class="FourthTask task_block">
         <div class="task_block__wrapper">
-            <div class="task_block__close" @click="hide">
-                <img
-                    class="close-icon"
-                    src="@app/assets/icons/close-icon.svg"
-                    alt="крест"
-                />
-            </div>
+           
             <template v-if="false">
+                <div class="task_block__close" @click="hide">
+                    <img
+                        class="close-icon"
+                        src="@app/assets/icons/close-icon.svg"
+                        alt="крест"
+                    />
+                </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
                     <p class="title-h4 task_block__title">
@@ -68,7 +69,7 @@
                     class="task_block__wrapper_answer"
                 />
             </template>
-            <TaskResultBanner v-if="true"></TaskResultBanner>
+            <TaskResultBanner v-if="true" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
