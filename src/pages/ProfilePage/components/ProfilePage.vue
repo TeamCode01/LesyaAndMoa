@@ -20,24 +20,39 @@
                 <p class="child__name">Мария Иванова</p>
                 <p class="child__school">Школа №1514</p>
                 <div class="child__scale">
-                    <v-progress-linear v-model="skill" height="30" class="scale">
+                    <v-progress-linear
+                        v-model="skill"
+                        height="30"
+                        class="scale"
+                    >
                         <template v-slot:default="{ value }">
                             <strong>{{ Math.ceil(value) }}%</strong>
                         </template>
                     </v-progress-linear>
                 </div>
-                <RouterLink to="/Game"> <Button label="Перейти к обучению" class="profile__btn"></Button></RouterLink>
-
+                <RouterLink to="/Game" class="router-link">
+                    <Button
+                        label="Перейти к обучению"
+                        class="profile__btn"
+                    ></Button
+                ></RouterLink>
             </div>
         </div>
-        <Button label="Добавить ребенка" class="profile__btn add-children"></Button>
-        <img class="profile-child__img" src="@app/assets/img/Profile/LesyaMoa.png" alt="" />
+        <Button
+            label="Добавить ребенка"
+            class="profile__btn add-children"
+        ></Button>
+        <img
+            class="profile-child__img"
+            src="@app/assets/img/Profile/LesyaMoa.png"
+            alt=""
+        />
     </div>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
-const skill = ref(0);
+const skill = ref(20);
 </script>
 <style lang="scss" scoped>
 .profile {
@@ -141,5 +156,11 @@ const skill = ref(0);
 
 .profile-child__img {
     margin: 0 45px -120px 45px;
+}
+.router-link {
+    text-decoration-line: none;
+}
+.btn_primary {
+    height: 58px;
 }
 </style>
