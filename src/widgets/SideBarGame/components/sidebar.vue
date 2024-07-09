@@ -20,10 +20,10 @@
             <ThirteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 13"></ThirteenthTask>
             <EighteenTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 18"></EighteenTask>
             <NineTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 9"></NineTask>
-            <ElevenTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 11"></ElevenTask>
+            <ElevenTask :end="endTime" @close="close()" v-show="SeeTask === true && taskId === 11"></ElevenTask>
         </div>
 
-        <Button class="start" label="Старт" :is-image="true"  :image="arrow" @click="openTask(item.id)"></Button>
+        <Button class="start" label="Старт" :is-image="true"  :image="arrow" @click="openTask(taskId)"></Button>
     </div>
 </template>
 <script setup>
@@ -61,7 +61,7 @@ const tasks = ref([
     { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 120, end: false, img: '/assets/backgrounds/animals.jpg' },
 ])
 
-const SeeTask = ref(null);
+const SeeTask = ref(false);
 const taskId = ref(null);
 const taskImage = ref('/assets/backgrounds/animals.jpg');
 const timeVal = ref(15);
@@ -70,6 +70,7 @@ const endTime = ref(false);
 const close = () => {
     SeeTask.value = false;
     endTime.value = false;
+    console.log('close yeah')
 };
 
 const switchTask = (id, openId, time, img) => {
@@ -78,6 +79,7 @@ const switchTask = (id, openId, time, img) => {
     timeVal.value = time;
     endTime.value = false;
     taskImage.value = img;
+    console.log(SeeTask.value);
     emit('sendImg', img);
 }
 

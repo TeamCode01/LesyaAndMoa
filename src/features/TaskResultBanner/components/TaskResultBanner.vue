@@ -33,7 +33,7 @@
             <div class="right-result">
                 <img
                     class="right-result__img-moa"
-                    src="@app\assets\backgrounds\moa.svg"
+                     id="result-bg"
                     alt="Moa"
                 />
             </div>
@@ -42,8 +42,7 @@
 </template>
 
 <script setup>
-import { type } from 'os';
-
+import { onMounted } from 'vue';
 const emit = defineEmits(['hide']);
 const hide = () => {
     emit('hide');
@@ -52,15 +51,22 @@ const hide = () => {
 const props = defineProps({
     text: {
         type: String,
-        required: true,
     },
     img: {
       type: String,
-      required: true,
+    },
+    bg: {
+        type: String,
     }
 })
 
-document.getElementById('result-banner').src = props.img;
+onMounted(() => {
+    document.getElementById('result-banner').src = props.img;
+    document.getElementById('result-bg').src = props.bg;
+});
+
+
+
 </script>
 
 <style lang="scss" scoped>

@@ -17,7 +17,7 @@
 import { Sidebar } from "@widgets/SideBarGame";
 import { ref, onMounted } from 'vue';
 
-let img = ref('');
+let img = ref('/assets/backgrounds/animals.jpg');
 
 
 const sendImg = (image) => {
@@ -26,9 +26,9 @@ const sendImg = (image) => {
 }
 
 onMounted(() => {
-
-
+  document.getElementById('background-banner').src = img.value
 })
+
 </script>
 <style lang="scss" scoped>
 .game {

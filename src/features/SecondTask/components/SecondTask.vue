@@ -1,35 +1,24 @@
 <template>
     <div class="SecondTask task_block">
+        <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/Moa.png" text="Так держать!"
+            v-if="endGame === true"></TaskResultBanner>
         <div class="SecondTask__wrapper">
             <div class="task_block__close" @click="hide">
-                <img
-                    class="close-icon"
-                    src="@app/assets/icons/close-icon.svg"
-                    alt="крест"
-                />
+                <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
             </div>
             <div class="task_block__time">
                 <Timer :end="end"></Timer>
                 <p class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</p>
             </div>
             <div class="SecondTask__wrapper_block">
-                <div class="SecondTask__wrapper_block_item">
-                    <img
-                        src="@app/assets/backgrounds/english.png"
-                        alt="english"
-                    />
+                <div @click="chooseTask()" class="SecondTask__wrapper_block_item">
+                    <img src="@app/assets/backgrounds/english.png" alt="english" />
                 </div>
-                <div class="SecondTask__wrapper_block_item">
-                    <img
-                        src="@app/assets/backgrounds/russian.png"
-                        alt="russian"
-                    />
+                <div @click="chooseTask()" class="SecondTask__wrapper_block_item">
+                    <img src="@app/assets/backgrounds/russian.png" alt="russian" />
                 </div>
-                <div class="SecondTask__wrapper_block_item">
-                    <img
-                        src="@app/assets/backgrounds/arabic.png"
-                        alt="arabic"
-                    />
+                <div @click="chooseTask()" class="SecondTask__wrapper_block_item">
+                    <img src="@app/assets/backgrounds/arabic.png" alt="arabic" />
                 </div>
             </div>
         </div>
@@ -38,6 +27,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
+import { TaskResultBanner } from '@features/TaskResultBanner/components';
 const emit = defineEmits(['close']);
 const props = defineProps({
     end: {
@@ -48,6 +38,12 @@ const props = defineProps({
 const hide = () => {
     emit('close');
 };
+
+const endGame = ref(false);
+
+const chooseTask = () => {
+
+}
 </script>
 <style lang="scss" scoped>
 .SecondTask {

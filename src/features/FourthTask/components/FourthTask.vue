@@ -68,7 +68,7 @@
                     class="task_block__wrapper_answer"
                 />
             </template>
-            <TaskResultBanner v-if="true" @hide="hide()"></TaskResultBanner>
+            <!-- <TaskResultBanner v-if="true" @hide="hide()"></TaskResultBanner> -->
         </div>
     </div>
 </template>
@@ -77,7 +77,7 @@
 import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
-import { TaskResultBanner } from '@features/TaskResultBanner/components';
+// import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
 const emit = defineEmits(['close']);
 const props = defineProps({

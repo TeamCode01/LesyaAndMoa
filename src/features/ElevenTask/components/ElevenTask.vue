@@ -1,5 +1,6 @@
 <template>
     <div class="ElevenTask task_block">
+        <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Молодец!" v-if="endGame === true"></TaskResultBanner>
         <div class="ElevenTask__wrapper">
             <div class="task_block__close" @click="hide">
                 <img
@@ -114,14 +115,17 @@
             </div>
         </div>
     </div>
+
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
+import { TaskResultBanner } from '@features/TaskResultBanner/components';
 const emit = defineEmits(['close']);
 
 const hide = () => {
     emit('close');
+    console.log('close')
 };
 
 const props = defineProps({
@@ -130,6 +134,8 @@ const props = defineProps({
         required: false,
     },
 });
+
+const endGame = ref(false);
 
 const syllables = ref([
     { id: 1, name: 'МЫШ', part: 1 },
@@ -213,7 +219,8 @@ const chooseFairyTail = () => {
             fairytails.value = fairytails.value.filter(
                 (item) => item.correct == true,
             );
-        }, 1000);
+            endGame.value = true;
+        }, 5000);
     } else {
         return false;
     }

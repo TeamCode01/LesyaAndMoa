@@ -1,80 +1,54 @@
 <template>
-    <div class="ThirteenthTask task_block">
-        <div class="ThirteenthTask__wrapper">
-            <div class="task_block__close" @click="hide">
-                <img
-                    class="close-icon"
-                    src="@app/assets/icons/close-icon.svg"
-                    alt="крест"
-                />
-            </div>
-            <div class="task_block__time">
-                <Timer :end="end"></Timer>
-                <p class="title-h4 ThirteenthTask__title">
-                    Дополни предложения недостающими словами.
-                </p>
-            </div>
+    <template v-if="endGame === false">
+        <div class="ThirteenthTask task_block">
+            <div class="ThirteenthTask__wrapper">
+                <div class="task_block__close" @click="hide">
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                </div>
+                <div class="task_block__time">
+                    <Timer :end="end"></Timer>
+                    <p class="title-h4 ThirteenthTask__title">
+                        Дополни предложения недостающими словами.
+                    </p>
+                </div>
 
-            <div class="draggable-list">
-                <q-btn
-                    v-for="(item, index) in words"
-                    :key="index"
-                    class="list-group-item item"
-                    draggable="true"
-                    @dragstart="drag($event, index)"
-                    @dragover.prevent
-                    :value="item"
-                >
-                    {{ item }}
-                </q-btn>
-            </div>
-            <div class="ThirteenthTask__wrapper_answer" v-show="answer === ''">
-                Мы очень
-                <input
-                    :class="{ correct: answer_drop === 'РАДЫ' }"
-                    @drop="drop($event)"
-                    @dragover="allowDrop($event)"
-                    v-model="answer_drop"
-                    type="text"
-                />
-                с вами познакомиться.
-            </div>
-            <div
-                v-show="answer === 'РАДЫ'"
-                class="ThirteenthTask__wrapper_answer"
-            >
-                Нам нравится
-                <input
-                    :class="{ correct: answer_drop === 'ОБЩАТЬСЯ' }"
-                    @drop="drop($event)"
-                    @dragover="allowDrop($event)"
-                    v-model="answer_drop"
-                    type="text"
-                />
-                с вами.
-            </div>
-            <div
-                v-show="answer === 'ОБЩАТЬСЯ'"
-                class="ThirteenthTask__wrapper_answer"
-            >
-                Приходите чаще на
-                <input
-                    :class="{ correct: answer_drop === 'ДЕТСКУЮ' }"
-                    @drop="drop($event)"
-                    @dragover="allowDrop($event)"
-                    v-model="answer_drop"
-                    type="text"
-                />
-                площадку.
+                <div class="draggable-list">
+                    <q-btn v-for="(item, index) in words" :key="index" class="list-group-item item" draggable="true"
+                        @dragstart="drag($event, index)" @dragover.prevent :value="item">
+                        {{ item }}
+                    </q-btn>
+                </div>
+                <div class="ThirteenthTask__wrapper_answer" v-show="answer === ''">
+                    Мы очень
+                    <input :class="{ correct: answer_drop === 'РАДЫ' }" @drop="drop($event)"
+                        @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
+                    с вами познакомиться.
+                </div>
+                <div v-show="answer === 'РАДЫ'" class="ThirteenthTask__wrapper_answer">
+                    Нам нравится
+                    <input :class="{ correct: answer_drop === 'ОБЩАТЬСЯ' }" @drop="drop($event)"
+                        @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
+                    с вами.
+                </div>
+                <div v-show="answer === 'ОБЩАТЬСЯ'" class="ThirteenthTask__wrapper_answer">
+                    Приходите чаще на
+                    <input :class="{ correct: answer_drop === 'ДЕТСКУЮ' }" @drop="drop($event)"
+                        @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
+                    площадку.
+                </div>
             </div>
         </div>
-    </div>
+    </template>
+
+    <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png" text="Чудесно!"
+        v-if="show === true" @hide="hideModal"></TaskResultBanner>
 </template>
+
 <script setup>
 import { ref } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
-
+import { TaskResultBanner } from '@features/TaskResultBanner/components';
 const emit = defineEmits(['close']);
 
 const hide = () => {
@@ -87,6 +61,14 @@ const props = defineProps({
         required: false,
     },
 });
+
+const endGame = ref(false);
+const show = ref(false);
+const hideModal = () => {
+    show.value = false;
+}
+
+
 
 const words = ref([
     'РАДЫ',
@@ -122,7 +104,13 @@ const drop = (event) => {
             answer.value = text;
             answer_drop.value = '?';
         }, 2000);
-    } else {
+
+        if (text === 'ДЕТСКУЮ') {
+            endGame.value = true;
+            show.value = true;
+        }
+    }
+    else {
         return false;
     }
 };
