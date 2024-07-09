@@ -33,22 +33,24 @@ onMounted(() => {
 <style lang="scss" scoped>
 .game {
   display: flex;
-  padding: 40px 40px 56px 40px;
+  padding: 56px 40px 56px 40px;
   margin: 60px 0px 90px 0px;
   background-color: $pink;
   border-radius: 20px;
   position: relative;
 
   &_img {
+    width: 100%;
 
 
     &_bg {
       max-width: 100%;
       border-radius: 20px;
-      height: 600px;
+      width: 100%;
+      height: 530px;
 
       @media (max-width: 1024px) {
-        height: 470px;
+        height: 400px;
         max-width: 100%;
       }
     }

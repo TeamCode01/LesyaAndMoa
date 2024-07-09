@@ -10,10 +10,10 @@
             </div>
             <div class="left-result">
                 <div class="left-result__greetings">
-                    <h4 class="left-result__title-h4">Здорово!</h4>
+                    <h4 class="left-result__title-h4">{{ props.text }}</h4>
                     <img
                         class="left-result__flowers"
-                        src="@app\assets\backgrounds\flowers.png"
+                        id="result-banner"
                         alt="flowers"
                     />
                 </div>
@@ -42,10 +42,25 @@
 </template>
 
 <script setup>
+import { type } from 'os';
+
 const emit = defineEmits(['hide']);
 const hide = () => {
     emit('hide');
 };
+
+const props = defineProps({
+    text: {
+        type: String,
+        required: true,
+    },
+    img: {
+      type: String,
+      required: true,
+    }
+})
+
+document.getElementById('result-banner').src = props.img;
 </script>
 
 <style lang="scss" scoped>
