@@ -1,77 +1,61 @@
 <template>
-    <div class="ThirdTask task_block">
-        <div class="ThirdTask__wrapper">
-            <div class="task_block__close" @click="hide">
-                <img
-                    class="close-icon"
-                    src="@app/assets/icons/close-icon.svg"
-                    alt="крест"
-                />
-            </div>
-            <div class="task_block__time">
-                <Timer :end="end"></Timer>
-                <p class="title-h4 ThirdTask__title">
-                    Распредели звуки по коробкам на образуемые с помощью только
-                    шума, голоса и шума, только голоса.
-                </p>
-            </div>
+    <template v-if="endGame === false">
+        <div class="ThirdTask task_block">
+            <div class="ThirdTask__wrapper">
+                <div class="task_block__close" @click="hide">
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                </div>
+                <div class="task_block__time">
+                    <Timer :end="end"></Timer>
+                    <p class="title-h4 ThirdTask__title">
+                        Распредели звуки по коробкам на образуемые с помощью только
+                        шума, голоса и шума, только голоса.
+                    </p>
+                </div>
 
-            <div class="draggable-list">
-                <div class="list-group ThirdTask__wrapper_block">
-                    <q-btn
-                        v-for="(item, index) in letters"
-                        :key="index"
-                        class="list-group-item item"
-                        draggable="true"
-                        @dragstart="drag($event, index)"
-                    >
-                        {{ item }}
-                    </q-btn>
-                </div>
-            </div>
-            <div class="ThirdTask__answer">
-                <div
-                    class="box"
-                    id="box"
-                    @drop="drop($event, array)"
-                    @dragover="allowDrop($event)"
-                >
-                    <div class="letter__item" v-for="item in array">
-                        {{ item }}
+                <div class="draggable-list">
+                    <div class="list-group ThirdTask__wrapper_block">
+                        <q-btn v-for="(item, index) in letters" :key="index" class="list-group-item item"
+                            draggable="true" @dragstart="drag($event, item.name, index)" @dragover.prevent
+                            :value="item">
+                            {{ item.name }}
+                        </q-btn>
                     </div>
                 </div>
-                <div
-                    class="box2"
-                    id="box2"
-                    @drop="drop($event, array_two)"
-                    @dragover="allowDrop($event)"
-                >
-                    <div class="letter__item" v-for="item in array_two">
-                        {{ item }}
+                <div class="ThirdTask__answer">
+                    <div class="box" id="box" @mouseover="playAudio('/assets/audio/Task3/32.3_слово.mp3')"
+                        @drop="drop($event, array)" @dragover="allowDrop($event)">
+                        <div class="letter__item" v-for="item in array">
+                            {{ item }}
+                        </div>
                     </div>
-                </div>
-                <div
-                    class="box3"
-                    id="box3"
-                    @drop="drop($event, array_three)"
-                    @dragover="allowDrop($event)"
-                >
-                    <div class="letter__item" v-for="item in array_three">
-                        {{ item }}
+                    <div class="box2" id="box2"  @drop="drop($event, array_two)" @dragover="allowDrop($event)">
+                        <div class="letter__item" v-for="item in array_two">
+                            {{ item }}
+                        </div>
+                    </div>
+                    <div class="box3" id="box3" @mouseover="playAudio('/assets/audio/Task3/33.3.mp3')" @drop="drop($event, array_three)" @dragover="allowDrop($event)">
+                        <div class="letter__item" v-for="item in array_three">
+                            {{ item }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </template>
+    <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Великолепно!"
+        v-if="show === true" @hide="hideModal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
+import { TaskResultBanner } from '@features/TaskResultBanner/components';
 const emit = defineEmits(['close']);
 
 const hide = () => {
     emit('close');
+    endGame.value = true;
 };
 
 const props = defineProps({
@@ -81,21 +65,66 @@ const props = defineProps({
     },
 });
 
-const letters = ref(['к', 'ч', 'с', 'о', 'ф', 'з', 'и', 'г', 'д']);
+function playAudio(audioPath) {
+    const audio = new Audio(audioPath);
+    audio.play();
+}
+
+const endGame = ref(false);
+const show = ref(false);
+const hideModal = () => {
+    show.value = false;
+}
+
+const letters = ref([{ name: 'к', type: 'глухой' }, { name: 'ч', type: 'глухой' }, { name: 'с', type: 'глухой' }, { name: 'о', type: 'звонкий' }, { name: 'ф', type: 'глухой' }, { name: 'з', type: 'средний' }, { name: 'и', type: 'звонкий' }, { name: 'г', type: 'средний' }, { name: 'д', type: 'средний' }])
 const answer = ref('');
 const array = ref([]);
 const array_two = ref([]);
 const array_three = ref([]);
+
+const array_result = ref([{ name: 'к', type: 'глухой' }, { name: 'ч', type: 'глухой' }, { name: 'с', type: 'глухой' }, { name: 'ф', type: 'глухой' }]);
+const array_two_result = ref([{ name: 'г', type: 'средний' }, { name: 'д', type: 'средний' }, { name: 'з', type: 'средний' }]);
+const array_three_result = ref([{ name: 'о', type: 'звонкий' }, { name: 'и', type: 'звонкий' }]);
 const dropIndex = ref(letters.value.length - 1);
-const drag = (event, index) => {
-    event.dataTransfer.setData('text', event.target.innerText);
+const drag = (event, letter, index) => {
+    event.dataTransfer.setData('text', letter);
     dropIndex.value = index;
 };
 
 const drop = (event, arr) => {
+    // event.preventDefault();
+    // const letter = event.dataTransfer.getData('text');
+    // letters.value.splice(dropIndex.value, 1);
+    // arr.push(letter);
+    event.preventDefault();
     const letter = event.dataTransfer.getData('text');
-    letters.value.splice(dropIndex.value, 1);
-    arr.push(letter);
+    event.target.value = letter;
+    const index = letters.value.findIndex((item) => item.name === letter);
+    // if (index !== -1) {
+    //     const letterType = letters.value[index].type;
+    //     arr.push(letter);
+
+    //     if (letterType === 'звонкий') {
+    //         if (array.value.includes(letterType === 'звонкий') || array_two.value.includes(letterType === 'звонкий')) {
+    //              event.target.classList.add('red');
+    //              setTimeout(() => {
+    //                  event.target.classList.remove('red');
+    //                  arr.splice(index, 1);
+    //              })
+    //         } else {
+    //             event.target.classList.add('green');
+    //             setTimeout(() => {
+    //                 event.target.classList.remove('green');
+    //             })
+    //         }
+    //      }
+    //      //else if (letterType === 'глухой') {
+    //     //     array.value.push(letter);
+    //     // } else {
+    //     //     array_two.value.push(letter);
+    //     // }
+    //     letters.value.splice(index, 1);
+    // }
 };
 
 const allowDrop = (event) => {
@@ -149,6 +178,14 @@ const allowDrop = (event) => {
         width: 250px;
         height: 186px;
     }
+}
+
+.red {
+    border: 2px solid red;
+}
+
+.green {
+    border: 2px solid green;
 }
 
 .ThirdTask {

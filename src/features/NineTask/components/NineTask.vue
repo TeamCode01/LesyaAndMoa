@@ -1,157 +1,80 @@
 <template>
-    <div class="NineTask task_block">
-        <div class="NineTask__wrapper">
-            <div class="task_block__close" @click="hide">
-                <img
-                    class="close-icon"
-                    src="@app/assets/icons/close-icon.svg"
-                    alt="крест"
-                />
-            </div>
-
-            <div class="task_block__time">
-                <Timer :end="end"></Timer>
-                <p class="title-h4 NineTask__title">
-                    Собери из букв одинакового размера названия предметов,
-                    которые встретились героям на детской площадке.
-                </p>
-            </div>
-            <div class="NineTask__content">
-                <div class="draggable-list">
-                    <q-btn
-                        class="list-group-item item"
-                        v-for="(item, index) in letterss"
-                        :id="item.id"
-                        :key="item.id"
-                        draggable="true"
-                        @dragstart="drag($event, item.name, index)"
-                        @dragover.prevent
-                        :value="item"
-                    >
-                        {{ item.name }}
-                    </q-btn>
+    <template v-if="endGame === false">
+        <div class="NineTask task_block">
+            <div class="NineTask__wrapper">
+                <div class="task_block__close" @click="hide">
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
 
-                <div class="input-group">
-                    <div class="big-letters">
-                        <input
-                            @drop="drop($event, 1, 1)"
-                            type="text"
-                            class="input-item"
-                            @dragover="allowDrop($event)"
-                        />
-                        <input
-                            @drop="drop($event, 1, 2)"
-                            @dragover="allowDrop($event)"
-                            type="text"
-                            class="input-item"
-                        /><input
-                            @drop="drop($event, 1, 3)"
-                            @dragover="allowDrop($event)"
-                            type="text"
-                            class="input-item"
-                        /><input
-                            @drop="drop($event, 1, 2)"
-                            type="text"
-                            class="input-item"
-                            @dragover="allowDrop($event)"
-                        /><input
-                            @drop="drop($event, 1, 5)"
-                            @dragover="allowDrop($event)"
-                            type="text"
-                            class="input-item"
-                        /><input
-                            type="text"
-                            @drop="drop($event, 1, 6)"
-                            @dragover="allowDrop($event)"
-                            class="input-item"
-                        /><input
-                            @drop="drop($event, 1, 7)"
-                            @dragover="allowDrop($event)"
-                            type="text"
-                            class="input-item"
-                        />
+                <div class="task_block__time">
+                    <Timer :end="end"></Timer>
+                    <p class="title-h4 NineTask__title">
+                        Собери из букв одинакового размера названия предметов,
+                        которые встретились героям на детской площадке.
+                    </p>
+                </div>
+                <div class="NineTask__content">
+                    <div class="draggable-list">
+                        <q-btn class="list-group-item item" v-for="(item, index) in letterss" :id="item.id"
+                            :key="item.id" draggable="true" @dragstart="drag($event, item.name, index)"
+                            @dragover.prevent :value="item">
+                            {{ item.name }}
+                        </q-btn>
                     </div>
 
-                    <div class="middle-letters">
-                        <input
-                            type="text"
-                            @drop="drop($event, 2, 1)"
-                            class="input-item"
-                        /><input
-                            type="text"
-                            @drop="drop($event, 2, 2)"
-                            class="input-item"
-                        /><input
-                            type="text"
-                            @drop="drop($event, 2, 3)"
-                            class="input-item"
-                        /><input
-                            type="text"
-                            @drop="drop($event, 2, 4)"
-                            class="input-item"
-                        /><input
-                            type="text"
-                            @drop="drop($event, 2, 5)"
-                            class="input-item"
-                        /><input
-                            @drop="drop($event, 2, 6)"
-                            type="text"
-                            class="input-item"
-                        />
-                    </div>
+                    <div class="input-group">
+                        <div class="big-letters">
+                            <input @drop="drop($event, 1, 1)" type="text" class="input-item"
+                                @dragover="allowDrop($event)" />
+                            <input @drop="drop($event, 1, 2)" @dragover="allowDrop($event)" type="text"
+                                class="input-item" /><input @drop="drop($event, 1, 3)" @dragover="allowDrop($event)"
+                                type="text" class="input-item" /><input @drop="drop($event, 1, 2)" type="text"
+                                class="input-item" @dragover="allowDrop($event)" /><input @drop="drop($event, 1, 5)"
+                                @dragover="allowDrop($event)" type="text" class="input-item" /><input type="text"
+                                @drop="drop($event, 1, 6)" @dragover="allowDrop($event)" class="input-item" /><input
+                                @drop="drop($event, 1, 7)" @dragover="allowDrop($event)" type="text"
+                                class="input-item" />
+                        </div>
 
-                    <div class="pre-middle-letters">
-                        <input
-                            type="text"
-                            @drop="drop($event, 3, 1)"
-                            class="input-item"
-                        /><input
-                            type="text"
-                            @drop="drop($event, 3, 2)"
-                            class="input-item"
-                        /><input
-                            type="text"
-                            @drop="drop($event, 3, 3)"
-                            class="input-item"
-                        /><input
-                            type="text"
-                            @drop="drop($event, 3, 4)"
-                            class="input-item"
-                        /><input
-                            type="text"
-                            class="input-item"
-                            @drop="drop($event, 3, 5)"
-                        />
-                    </div>
+                        <div class="middle-letters">
+                            <input type="text" @drop="drop($event, 2, 1)" class="input-item" /><input type="text"
+                                @drop="drop($event, 2, 2)" class="input-item" /><input type="text"
+                                @drop="drop($event, 2, 3)" class="input-item" /><input type="text"
+                                @drop="drop($event, 2, 4)" class="input-item" /><input type="text"
+                                @drop="drop($event, 2, 5)" class="input-item" /><input @drop="drop($event, 2, 6)"
+                                type="text" class="input-item" />
+                        </div>
 
-                    <div class="small-letters">
-                        <input
-                            type="text"
-                            @drop="drop($event, 4, 1)"
-                            class="input-item"
-                        /><input
-                            type="text"
-                            @drop="drop($event, 4, 2)"
-                            class="input-item"
-                        /><input
-                            type="text"
-                            @drop="drop($event, 4, 3)"
-                            class="input-item"
-                        />
+                        <div class="pre-middle-letters">
+                            <input type="text" @drop="drop($event, 3, 1)" class="input-item" /><input type="text"
+                                @drop="drop($event, 3, 2)" class="input-item" /><input type="text"
+                                @drop="drop($event, 3, 3)" class="input-item" /><input type="text"
+                                @drop="drop($event, 3, 4)" class="input-item" /><input type="text" class="input-item"
+                                @drop="drop($event, 3, 5)" />
+                        </div>
+
+                        <div class="small-letters">
+                            <input type="text" @drop="drop($event, 4, 1)" class="input-item" /><input type="text"
+                                @drop="drop($event, 4, 2)" class="input-item" /><input type="text"
+                                @drop="drop($event, 4, 3)" class="input-item" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </template>
+    <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png" text="Восхитительно!"
+        v-if="show === true" @hide="hideModal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
+import { TaskResultBanner } from '@features/TaskResultBanner/components';
 const emit = defineEmits(['close']);
-
+const endGame = ref(false);
 const hide = () => {
     emit('close');
+    endGame.value = true;
 };
 
 const props = defineProps({
@@ -160,6 +83,12 @@ const props = defineProps({
         required: false,
     },
 });
+
+
+const show = ref(false);
+const hideModal = () => {
+    show.value = false;
+}
 
 const letterss = ref([
     { id: 'L', name: 'Л' },
@@ -270,6 +199,7 @@ const allowDrop = (event) => {
 
     &__wrapper {
         padding: 30px 76px 76px 76px;
+
         @media (max-width: 1024px) {
             padding: 30px 32px 32px 42px;
         }

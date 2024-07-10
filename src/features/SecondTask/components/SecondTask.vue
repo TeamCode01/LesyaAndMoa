@@ -1,33 +1,33 @@
 <template>
-    <div class="SecondTask task_block">
-        <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/Moa.png" text="Так держать!"
-            v-if="endGame === true"></TaskResultBanner>
-        <div class="SecondTask__wrapper">
-            <div class="task_block__close" @click="hide">
-                <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
-            </div>
-            <div class="task_block__time">
-                <Timer :end="end"></Timer>
-                <p class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</p>
-            </div>
-            <div class="SecondTask__wrapper_block">
-                <div @click="chooseTask()" class="SecondTask__wrapper_block_item">
-                    <img src="@app/assets/backgrounds/english.png" alt="english" />
+    <template v-if="endGame === false">
+        <div class="SecondTask task_block">
+
+            <div class="SecondTask__wrapper">
+                <div class="task_block__close" @click="hide">
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
-                <div @click="chooseTask()" class="SecondTask__wrapper_block_item">
-                    <img src="@app/assets/backgrounds/russian.png" alt="russian" />
+                <div class="task_block__time">
+                    <Timer :end="end"></Timer>
+                    <p class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</p>
                 </div>
-                <div @click="chooseTask()" class="SecondTask__wrapper_block_item">
-                    <img src="@app/assets/backgrounds/arabic.png" alt="arabic" />
+                <div class="SecondTask__wrapper_block">
+                    <div @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"
+                        class="SecondTask__wrapper_block_item">
+                        <img id="image" :src="item.src" alt="alphabet">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </template>
+
+    <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/Moa.png" text="Так держать!"
+        v-if="show === true" @hide="hideModal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+import { event } from 'quasar';
 const emit = defineEmits(['close']);
 const props = defineProps({
     end: {
@@ -37,15 +37,46 @@ const props = defineProps({
 });
 const hide = () => {
     emit('close');
+    endGame.value = true;
 };
-
+const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false }])
 const endGame = ref(false);
+const show = ref(false);
+const hideModal = () => {
+    show.value = false;
+}
 
-const chooseTask = () => {
+const chooseTask = (event, status) => {
+    if (status === true) {
+        event.target.value = status;
+        alphabets.value = alphabets.value.filter(
+            (item) => item.isCorrect == true,
+        );
+        event.target.classList.add('green');
+        setTimeout(() => {
+            show.value = true;
+            endGame.value = true;
+            event.target.classList.remove('green');
+        }, 2000);
 
+    } else {
+        event.target.value = status;
+        event.target.classList.add('red');
+        setTimeout(() => {
+            event.target.classList.remove('red');
+        }, 2000);
+    }
 }
 </script>
 <style lang="scss" scoped>
+.green {
+    border: 2px solid green;
+}
+
+.red {
+    border: 2px solid red;
+}
+
 .SecondTask {
     &__wrapper {
         padding: 30px 100px;

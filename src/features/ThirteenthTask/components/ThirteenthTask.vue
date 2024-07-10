@@ -50,9 +50,10 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 const emit = defineEmits(['close']);
-
+const endGame = ref(false);
 const hide = () => {
     emit('close');
+    endGame.value = true;
 };
 
 const props = defineProps({
@@ -62,13 +63,11 @@ const props = defineProps({
     },
 });
 
-const endGame = ref(false);
+
 const show = ref(false);
 const hideModal = () => {
     show.value = false;
 }
-
-
 
 const words = ref([
     'РАДЫ',
