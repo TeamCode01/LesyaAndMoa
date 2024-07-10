@@ -33,7 +33,7 @@
             <div class="right-result">
                 <img
                     class="right-result__img-moa"
-                     id="result-bg"
+                    id="result-bg"
                     alt="Moa"
                 />
             </div>
@@ -192,5 +192,10 @@ onMounted(() => {
         height: 327px;
         width: 320px;
     }
+}
+
+#result-bg {
+    width: 403px;
+    height: 407px;
 }
 </style>
