@@ -1,38 +1,93 @@
 <template>
-  <div class="TestTask">
-    <div class="TestTask__wrapper">
-      <div class="close" @click="hide">
-        <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+  <template v-if="endGame === false">
+    <div class="TestTask">
+      <div class="TestTask__wrapper">
+        <div class="close" @click="hide">
+          <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+        </div>
+        <p class="title-h4 TestTask__title"> Вставь пропущенные слова.</p>
+        <div class="TestTask__task">
+          Необыкновенные пришельцы Леся и Моа, не знающие нашего<br> <input class="answer_input" v-model="answer"
+            maxlength="5" type="text" placeholder="_ _ _ _ _">, оказались на нашей планете. Они, словно немые <input
+            class="answer_input" v-model="answer_two" type="text" maxlength="5" placeholder="_ _ _ _ _">,<br> не могут
+          объяснить нам на своём языке, который для
+          нас звучит,<br> как <input class="answer_input" v-model="answer_three" type="text" maxlength="6"
+            placeholder="_ _ _ _ _ _">,
+          чего же они хотят. Мы постараемся <input class="answer_input" v-model="answer_four" maxlength="7" type="text"
+            placeholder="_ _ _ _ _ _ _"> стекло<br> недопонимания между нами и <input class="answer_input"
+            v-model="answer_five" type="text" maxlength="6" placeholder="_ _ _ _ _ _ "> им.
+        </div>
+        <Button class="TestTask__btn" :isImage="true" :image="arrow" @click="checkAnswer()" label="Ответить" />
       </div>
-      <p class="title-h4 TestTask__title"> Вставь пропущенные слова.</p>
-      <div class="TestTask__task">
-        Необыкновенные пришельцы Леся и Моа, не знающие нашего<br> <input class="answer_input" v-model="answer" maxlength="5" type="text"
-          placeholder="_ _ _ _ _">, оказались на нашей планете. Они, словно немые <input class="answer_input"
-          v-model="answer_two" type="text"  maxlength="5" placeholder="_ _ _ _ _">,<br> не могут объяснить нам на своём языке, который для
-        нас звучит,<br> как <input class="answer_input" v-model="answer_three" type="text"  maxlength="6" placeholder="_ _ _ _ _ _">,
-        чего же они хотят. Мы постараемся <input class="answer_input" v-model="answer_four"  maxlength="7" type="text"
-          placeholder="_ _ _ _ _ _ _"> стекло<br> недопонимания между нами и <input class="answer_input"
-          v-model="answer_five" type="text"  maxlength="6" placeholder="_ _ _ _ _ _ "> им.
-      </div>
-      <Button class="TestTask__btn" :isImage="true" :image="arrow" label="Ответить" />
+      <!-- <p v-if="finished === true">{{ correct }}</p> -->
     </div>
-  </div>
+  </template>
+  <TaskResultBanner :is_test="true"  bg="/assets/backgrounds/Moa.png"
+    text="Молодец! Ты полностью справился с заданием. Теперь ты можешь помочь и Лесе с Моа тоже научиться понимать нас."
+    v-if="show === true && correct === 5" @hide="hideModal"></TaskResultBanner>
+  <TaskResultBanner :is_test="true" bg="/assets/backgrounds/Moa.png"
+    text="Здорово! Ты почти всё верно выполнил. Помоги теперь Лесе и Моа научиться понимать нас."
+    v-if="show === true && correct === 4" @hide="hideModal"></TaskResultBanner>
+  <TaskResultBanner :is_test="true"  bg="/assets/backgrounds/Moa.png"
+    text="Неплохо, ты верно выполнил задание больше, чем наполовину. Ты можешь помочь Лесе и Моа научиться понимать нас."
+    v-if="show === true && correct === 3" @hide="hideModal"></TaskResultBanner>
+  <TaskResultBanner :is_test="true"  bg="/assets/backgrounds/Moa.png"
+    text=" Неплохо, ты попробовал понять текст. А Леся и Моа не понимают нас совсем. Только ты можешь помочь им."
+    v-if="show === true && (correct === 2 || correct === 1)" @hide="hideModal"></TaskResultBanner>
+  <TaskResultBanner :is_test="true"  bg="/assets/backgrounds/Moa.png" text="Попробуй помочь нашим героям! У тебя все получится!"
+    v-if="show === true && correct === 0" @hide="hideModal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref } from 'vue';
 import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
+import { TaskResultBanner } from '@features/TaskResultBanner/components';
 const emit = defineEmits(['close']);
 
 const hide = () => {
   emit('close');
+  endGame.value = true;
 };
+
+const show = ref(false);
+const hideModal = () => {
+  show.value = false;
+}
 
 const answer = ref('');
 const answer_two = ref('');
 const answer_three = ref('');
 const answer_four = ref('');
 const answer_five = ref('');
+const endGame = ref(false);
+const correct = ref(0);
+
+const answer_finish = ref('языка');
+const answer_two_finish = ref('рыбы');
+const answer_three_finish = ref('музыка');
+const answer_four_finish = ref('разбить');
+const answer_five_finish = ref('помочь');
+
+const checkAnswer = () => {
+  if (answer.value === answer_finish.value) {
+    correct.value++;
+  }
+  if (answer_two.value === answer_two_finish.value) {
+    correct.value++;
+  }
+  if (answer_three.value === answer_three_finish.value) {
+    correct.value++;
+  }
+  if (answer_four.value === answer_four_finish.value) {
+    correct.value++;
+  }
+  if (answer_five.value === answer_five_finish.value) {
+    correct.value++;
+  }
+
+  endGame.value = true;
+  show.value = true;
+}
 
 </script>
 <style lang="scss" scoped>
@@ -47,6 +102,7 @@ const answer_five = ref('');
   height: 600px;
   width: 100%;
   max-width: 1200px;
+
   @media (max-width: 1024px) {
     height: 470px;
     max-width: 944px;
@@ -58,6 +114,7 @@ const answer_five = ref('');
     font-size: 24px;
     font-weight: medium;
     font-family: 'Nunito';
+
     @media (max-width: 1024px) {
       font-size: 20px;
     }
@@ -71,7 +128,7 @@ const answer_five = ref('');
     font-size: 24px;
     font-family: 'Nunito';
     font-weight: 600;
-     max-width: 870px;
+    max-width: 870px;
     line-height: 40px;
 
   }
@@ -79,6 +136,7 @@ const answer_five = ref('');
   &__wrapper {
     padding: 30px 0px 73px 0px;
     position: relative;
+
     @media (max-width: 1024px) {
       padding: 30px 0px 45px 0px;
     }
