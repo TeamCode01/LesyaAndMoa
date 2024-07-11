@@ -3,7 +3,7 @@
         <p class="sidebar__title">Выбери задание!</p>
         <div class="sidebar__wrapper">
             <div class="sidebar__bg">
-                <div @click="switchTask(item.id, item.open, item.time, item.img)"
+                <div @click="switchTask(item.id, item.open, item.time, item.img, item.audio)"
                     :class="{ disabled: item.disabled === true }" class="task" v-for="item in tasks" :key="item.id">{{
                         item.name
                     }} <img class="icon" v-if="item.disabled === false && item.done === false"
@@ -11,26 +11,25 @@
                         v-else-if="item.disabled === true && item.done === false" src="@app/assets/icons/block.svg" />
                 </div>
             </div>
-
-
-            <FirstTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 1"></FirstTask>
-            <SecondTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 2"></SecondTask>
-            <ThirdTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 3"></ThirdTask>
-            <FourthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 4"></FourthTask>
-            <ThirteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 13"></ThirteenthTask>
+            <FirstTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 1"></FirstTask>
+            <SecondTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 2"></SecondTask>
+            <ThirdTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 3"></ThirdTask>
+            <FourthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 4"></FourthTask>
+            <ThirteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 13"></ThirteenthTask>
             <SixteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 16"></SixteenthTask>
-            <EighteenTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 18"></EighteenTask>
-            <NineTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 9"></NineTask>
-            <ElevenTask :end="endTime" @close="close()" v-show="SeeTask === true && taskId === 11"></ElevenTask>
+            <EighteenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 18"></EighteenTask>
+            <NineTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 9"></NineTask>
+            <ElevenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 11"></ElevenTask>
         </div>
 
-        <Button class="start" label="Старт" :is-image="true"  :image="arrow" @click="openTask(taskId)"></Button>
+        <Button class="start" label="Старт" :is-image="true" :image="arrow" @click="openTask(taskId)"></Button>
     </div>
 </template>
 <script setup>
+import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
-import { ref } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { FirstTask } from '@features/FirstTask/components';
 import { ThirdTask } from '@features/ThirdTask/components';
 import { FourthTask } from '@features/FourthTask/components';
@@ -43,9 +42,9 @@ import { ElevenTask } from '@features/ElevenTask';
 const emit = defineEmits('sendImg');
 const tasks = ref([
 
-    { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/animals.jpg' },
+    { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/animals.jpg', audio: '/assets/audio/Task1/12.1.mp3' },
     { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task2.jpg' },
-    { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg' },
+    { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg', audio: '/assets/audio/Task3/31.3.mp3' },
     { id: 4, name: 'Задание 4', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task4.jpg' },
     { id: 5, name: 'Задание 5', disabled: true, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task5.jpg' },
     { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task6.jpg' },
@@ -67,7 +66,9 @@ const SeeTask = ref(false);
 const taskId = ref(null);
 const taskImage = ref('/assets/backgrounds/animals.jpg');
 const timeVal = ref(15);
+const taskAudio = ref('/assets/audio/Task1/12.1.mp3');
 const endTime = ref(false);
+const taskss = ref([]);
 
 const close = () => {
     SeeTask.value = false;
@@ -75,22 +76,65 @@ const close = () => {
     console.log('close yeah')
 };
 
-const switchTask = (id, openId, time, img) => {
+function playAudio(audioPath) {
+    const audio = new Audio(audioPath);
+    audio.play();
+}
+
+const switchTask = (id, openId, time, img, audio) => {
     taskId.value = id;
+    console.log(taskId.value)
     SeeTask.value = openId;
     timeVal.value = time;
+    taskAudio.value = audio;
     endTime.value = false;
     taskImage.value = img;
     console.log(SeeTask.value);
     emit('sendImg', img);
 }
 
+const startTask = async (id) => {
+    try {
+        const resp = await HTTP.post(`answers/${id}`);
+    } catch (e) {
+        console.error('Error starting task', e);
+    }
+
+}
+
 const openTask = (taskId) => {
     SeeTask.value = true;
     setTimeout(() => {
+        playAudio(taskAudio.value);
+    })
+
+    setTimeout(() => {
+
         endTime.value = true;
     }, timeVal.value * 1000);
 }
+
+const getTasks = async () => {
+    await HTTP.get('tasks').then((response) => {
+        taskss.value = response.data;
+    }).catch((error) => {
+        console.error(error);
+    });
+}
+
+watch(
+    () => taskId.value,
+    (newId) => {
+        if (!newId) {
+            return
+        }
+        taskId.value = newId;
+    },
+);
+
+onMounted(() => {
+    getTasks();
+});
 
 </script>
 <style lang="scss" scoped>
@@ -174,20 +218,21 @@ const openTask = (taskId) => {
 
 
     }
+
     &__bg {
-            display: flex;
-            flex-direction: column;
-            row-gap: 12px;
-            height: 300px;
-            padding: 8px 0;
-            overflow-y: scroll;
+        display: flex;
+        flex-direction: column;
+        row-gap: 12px;
+        height: 300px;
+        padding: 8px 0;
+        overflow-y: scroll;
 
-            @media (max-width: 1024px) {
-                height: 185px;
-                padding: 0px;
-            }
-
+        @media (max-width: 1024px) {
+            height: 185px;
+            padding: 0px;
         }
+
+    }
 
 }
 

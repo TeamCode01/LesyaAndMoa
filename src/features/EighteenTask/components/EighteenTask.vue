@@ -1,42 +1,39 @@
 <template>
-    <div class="EighteenTask task_block">
-        <div class="EighteenTask__wrapper">
-            <div class="task_block__close" @click="hide">
-                <img
-                    class="close-icon"
-                    src="@app/assets/icons/close-icon.svg"
-                    alt="крест"
-                />
-            </div>
-            <div class="task_block__time">
-                <Timer :end="end"></Timer>
-                <p class="title-h4 EighteenTask__title">
-                    Прочитай текст, запиши его в поле ответа.
-                </p>
-            </div>
+    <template v-if="endGame === false">
+        <div class="EighteenTask task_block">
+            <div class="EighteenTask__wrapper">
+                <div class="task_block__close" @click="hide">
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                </div>
+                <div class="task_block__time">
+                    <Timer :end="end"></Timer>
+                    <p class="title-h4 EighteenTask__title">
+                        Прочитай текст, запиши его в поле ответа.
+                    </p>
+                </div>
 
-            <div class="EighteenTask__task">
-                <img src="@app/assets/backgrounds/pictureWords.png" />
+                <div class="EighteenTask__task">
+                    <img src="@app/assets/backgrounds/pictureWords.png" />
+                </div>
+                <input class="EighteenTask__answer" v-model="answer" />
+                <Button class="send" :isImage="true" :image="arrow" label="Ответить" />
             </div>
-            <input class="EighteenTask__answer" v-model="answer" />
-            <Button
-                class="send"
-                :isImage="true"
-                :image="arrow"
-                label="Ответить"
-            />
         </div>
-    </div>
+    </template>
+    <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png" text="Отлично!"
+        v-if="show === true" @hide="hideModal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
 import { Timer } from '@shared/components/timer';
+import { TaskResultBanner } from '@features/TaskResultBanner/components';
 const emit = defineEmits(['close']);
-
+const endGame = ref(false);
 const hide = () => {
     emit('close');
+    endGame.value = true;
 };
 
 const props = defineProps({
@@ -45,6 +42,12 @@ const props = defineProps({
         required: false,
     },
 });
+
+
+const show = ref(false);
+const hideModal = () => {
+    show.value = false;
+}
 
 const answer = ref('');
 </script>
@@ -76,6 +79,7 @@ const answer = ref('');
 
     &__wrapper {
         padding: 30px 60px 57px 60px;
+
         @media (max-width: 1024px) {
             padding: 30px 20px 50px 20px;
         }

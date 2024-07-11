@@ -1,121 +1,65 @@
 <template>
-    <div class="ElevenTask task_block">
-        <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Молодец!" v-if="endGame === true"></TaskResultBanner>
-        <div class="ElevenTask__wrapper">
-            <div class="task_block__close" @click="hide">
-                <img
-                    class="close-icon"
-                    src="@app/assets/icons/close-icon.svg"
-                    alt="крест"
-                />
-            </div>
+    <template v-if="endGame === false">
+        <div class="ElevenTask task_block">
+            <div class="ElevenTask__wrapper">
+                <div class="task_block__close" @click="hide">
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                </div>
 
-            <div class="task_block__time">
-                <Timer :end="end"></Timer>
-                <p class="title-h4 task_block__title">
-                    Собери слова из двух частей, угадай, из какой сказки эти
-                    герои.
-                </p>
-            </div>
-            <div class="ElevenTask__content">
-                <div class="fairy_tales__wrapper hide">
-                    <div
-                        class="fairy_tales__item"
-                        @click="chooseFairyTail()"
-                        v-for="item in fairytails"
-                        :key="item"
-                    >
-                        <span>«{{ item.name }}»</span>
+                <div class="task_block__time">
+                    <Timer :end="end"></Timer>
+                    <p class="title-h4 task_block__title">
+                        Собери слова из двух частей, угадай, из какой сказки эти
+                        герои.
+                    </p>
+                </div>
+                <div class="ElevenTask__content">
+                    <div class="fairy_tales__wrapper hide">
+                        <div class="fairy_tales__item" @click="chooseFairyTail()" v-for="item in fairytails"
+                            :key="item">
+                            <span>«{{ item.name }}»</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="draggable-list">
-                    <q-btn
-                        class="list-group-item item"
-                        v-for="(item, index) in syllables"
-                        :key="item.id"
-                        draggable="true"
-                        @dragstart="drag($event, item.name, index)"
-                        @dragover.prevent
-                        :value="item"
-                    >
-                        {{ item.name }}
-                    </q-btn>
-                </div>
-                <div class="finish_words__wrapper hide">
-                    <div
-                        class="finish_words__item"
-                        v-for="item in finish_answers"
-                        :key="item"
-                    >
-                        {{ item }}
+                    <div class="draggable-list">
+                        <q-btn class="list-group-item item" v-for="(item, index) in syllables" :key="item.id"
+                            draggable="true" @dragstart="drag($event, item.name, index)" @dragover.prevent
+                            :value="item">
+                            {{ item.name }}
+                        </q-btn>
                     </div>
-                </div>
-                <div class="inputs">
-                    <div class="input-group">
-                        <input
-                            @drop="drop($event, 1, 1)"
-                            type="text"
-                            class="input-item row1 part1"
-                        /><input
-                            @drop="drop($event, 2, 1)"
-                            type="text"
-                            class="input-item row1 part2"
-                        />
+                    <div class="finish_words__wrapper hide">
+                        <div class="finish_words__item" v-for="item in finish_answers" :key="item">
+                            {{ item }}
+                        </div>
+                    </div>
+                    <div class="inputs">
+                        <div class="input-group">
+                            <input @drop="drop($event, 1, 1)" type="text" class="input-item row1 part1" /><input
+                                @drop="drop($event, 2, 1)" type="text" class="input-item row1 part2" />
 
-                        <input
-                            @drop="drop($event, 1, 2)"
-                            type="text"
-                            class="input-item row2 part1"
-                        /><input
-                            @drop="drop($event, 2, 2)"
-                            type="text"
-                            class="input-item row2 part2"
-                        />
+                            <input @drop="drop($event, 1, 2)" type="text" class="input-item row2 part1" /><input
+                                @drop="drop($event, 2, 2)" type="text" class="input-item row2 part2" />
 
-                        <input
-                            @drop="drop($event, 1, 3)"
-                            type="text"
-                            class="input-item row3 part1"
-                        /><input
-                            @drop="drop($event, 2, 3)"
-                            type="text"
-                            class="input-item row3 part2"
-                        />
+                            <input @drop="drop($event, 1, 3)" type="text" class="input-item row3 part1" /><input
+                                @drop="drop($event, 2, 3)" type="text" class="input-item row3 part2" />
 
-                        <input
-                            @drop="drop($event, 1, 4)"
-                            type="text"
-                            class="input-item row4 part1"
-                        /><input
-                            @drop="drop($event, 2, 4)"
-                            type="text"
-                            class="input-item row4 part2"
-                        /><input
-                            @drop="drop($event, 1, 5)"
-                            type="text"
-                            class="input-item row5 part1"
-                        /><input
-                            @drop="drop($event, 2, 5)"
-                            type="text"
-                            class="input-item row5 part2"
-                        />
+                            <input @drop="drop($event, 1, 4)" type="text" class="input-item row4 part1" /><input
+                                @drop="drop($event, 2, 4)" type="text" class="input-item row4 part2" /><input
+                                @drop="drop($event, 1, 5)" type="text" class="input-item row5 part1" /><input
+                                @drop="drop($event, 2, 5)" type="text" class="input-item row5 part2" />
 
-                        <input
-                            @drop="drop($event, 1, 6)"
-                            type="text"
-                            class="input-item row6 part1"
-                        /><input
-                            @drop="drop($event, 2, 6)"
-                            type="text"
-                            class="input-item row6 part2"
-                        />
+                            <input @drop="drop($event, 1, 6)" type="text" class="input-item row6 part1" /><input
+                                @drop="drop($event, 2, 6)" type="text" class="input-item row6 part2" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </template>
 
+    <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Молодец!"
+        v-if="show === true" @hide="hideModal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -123,9 +67,10 @@ import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 const emit = defineEmits(['close']);
 
+const endGame = ref(false);
 const hide = () => {
     emit('close');
-    console.log('close')
+    endGame.value = true;
 };
 
 const props = defineProps({
@@ -135,7 +80,10 @@ const props = defineProps({
     },
 });
 
-const endGame = ref(false);
+const show = ref(false);
+const hideModal = () => {
+    show.value = false;
+}
 
 const syllables = ref([
     { id: 1, name: 'МЫШ', part: 1 },
@@ -310,6 +258,7 @@ const allowDrop = (event) => {
         width: 100%;
         column-gap: 160px;
         align-items: center;
+
         @media (max-width: 1024px) {
             margin-top: 30px;
             column-gap: 120px;
