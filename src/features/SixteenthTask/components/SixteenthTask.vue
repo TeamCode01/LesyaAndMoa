@@ -1,7 +1,7 @@
 <template>
     <div class="SixteenthTask task_block">
-        <div class="task_block__wrapper">
-            <template v-if="true">
+        <div class="wrapper">
+            <template v-if="false">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -225,8 +225,8 @@
                     class="task_block__wrapper_answer"
                 />
             </template>
-            <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Здорово!"
-            v-if="false" @hide="hide()"></TaskResultBanner>
+            <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/moa.gif" text="Изумительно!"
+            v-if="true" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -253,7 +253,23 @@ const isActive = true;
 
 <style lang="scss" scoped>
 .SixteenthTask{
-    position: block;
+    width: 1200px;
+    @media (max-width: 1024px) {
+        min-width: 944px;
+    }
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 60px 67px 60px;
+    position: relative;
+    height: 600px;
+
+    @media (max-width: 1024px) {
+        padding: 30px 20px 43px 20px;
+    }
 }
 
 .SixteenthTask__title {

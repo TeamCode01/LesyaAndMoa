@@ -1,5 +1,5 @@
 <template>
-    <div class="FourthTask task_block">
+    <div class="FifthTask task_block">
         <div class="task_block__wrapper">
             <template v-if="true">
                 <div class="task_block__close" @click="hide">
@@ -18,24 +18,24 @@
                 <div class="draggable-list">
                     <div class="draggable-list__items">
                         <div class="draggable-list__item1">
-                            <button class="draggable-list__button">ШО</button>
-                            <button class="draggable-list__button">БА</button>
-                            <button class="draggable-list__button">ГЮ</button>
-                            <button class="draggable-list__button">ЛЫ</button>
-                            <button class="draggable-list__button">ХА</button>
+                            <button class="draggable-list__button">РЕГ</button>
+                            <button class="draggable-list__button">МОД</button>
+                            <button class="draggable-list__button">ЛЁК</button>
+                            <button class="draggable-list__button">ЗИН</button>
+                            <button class="draggable-list__button">УПР</button>
                         </div>
                         <div class="draggable-list__item2">
-                            <button class="draggable-list__button">ДЯ</button
-                            ><button class="draggable-list__button">ЩИ</button
-                            ><button class="draggable-list__button">ФО</button
-                            ><button class="draggable-list__button">ЖУ</button>
+                            <button class="draggable-list__button">ИЗН</button
+                            ><button class="draggable-list__button">НОК</button
+                            ><button class="draggable-list__button">ВЕТ</button
+                            ><button class="draggable-list__button">РИС</button>
                         </div>
                         <div class="draggable-list__item3">
-                            <button class="draggable-list__button">ЗИ</button
-                            ><button class="draggable-list__button">ТЬ</button
-                            ><button class="draggable-list__button">ВЕ</button
-                            ><button class="draggable-list__button">КЕ</button
-                            ><button class="draggable-list__button">РЮ</button>
+                            <button class="draggable-list__button">ЗАП</button
+                            ><button class="draggable-list__button">МЫЙ</button
+                            ><button class="draggable-list__button">БУК</button
+                            ><button class="draggable-list__button">ОЛЬТ</button
+                            ><button class="draggable-list__button">ВЕЦ</button>
                         </div>
                     </div>
                     <div v-if="false">
@@ -68,7 +68,7 @@
                     class="task_block__wrapper_answer"
                 />
             </template>
-            <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Здорово!"
+            <TaskResultBanner img="/assets/backgrounds/cup.png" bg="/assets/backgrounds/lesya.gif" text="Прекрасно!"
             v-if="false" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
@@ -108,7 +108,7 @@ const hide = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 540px;
+    width: 632px;
     height: 200px;
     gap: 40px;
     @media (max-width: 1024px) {
@@ -123,34 +123,40 @@ const hide = () => {
     display: flex;
     justify-content: space-between;
     gap: 60px;
+    height: 40px;
 }
 
-.draggable-list__item1,
+.draggable-list__item1 {
+    width: 613px;
+}
+
+
 .draggable-list__item3 {
     width: 100%;
-    height: 40px;
 }
 
 .draggable-list__item2 {
-    width: 420px;
-    height: 40px;
+    width: 478px;
 }
 
 .draggable-list__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    width: 60px;
     height: 40px;
-    background-color: $lightPink;
-    color: $vihous;
+    background-color: $blueGame;
+    color: $darkBlue;
     font-family: 'Nunito', sans-serif;
     font-size: 20px;
     letter-spacing: 0;
     border-radius: 6px;
     font-weight: bold;
     line-height: 40px;
+    padding: 8px 16px;
 }
 
-.FourthTask {
+.FifthTask {
     position: block;
 }
 

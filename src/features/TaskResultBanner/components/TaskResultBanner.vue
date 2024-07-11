@@ -42,6 +42,7 @@
 </template>
 
 <script setup>
+import Button from '@shared/components/buttons/Button.vue';
 import { onMounted } from 'vue';
 const emit = defineEmits(['hide']);
 const hide = () => {
@@ -188,14 +189,17 @@ onMounted(() => {
 }
 
 .right-result__img-moa {
+    width: 403px;
+    height: 407px;
     @media (max-width: 1024px) {
         height: 327px;
         width: 320px;
     }
 }
 
-#result-bg {
-    width: 403px;
-    height: 407px;
-}
+// При планшетном варианте ломает адаптив
+// #result-bg {
+//     width: 403px;
+//     height: 407px;
+// }
 </style>
