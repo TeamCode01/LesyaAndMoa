@@ -13,8 +13,8 @@
                 </div>
 
                 <div class="draggable-list">
-                    <q-btn v-for="(item, index) in words" :key="index.id" class="list-group-item item" draggable="true"
-                        @dragstart="drag($event, item.name, index)" @dragover.prevent :value="item.name">
+                    <q-btn  v-for="(item, index) in words" :key="index.id" class="list-group-item item" draggable="true"
+                        @dragstart="drag($event, item.name, item.audio, index)" @dragover.prevent :value="item.name">
                         {{ item.name }}
                     </q-btn>
                 </div>
@@ -51,17 +51,22 @@ const hideModal = () => {
     show.value = false;
 }
 
+const playAudio = (audioPath) => {
+    const audio = new Audio(audioPath);
+    audio.play();
+}
+
 const words = ref([
-    { id: 1, name: 'медведи и зайцы', index: 11 },
-    { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2 },
-    { id: 3, name: 'в слоги и в слова.', index: 5 },
-    { id: 4, name: 'В нашем языке', index: 0 },
-    { id: 5, name: 'в леса и поля', index: 22 },
-    { id: 6, name: 'есть иероглифы', index: 81 },
-    { id: 7, name: 'и складываются', index: 3 },
-    { id: 8, name: 'явления и предметы', index: 7 },
-    { id: 9, name: 'есть буквы.', index: 1 },
-    { id: 10, name: 'Все вместе они образуют МОЗАИКУ', index: 9 },
+    { id: 1, name: 'медведи и зайцы', index: 11, audio: '/assets/audio/Task1/13.1.mp3' },
+    { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2, audio: '/assets/audio/Task1/14.1.mp3' },
+    { id: 3, name: 'в слоги и в слова.', index: 5, audio: '/assets/audio/Task1/15.1.mp3' },
+    { id: 4, name: 'В нашем языке', index: 0, audio: '/assets/audio/Task1/16.1.mp3' },
+    { id: 5, name: 'в леса и поля', index: 22, audio: '/assets/audio/Task1/17.1.mp3' },
+    { id: 6, name: 'есть иероглифы', index: 81, audio: '/assets/audio/Task1/18.1.mp3' },
+    { id: 7, name: 'и складываются', index: 3, audio: '/assets/audio/Task1/19.1.mp3' },
+    { id: 8, name: 'явления и предметы', index: 7, audio: '/assets/audio/Task1/20.1.mp3' },
+    { id: 9, name: 'есть буквы.', index: 1, audio: '/assets/audio/Task1/21.1.mp3' },
+    { id: 10, name: 'Все вместе они образуют МОЗАИКУ', index: 9, audio: '/assets/audio/Task1/22.1.mp3' },
 ]);
 const wordsAnswer = ref([
     { id: 1, name: 'В нашем языке', index: 3 },
@@ -72,9 +77,10 @@ const wordsAnswer = ref([
 ]);
 const answer = ref('');
 const dropIndex = ref(words.value.length - 1);
-const drag = (event, word, index) => {
+const drag = (event, word, audio, index) => {
     event.dataTransfer.setData('text', word);
     dropIndex.value = index;
+    playAudio(audio);
 };
 
 // const drop = (event, word) => {

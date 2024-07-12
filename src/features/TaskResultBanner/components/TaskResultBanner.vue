@@ -11,19 +11,18 @@
             <div class="left-result">
                 <div class="left-result__greetings">
                     <h4 class="left-result__title-h4">{{ props.text }}</h4>
-                    <img
+                    <img v-if="props.is_test === false"
                         class="left-result__flowers"
                         id="result-banner"
-                        alt="flowers"
                     />
                 </div>
-                <div v-if="false">
+                <div v-if="props.is_test === false">
                     <button class="left-result__button left-result__text">
                         <span class="left-result__text">Далее</span>
                         <img src="@app\assets\icons\vector.svg" alt="vector" />
                     </button>
                 </div>
-                <div v-if="true">
+                <div v-else>
                     <button class="left-result__button left-result__text">
                         <span class="left-result__text">К обучению</span>
                         <img src="@app\assets\icons\vector.svg" alt="vector" />
@@ -33,8 +32,7 @@
             <div class="right-result">
                 <img
                     class="right-result__img-moa"
-                    id="result-bg"
-                    alt="Moa"
+                     id="result-bg"
                 />
             </div>
         </div>
@@ -58,11 +56,17 @@ const props = defineProps({
     },
     bg: {
         type: String,
+    },
+    is_test: {
+        type: Boolean,
+        default: false,
     }
 })
 
 onMounted(() => {
-    document.getElementById('result-banner').src = props.img;
+    if(props.is_test === false) {
+        document.getElementById('result-banner').src = props.img;
+    }
     document.getElementById('result-bg').src = props.bg;
 });
 

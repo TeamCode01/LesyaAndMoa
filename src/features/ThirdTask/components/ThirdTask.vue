@@ -24,17 +24,18 @@
                 </div>
                 <div class="ThirdTask__answer">
                     <div class="box" id="box" @mouseover="playAudio('/assets/audio/Task3/32.3_слово.mp3')"
-                        @drop="drop($event, array)" @dragover="allowDrop($event)">
+                        @drop="drop($event)" @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array">
                             {{ item }}
                         </div>
                     </div>
-                    <div class="box2" id="box2"  @drop="drop($event, array_two)" @dragover="allowDrop($event)">
+                    <div class="box2" id="box2" @drop="drop($event)" @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array_two">
                             {{ item }}
                         </div>
                     </div>
-                    <div class="box3" id="box3" @mouseover="playAudio('/assets/audio/Task3/33.3.mp3')" @drop="drop($event, array_three)" @dragover="allowDrop($event)">
+                    <div class="box3" id="box3" @mouseover="playAudio('/assets/audio/Task3/33.3.mp3')"
+                        @drop="drop($event)" @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array_three">
                             {{ item }}
                         </div>
@@ -65,10 +66,11 @@ const props = defineProps({
     },
 });
 
-function playAudio(audioPath) {
+const playAudio = (audioPath) => {
     const audio = new Audio(audioPath);
     audio.play();
 }
+
 
 const endGame = ref(false);
 const show = ref(false);
@@ -91,40 +93,44 @@ const drag = (event, letter, index) => {
     dropIndex.value = index;
 };
 
-const drop = (event, arr) => {
-    // event.preventDefault();
-    // const letter = event.dataTransfer.getData('text');
-    // letters.value.splice(dropIndex.value, 1);
-    // arr.push(letter);
+const drop = (event) => {
     event.preventDefault();
     const letter = event.dataTransfer.getData('text');
     event.target.value = letter;
-    const index = letters.value.findIndex((item) => item.name === letter);
-    // if (index !== -1) {
-    //     const letterType = letters.value[index].type;
-    //     arr.push(letter);
+    // const index = letters.value.findIndex((item) => item.name === letter);
+    // const indexInResult = array_result.value.findIndex((item) => item.name === letter);
+    if (array_result.value.find((item) => item.name === letter)) {
+        array.value.push(letter);
+        letters.value.splice(dropIndex.value, 1);
+        event.target.classList.add('green');
+        setTimeout(() => {
+            event.target.classList.remove('green');
+        }, 2000);
+    } else {
+        return false;
+    }
 
-    //     if (letterType === 'звонкий') {
-    //         if (array.value.includes(letterType === 'звонкий') || array_two.value.includes(letterType === 'звонкий')) {
-    //              event.target.classList.add('red');
-    //              setTimeout(() => {
-    //                  event.target.classList.remove('red');
-    //                  arr.splice(index, 1);
-    //              })
-    //         } else {
-    //             event.target.classList.add('green');
-    //             setTimeout(() => {
-    //                 event.target.classList.remove('green');
-    //             })
-    //         }
-    //      }
-    //      //else if (letterType === 'глухой') {
-    //     //     array.value.push(letter);
-    //     // } else {
-    //     //     array_two.value.push(letter);
-    //     // }
-    //     letters.value.splice(index, 1);
-    // }
+    if (array_two_result.value.find((item) => item.name === letter)) {
+        array_two.value.push(letter);
+        letters.value.splice(dropIndex.value, 1);
+        event.target.classList.add('green');
+        setTimeout(() => {
+            event.target.classList.remove('green');
+        }, 2000);
+    } else {
+        return false;
+    }
+
+    if (array_three_result.value.find((item) => item.name === letter)) {
+        array_three.value.push(letter);
+        letters.value.splice(dropIndex.value, 1);
+        event.target.classList.add('green');
+        setTimeout(() => {
+            event.target.classList.remove('green');
+        }, 2000);
+    } else {
+        return false;
+    }
 };
 
 const allowDrop = (event) => {

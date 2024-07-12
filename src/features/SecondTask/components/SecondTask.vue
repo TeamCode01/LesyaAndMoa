@@ -11,7 +11,8 @@
                     <p class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</p>
                 </div>
                 <div class="SecondTask__wrapper_block">
-                    <div @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"
+                    <div @mouseenter="playAudio(item.audio)"
+                        @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"
                         class="SecondTask__wrapper_block_item">
                         <img id="image" :src="item.src" alt="alphabet">
                     </div>
@@ -20,7 +21,7 @@
         </div>
     </template>
 
-    <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/Moa.png" text="Так держать!"
+    <TaskResultBanner :is-test="false" img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/Moa.png" text="Так держать!"
         v-if="show === true" @hide="hideModal"></TaskResultBanner>
 </template>
 <script setup>
@@ -39,12 +40,28 @@ const hide = () => {
     emit('close');
     endGame.value = true;
 };
-const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false }])
+const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false, audio: '/assets/audio/Task2/27.2.mp3' }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true, audio: '/assets/audio/Task2/26.2.mp3' }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false, audio: '/assets/audio/Task2/28.2.mp3' }])
 const endGame = ref(false);
 const show = ref(false);
 const hideModal = () => {
     show.value = false;
 }
+const music = ref(null);
+
+const playAudio = (audioPath) => {
+    const audio = new Audio(audioPath);
+    music.value = audio;
+    audio.play();
+}
+
+// const stopAudio = (audioPath) => {
+//     const audio = new Audio(audioPath);
+//     if (audio.paused) {
+//         audio.play();
+//     } else {
+//         audio.pause();
+//     }
+// }
 
 const chooseTask = (event, status) => {
     if (status === true) {
@@ -53,6 +70,7 @@ const chooseTask = (event, status) => {
             (item) => item.isCorrect == true,
         );
         event.target.classList.add('green');
+        music.value.pause();
         setTimeout(() => {
             show.value = true;
             endGame.value = true;
