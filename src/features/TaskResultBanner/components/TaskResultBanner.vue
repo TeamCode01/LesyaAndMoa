@@ -124,7 +124,7 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 203px;
+    width: 100%;
     height: 260px;
     gap: 28px;
     @media (max-width: 1024px) {
