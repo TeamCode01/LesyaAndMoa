@@ -125,8 +125,10 @@ const onSelection = (firstIndex, id) => {
         playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     }
     if(countAnswers.value == 14){
-        startGame.value = false;
-        playAudio('/assets/audio/Task4/60.4_.mp3');
+        setTimeout(() => {
+            startGame.value = false;
+            playAudio('/assets/audio/Task4/60.4_.mp3');
+        }, 1000);
     }
 }
 
