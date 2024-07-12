@@ -3,7 +3,7 @@
         <p class="sidebar__title">Выбери задание!</p>
         <div class="sidebar__wrapper">
             <div class="sidebar__bg">
-                <div @click="switchTask(item.id, item.open, item.time, item.img, item.audio)"
+                <div @click="switchTask(item.id, item.open, item.time, item.img, item.audio, item.startAudio)"
                     :class="{ disabled: item.disabled === true }" class="task" v-for="item in tasks" :key="item.id">{{
                         item.name
                     }} <img class="icon" v-if="item.disabled === false && item.done === false"
@@ -15,6 +15,7 @@
             <SecondTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 2"></SecondTask>
             <ThirdTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 3"></ThirdTask>
             <FourthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 4"></FourthTask>
+            <FifthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 5"></FifthTask>
             <ThirteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 13"></ThirteenthTask>
             <SixteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 16"></SixteenthTask>
             <EighteenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 18"></EighteenTask>
@@ -33,33 +34,34 @@ import { ref, watch, onMounted } from 'vue';
 import { FirstTask } from '@features/FirstTask/components';
 import { ThirdTask } from '@features/ThirdTask/components';
 import { FourthTask } from '@features/FourthTask/components';
+import { FifthTask } from '@features/FifthTask/components';
 import { SecondTask } from '@features/SecondTask';
 import { ThirteenthTask } from '@features/ThirteenthTask';
 import { SixteenthTask } from '@features/SixteenthTask';
 import { EighteenTask } from '@features/EighteenTask';
 import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
-const emit = defineEmits('sendImg');
+const emit = defineEmits(['sendImg', 'sendAudio']);
 const tasks = ref([
 
-    { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/animals.jpg', audio: '/assets/audio/Task1/12.1.mp3' },
-    { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task2.jpg' },
-    { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg', audio: '/assets/audio/Task3/31.3.mp3' },
+    { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 22, end: false, img: '/assets/backgrounds/animals.jpg', audio: '/assets/audio/Task1/12.1.mp3', startAudio: '/assets/audio/Task1/11.1_.mp3' },
+    { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 17, end: false, img: '/assets/backgrounds/task2.jpg', audio: '/assets/audio/Task2/25.2.mp3',  startAudio: '/assets/audio/Task2/24.2_.mp3' },
+    { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg', audio: '/assets/audio/Task3/31.3.mp3', startAudio: '/assets/audio/Task3/30.3_.mp3' },
     { id: 4, name: 'Задание 4', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task4.jpg' },
-    { id: 5, name: 'Задание 5', disabled: true, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task5.jpg' },
+    { id: 5, name: 'Задание 5', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task5.jpg' },
     { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task6.jpg' },
     { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task7.jpg' },
     { id: 8, name: 'Задание 8', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 9, name: 'Задание 9', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task9.jpg' },
     { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task10.jpg' },
-    { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/animals.jpg' },
+    { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task11.jpg', },
     { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task12.jpg' },
-    { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task13.jpg' },
+    { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task13.jpg'},
     { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/task15.jpg' },
     { id: 16, name: 'Задание 16', disabled: false, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 120, end: false, img: '/assets/backgrounds/animals.jpg' },
+    { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 120, end: false, img: '/assets/backgrounds/task18.jpg', startAudio: '/assets/audio/Task18/470.18_.mp3' },
 ])
 
 const SeeTask = ref(false);
@@ -67,29 +69,30 @@ const taskId = ref(null);
 const taskImage = ref('/assets/backgrounds/animals.jpg');
 const timeVal = ref(15);
 const taskAudio = ref('/assets/audio/Task1/12.1.mp3');
+const startAudio = ref('/assets/audio/Task1/11.1_.mp3');
 const endTime = ref(false);
 const taskss = ref([]);
 
 const close = () => {
     SeeTask.value = false;
     endTime.value = false;
-    console.log('close yeah')
 };
 
-function playAudio(audioPath) {
+const playAudio = (audioPath) => {
     const audio = new Audio(audioPath);
     audio.play();
 }
 
-const switchTask = (id, openId, time, img, audio) => {
+const switchTask = (id, openId, time, img, audio, startAudioV) => {
     taskId.value = id;
-    console.log(taskId.value)
     SeeTask.value = openId;
+    startAudio.value = startAudioV;
     timeVal.value = time;
     taskAudio.value = audio;
     endTime.value = false;
     taskImage.value = img;
-    console.log(SeeTask.value);
+    emit('sendAudio', startAudioV);
+    console.log(startAudioV)
     emit('sendImg', img);
 }
 
@@ -104,12 +107,10 @@ const startTask = async (id) => {
 
 const openTask = (taskId) => {
     SeeTask.value = true;
-    setTimeout(() => {
-        playAudio(taskAudio.value);
-    })
+    playAudio(taskAudio.value);
+
 
     setTimeout(() => {
-
         endTime.value = true;
     }, timeVal.value * 1000);
 }

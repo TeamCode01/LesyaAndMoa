@@ -1,7 +1,7 @@
 <template>
-    <div class="FourthTask task_block">
+    <div class="FifthTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="false">
+            <template v-if="startGame">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div v-if="firstListen">
-                        <button class="draggable-list__button_final" @click="listenTo()">
+                        <button @click="listenTo()" class="draggable-list__button_final">
                             <span class="draggable-list__button-speaker"
                                 >Прослушать</span
                             >
@@ -40,7 +40,7 @@
                         </button>
                     </div>
                     <div v-else>
-                        <button class="draggable-list__button_final" @click="listenTo()">
+                        <button @click="listenTo()" class="draggable-list__button_final">
                             <span class="draggable-list__button-repeat"
                                 >Повторить</span
                             >
@@ -58,8 +58,8 @@
                     class="task_block__wrapper_answer"
                 />
             </template>
-            <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Здорово!"
-            v-if="true" @hide="hide()"></TaskResultBanner>
+            <TaskResultBanner img="/assets/backgrounds/cup.png" bg="/assets/backgrounds/lesya.gif" text="Прекрасно!"
+            v-else @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -72,39 +72,41 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
 const startGame = ref(true);
 const firstListen = ref(true);
+
+const countAnswers = ref(0);
+const currSyllable = ref();
+const played = ref([])
+
+const syllables = ref({
+    1: {
+        1: { name: "РЕГ", audio: '/assets/audio/Task5/63.5.mp3', correct: null },
+        2: { name: "МОД", audio: '/assets/audio/Task5/64.5.mp3', correct: null },
+        3: { name: "ЛЁК", audio: '/assets/audio/Task5/65.5.mp3', correct: null },
+        4: { name: "ЗИН", audio: '/assets/audio/Task5/66.5.mp3', correct: null },
+        5: { name: "УПР", audio: '/assets/audio/Task5/67.5.mp3', correct: null },
+    },
+    2: {
+        6: { name: "ИЗН", audio: '/assets/audio/Task5/68.5.mp3', correct: null },
+        7: { name: "НОК", audio: '/assets/audio/Task5/69.5.mp3', correct: null },
+        8: { name: "ВЕТ", audio: '/assets/audio/Task5/70.5.mp3', correct: null },
+        9: { name: "РИС", audio: '/assets/audio/Task5/71.5.mp3', correct: null },
+    },
+    3: {
+        10: { name: "ЗАП", audio: '/assets/audio/Task5/72.5.mp3', correct: null },
+        11: { name: "МЫЙ", audio: '/assets/audio/Task5/73.5.mp3', correct: null },
+        12: { name: "БУК", audio: '/assets/audio/Task5/74.5.mp3', correct: null },
+        13: { name: "ОЛЬТ", audio: '/assets/audio/Task5/75.5.mp3', correct: null },
+        14: { name: "ВЕЦ", audio: '/assets/audio/Task5/76.5.mp3', correct: null },
+    }
+})
+
 const emit = defineEmits(['close']);
+
 const props = defineProps({
     end: {
         type: Boolean,
         required: false,
     },
-});
-
-const countAnswers = ref(0);
-
-const currSyllable = ref();
-const played = ref([])
-const syllables = ref({
-    1:{
-        1: { name: "ШО", audio: '/assets/audio/Task4/46.4.mp3', correct: null },
-        2: { name: "БА", audio: '/assets/audio/Task4/47.4.mp3', correct: null },
-        3: { name: "ГЮ", audio: '/assets/audio/Task4/48.4.mp3', correct: null },
-        4: { name: "ЛЫ", audio: '/assets/audio/Task4/49.4.mp3', correct: null },
-        5: { name: "ХА", audio: '/assets/audio/Task4/50.4.mp3', correct: null },
-    },
-    2: {
-        6: { name: "ДЯ", audio: '/assets/audio/Task4/51.4.mp3', correct: null},
-        7: { name: "ЩИ", audio: '/assets/audio/Task4/52.4.mp3', correct: null},
-        8: { name: "ФО", audio: '/assets/audio/Task4/53.4.mp3', correct: null},
-        9: { name: "ЖУ", audio: '/assets/audio/Task4/54.4.mp3', correct: null},
-    },
-    3: {
-        10: { name: "ЗИ", audio: '/assets/audio/Task4/55.4.mp3', correct: null},
-        11: { name: "ТЬ", audio: '/assets/audio/Task4/56.4.mp3', correct: null},
-        12: { name: "ВЕ", audio: '/assets/audio/Task4/57.4.mp3', correct: null},
-        13: { name: "КЕ", audio: '/assets/audio/Task4/58.4.mp3', correct: null},
-        14: { name: "РЮ", audio: '/assets/audio/Task4/59.4.mp3', correct: null},
-    }
 });
 
 const onSelection = (firstIndex, id) => {
@@ -126,7 +128,7 @@ const onSelection = (firstIndex, id) => {
     }
     if(countAnswers.value == 14){
         startGame.value = false;
-        playAudio('/assets/audio/Task4/60.4_.mp3');
+        playAudio('/assets/audio/Task5/77.5_.mp3');
     }
 }
 
@@ -159,6 +161,7 @@ const hide = () => {
     emit('close');
 };
 </script>
+
 <style lang="scss" scoped>
 .correct_select {
     border: 2px solid;
@@ -184,7 +187,7 @@ const hide = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 540px;
+    width: 632px;
     height: 200px;
     gap: 40px;
     @media (max-width: 1024px) {
@@ -199,34 +202,40 @@ const hide = () => {
     display: flex;
     justify-content: space-between;
     gap: 60px;
+    height: 40px;
 }
 
-.draggable-list__item1,
+.draggable-list__item1 {
+    width: 613px;
+}
+
+
 .draggable-list__item3 {
     width: 100%;
-    height: 40px;
 }
 
 .draggable-list__item2 {
-    width: 420px;
-    height: 40px;
+    width: 478px;
 }
 
 .draggable-list__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    width: 60px;
     height: 40px;
-    background-color: $lightPink;
-    color: $vihous;
+    background-color: $blueGame;
+    color: $darkBlue;
     font-family: 'Nunito', sans-serif;
     font-size: 20px;
     letter-spacing: 0;
     border-radius: 6px;
     font-weight: bold;
     line-height: 40px;
+    padding: 8px 16px;
 }
 
-.FourthTask {
+.FifthTask {
     position: block;
 }
 
