@@ -48,20 +48,15 @@ const hideModal = () => {
 }
 const music = ref(null);
 
-const playAudio = (audioPath) => {
+const playAudio = (audioPath, end) => {
     const audio = new Audio(audioPath);
-    music.value = audio;
     audio.play();
+    if(end) {
+        audio.pause();
+        audio.currentTime = 0;
+        // audio.removeEventListener('ended', playAudio);
+    }
 }
-
-// const stopAudio = (audioPath) => {
-//     const audio = new Audio(audioPath);
-//     if (audio.paused) {
-//         audio.play();
-//     } else {
-//         audio.pause();
-//     }
-// }
 
 const chooseTask = (event, status) => {
     if (status === true) {
@@ -70,7 +65,7 @@ const chooseTask = (event, status) => {
             (item) => item.isCorrect == true,
         );
         event.target.classList.add('green');
-        music.value.pause();
+        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
             show.value = true;
             endGame.value = true;
@@ -79,6 +74,7 @@ const chooseTask = (event, status) => {
 
     } else {
         event.target.value = status;
+        playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
         event.target.classList.add('red');
         setTimeout(() => {
             event.target.classList.remove('red');

@@ -24,18 +24,18 @@
                 </div>
                 <div class="ThirdTask__answer">
                     <div class="box" id="box" @mouseover="playAudio('/assets/audio/Task3/32.3_слово.mp3')"
-                        @drop="drop($event)" @dragover="allowDrop($event)">
+                        @drop="drop($event, 0)" @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array">
                             {{ item }}
                         </div>
                     </div>
-                    <div class="box2" id="box2" @drop="drop($event)" @dragover="allowDrop($event)">
+                    <div class="box2" id="box2" @drop="drop($event, 1)" @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array_two">
                             {{ item }}
                         </div>
                     </div>
                     <div class="box3" id="box3" @mouseover="playAudio('/assets/audio/Task3/33.3.mp3')"
-                        @drop="drop($event)" @dragover="allowDrop($event)">
+                        @drop="drop($event, 2)" @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array_three">
                             {{ item }}
                         </div>
@@ -93,44 +93,48 @@ const drag = (event, letter, index) => {
     dropIndex.value = index;
 };
 
-const drop = (event) => {
+const drop = (event, index) => {
     event.preventDefault();
-    const letter = event.dataTransfer.getData('text');
+    let letter = event.dataTransfer.getData('text');
     event.target.value = letter;
-    // const index = letters.value.findIndex((item) => item.name === letter);
-    // const indexInResult = array_result.value.findIndex((item) => item.name === letter);
-    if (array_result.value.find((item) => item.name === letter)) {
+    console.log(letter, event.target.value);
+    if (array_result.value.find((item) => item.name === letter) && index == 0) {
         array.value.push(letter);
         letters.value.splice(dropIndex.value, 1);
-        event.target.classList.add('green');
-        setTimeout(() => {
-            event.target.classList.remove('green');
-        }, 2000);
-    } else {
-        return false;
-    }
+        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
 
-    if (array_two_result.value.find((item) => item.name === letter)) {
+    } else if (array_two_result.value.find((item) => item.name === letter) && index == 1) {
         array_two.value.push(letter);
         letters.value.splice(dropIndex.value, 1);
-        event.target.classList.add('green');
-        setTimeout(() => {
-            event.target.classList.remove('green');
-        }, 2000);
+        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+    }
+    else if (array_three_result.value.find((item) => item.name === letter) && index == 2) {
+        array_three.value.push(letter);
+        letters.value.splice(dropIndex.value, 1);
+        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+
     } else {
+        playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+        event.target.classList.add('red');
+        setTimeout(() => {
+            event.target.classList.remove('red');
+        }, 2000);
         return false;
     }
 
-    if (array_three_result.value.find((item) => item.name === letter)) {
-        array_three.value.push(letter);
-        letters.value.splice(dropIndex.value, 1);
-        event.target.classList.add('green');
+    event.target.classList.add('green');
+    setTimeout(() => {
+        event.target.classList.remove('green');
+    }, 2000);
+
+    if (array.value.length == array_result.value.length && array_two.value.length == array_two_result.value.length && array_three.value.length == array_three_result.value.length) {
         setTimeout(() => {
-            event.target.classList.remove('green');
-        }, 2000);
-    } else {
-        return false;
+            show.value = true;
+            endGame.value = true;
+        }, 3000)
     }
+
+
 };
 
 const allowDrop = (event) => {
@@ -188,10 +192,28 @@ const allowDrop = (event) => {
 
 .red {
     border: 2px solid red;
+    // width: 48px;
+    // height: 48px;
+    // font-family: 'Nunito', sans-serif;
+    // font-weight: bold;
+    // font-size: 24px;
+    // color: #a8664a;
+    // padding: 7.5px 15px;
+    // z-index: 998;
+    // border-radius: 6px;
 }
 
 .green {
     border: 2px solid green;
+    // width: 48px;
+    // height: 48px;
+    // font-family: 'Nunito', sans-serif;
+    // font-weight: bold;
+    // font-size: 24px;
+    // color: #a8664a;
+    // padding: 7.5px 15px;
+    // z-index: 998;
+    // border-radius: 6px;
 }
 
 .ThirdTask {
