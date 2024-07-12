@@ -1,7 +1,7 @@
 <template>
     <div class="FourthTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="false">
+            <template v-if="startGame">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -59,7 +59,7 @@
                 />
             </template>
             <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Здорово!"
-            v-if="true" @hide="hide()"></TaskResultBanner>
+            v-else @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
