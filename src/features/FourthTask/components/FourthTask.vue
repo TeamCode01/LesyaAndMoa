@@ -1,7 +1,7 @@
 <template>
     <div class="FourthTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="true">
+            <template v-if="false">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -17,29 +17,19 @@
                 </div>
                 <div class="draggable-list">
                     <div class="draggable-list__items">
-                        <div class="draggable-list__item1">
-                            <button class="draggable-list__button">ШО</button>
-                            <button class="draggable-list__button">БА</button>
-                            <button class="draggable-list__button">ГЮ</button>
-                            <button class="draggable-list__button">ЛЫ</button>
-                            <button class="draggable-list__button">ХА</button>
-                        </div>
-                        <div class="draggable-list__item2">
-                            <button class="draggable-list__button">ДЯ</button
-                            ><button class="draggable-list__button">ЩИ</button
-                            ><button class="draggable-list__button">ФО</button
-                            ><button class="draggable-list__button">ЖУ</button>
-                        </div>
-                        <div class="draggable-list__item3">
-                            <button class="draggable-list__button">ЗИ</button
-                            ><button class="draggable-list__button">ТЬ</button
-                            ><button class="draggable-list__button">ВЕ</button
-                            ><button class="draggable-list__button">КЕ</button
-                            ><button class="draggable-list__button">РЮ</button>
+                        <div v-for="(line, line_index) in syllables" :key="line_index">
+                            <div :class="{'draggable-list__item1': 1 == line_index, 'draggable-list__item2': 2 == line_index, 'draggable-list__item3': 3 == line_index }">
+                                <button 
+                                    v-for="(item, item_index) in line"
+                                    :key="item_index"
+                                    @click="onSelection(line_index, item_index)" 
+                                    :class="{'draggable-list__button': true, correct_select: item.correct, not_correct_select: item.correct === false}"
+                                > {{ item.name }}</button>
+                            </div>
                         </div>
                     </div>
-                    <div v-if="false">
-                        <button class="draggable-list__button_final">
+                    <div v-if="firstListen">
+                        <button class="draggable-list__button_final" @click="listenTo()">
                             <span class="draggable-list__button-speaker"
                                 >Прослушать</span
                             >
@@ -49,8 +39,8 @@
                             />
                         </button>
                     </div>
-                    <div v-if="true">
-                        <button class="draggable-list__button_final">
+                    <div v-else>
+                        <button class="draggable-list__button_final" @click="listenTo()">
                             <span class="draggable-list__button-repeat"
                                 >Повторить</span
                             >
@@ -69,7 +59,7 @@
                 />
             </template>
             <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Здорово!"
-            v-if="false" @hide="hide()"></TaskResultBanner>
+            v-if="true" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -80,6 +70,8 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
+const startGame = ref(true);
+const firstListen = ref(true);
 const emit = defineEmits(['close']);
 const props = defineProps({
     end: {
@@ -87,11 +79,95 @@ const props = defineProps({
         required: false,
     },
 });
+
+const countAnswers = ref(0);
+
+const currSyllable = ref();
+const played = ref([])
+const syllables = ref({
+    1:{
+        1: { name: "ШО", audio: '/assets/audio/Task4/46.4.mp3', correct: null },
+        2: { name: "БА", audio: '/assets/audio/Task4/47.4.mp3', correct: null },
+        3: { name: "ГЮ", audio: '/assets/audio/Task4/48.4.mp3', correct: null },
+        4: { name: "ЛЫ", audio: '/assets/audio/Task4/49.4.mp3', correct: null },
+        5: { name: "ХА", audio: '/assets/audio/Task4/50.4.mp3', correct: null },
+    },
+    2: {
+        6: { name: "ДЯ", audio: '/assets/audio/Task4/51.4.mp3', correct: null},
+        7: { name: "ЩИ", audio: '/assets/audio/Task4/52.4.mp3', correct: null},
+        8: { name: "ФО", audio: '/assets/audio/Task4/53.4.mp3', correct: null},
+        9: { name: "ЖУ", audio: '/assets/audio/Task4/54.4.mp3', correct: null},
+    },
+    3: {
+        10: { name: "ЗИ", audio: '/assets/audio/Task4/55.4.mp3', correct: null},
+        11: { name: "ТЬ", audio: '/assets/audio/Task4/56.4.mp3', correct: null},
+        12: { name: "ВЕ", audio: '/assets/audio/Task4/57.4.mp3', correct: null},
+        13: { name: "КЕ", audio: '/assets/audio/Task4/58.4.mp3', correct: null},
+        14: { name: "РЮ", audio: '/assets/audio/Task4/59.4.mp3', correct: null},
+    }
+});
+
+const onSelection = (firstIndex, id) => {
+    if(currSyllable.value == id && !firstListen.value) {
+        firstListen.value = true;
+        syllables.value[firstIndex][id].correct = true;
+        for(let i = 1; i<= 3; i++){
+            for(const temp in syllables.value[i]){
+                if(!syllables.value[i][temp].correct){
+                    syllables.value[i][temp].correct = null;
+                }
+            }
+        }
+        countAnswers.value++;
+        playAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
+    } else if(!firstListen.value){
+        syllables.value[firstIndex][id].correct = false;
+        playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+    }
+    if(countAnswers.value == 14){
+        startGame.value = false;
+        playAudio('/assets/audio/Task4/60.4_.mp3');
+    }
+}
+
+const listenTo = () => {
+    if (firstListen.value) {
+        firstListen.value = false;
+        let exist = true;
+        while (exist) {
+            currSyllable.value = Math.floor(Math.random() * 14 + 1);
+            if(!played.value.includes(currSyllable.value)) exist = false;
+        }
+        played.value.push(currSyllable.value)
+    }
+
+    if([1,2,3,4,5].includes(currSyllable.value)){
+        playAudio(syllables.value[1][currSyllable.value].audio);
+    } else if ([6,7,8,9].includes(currSyllable.value)){
+        playAudio(syllables.value[2][currSyllable.value].audio);
+    } else {
+        playAudio(syllables.value[3][currSyllable.value].audio);
+    }
+}
+
+const playAudio = (audioPath) => {
+    const audio = new Audio(audioPath);
+    audio.play();
+}
+
 const hide = () => {
     emit('close');
 };
 </script>
 <style lang="scss" scoped>
+.correct_select {
+    border: 2px solid;
+    border-color: #5CCF54;
+}
+.not_correct_select {
+    border: 2px solid;
+    border-color: #DB0000;
+}
 .draggable-list {
     display: flex;
     gap: 88px;
