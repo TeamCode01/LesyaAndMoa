@@ -1,7 +1,7 @@
 <template>
     <div class="FifthTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="true">
+            <template v-if="startGame">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -18,28 +18,56 @@
                 <div class="draggable-list">
                     <div class="draggable-list__items">
                         <div class="draggable-list__item1">
-                            <button class="draggable-list__button">РЕГ</button>
-                            <button class="draggable-list__button">МОД</button>
-                            <button class="draggable-list__button">ЛЁК</button>
-                            <button class="draggable-list__button">ЗИН</button>
-                            <button class="draggable-list__button">УПР</button>
+                            <button @click="onSelection(0)" 
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[0], not_correct_select: selection.notCorrect[0]}"
+                            >РЕГ</button>
+                            <button @click="onSelection(1)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[1], not_correct_select: selection.notCorrect[1]}"
+                            >МОД</button>
+                            <button @click="onSelection(2)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[2], not_correct_select: selection.notCorrect[2]}"
+                            >ЛЁК</button>
+                            <button @click="onSelection(3)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[3], not_correct_select: selection.notCorrect[3]}"
+                            >ЗИН</button>
+                            <button @click="onSelection(4)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[4], not_correct_select: selection.notCorrect[4]}"
+                            >УПР</button>
                         </div>
                         <div class="draggable-list__item2">
-                            <button class="draggable-list__button">ИЗН</button
-                            ><button class="draggable-list__button">НОК</button
-                            ><button class="draggable-list__button">ВЕТ</button
-                            ><button class="draggable-list__button">РИС</button>
+                            <button @click="onSelection(5)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[5], not_correct_select: selection.notCorrect[5]}"
+                            >ИЗН</button
+                            ><button @click="onSelection(6)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[6], not_correct_select: selection.notCorrect[6]}"
+                            >НОК</button
+                            ><button @click="onSelection(7)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[7], not_correct_select: selection.notCorrect[7]}"
+                            >ВЕТ</button
+                            ><button @click="onSelection(8)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[8], not_correct_select: selection.notCorrect[8]}"
+                            >РИС</button>
                         </div>
                         <div class="draggable-list__item3">
-                            <button class="draggable-list__button">ЗАП</button
-                            ><button class="draggable-list__button">МЫЙ</button
-                            ><button class="draggable-list__button">БУК</button
-                            ><button class="draggable-list__button">ОЛЬТ</button
-                            ><button class="draggable-list__button">ВЕЦ</button>
+                            <button @click="onSelection(9)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[9], not_correct_select: selection.notCorrect[9]}"
+                            >ЗАП</button
+                            ><button @click="onSelection(10)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[10], not_correct_select: selection.notCorrect[10]}"
+                            >МЫЙ</button
+                            ><button @click="onSelection(11)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[11], not_correct_select: selection.notCorrect[11]}"
+                            >БУК</button
+                            ><button @click="onSelection(12)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[12], not_correct_select: selection.notCorrect[12]}"
+                            >ОЛЬТ</button
+                            ><button @click="onSelection(13)"
+                            :class="{'draggable-list__button': true, correct_select: selection.correct[13], not_correct_select: selection.notCorrect[13]}"
+                            >ВЕЦ</button>
                         </div>
                     </div>
-                    <div v-if="false">
-                        <button class="draggable-list__button_final">
+                    <div v-if="firstListen">
+                        <button @click="listenTo()" class="draggable-list__button_final">
                             <span class="draggable-list__button-speaker"
                                 >Прослушать</span
                             >
@@ -49,8 +77,8 @@
                             />
                         </button>
                     </div>
-                    <div v-if="true">
-                        <button class="draggable-list__button_final">
+                    <div v-else>
+                        <button @click="listenTo()" class="draggable-list__button_final">
                             <span class="draggable-list__button-repeat"
                                 >Повторить</span
                             >
@@ -69,7 +97,7 @@
                 />
             </template>
             <TaskResultBanner img="/assets/backgrounds/cup.png" bg="/assets/backgrounds/lesya.gif" text="Прекрасно!"
-            v-if="false" @hide="hide()"></TaskResultBanner>
+            v-else @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -80,18 +108,124 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
+const startGame = ref(true);
+const firstListen = ref(true);
+
+const countAnswers = ref(0);
+const currSyllable = ref();
+const played = ref([])
+
+const selection = ref({
+    correct: {
+        0: false,
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false,
+        6: false,
+        7: false,
+        8: false,
+        9: false,
+        10: false,
+        11: false,
+        12: false,
+    },
+    notCorrect: {
+        0: false,
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false,
+        6: false,
+        7: false,
+        8: false,
+        9: false,
+        10: false,
+        11: false,
+        12: false,
+    }
+})
+
+const syllables = [
+    { name: "РЕГ", audio: '/assets/audio/Task5/63.5.mp3' },
+    { name: "МОД", audio: '/assets/audio/Task5/64.5.mp3' },
+    { name: "ЛЁК", audio: '/assets/audio/Task5/65.5.mp3' },
+    { name: "ЗИН", audio: '/assets/audio/Task5/66.5.mp3' },
+    { name: "УПР", audio: '/assets/audio/Task5/67.5.mp3' },
+    { name: "ИЗН", audio: '/assets/audio/Task5/68.5.mp3' },
+    { name: "НОК", audio: '/assets/audio/Task5/69.5.mp3' },
+    { name: "ВЕТ", audio: '/assets/audio/Task5/70.5.mp3' },
+    { name: "РИС", audio: '/assets/audio/Task5/71.5.mp3' },
+    { name: "ЗАП", audio: '/assets/audio/Task5/72.5.mp3' },
+    { name: "МЫЙ", audio: '/assets/audio/Task5/73.5.mp3' },
+    { name: "БУК", audio: '/assets/audio/Task5/74.5.mp3' },
+    { name: "ОЛЬТ", audio: '/assets/audio/Task5/75.5.mp3' },
+    { name: "ВЕЦ", audio: '/assets/audio/Task5/76.5.mp3' },
+
+]
+
 const emit = defineEmits(['close']);
+
 const props = defineProps({
     end: {
         type: Boolean,
         required: false,
     },
 });
+
+const onSelection = (id) => {
+    if(currSyllable.value === id) {
+        firstListen.value = true;
+        selection.value.correct[id] = true;
+        for (const temp in selection.value.notCorrect) {
+            selection.value.notCorrect[temp] = false;
+        }
+        countAnswers.value++;
+        playAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
+    } else {
+        selection.value.notCorrect[id] = true;
+        playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+    }
+    if(countAnswers.value == 14){
+        startGame.value = false;
+        playAudio('/assets/audio/Task5/77.5_.mp3');
+    }
+}
+
+const listenTo = () => {
+    if (firstListen.value) {
+        firstListen.value = false;
+        let exist = true;
+        while (exist) {
+            currSyllable.value = Math.floor(Math.random() *14);
+            if(!played.value.includes(currSyllable.value)) exist = false;
+        }
+        played.value.push(currSyllable.value)
+    }
+    playAudio(syllables[currSyllable.value].audio);
+}
+
+const playAudio = (audioPath) => {
+    const audio = new Audio(audioPath);
+    audio.play();
+}
+
 const hide = () => {
     emit('close');
 };
 </script>
+
 <style lang="scss" scoped>
+.correct_select {
+    border: 2px solid;
+    border-color: #5CCF54;
+}
+.not_correct_select {
+    border: 2px solid;
+    border-color: #DB0000;
+}
 .draggable-list {
     display: flex;
     gap: 88px;
