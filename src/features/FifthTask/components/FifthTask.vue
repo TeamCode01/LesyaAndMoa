@@ -17,53 +17,15 @@
                 </div>
                 <div class="draggable-list">
                     <div class="draggable-list__items">
-                        <div class="draggable-list__item1">
-                            <button @click="onSelection(0)" 
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[0], not_correct_select: selection.notCorrect[0]}"
-                            >РЕГ</button>
-                            <button @click="onSelection(1)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[1], not_correct_select: selection.notCorrect[1]}"
-                            >МОД</button>
-                            <button @click="onSelection(2)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[2], not_correct_select: selection.notCorrect[2]}"
-                            >ЛЁК</button>
-                            <button @click="onSelection(3)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[3], not_correct_select: selection.notCorrect[3]}"
-                            >ЗИН</button>
-                            <button @click="onSelection(4)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[4], not_correct_select: selection.notCorrect[4]}"
-                            >УПР</button>
-                        </div>
-                        <div class="draggable-list__item2">
-                            <button @click="onSelection(5)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[5], not_correct_select: selection.notCorrect[5]}"
-                            >ИЗН</button
-                            ><button @click="onSelection(6)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[6], not_correct_select: selection.notCorrect[6]}"
-                            >НОК</button
-                            ><button @click="onSelection(7)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[7], not_correct_select: selection.notCorrect[7]}"
-                            >ВЕТ</button
-                            ><button @click="onSelection(8)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[8], not_correct_select: selection.notCorrect[8]}"
-                            >РИС</button>
-                        </div>
-                        <div class="draggable-list__item3">
-                            <button @click="onSelection(9)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[9], not_correct_select: selection.notCorrect[9]}"
-                            >ЗАП</button
-                            ><button @click="onSelection(10)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[10], not_correct_select: selection.notCorrect[10]}"
-                            >МЫЙ</button
-                            ><button @click="onSelection(11)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[11], not_correct_select: selection.notCorrect[11]}"
-                            >БУК</button
-                            ><button @click="onSelection(12)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[12], not_correct_select: selection.notCorrect[12]}"
-                            >ОЛЬТ</button
-                            ><button @click="onSelection(13)"
-                            :class="{'draggable-list__button': true, correct_select: selection.correct[13], not_correct_select: selection.notCorrect[13]}"
-                            >ВЕЦ</button>
+                        <div v-for="(line, line_index) in syllables" :key="line_index">
+                            <div :class="{'draggable-list__item1': 1 == line_index, 'draggable-list__item2': 2 == line_index, 'draggable-list__item3': 3 == line_index }">
+                                <button 
+                                    v-for="(item, item_index) in line"
+                                    :key="item_index"
+                                    @click="onSelection(line_index, item_index)" 
+                                    :class="{'draggable-list__button': true, correct_select: item.correct, not_correct_select: item.correct === false}"
+                                > {{ item.name }}</button>
+                            </div>
                         </div>
                     </div>
                     <div v-if="firstListen">
@@ -115,56 +77,28 @@ const countAnswers = ref(0);
 const currSyllable = ref();
 const played = ref([])
 
-const selection = ref({
-    correct: {
-        0: false,
-        1: false,
-        2: false,
-        3: false,
-        4: false,
-        5: false,
-        6: false,
-        7: false,
-        8: false,
-        9: false,
-        10: false,
-        11: false,
-        12: false,
+const syllables = ref({
+    1: {
+        1: { name: "РЕГ", audio: '/assets/audio/Task5/63.5.mp3', correct: null },
+        2: { name: "МОД", audio: '/assets/audio/Task5/64.5.mp3', correct: null },
+        3: { name: "ЛЁК", audio: '/assets/audio/Task5/65.5.mp3', correct: null },
+        4: { name: "ЗИН", audio: '/assets/audio/Task5/66.5.mp3', correct: null },
+        5: { name: "УПР", audio: '/assets/audio/Task5/67.5.mp3', correct: null },
     },
-    notCorrect: {
-        0: false,
-        1: false,
-        2: false,
-        3: false,
-        4: false,
-        5: false,
-        6: false,
-        7: false,
-        8: false,
-        9: false,
-        10: false,
-        11: false,
-        12: false,
+    2: {
+        6: { name: "ИЗН", audio: '/assets/audio/Task5/68.5.mp3', correct: null },
+        7: { name: "НОК", audio: '/assets/audio/Task5/69.5.mp3', correct: null },
+        8: { name: "ВЕТ", audio: '/assets/audio/Task5/70.5.mp3', correct: null },
+        9: { name: "РИС", audio: '/assets/audio/Task5/71.5.mp3', correct: null },
+    },
+    3: {
+        10: { name: "ЗАП", audio: '/assets/audio/Task5/72.5.mp3', correct: null },
+        11: { name: "МЫЙ", audio: '/assets/audio/Task5/73.5.mp3', correct: null },
+        12: { name: "БУК", audio: '/assets/audio/Task5/74.5.mp3', correct: null },
+        13: { name: "ОЛЬТ", audio: '/assets/audio/Task5/75.5.mp3', correct: null },
+        14: { name: "ВЕЦ", audio: '/assets/audio/Task5/76.5.mp3', correct: null },
     }
 })
-
-const syllables = [
-    { name: "РЕГ", audio: '/assets/audio/Task5/63.5.mp3' },
-    { name: "МОД", audio: '/assets/audio/Task5/64.5.mp3' },
-    { name: "ЛЁК", audio: '/assets/audio/Task5/65.5.mp3' },
-    { name: "ЗИН", audio: '/assets/audio/Task5/66.5.mp3' },
-    { name: "УПР", audio: '/assets/audio/Task5/67.5.mp3' },
-    { name: "ИЗН", audio: '/assets/audio/Task5/68.5.mp3' },
-    { name: "НОК", audio: '/assets/audio/Task5/69.5.mp3' },
-    { name: "ВЕТ", audio: '/assets/audio/Task5/70.5.mp3' },
-    { name: "РИС", audio: '/assets/audio/Task5/71.5.mp3' },
-    { name: "ЗАП", audio: '/assets/audio/Task5/72.5.mp3' },
-    { name: "МЫЙ", audio: '/assets/audio/Task5/73.5.mp3' },
-    { name: "БУК", audio: '/assets/audio/Task5/74.5.mp3' },
-    { name: "ОЛЬТ", audio: '/assets/audio/Task5/75.5.mp3' },
-    { name: "ВЕЦ", audio: '/assets/audio/Task5/76.5.mp3' },
-
-]
 
 const emit = defineEmits(['close']);
 
@@ -175,17 +109,21 @@ const props = defineProps({
     },
 });
 
-const onSelection = (id) => {
-    if(currSyllable.value === id) {
+const onSelection = (firstIndex, id) => {
+    if(currSyllable.value == id && !firstListen.value) {
         firstListen.value = true;
-        selection.value.correct[id] = true;
-        for (const temp in selection.value.notCorrect) {
-            selection.value.notCorrect[temp] = false;
+        syllables.value[firstIndex][id].correct = true;
+        for(let i = 1; i<= 3; i++){
+            for(const temp in syllables.value[i]){
+                if(!syllables.value[i][temp].correct){
+                    syllables.value[i][temp].correct = null;
+                }
+            }
         }
         countAnswers.value++;
         playAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
-    } else {
-        selection.value.notCorrect[id] = true;
+    } else if(!firstListen.value){
+        syllables.value[firstIndex][id].correct = false;
         playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     }
     if(countAnswers.value == 14){
@@ -199,12 +137,19 @@ const listenTo = () => {
         firstListen.value = false;
         let exist = true;
         while (exist) {
-            currSyllable.value = Math.floor(Math.random() *14);
+            currSyllable.value = Math.floor(Math.random() * 14 + 1);
             if(!played.value.includes(currSyllable.value)) exist = false;
         }
         played.value.push(currSyllable.value)
     }
-    playAudio(syllables[currSyllable.value].audio);
+
+    if([1,2,3,4,5].includes(currSyllable.value)){
+        playAudio(syllables.value[1][currSyllable.value].audio);
+    } else if ([6,7,8,9].includes(currSyllable.value)){
+        playAudio(syllables.value[2][currSyllable.value].audio);
+    } else {
+        playAudio(syllables.value[3][currSyllable.value].audio);
+    }
 }
 
 const playAudio = (audioPath) => {
