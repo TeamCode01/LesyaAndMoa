@@ -13,8 +13,10 @@
                 </div>
 
                 <div class="draggable-list">
-                    <q-btn  v-for="(item, index) in words" :key="index.id" class="list-group-item item" draggable="true"
-                        @dragstart="drag($event, item.name, item.audio, index)" @dragover.prevent :value="item.name">
+                    <q-btn v-for="(item, index) in words" :key="item.id" :id="item.id + '_elem'"
+                        class="list-group-item item" draggable="true"
+                        @dragstart="drag($event, item.name, item.id, item.audio, index)" @dragover.prevent
+                        :value="item.name">
                         {{ item.name }}
                     </q-btn>
                 </div>
@@ -68,63 +70,85 @@ const words = ref([
     { id: 9, name: 'есть буквы.', index: 1, audio: '/assets/audio/Task1/21.1.mp3' },
     { id: 10, name: 'Все вместе они образуют МОЗАИКУ', index: 9, audio: '/assets/audio/Task1/22.1.mp3' },
 ]);
-const wordsAnswer = ref([
-    { id: 1, name: 'В нашем языке', index: 3 },
-    { id: 2, name: 'есть буквы.', index: 8 },
-    { id: 3, name: 'Вместе они составляют АЛФАВИТ', index: 1 },
-    { id: 4, name: 'и складываются', index: 6 },
-    { id: 5, name: 'в слоги и в слова.', index: 2 },
-]);
+const wordsAnswer = ref({
+    0: { id: 4, name: 'В нашем языке' },
+    1: { id: 9, name: 'есть буквы.', },
+    2: { id: 2, name: 'Вместе они составляют АЛФАВИТ' },
+    3: { id: 7, name: 'и складываются', },
+    4: { id: 3, name: 'в слоги и в слова.', },
+});
 const answer = ref('');
+
+const answer_arr = ref([]);
 const dropIndex = ref(words.value.length - 1);
-const drag = (event, word, audio, index) => {
+const drag = (event, word, id, audio, index) => {
     event.dataTransfer.setData('text', word);
+    event.dataTransfer.setData('id', id);
     dropIndex.value = index;
     playAudio(audio);
 };
 
-// const drop = (event, word) => {
-//     event.preventDefault();
-//     let text = event.dataTransfer.getData('text');
-//     let correct = wordsAnswer.value.find((item) => item.name === text);
-//     if (correct) {
-//         words.value.splice(dropIndex.value, 1);
-//         answer.value += text + ' ';
-//     } else {
-//         return false;
-//     }
-// };
-const answerString = wordsAnswer.value.map((item) => item.name).join(' ');
-
-const drop = (event, word) => {
+const drop = (event) => {
     event.preventDefault();
     let text = event.dataTransfer.getData('text');
-    let correct = wordsAnswer.value.find((item) => item.name === text);
-    const answerWords = text.trim().split(' ');
-    const answerStringWords = answerString.trim().split(' ');
-    console.log(answerWords, answerStringWords);
+    let id = event.dataTransfer.getData('id');
+    let elem = document.getElementById(id + '_elem')
 
-    for (let i = 0; i < answerWords.length; i++) {
-        if (answerWords[i].length == answerStringWords[i].length && correct) {
-            answer.value += text + ' ';
+    if (answer_arr.value.length == 0) {
+
+        if (wordsAnswer.value[0].id == id) {
             words.value.splice(dropIndex.value, 1);
+            answer.value += text + ' ';
+            answer_arr.value.push(0);
+            playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        } else {
+            elem.classList.add('red');
+            setTimeout(() => {
+                elem.classList.remove('red');
+            }, 2000);
+            playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+            return false;
         }
-        else {
-            alert('Попробуй еще!');
+    } else {
+
+        let index = answer_arr.value.at(-1) + 1;
+        if (wordsAnswer.value[index].id == id) {
+            elem.classList.add('green');
+            words.value.splice(dropIndex.value, 1);
+            answer.value += text + ' ';
+            answer_arr.value.push(index);
+            playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        } else {
+            elem.classList.add('red');
+            setTimeout(() => {
+                elem.classList.remove('red');
+            }, 2000);
+            playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+
             return false;
         }
     }
-
-    if (answer.value.trim() === answerString.trim()) {
-        endGame.value = true;
+if (answer_arr.value.length === 5) {
+    setTimeout(() => {
         show.value = true;
-    }
+        endGame.value = true;
+    }, 3000)
 }
+};
+
 const allowDrop = (event) => {
     event.preventDefault();
 };
 </script>
 <style lang="scss" scoped>
+.red {
+    border: 2px solid red !important;
+}
+
+.green {
+    border: 2px solid green !important;
+}
+
 .draggable-list {
     display: flex;
     flex-wrap: wrap;
