@@ -128,6 +128,11 @@ const hide = () => {
 
 .EighthTask__title {
     width: 677px;
+    @media (max-width: 1024px) {
+        width: 560px;
+        font-size: 20px;
+        font-weight: 400;
+    }
 }
 
 
