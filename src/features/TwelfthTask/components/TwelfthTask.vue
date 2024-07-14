@@ -1,14 +1,10 @@
 <template>
     <div class="TwelfthTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="true">
+            <template v-if="endGame === false">
                 <!-- ВЫХОД ИЗ ИГРЫ -->
                 <div class="task_block__close" @click="hide">
-                    <img
-                        class="close-icon"
-                        src="@app/assets/icons/close-icon.svg"
-                        alt="Выйти из игры"
-                    />
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="Выйти из игры" />
                 </div>
 
                 <!-- ЗАДАНИЕ И ВРЕМЯ -->
@@ -57,22 +53,22 @@
                             <div class="draggable-list__question-word">
                                 <!-- ВЕ -->
                                 <div class="draggable-list__question-block">
-                                    
+
                                 </div>
 
                                 <!-- СЁ -->
                                 <div class="draggable-list__question-block">
-                                    
+
                                 </div>
 
                                 <!-- ЛЫ -->
                                 <div class="draggable-list__question-block">
-                                    
+
                                 </div>
 
                                 <!-- Е -->
                                 <div class="draggable-list__question-block">
-                                    
+
                                 </div>
                             </div>
 
@@ -80,17 +76,17 @@
                             <div class="draggable-list__question-word">
                                 <!-- РЕ -->
                                 <div class="draggable-list__question-block">
-                                    
+
                                 </div>
 
                                 <!-- БЯ -->
                                 <div class="draggable-list__question-block">
-                                    
+
                                 </div>
 
                                 <!-- ТА -->
                                 <div class="draggable-list__question-block">
-                                    
+
                                 </div>
                             </div>
 
@@ -106,12 +102,12 @@
                             <div class="draggable-list__question-word">
                                 <!-- НА -->
                                 <div class="draggable-list__question-block">
-                                    
+
                                 </div>
 
                                 <!-- ШИ -->
                                 <div class="draggable-list__question-block">
-                                    
+
                                 </div>
                             </div>
 
@@ -119,12 +115,12 @@
                             <div class="draggable-list__question-word">
                                 <!-- ДРУ -->
                                 <div class="draggable-list__question-block">
-                                    
+
                                 </div>
 
                                 <!-- ЗЬЯ -->
                                 <div class="draggable-list__question-block">
-                                    
+
                                 </div>
                             </div>
 
@@ -136,21 +132,35 @@
                     </div>
                 </div>
             </template>
-            <TaskResultBanner
-                img="/assets/backgrounds/flowers.png"
-                bg="/assets/backgrounds/moa.gif"
-                text="Превосходно!"
-                v-if="false"
-                @hide="hide()"
-            ></TaskResultBanner>
+            <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Превосходно!"
+                v-if="show === true" @hide="hideModal"></TaskResultBanner>
         </div>
     </div>
 </template>
-<script>
+<script setup>
 import { ref, onMounted } from 'vue';
-import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+
+const emit = defineEmits(['close']);
+
+const hide = () => {
+    emit('close');
+    endGame.value = true;
+};
+
+const props = defineProps({
+    end: {
+        type: Boolean,
+        required: false,
+    },
+});
+
+const endGame = ref(false);
+const show = ref(false);
+const hideModal = () => {
+    show.value = false;
+}
 </script>
 
 // TODO Прописать стили
@@ -163,6 +173,7 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
     width: 640px;
     font-weight: 500;
     font-size: 24px;
+
     @media (max-width: 1024px) {
         width: 550px;
         font-size: 20px;

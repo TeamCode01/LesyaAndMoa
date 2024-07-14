@@ -23,7 +23,7 @@
             <EighteenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 18"></EighteenTask>
             <NineTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 9"></NineTask>
             <ElevenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 11"></ElevenTask>
-            <TwelfthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 11"></TwelfthTask>
+            <TwelfthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 12"></TwelfthTask>
         </div>
 
         <Button class="start" label="Старт" :is-image="true" :image="arrow" @click="openTask(taskId)"></Button>
