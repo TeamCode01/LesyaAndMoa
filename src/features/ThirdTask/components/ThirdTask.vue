@@ -15,27 +15,28 @@
 
                 <div class="draggable-list">
                     <div class="list-group ThirdTask__wrapper_block">
-                        <q-btn v-for="(item, index) in letters" :key="index" class="list-group-item item"
-                            draggable="true" @dragstart="drag($event, item.name, index)" @dragover.prevent
-                            :value="item">
+                        <q-btn v-for="(item, index) in letters" :key="index" :id="item.id + '_elem'"
+                            class="list-group-item item" draggable="true" @mouseover="playAudio(item.audio)"
+                            @dragstart="drag($event, item.name, item.id, index)" @dragover.prevent :value="item.name">
                             {{ item.name }}
                         </q-btn>
                     </div>
                 </div>
                 <div class="ThirdTask__answer">
                     <div class="box" id="box" @mouseover="playAudio('/assets/audio/Task3/32.3_слово.mp3')"
-                        @drop="drop($event)" @dragover="allowDrop($event)">
+                        @drop="drop($event, 0)" @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array">
                             {{ item }}
                         </div>
                     </div>
-                    <div class="box2" id="box2" @drop="drop($event)" @dragover="allowDrop($event)">
+                    <div class="box2" id="box2" @mouseover="playAudio('/assets/audio/Task3/32.3_вариант.mp3')"
+                        @drop="drop($event, 1)" @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array_two">
                             {{ item }}
                         </div>
                     </div>
                     <div class="box3" id="box3" @mouseover="playAudio('/assets/audio/Task3/33.3.mp3')"
-                        @drop="drop($event)" @dragover="allowDrop($event)">
+                        @drop="drop($event, 2)" @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array_three">
                             {{ item }}
                         </div>
@@ -78,7 +79,7 @@ const hideModal = () => {
     show.value = false;
 }
 
-const letters = ref([{ name: 'к', type: 'глухой' }, { name: 'ч', type: 'глухой' }, { name: 'с', type: 'глухой' }, { name: 'о', type: 'звонкий' }, { name: 'ф', type: 'глухой' }, { name: 'з', type: 'средний' }, { name: 'и', type: 'звонкий' }, { name: 'г', type: 'средний' }, { name: 'д', type: 'средний' }])
+const letters = ref([{ id: 1, name: 'к', type: 'глухой', audio: '/assets/audio/Task3/34.3.mp3' }, { id: 2, name: 'ч', type: 'глухой', audio: '/assets/audio/Task3/35.3.mp3' }, { id: 3, name: 'с', type: 'глухой', audio: '/assets/audio/Task3/36.3.mp3' }, { id: 4, name: 'о', type: 'звонкий', audio: '/assets/audio/Task3/37.3.mp3' }, { id: 5, name: 'ф', type: 'глухой', audio: '/assets/audio/Task3/38.3.mp3' }, { id: 6, name: 'з', type: 'средний', audio: '/assets/audio/Task3/39.3.mp3' }, { id: 7, name: 'и', type: 'звонкий', audio: '/assets/audio/Task3/40.3.mp3' }, { id: 8, name: 'г', type: 'средний', audio: '/assets/audio/Task3/41.3.mp3' }, { id: 9, name: 'д', type: 'средний', audio: '/assets/audio/Task3/42.3.mp3' }])
 const answer = ref('');
 const array = ref([]);
 const array_two = ref([]);
@@ -88,49 +89,73 @@ const array_result = ref([{ name: 'к', type: 'глухой' }, { name: 'ч', ty
 const array_two_result = ref([{ name: 'г', type: 'средний' }, { name: 'д', type: 'средний' }, { name: 'з', type: 'средний' }]);
 const array_three_result = ref([{ name: 'о', type: 'звонкий' }, { name: 'и', type: 'звонкий' }]);
 const dropIndex = ref(letters.value.length - 1);
-const drag = (event, letter, index) => {
+const drag = (event, letter, id, index) => {
     event.dataTransfer.setData('text', letter);
+    event.dataTransfer.setData('id', id);
     dropIndex.value = index;
 };
 
-const drop = (event) => {
+const drop = (event, index) => {
     event.preventDefault();
-    const letter = event.dataTransfer.getData('text');
-    event.target.value = letter;
-    // const index = letters.value.findIndex((item) => item.name === letter);
-    // const indexInResult = array_result.value.findIndex((item) => item.name === letter);
-    if (array_result.value.find((item) => item.name === letter)) {
-        array.value.push(letter);
-        letters.value.splice(dropIndex.value, 1);
-        event.target.classList.add('green');
+    let letter = event.dataTransfer.getData('text');
+    let id = event.dataTransfer.getData('id');
+    // let id_box = document.getElementById(letter + '_box');
+    let elem = document.getElementById(id + '_elem');
+    if (array_result.value.find((item) => item.name === letter) && index == 0) {
+        elem.classList.add('green');
         setTimeout(() => {
-            event.target.classList.remove('green');
+            elem.classList.remove('green');
         }, 2000);
+
+        setTimeout(() => {
+            array.value.push(letter);
+            letters.value.splice(dropIndex.value, 1)
+        }, 2100);
+
+
+        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+
+    } else if (array_two_result.value.find((item) => item.name === letter) && index == 1) {
+        elem.classList.add('green');
+        setTimeout(() => {
+            elem.classList.remove('green');
+        }, 2000);
+        setTimeout(() => {
+            array_two.value.push(letter);
+            letters.value.splice(dropIndex.value, 1)
+        }, 2100);
+        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+    }
+    else if (array_three_result.value.find((item) => item.name === letter) && index == 2) {
+        elem.classList.add('green');
+        setTimeout(() => {
+            elem.classList.remove('green');
+        }, 2000);
+        setTimeout(() => {
+            array_three.value.push(letter);
+            letters.value.splice(dropIndex.value, 1)
+        }, 2100);
+
+        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+
     } else {
+        elem.classList.add('red');
+        setTimeout(() => {
+            elem.classList.remove('red');
+        }, 2000);
+        playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+
         return false;
     }
 
-    if (array_two_result.value.find((item) => item.name === letter)) {
-        array_two.value.push(letter);
-        letters.value.splice(dropIndex.value, 1);
-        event.target.classList.add('green');
+    if (array.value.length == array_result.value.length && array_two.value.length == array_two_result.value.length && array_three.value.length == array_three_result.value.length) {
         setTimeout(() => {
-            event.target.classList.remove('green');
-        }, 2000);
-    } else {
-        return false;
+            show.value = true;
+            endGame.value = true;
+        }, 3000)
     }
 
-    if (array_three_result.value.find((item) => item.name === letter)) {
-        array_three.value.push(letter);
-        letters.value.splice(dropIndex.value, 1);
-        event.target.classList.add('green');
-        setTimeout(() => {
-            event.target.classList.remove('green');
-        }, 2000);
-    } else {
-        return false;
-    }
+
 };
 
 const allowDrop = (event) => {
@@ -187,11 +212,11 @@ const allowDrop = (event) => {
 }
 
 .red {
-    border: 2px solid red;
+    border: 2px solid red !important;
 }
 
 .green {
-    border: 2px solid green;
+    border: 2px solid green !important;
 }
 
 .ThirdTask {
@@ -239,6 +264,7 @@ const allowDrop = (event) => {
     border-radius: 6px;
     border: none;
     cursor: pointer;
+
 }
 
 .letter__item {
@@ -249,8 +275,9 @@ const allowDrop = (event) => {
     font-weight: bold;
     font-size: 24px;
     color: #a8664a;
-    padding: 7.5px 15px;
+    padding: 4px 15px;
     z-index: 998;
     border-radius: 6px;
+    text-align: center;
 }
 </style>

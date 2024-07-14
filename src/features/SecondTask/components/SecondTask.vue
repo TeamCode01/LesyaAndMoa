@@ -43,25 +43,21 @@ const hide = () => {
 const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false, audio: '/assets/audio/Task2/27.2.mp3' }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true, audio: '/assets/audio/Task2/26.2.mp3' }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false, audio: '/assets/audio/Task2/28.2.mp3' }])
 const endGame = ref(false);
 const show = ref(false);
+let audio = ref(null);
 const hideModal = () => {
     show.value = false;
 }
 const music = ref(null);
 
-const playAudio = (audioPath) => {
-    const audio = new Audio(audioPath);
-    music.value = audio;
-    audio.play();
+const playAudio = (audioPath, end) => {
+    audio.value = new Audio(audioPath);
+    audio.value.play();
+    if(end) {
+        audio.pause();
+        audio.currentTime = 0;
+        // audio.removeEventListener('ended', playAudio);
+    }
 }
-
-// const stopAudio = (audioPath) => {
-//     const audio = new Audio(audioPath);
-//     if (audio.paused) {
-//         audio.play();
-//     } else {
-//         audio.pause();
-//     }
-// }
 
 const chooseTask = (event, status) => {
     if (status === true) {
@@ -70,7 +66,7 @@ const chooseTask = (event, status) => {
             (item) => item.isCorrect == true,
         );
         event.target.classList.add('green');
-        music.value.pause();
+        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
             show.value = true;
             endGame.value = true;
@@ -79,6 +75,7 @@ const chooseTask = (event, status) => {
 
     } else {
         event.target.value = status;
+        playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
         event.target.classList.add('red');
         setTimeout(() => {
             event.target.classList.remove('red');
