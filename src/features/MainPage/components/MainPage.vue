@@ -12,7 +12,7 @@
                 <Button label="Зарегистрироваться" class="btn_primary main__btn"></Button></router-link>
         </div>
     </div>
-    <div class="Test">
+    <div class="Test" id="Test">
         <p class="title-h2 Test__title">Тестовое задание</p>
         <div class="wrap">
             <div class="Test__wrapper">
@@ -20,13 +20,22 @@
                 <p class="Test__wrapper_text">Мы услышали речь увиденных нами странных героев. Но как нам понять друг
                     друга? Пройди задание и
                     присоединяйся к тем, кто помогает инопланетянам понять нас. </p>
-                <Button @click="openTest()" class="Test__wrapper_btn" :isImage="true" :image="arrow" label="Начать"></Button>
+                <Button @click="openTest()" class="Test__wrapper_btn" :isImage="true" :image="arrow"
+                    label="Начать"></Button>
+            </div>
+            <div class="Test_icons_wrap">
+                <div class="Test_icons_item" @click="pause()"><img src="@app/assets/icons/sound.svg" alt="sound"></div>
+                <div class="Test_icons_item" @click="refresh()"><img src="@app/assets/icons/refresh.svg" alt="refresh">
+                </div>
+                <div class="Test_icons_item" @click="skip()">
+                    <img src="@app/assets/icons/playGame.svg" alt="play">
+                </div>
             </div>
             <div class="Test__img">
                 <img src="@app/assets/backgrounds/animals.jpg" alt="game">
             </div>
         </div>
-        <TestTask  @close="close()" v-show="isOpen == true"></TestTask>
+        <TestTask @close="close()" v-if="isOpen == true"></TestTask>
     </div>
 
     <div class="about">
@@ -147,6 +156,8 @@ import news from "@app/assets/backgrounds/news.png";
 import arrow from '@app/assets/icons/Arrow.svg';
 import { TestTask } from '@features/TestTask';
 
+const test = document.querySelector('#Test')
+
 const slideItems = ref([
     {
         id: 1,
@@ -182,12 +193,18 @@ const slideItems = ref([
 
 const isOpen = ref(false);
 
+const playAudio = (audioPath) => {
+    const audio = new Audio(audioPath);
+    audio.play();
+}
+
 const close = () => {
     isOpen.value = false;
 }
 
 const openTest = () => {
     isOpen.value = true;
+    playAudio('/assets/audio/TestTask/4.тестовое задание.mp3');
 }
 
 </script>
@@ -233,6 +250,30 @@ const openTest = () => {
 
 .Test {
     padding-top: 100px;
+    position: relative;
+    &_icons {
+        &_item {
+            width: 40px;
+            height: 40px;
+            background-color: #E6F2FA;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &_wrap {
+            display: flex;
+            column-gap: 8px;
+            align-items: center;
+            position: absolute;
+            top: 15px;
+            right: 50px;
+
+        }
+    }
+
 
     &__title {
         font-size: 32px;
@@ -297,6 +338,7 @@ const openTest = () => {
 
 .wrap {
     display: flex;
+    position: relative;
 }
 
 .about {
