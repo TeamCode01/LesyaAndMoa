@@ -36,13 +36,13 @@
                         <div class="draggable-list__answer-wrapper">
                             <p>{{ questions[currStage].first_part }}</p>
                             <div class="draggable-list__quastion-block" v-if="!givenAnswer[1]">
-                                <input @drop="drop($event, 1)" @dragover="allowDrop($event)" v-model="answer" class="answer" />
+                                <input @drop="drop($event, 1)" @dragover="allowDrop($event)" v-model="answer" class="answer" readonly />
                             </div>
                             <p v-else>&nbsp;{{ questions[currStage].first_answer }}&nbsp;</p>
                             <p>{{ questions[currStage].second_part }}</p>
                             <template v-if="currStage>2">
                                 <div class="draggable-list__quastion-block" v-if="!givenAnswer[2]">
-                                    <input @drop="drop($event, 2)" @dragover="allowDrop($event)" v-model="answer" class="answer" />
+                                    <input @drop="drop($event, 2)" @dragover="allowDrop($event)" v-model="answer" class="answer" readonly />
                                 </div>
                                 <p v-else>&nbsp;{{ questions[currStage].second_answer }}&nbsp;</p>
                                 <p>{{ questions[currStage].third_part }}</p>
