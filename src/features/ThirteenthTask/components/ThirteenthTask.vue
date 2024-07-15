@@ -1,5 +1,5 @@
 <template>
-    <template v-if="endGame === true">
+    <template v-if="endGame === false">
         <div class="ThirteenthTask task_block">
             <div class="ThirteenthTask__wrapper">
                 <div class="task_block__close" @click="hide">
