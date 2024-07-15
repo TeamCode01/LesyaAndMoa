@@ -23,6 +23,7 @@
             <EighteenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 18"></EighteenTask>
             <NineTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 9"></NineTask>
             <ElevenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 11"></ElevenTask>
+            <TwelfthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 12"></TwelfthTask>
         </div>
 
         <Button class="start" label="Старт" :is-image="true" :image="arrow" @click="openTask(taskId)"></Button>
@@ -45,6 +46,7 @@ import { SixteenthTask } from '@features/SixteenthTask';
 import { EighteenTask } from '@features/EighteenTask';
 import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
+import { TwelfthTask } from '@features/TwelfthTask';
 const emit = defineEmits(['sendImg', 'sendAudio']);
 const tasks = ref([
 
@@ -59,7 +61,7 @@ const tasks = ref([
     { id: 9, name: 'Задание 9', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task9.jpg' },
     { id: 10, name: 'Задание 10', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task10.jpg' },
     { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task11.jpg', },
-    { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task12.jpg' },
+    { id: 12, name: 'Задание 12', disabled: false, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task12.jpg' },
     { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task13.jpg'},
     { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/task15.jpg' },
