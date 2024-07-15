@@ -18,14 +18,43 @@
                 <div class="draggable-list">
                     <div class="draggable-list__draggable-items">
                         <div class="draggable-list__words">
-                            <div class="draggable-list__word">б</div>
-                            <div class="draggable-list__word">а</div>
-                            <div class="draggable-list__word">р</div>
-                            <div class="draggable-list__word">в</div>
-                            <div class="draggable-list__word">д</div>
-                            <div class="draggable-list__word">у</div>
+                            <button class="draggable-list__word" id="draggable-list__word1">б</button>
+                            <button class="draggable-list__word" id="draggable-list__word2">а</button>
+                            <button class="draggable-list__word" id="draggable-list__word3">р</button>
+                            <button class="draggable-list__word" id="draggable-list__word4">в</button>
+                            <button class="draggable-list__word" id="draggable-list__word5">д</button>
+                            <button class="draggable-list__word" id="draggable-list__word6">у</button>
                         </div>
-                        <div class="draggable-list__speakers"></div>
+                        <div class="draggable-list__speakers">
+                            <button class="draggable-list__speaker">
+                                <img src="/assets/icons/speaker-violet.svg" alt="speaker" class="speaker"/>
+                            </button>
+                            <button class="draggable-list__speaker">
+                                <img src="/assets/icons/speaker-violet.svg" alt="speaker" class="speaker"/>
+                            </button>
+                            <button class="draggable-list__speaker">
+                                <img src="/assets/icons/speaker-violet.svg" alt="speaker" class="speaker"/>
+                            </button>
+                            <button class="draggable-list__speaker">
+                                <img src="/assets/icons/speaker-violet.svg" alt="speaker" class="speaker"/>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="draggable-list__answer-zone">
+                        <div class="draggable-list__answer">
+                            <img src="/assets/backgrounds/lesyaandmoasmall.svg" alt="lesyaandmoa" class="lesyaandmoa">
+                            <div class="draggable-list__subanswer">
+                                <div class="draggable-list__word"></div>
+                                <div class="draggable-list__speaker"></div>
+                            </div>
+                        </div>
+                        <div class="draggable-list__answer">
+                            <img src="/assets/backgrounds/lesyaandmoasmall.svg" alt="lesyaandmoa" class="lesyaandmoa">
+                            <div class="draggable-list__subanswer">
+                                <div class="draggable-list__word"></div>
+                                <div class="draggable-list__speaker"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <input
@@ -121,9 +150,44 @@ const hide = () => {
     color: $darkBlue;
     border-radius: 6px;
     font-family: 'czizh', sans-serif;
+    font-size: 44px;
     @media (max-width: 1024px) {
         width: 80px;
         height: 40px;
+        font-size: 36px;
+    }
+}
+
+#draggable-list__word1 {
+    padding-top: 5px;
+}
+
+#draggable-list__word2 {
+    padding-bottom: 10px;
+}
+
+#draggable-list__word3 {
+    padding-bottom: 17px;
+    @media (max-width: 1024px) {
+        padding-bottom: 11px;
+    }
+}
+
+#draggable-list__word4 {
+    padding-top: 5px;
+}
+
+#draggable-list__word5 {
+    padding-bottom: 23px;
+    @media (max-width: 1024px) {
+        padding-bottom: 17px;
+    }
+}
+
+#draggable-list__word6 {
+    padding-bottom: 23px;
+    @media (max-width: 1024px) {
+        padding-bottom: 17px;
     }
 }
 
@@ -138,17 +202,74 @@ const hide = () => {
     }
 }
 
+.draggable-list__speaker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 108px;
+    height: 52px;
+    background-color: $puppe;
+    border-radius: 6px;
+    @media (max-width: 1024px) {
+        width: 80px;
+        height: 40px;
+    }
+}
 
+.speaker {
+    width: 32px;
+    height: 32px;
+    @media (max-width: 1024px) {
+        width: 26px;
+        height: 26px;
+    }
+}
 
+.draggable-list__answer-zone {
+    display: flex;
+    justify-content: space-between;
+    width: 576px;
+    height: 264px;
+    @media (max-width: 1024px) {
+        width: 448px;
+        height: 205px;
+    }
+}
 
+.draggable-list__answer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    width: 268px;
+    height: 100%;
+    border: 1px solid $darkBlue;
+    border-radius: 6px;
+    @media (max-width: 1024px) {
+        width: 204px;
+        padding: 16px;
+    }
+}
 
+.lesyaandmoa {
+    width: 228px;
+    height: 160px;
+    @media (max-width: 1024px) {
+        width: 172px;
+        height: 121px;
+    }
+}
 
-
-
-
-
-
-
+.draggable-list__subanswer {
+    display: flex;
+    justify-content: space-between;
+    width: 228px;
+    height: 52px;
+    @media (max-width: 1024px) {
+        width: 172px;
+        height: 40px;
+    }
+}
 
 
 

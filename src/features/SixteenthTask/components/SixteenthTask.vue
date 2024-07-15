@@ -1,7 +1,7 @@
 <template>
     <div class="SixteenthTask task_block">
         <div class="wrapper">
-            <template v-if="false">
+            <template v-if="true">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -226,7 +226,7 @@
                 />
             </template>
             <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/moa.gif" text="Изумительно!"
-            v-if="true" @hide="hide()"></TaskResultBanner>
+            v-if="false" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
