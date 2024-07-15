@@ -146,8 +146,10 @@ const drop = (event, num) => {
                         givenAnswer.value[1] = false;
                         givenAnswer.value[2] = false;
                         currStage.value += 1;
-                        if(currStage.value == 5) startGame.value = false;
-                        playAudio(`/assets/audio/Task10/328.10_${Math.floor(Math.random() * 3) + 1}.mp3`)
+                        if(currStage.value == 5) {
+                            startGame.value = false;
+                            playAudio(`/assets/audio/Task10/328.10_.mp3`)
+                        }
                     }, 2000)
                 }
             } else {
@@ -162,8 +164,10 @@ const drop = (event, num) => {
                         givenAnswer.value[1] = false;
                         givenAnswer.value[2] = false;
                         currStage.value += 1;
-                        if(currStage.value == 5) startGame.value = false;
-                        playAudio(`/assets/audio/Task10/328.10_${Math.floor(Math.random() * 3) + 1}.mp3`)
+                        if(currStage.value == 5) {
+                            startGame.value = false;
+                            playAudio(`/assets/audio/Task10/328.10_.mp3`)
+                        }
                     }, 2000)
                 }
             } else {
