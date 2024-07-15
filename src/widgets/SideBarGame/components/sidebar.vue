@@ -19,6 +19,7 @@
             <EighthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 8"></EighthTask>
             <TenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 10"></TenthTask>
             <ThirteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 13"></ThirteenthTask>
+            <FourteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 14"></FourteenthTask>
             <SixteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 16"></SixteenthTask>
             <EighteenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 18"></EighteenTask>
             <NineTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 9"></NineTask>
@@ -42,11 +43,13 @@ import { EighthTask } from '@features/EighthTask/components';
 import { TenthTask } from '@features/TenthTask';
 import { SecondTask } from '@features/SecondTask';
 import { ThirteenthTask } from '@features/ThirteenthTask';
+import { FourteenthTask } from '@features/FourteenthTask';
 import { SixteenthTask } from '@features/SixteenthTask';
 import { EighteenTask } from '@features/EighteenTask';
 import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 import { TwelfthTask } from '@features/TwelfthTask';
+// import FourteenthTask from '@features/FourteenthTask/components/FourteenthTask.vue';
 const emit = defineEmits(['sendImg', 'sendAudio']);
 const tasks = ref([
 
@@ -63,7 +66,7 @@ const tasks = ref([
     { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task11.jpg', },
     { id: 12, name: 'Задание 12', disabled: false, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task12.jpg' },
     { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task13.jpg'},
-    { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
+    { id: 14, name: 'Задание 14', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/task15.jpg' },
     { id: 16, name: 'Задание 16', disabled: false, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
