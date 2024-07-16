@@ -19,7 +19,7 @@
                 <div v-if="props.is_test === false">
                     <button class="left-result__button left-result__text">
                         <span class="left-result__text">Далее</span>
-                        <img src="@app\assets\icons\vector.svg" alt="vector" />
+                        <img src="@app\assets\icons\vector.svg" alt="vector"/>
                     </button>
                 </div>
                 <div v-else>
@@ -193,7 +193,7 @@ onMounted(() => {
 }
 
 .right-result__img-moa {
-    width: 403px;
+    width: 100%;
     height: 407px;
     @media (max-width: 1024px) {
         height: 327px;
