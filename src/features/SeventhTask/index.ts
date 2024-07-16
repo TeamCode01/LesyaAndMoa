@@ -1,0 +1,1 @@
+export { default as SeventhTask } from './components/SeventhTask.vue';
