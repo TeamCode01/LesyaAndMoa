@@ -21,6 +21,7 @@
             <ThirteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 13"></ThirteenthTask>
             <FourteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 14"></FourteenthTask>
             <SixteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 16"></SixteenthTask>
+            <SeventeenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 17"></SeventeenthTask>
             <EighteenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 18"></EighteenTask>
             <NineTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 9"></NineTask>
             <ElevenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 11"></ElevenTask>
@@ -45,6 +46,7 @@ import { SecondTask } from '@features/SecondTask';
 import { ThirteenthTask } from '@features/ThirteenthTask';
 import { FourteenthTask } from '@features/FourteenthTask';
 import { SixteenthTask } from '@features/SixteenthTask';
+import { SeventeenthTask } from '@features/SeventeenthTask';
 import { EighteenTask } from '@features/EighteenTask';
 import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
@@ -69,7 +71,7 @@ const tasks = ref([
     { id: 14, name: 'Задание 14', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/task15.jpg' },
     { id: 16, name: 'Задание 16', disabled: false, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
+    { id: 17, name: 'Задание 17', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 120, end: false, img: '/assets/backgrounds/task18.jpg', startAudio: '/assets/audio/Task18/470.18_.mp3' },
 ])
 

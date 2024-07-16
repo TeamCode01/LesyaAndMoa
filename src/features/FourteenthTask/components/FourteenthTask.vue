@@ -1,7 +1,7 @@
 <template>
     <div class="FourteenthTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="true">
+            <template v-if="false">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -64,8 +64,10 @@
                     class="task_block__wrapper_answer"
                 />
             </template>
-            <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/moa.gif" text="Замечательно!"
-            v-if="false" @hide="hide()"></TaskResultBanner>
+            <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/moa.gif" text="Друзья заметили, что письменная б (БЭ), которая звучит, 
+            как [б] или [б'] похожа на белку с поднятым хвостом. В слове «белка» звучит [б']. А письменная д, которая звучит, как [д] или [д'], похожа на дятла, 
+            у которого хвостик вниз. В слове «дятел» звучит [д']."
+            v-if="true" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
