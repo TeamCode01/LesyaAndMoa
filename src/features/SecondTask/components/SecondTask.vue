@@ -1,118 +1,134 @@
 <template>
-  <div class="SecondTask">
-    <div class="SecondTask__wrapper">
-      <div class="close" @click="hide">
-        <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
-      </div>
-      <div class="time">
-        <Timer :end="end"></Timer>
-        <p class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</p>
-      </div>
-      <div class="SecondTask__wrapper_block">
-        <div class="SecondTask__wrapper_block_item"><img src="@app/assets/backgrounds/english.png" alt="english"></div>
-        <div class="SecondTask__wrapper_block_item"><img src="@app/assets/backgrounds/russian.png" alt="russian"></div>
-        <div class="SecondTask__wrapper_block_item"><img src="@app/assets/backgrounds/arabic.png" alt="arabic"></div>
-      </div>
-    </div>
-  </div>
+    <template v-if="endGame === false">
+        <div class="SecondTask task_block">
+
+            <div class="SecondTask__wrapper">
+                <div class="task_block__close" @click="hide">
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                </div>
+                <div class="task_block__time">
+                    <Timer :end="end"></Timer>
+                    <p class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</p>
+                </div>
+                <div class="SecondTask__wrapper_block">
+                    <div @mouseenter="playAudio(item.audio)"
+                        @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"
+                        class="SecondTask__wrapper_block_item">
+                        <img id="image" :src="item.src" alt="alphabet">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <TaskResultBanner :is-test="false" img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/Moa.png" text="Так держать!"
+        v-if="show === true" @hide="hideModal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
+import { TaskResultBanner } from '@features/TaskResultBanner/components';
+import { event } from 'quasar';
 const emit = defineEmits(['close']);
 const props = defineProps({
-  end: {
-    type: Boolean,
-    required: false,
-  },
-})
+    end: {
+        type: Boolean,
+        required: false,
+    },
+});
 const hide = () => {
-  emit('close');
+    emit('close');
+    endGame.value = true;
 };
+const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false, audio: '/assets/audio/Task2/27.2.mp3' }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true, audio: '/assets/audio/Task2/26.2.mp3' }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false, audio: '/assets/audio/Task2/28.2.mp3' }])
+const endGame = ref(false);
+const show = ref(false);
+let audio = ref(null);
+const hideModal = () => {
+    show.value = false;
+}
+const music = ref(null);
 
+const playAudio = (audioPath, end) => {
+    audio.value = new Audio(audioPath);
+    audio.value.play();
+    if(end) {
+        audio.pause();
+        audio.currentTime = 0;
+        // audio.removeEventListener('ended', playAudio);
+    }
+}
+
+const chooseTask = (event, status) => {
+    if (status === true) {
+        event.target.value = status;
+        alphabets.value = alphabets.value.filter(
+            (item) => item.isCorrect == true,
+        );
+        event.target.classList.add('green');
+        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        setTimeout(() => {
+            show.value = true;
+            endGame.value = true;
+            event.target.classList.remove('green');
+        }, 2000);
+
+    } else {
+        event.target.value = status;
+        playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+        event.target.classList.add('red');
+        setTimeout(() => {
+            event.target.classList.remove('red');
+        }, 2000);
+    }
+}
 </script>
 <style lang="scss" scoped>
-.time {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  column-gap: 28px;
+.green {
+    border: 2px solid green;
+}
+
+.red {
+    border: 2px solid red;
 }
 
 .SecondTask {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 999;
-  border-radius: 20px;
-  background-color: #fff;
-  width: 100%;
-  max-width: 1200px;
-  height: 600px;
-
-  @media (max-width: 1024px) {
-    height: 470px;
-    max-width: 944px;
-    width: 100%;
-  }
-
-  &__title {
-    text-align: center;
-    font-size: 24px;
-    font-weight: 500;
-    font-family: 'Nunito', sans-serif;
-    max-width: 700px;
-
-    @media (max-width: 1024px) {
-      font-size: 20px;
-    }
-  }
-
-  .close {
-    right: 20px;
-    top: 20px;
-    position: absolute;
-    cursor: pointer;
-  }
-
-  &__wrapper {
-    padding: 30px 100px;
-    position: relative;
-
-    @media (max-width: 1024px) {
-      padding: 30px 60px;
-    }
-
-    &_block {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      column-gap: 41px;
-      margin-top: 68px;
-
-      &_item {
-        background-color: #D2EFFF;
-        border-radius: 20px;
-        max-width: 316px;
-        width: 100%;
-        height: 256px;
-        padding: 45.5px 60px;
-        cursor: pointer;
+    &__wrapper {
+        padding: 30px 100px;
+        position: relative;
 
         @media (max-width: 1024px) {
-          max-width: 276px;
-          height: 215px;
-          padding: 32px 40px;
+            padding: 30px 60px;
         }
 
-        img {
-          display: block;
-          margin: 0px auto;
+        &_block {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            column-gap: 41px;
+            margin-top: 68px;
+
+            &_item {
+                background-color: #d2efff;
+                border-radius: 20px;
+                max-width: 316px;
+                width: 100%;
+                height: 256px;
+                padding: 45.5px 60px;
+                cursor: pointer;
+
+                @media (max-width: 1024px) {
+                    max-width: 276px;
+                    height: 215px;
+                    padding: 32px 40px;
+                }
+
+                img {
+                    display: block;
+                    margin: 0px auto;
+                }
+            }
         }
-      }
     }
-  }
-
 }
 </style>

@@ -1,6 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@font-face {
+    font-family: "czizh";
+    src: url("/assets/fonts/czizh.woff2"),
+    url("/assets/fonts/czizh.woff");
+    font-style: normal;
+    font-display: swap;
+    font-weight: normal;
+}
 
 body div[id='app'] {
     display: flex;
@@ -120,4 +128,60 @@ title {
 }
 .v-progress-linear__determinate {
     color: #5ccf54;
+}
+
+.task_block {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    // background-color: white;
+    z-index: 999;
+    border-radius: 20px;
+    background-color: #fff;
+    height: 600px;
+    width: 100%;
+    max-width: 1200px;
+
+    @media (max-width: 1024px) {
+        height: 470px;
+        max-width: 944px;
+        width: 100%;
+    }
+
+    &__title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 500;
+        font-family: 'Nunito', sans-serif;
+
+        @media (max-width: 1024px) {
+            font-size: 20px;
+        }
+    }
+
+    &__wrapper {
+        padding: 30px 60px 67px 60px;
+        position: relative;
+        height: 600px;
+
+        @media (max-width: 1024px) {
+            padding: 30px 20px 43px 20px;
+        }
+    }
+
+    &__time {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        column-gap: 28px;
+    }
+
+    &__close {
+        right: 20px;
+        top: 20px;
+        position: absolute;
+        cursor: pointer;
+    }
 }

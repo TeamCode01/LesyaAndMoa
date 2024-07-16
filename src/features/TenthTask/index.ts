@@ -1,0 +1,1 @@
+export { default as TenthTask } from './components/TenthTask.vue';

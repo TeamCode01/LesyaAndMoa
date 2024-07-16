@@ -14,19 +14,30 @@
     </div>
     <div class="Test">
         <p class="title-h2 Test__title">Тестовое задание</p>
-        <div class="wrap">
+        <div class="wrap" id="test">
             <div class="Test__wrapper">
                 <p class="Test__wrapper_title">Дорогие друзья!</p>
                 <p class="Test__wrapper_text">Мы услышали речь увиденных нами странных героев. Но как нам понять друг
                     друга? Пройди задание и
                     присоединяйся к тем, кто помогает инопланетянам понять нас. </p>
-                <Button @click="openTest()" class="Test__wrapper_btn" :isImage="true" :image="arrow" label="Начать"></Button>
+                <Button @click="openTest()" class="Test__wrapper_btn" :isImage="true" :image="arrow"
+                    label="Начать"></Button>
+            </div>
+            <div class="Test_icons_wrap">
+                <div class="Test_icons_item" @click="mute()"><img v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg" alt="sound"><img v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg" alt="mute"></div>
+                <div class="Test_icons_item" @click="refresh()"><img src="@app/assets/icons/refresh.svg" alt="refresh">
+                </div>
+                <div class="Test_icons_item" @click="skip()">
+                    <img src="@app/assets/icons/playGame.svg" alt="play">
+                </div>
             </div>
             <div class="Test__img">
                 <img src="@app/assets/backgrounds/animals.jpg" alt="game">
             </div>
         </div>
-        <TestTask  @close="close()" v-show="isOpen == true"></TestTask>
+        <TestTask @close="close()" v-if="isOpen == true"></TestTask>
     </div>
 
     <div class="about">
@@ -140,12 +151,13 @@
 
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Carousel } from '@shared/components/carousel';
 import news from "@app/assets/backgrounds/news.png";
 import arrow from '@app/assets/icons/Arrow.svg';
 import { TestTask } from '@features/TestTask';
+
 
 const slideItems = ref([
     {
@@ -181,15 +193,65 @@ const slideItems = ref([
 ])
 
 const isOpen = ref(false);
-
+// const audio = new Audio('/assets/audio/TestTask/3.тестовое задание.mp3');
+const isPlaying = ref(false);
+const isMuted = ref(false);
 const close = () => {
     isOpen.value = false;
 }
 
-const openTest = () => {
-    isOpen.value = true;
+
+function playAudio(audioPath) {
+    const audio = new Audio(audioPath);
+    audio.play(audioPath);
+    // if (!isPlaying.value) {
+
+    // isPlaying.value = true;
+    // } else {
+    //     audio.pause();
+    //     isPlaying.value = false;
+    // }
 }
 
+const mute = () => {
+    console.log('skip')
+    const audio = new Audio('/assets/audio/TestTask/3.тестовое задание.mp3');
+    isMuted.value = !isMuted.value;
+    audio.muted = isMuted.value;
+}
+
+const refresh = () => {
+    console.log('skip')
+    const audio = new Audio('/assets/audio/TestTask/3.тестовое задание.mp3');
+    audio.currentTime = 0;
+    audio.play();
+}
+
+const skip = () => {
+    console.log('skip')
+    const audio = new Audio('/assets/audio/TestTask/3.тестовое задание.mp3');
+    audio.currentTime = 0;
+}
+
+const openTest = () => {
+    isOpen.value = true;
+    playAudio('/assets/audio/TestTask/4.тестовое задание.mp3');
+}
+
+onMounted(() => {
+    const test = document.getElementById('test');
+    function handleScroll() {
+        const posTop = test.getBoundingClientRect().top;
+        if (posTop + test.clientHeight <= window.innerHeight && posTop >= 0) {
+            playAudio('/assets/audio/Music/звук 1_.mp3');
+            setTimeout(() => {
+                playAudio('/assets/audio/TestTask/3.тестовое задание.mp3');
+            }, 14000)
+            window.removeEventListener('scroll', handleScroll);
+        }
+    }
+    window.addEventListener('scroll', handleScroll);
+})
 </script>
 <style lang="scss" scoped>
 .main {
@@ -233,6 +295,31 @@ const openTest = () => {
 
 .Test {
     padding-top: 100px;
+    position: relative;
+
+    &_icons {
+        &_item {
+            width: 40px;
+            height: 40px;
+            background-color: #E6F2FA;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &_wrap {
+            display: flex;
+            column-gap: 8px;
+            align-items: center;
+            position: absolute;
+            top: 15px;
+            right: 50px;
+
+        }
+    }
+
 
     &__title {
         font-size: 32px;
@@ -297,6 +384,7 @@ const openTest = () => {
 
 .wrap {
     display: flex;
+    position: relative;
 }
 
 .about {

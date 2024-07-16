@@ -1,0 +1,1 @@
+export { default as TaskResultBanner } from './components/TaskResultBanner.vue';
