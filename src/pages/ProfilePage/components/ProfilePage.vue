@@ -102,7 +102,7 @@
                             placeholder="Выберите регион из списка"
                             variant="outlined"
                             :sorts-boolean="false"
-                            @update:value="changeValue"
+                            @update:value="changeOption"
                         />
                     </div>
                     <div class="form-input">
@@ -178,25 +178,25 @@ const tasksChoose = ref([
     { value: 'Женский', name: 'Женский' },
     { value: 'Мужской', name: 'Мужской' },
 ]);
+const reg = ref([]);
 const form = ref({
     first_name: '',
     last_name: '',
-    sex: '',
     age: '',
-    region: '',
+    region: null,
     school: '',
     grade: '',
     attended_speech_therapist: false,
     sex: null,
     data_processing_agreement: false,
 });
-const reg = ref({});
 
 const AddChild = async () => {
     try {
         const response = await HTTP.post('/children/', form.value, {
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
         form.value = response.data;
@@ -212,7 +212,6 @@ const GetRegion = async () => {
         const response = await HTTP.get('/regions/', reg.value, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
         reg.value = response.data;
