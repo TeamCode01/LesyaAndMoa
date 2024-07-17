@@ -42,7 +42,7 @@
                     <div class="draggable-list__pictures" v-if="true">
                         <div class="draggable-list__picture">
                             <img src="/assets/creatures/SeventeenthTask/green-circle.svg" alt="green-circle" class="draggable-list__word-top-circle">
-                            <img src="/assets/creatures/SeventeenthTask/tree.svg" alt="tree" class="draggable-list__lesyaandmoa">
+                            <img src="/assets/creatures/SeventeenthTask/tree.png" alt="tree" class="draggable-list__lesyaandmoa">
                         </div>
                         <div class="draggable-list__picture">
                             <img src="/assets/creatures/SeventeenthTask/green-circle.svg" alt="green-circle" class="draggable-list__word-top-circle">
