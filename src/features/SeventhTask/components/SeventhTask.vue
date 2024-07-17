@@ -67,23 +67,23 @@
                     <div class="draggable-list__pictures">
                         <div class="draggable-list__picture-container">
                             <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                            <img v-if="false" src="assets/creatures/SeventhTask/girl's-top.svg" alt="girl's-top" class="draggable-list__image">
-                            <img v-if="true" src="assets/creatures/SeventhTask/chalk.svg" alt="chalk" class="draggable-list__image">
+                            <img v-if="false" src="assets/creatures/SeventhTask/girl's-top.png" alt="girl's-top" class="draggable-list__image">
+                            <img v-if="true" src="assets/creatures/SeventhTask/chalk.png" alt="chalk" class="draggable-list__image">
                         </div>
                         <div class="draggable-list__picture-container">
                             <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                            <img v-if="false" src="assets/creatures/SeventhTask/chess.svg" alt="chess" class="draggable-list__image">
-                            <img v-if="true" src="assets/creatures/SeventhTask/shallow.svg" alt="shallow" class="draggable-list__image">
+                            <img v-if="false" src="assets/creatures/SeventhTask/chess.png" alt="chess" class="draggable-list__image">
+                            <img v-if="true" src="assets/creatures/SeventhTask/shallow.png" alt="shallow" class="draggable-list__image">
                         </div>
                         <div class="draggable-list__picture-container">
                             <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                            <img v-if="false" src="assets/creatures/SeventhTask/horse.svg" alt="horse" class="draggable-list__image">
-                            <img v-if="true" src="assets/creatures/SeventhTask/food.svg" alt="food" class="draggable-list__image">
+                            <img v-if="false" src="assets/creatures/SeventhTask/horse.png" alt="horse" class="draggable-list__image">
+                            <img v-if="true" src="assets/creatures/SeventhTask/food.png" alt="food" class="draggable-list__image">
                         </div>
                         <div class="draggable-list__picture-container">
                             <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                            <img v-if="false" src="assets/creatures/SeventhTask/swamp.svg" alt="swamp" class="draggable-list__image">
-                            <img v-if="true" src="assets/creatures/SeventhTask/sit.svg" alt="sit" class="draggable-list__image">
+                            <img v-if="false" src="assets/creatures/SeventhTask/swamp.png" alt="swamp" class="draggable-list__image">
+                            <img v-if="true" src="assets/creatures/SeventhTask/sit.png" alt="sit" class="draggable-list__image">
                         </div>
                     </div>
                 </div>
@@ -260,7 +260,6 @@ const hide = () => {
 .draggable-list__image {
     width: 116px;
     height: 100%;
-    transform: rotate(180deg);
     @media (max-width: 1024px) {
         width: 96px;
     }
