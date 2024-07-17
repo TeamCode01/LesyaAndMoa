@@ -127,7 +127,7 @@
                 />
             </template>
             <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/lesya.gif" text="Потрясающе!"
-            v-if="true" @hide="hide()"></TaskResultBanner>
+            v-if="false" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>

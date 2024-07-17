@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import Button from '@shared/components/buttons/Button.vue';
+import Button from '@shared/components/buttons/button.vue';
 import { onMounted } from 'vue';
 const emit = defineEmits(['hide']);
 const hide = () => {
