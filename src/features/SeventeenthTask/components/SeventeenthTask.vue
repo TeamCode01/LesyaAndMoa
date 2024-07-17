@@ -42,23 +42,23 @@
                     <div class="draggable-list__pictures" v-if="true">
                         <div class="draggable-list__picture">
                             <img src="assets/creatures/SeventeenthTask/green-circle.svg" alt="green-circle" class="draggable-list__word-top-circle">
-                            <img src="assets/creatures/SeventeenthTask/lesyaandmoasmall.svg" alt="lesyaandmoa" class="draggable-list__lesyaandmoa">
+                            <img src="assets/creatures/SeventeenthTask/tree.svg" alt="tree" class="draggable-list__lesyaandmoa">
                         </div>
                         <div class="draggable-list__picture">
                             <img src="assets/creatures/SeventeenthTask/green-circle.svg" alt="green-circle" class="draggable-list__word-top-circle">
-                            <img src="assets/creatures/SeventeenthTask/lesyaandmoasmall.svg" alt="lesyaandmoa" class="draggable-list__lesyaandmoa">
+                            <img src="assets/creatures/SeventeenthTask/daisy.svg" alt="daisy" class="draggable-list__lesyaandmoa">
                         </div>
                         <div class="draggable-list__picture">
                             <img src="assets/creatures/SeventeenthTask/green-circle.svg" alt="green-circle" class="draggable-list__word-top-circle">
-                            <img src="assets/creatures/SeventeenthTask/lesyaandmoasmall.svg" alt="lesyaandmoa" class="draggable-list__lesyaandmoa">
+                            <img src="assets/creatures/SeventeenthTask/cloud.svg" alt="cloud" class="draggable-list__lesyaandmoa">
                         </div>
                         <div class="draggable-list__picture">
                             <img src="assets/creatures/SeventeenthTask/green-circle.svg" alt="green-circle" class="draggable-list__word-top-circle">
-                            <img src="assets/creatures/SeventeenthTask/lesyaandmoasmall.svg" alt="lesyaandmoa" class="draggable-list__lesyaandmoa">
+                            <img src="assets/creatures/SeventeenthTask/cow.svg" alt="cow" class="draggable-list__lesyaandmoa">
                         </div>
                         <div class="draggable-list__picture">
                             <img src="assets/creatures/SeventeenthTask/green-circle.svg" alt="green-circle" class="draggable-list__word-top-circle">
-                            <img src="assets/creatures/SeventeenthTask/lesyaandmoasmall.svg" alt="lesyaandmoa" class="draggable-list__lesyaandmoa">
+                            <img src="assets/creatures/SeventeenthTask/river.svg" alt="river" class="draggable-list__lesyaandmoa">
                         </div>
                     </div>
                     <div class="draggable-list__syllables" v-if="false">
@@ -127,7 +127,7 @@
                 />
             </template>
             <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/lesya.gif" text="Потрясающе!"
-            v-if="true" @hide="hide()"></TaskResultBanner>
+            v-if="false" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
