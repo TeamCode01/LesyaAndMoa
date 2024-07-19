@@ -20,101 +20,83 @@
                     <div class="draggable-list__items">
                         <div class="draggable-list__item1">
                             <div class="draggable-list__letters" id="letters-1">
-                                <div class="draggable-list__word1">
-                                    <span class="draggable-list__letter1">Я</span>
-                                    <span class="draggable-list__letter2">Л</span>
-                                    <span class="draggable-list__letter3">Д</span>
-                                </div>
+                                <span class="draggable-list__letter1">Я</span>
+                                <span class="draggable-list__letter2">Л</span>
+                                <span class="draggable-list__letter3">Д</span>
                             </div>
                             <div class="draggable-list__letters" id="letters-2">
-                                <div class="draggable-list__word2">
-                                    <span class="draggable-list__letter1">К</span>
-                                    <span class="draggable-list__letter4">И</span>
-                                    <span class="draggable-list__letter3">П</span>
-                                    <span class="draggable-list__letter5">С</span>
-                                    <span class="draggable-list__letter6">О</span>
-                                    <span class="draggable-list__letter7">Т</span>
-                                    <span class="draggable-list__letter8">о</span>
-                                    <span class="draggable-list__letter9">й</span>
-                                    <span class="draggable-list__letter10">Р</span>
-                                </div>
+                                <span class="draggable-list__letter1">К</span>
+                                <span class="draggable-list__letter4">И</span>
+                                <span class="draggable-list__letter3">П</span>
+                                <span class="draggable-list__letter5">С</span>
+                                <span class="draggable-list__letter6">О</span>
+                                <span class="draggable-list__letter7">Т</span>
+                                <span class="draggable-list__letter8">о</span>
+                                <span class="draggable-list__letter9">й</span>
+                                <span class="draggable-list__letter10">Р</span>
                             </div>
                             <div class="draggable-list__letters" id="letters-3">
-                                <div class="draggable-list__word3">
-                                    <span class="draggable-list__letter6">О</span>
-                                    <span class="draggable-list__letter5">М</span>
-                                    <span class="draggable-list__letter3">Д</span>
-                                    <span class="draggable-list__letter7">И</span>
-                                    <span class="draggable-list__letter7">к</span>
-                                    <span class="draggable-list__letter9">а</span>
-                                </div>
+
+                                <span class="draggable-list__letter6">О</span>
+                                <span class="draggable-list__letter5">М</span>
+                                <span class="draggable-list__letter3">Д</span>
+                                <span class="draggable-list__letter7">И</span>
+                                <span class="draggable-list__letter7">к</span>
+                                <span class="draggable-list__letter9">а</span>
+
                             </div>
                             <div class="draggable-list__letters" id="letters-4">
-                                <div class="draggable-list__word4">
-                                    <span class="draggable-list__letter2">Ы</span>
-                                    <span class="draggable-list__letter3">М</span>
-                                </div>
+                                <span class="draggable-list__letter2">Ы</span>
+                                <span class="draggable-list__letter3">М</span>
                             </div>
                             <div class="draggable-list__letters" id="letters-5">
-                                <div class="draggable-list__word5">
-                                    <span class="draggable-list__letter10">М</span>
-                                    <span class="draggable-list__letter7">ё</span>
-                                    <span class="draggable-list__letter3">В</span>
-                                    <span class="draggable-list__letter6">О</span>
-                                    <span class="draggable-list__letter9">м</span>
-                                    <span class="draggable-list__letter5">З</span>
-                                    <span class="draggable-list__letter7">Ь</span>
-                                </div>
+                                <span class="draggable-list__letter10">М</span>
+                                <span class="draggable-list__letter7">ё</span>
+                                <span class="draggable-list__letter3">В</span>
+                                <span class="draggable-list__letter6">О</span>
+                                <span class="draggable-list__letter9">м</span>
+                                <span class="draggable-list__letter5">З</span>
+                                <span class="draggable-list__letter7">Ь</span>
                             </div>
                         </div>
                         <div class="draggable-list__item2">
                             <div class="draggable-list__letters" id="letters-6">
-                                <div class="draggable-list__word6">
-                                    <span class="draggable-list__letter6">Е</span>
-                                    <span class="draggable-list__letter7">Т</span>
-                                    <span class="draggable-list__letter3">В</span>
-                                    <span class="draggable-list__letter9">К</span>
-                                    <span class="draggable-list__letter9">и</span>
-                                </div>
+                                <span class="draggable-list__letter6">Е</span>
+                                <span class="draggable-list__letter7">Т</span>
+                                <span class="draggable-list__letter3">В</span>
+                                <span class="draggable-list__letter9">К</span>
+                                <span class="draggable-list__letter9">и</span>
                             </div>
                             <div class="draggable-list__letters" id="letters-7">
-                                <div class="draggable-list__word7">
-                                    <span class="draggable-list__letter6">О</span>
-                                    <span class="draggable-list__letter8">к</span>
-                                    <span class="draggable-list__letter9">у</span>
-                                    <span class="draggable-list__letter5">Щ</span>
-                                    <span class="draggable-list__letter7">Е</span>
-                                    <span class="draggable-list__letter3">Д</span>
-                                    <span class="draggable-list__letter10">Ч</span>
-                                </div>
+                                <span class="draggable-list__letter6">О</span>
+                                <span class="draggable-list__letter8">к</span>
+                                <span class="draggable-list__letter9">у</span>
+                                <span class="draggable-list__letter5">Щ</span>
+                                <span class="draggable-list__letter7">Е</span>
+                                <span class="draggable-list__letter3">Д</span>
+                                <span class="draggable-list__letter10">Ч</span>
                             </div>
                             <div class="draggable-list__letters" id="letters-8">
-                                <div class="draggable-list__word8">
                                     <span class="draggable-list__letter6">Е</span>
                                     <span class="draggable-list__letter5">Н</span>
                                     <span class="draggable-list__letter3">В</span>
                                     <span class="draggable-list__letter10">И</span>
                                     <span class="draggable-list__letter1">к</span>
-                                </div>
                             </div>
                             <div class="draggable-list__letters" id="letters-9">
-                                <div class="draggable-list__word9">
-                                    <span class="draggable-list__letter6">К</span>
-                                    <span class="draggable-list__letter5">О</span>
-                                    <span class="draggable-list__letter3">С</span>
-                                    <span class="draggable-list__letter10">Т</span>
-                                    <span class="draggable-list__letter9">ч</span>
-                                </div>
+                                <span class="draggable-list__letter6">К</span>
+                                <span class="draggable-list__letter5">О</span>
+                                <span class="draggable-list__letter3">С</span>
+                                <span class="draggable-list__letter10">Т</span>
+                                <span class="draggable-list__letter9">ч</span>
                             </div>
                             <div class="draggable-list__letters" id="letters-10">
-                                <div class="draggable-list__word10">
-                                    <span class="draggable-list__letter10">Т</span>
-                                    <span class="draggable-list__letter8">о</span>
-                                    <span class="draggable-list__letter3">П</span>
-                                    <span class="draggable-list__letter5">Л</span>
-                                    <span class="draggable-list__letter1">к</span>
-                                    <span class="draggable-list__letter7">А</span>
-                                </div>
+                                <span class="draggable-list__letter10">Т</span>
+                                <span class="draggable-list__letter8">о</span>
+                                <span class="draggable-list__letter3">П</span>
+                                <span class="draggable-list__letter5">Л</span>
+                                <span class="draggable-list__letter1">к</span>
+                                <span class="draggable-list__letter7">А</span>
                             </div>
                         </div>
                     </div>
@@ -249,6 +231,53 @@ const hide = () => {
 };
 
 const isActive = true;
+
+
+// Для постройки домика мы
+// возьмем ветки дощечку 
+// веник скотч платок
+
+const data = 
+{
+    1: {
+        1: [{classid: 1, text: 'Я'}, {classid: 2, text: 'Л'}, {classid: 3, text: 'Д'}],
+        2: [{classid: 1, text: 'К'}, {classid: 4, text: 'И'}, {classid: 3, text: 'П'},  {classid: 5, text: 'С'}, {classid: 6, text: 'О'}, {classid: 7, text: 'Т'}, {classid: 8, text: 'о'}, {classid: 9, text: 'й'}, {classid: 10, text: 'Р'}],
+        3: [[6, 'О'], [5, 'М'], [3, 'Д'], [7, 'И'], [7, 'к'], [9, 'а']],
+        4: [[2, 'М'], [3, 'Ы']],
+        5: [[10, 'М'], [7, 'ё'], [3, 'В'], [6, 'О'], [9, 'м'], [5, 'З'], [7, 'Ь']]
+    },
+    2: {
+        1: {1: 'в', 2: 'о', 3: 'з', 4: 'ь', 5: 'м', 6: 'ё', 7: 'м'},
+        2: {1: 'в', 2: 'е', 3: 'т', 4: 'к', 5: 'и'},
+        3: {1: 'д', 2: 'о', 3: 'щ', 4: 'е', 5: 'ч', 6: 'к', 7: 'у'}
+    },
+    3: {
+        1: {1: 'в', 2: 'е', 3: 'н', 4: 'и', 5: 'к'},
+        2: {1: 'с', 2: 'к', 3: 'о', 4: 'т', 5: 'ч'},
+        3: {1: 'п', 2: 'л', 3: 'а', 4: 'т', 5: 'о', 6: 'к'}
+    }
+}
+
+const answer = 
+{
+    1: {
+        1: {1: 'Д', 2: 'л', 3: 'я'},
+        2: {1: 'п', 2: 'о', 3: 'с', 4: 'т', 5: 'р', 6: 'о', 7: 'й', 8: 'к', 9: 'и'},
+        3: {1: 'д', 2: 'о', 3: 'м', 4: 'и', 5: 'к', 6: 'а'},
+        4: {1: 'м', 2: 'ы'}
+    },
+    2: {
+        1: {1: 'в', 2: 'о', 3: 'з', 4: 'ь', 5: 'м', 6: 'ё', 7: 'м'},
+        2: {1: 'в', 2: 'е', 3: 'т', 4: 'к', 5: 'и'},
+        3: {1: 'д', 2: 'о', 3: 'щ', 4: 'е', 5: 'ч', 6: 'к', 7: 'у'}
+    },
+    3: {
+        1: {1: 'в', 2: 'е', 3: 'н', 4: 'и', 5: 'к'},
+        2: {1: 'с', 2: 'к', 3: 'о', 4: 'т', 5: 'ч'},
+        3: {1: 'п', 2: 'л', 3: 'а', 4: 'т', 5: 'о', 6: 'к'}
+    }
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -304,14 +333,20 @@ const isActive = true;
 }
 
 .draggable-list__letters {
+    padding: 16px 13px;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 60px;
     border-radius: 6px;
     background-color: $puppe;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
     @media (max-width: 1024px) {
         height: 52px;
+        padding: 9px 13px;
     }
 }
 

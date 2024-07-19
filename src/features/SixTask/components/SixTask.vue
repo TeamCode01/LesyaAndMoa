@@ -1,7 +1,7 @@
 <template>
     <div class="SixTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="usedWord.length < 15">
+            <template v-if="usedWord.length < 5">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -51,7 +51,7 @@
                 </div>
             </template>
             <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Здорово!"
-            v-if="usedWord.length >= 15" @hide="hide()"></TaskResultBanner>
+            v-if="usedWord.length >= 5" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -62,7 +62,9 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
+import { tasksData } from './tasks'
 import dict from './dict'
+
 
 const emit = defineEmits(['close']);
 const props = defineProps({
@@ -85,12 +87,8 @@ const dictKeys = dict.keys().toArray() // Массив разрешенных з
 
 let legalWords = []
 
-const taskData  =  [[' ','А','Я','У','Ю','О','Ё','Э','Е','Ы','И'],
-                    ['Б',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-                    ['В',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-                    ['Г',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-                    ['Д',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-                    ['Ж',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']]
+const taskData = tasksData[Math.floor(tasksData.length * Math.random())]
+
 
 for (let row = 1; row in taskData; row++){
     for (let column = 1; column in taskData[row]; column++){
@@ -124,7 +122,6 @@ const randomMusic = ()=>{
 
 
     usedWord.value.push(item)
-    console.log(usedWord.value)
 
     repeated.value = false
 }
@@ -148,13 +145,12 @@ const clickItem = (word)=>{
     else {
         let reactionAudio = new Audio(`/assets/audio/Task6/wrong.${Math.ceil(Math.random()*3)}.mp3`)
         reactionAudio.play()
-        console.log('неверно')
     }
     selectedWord.value = word
     setTimeout(()=>{
         selectedWord.value = ''
         if (word == taskWord.value) randomMusic()
-    }, 1000)
+    }, 2000)
 }
 
 </script>
