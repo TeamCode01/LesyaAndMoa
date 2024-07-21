@@ -1,7 +1,7 @@
 <template>
     <div class="SeventhTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="true">
+            <template v-if="startGame">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -17,73 +17,22 @@
                 </div>
                 <div class="draggable-list">
                     <div class="draggable-list__words">
-                        <div class="draggable-list__word-container">
-                            <div class="draggable-list__word" v-if="false">КОНЬ</div>
-                            <div class="draggable-list__word" v-if="true">СЕЛ</div>
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                        </div>
-                        <div class="draggable-list__word-container">
-                            <div class="draggable-list__word" v-if="false">ТОПЬ</div>
-                            <div class="draggable-list__word" v-if="true">СЪЕЛ</div>
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                        </div>
-                        <div class="draggable-list__word-container">
-                            <div class="draggable-list__word" v-if="false">ТОП</div>
-                            <div class="draggable-list__word" v-if="true">МЕЛ</div>
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                        </div>
-                        <div class="draggable-list__word-container">
-                            <div class="draggable-list__word" v-if="false">КОН</div>
-                            <div class="draggable-list__word" v-if="true">МЕЛЬ</div>
+                        <div class="draggable-list__word-container" v-for="(word, word_index) in words[option]" :key="word_index">
+                            <div class="draggable-list__word">{{ word.word }}</div>
                             <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
                         </div>
                     </div>
                     <div class="draggable-list__sentences">
-                        <div class="draggable-list__sentence-container">
+                        <div class="draggable-list__sentence-container" v-for="(sentence, sentence_index) in sentences[option]" :key="sentence_index">
                             <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                            <div class="draggable-list__sentence" v-if="false">одна партия какой-либо игры</div>
-                            <div class="draggable-list__sentence" v-if="true">принял пищу, покушал</div>
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                        </div>
-                        <div class="draggable-list__sentence-container">
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                            <div class="draggable-list__sentence" v-if="false">лёгкая женская одежда для верхней половины тела</div>
-                            <div class="draggable-list__sentence" v-if="true">принял положение сидя</div>
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                        </div>
-                        <div class="draggable-list__sentence-container">
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                            <div class="draggable-list__sentence" v-if="false">топкое, болотистое место</div>
-                            <div class="draggable-list__sentence" v-if="true">неглубокое место в реке, озере или в море</div>
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                        </div>
-                        <div class="draggable-list__sentence-container">
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                            <div class="draggable-list__sentence" v-if="false">то же, что лошадь, вьючное животное</div>
-                            <div class="draggable-list__sentence" v-if="true">белый известняк для окраски, писания (на доске)</div>
+                            <div class="draggable-list__sentence">{{ sentence.sentence }}</div>
                             <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
                         </div>
                     </div>
                     <div class="draggable-list__pictures">
-                        <div class="draggable-list__picture-container">
+                        <div class="draggable-list__picture-container" v-for="(img, img_index) in images[option]" :key="img_index">
                             <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                            <img v-if="false" src="assets/creatures/SeventhTask/girl's-top.png" alt="girl's-top" class="draggable-list__image">
-                            <img v-if="true" src="assets/creatures/SeventhTask/chalk.png" alt="chalk" class="draggable-list__image">
-                        </div>
-                        <div class="draggable-list__picture-container">
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                            <img v-if="false" src="assets/creatures/SeventhTask/chess.png" alt="chess" class="draggable-list__image">
-                            <img v-if="true" src="assets/creatures/SeventhTask/shallow.png" alt="shallow" class="draggable-list__image">
-                        </div>
-                        <div class="draggable-list__picture-container">
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                            <img v-if="false" src="assets/creatures/SeventhTask/horse.png" alt="horse" class="draggable-list__image">
-                            <img v-if="true" src="assets/creatures/SeventhTask/food.png" alt="food" class="draggable-list__image">
-                        </div>
-                        <div class="draggable-list__picture-container">
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
-                            <img v-if="false" src="assets/creatures/SeventhTask/swamp.png" alt="swamp" class="draggable-list__image">
-                            <img v-if="true" src="assets/creatures/SeventhTask/sit.png" alt="sit" class="draggable-list__image">
+                            <img :src="img.url" class="draggable-list__image">
                         </div>
                     </div>
                 </div>
@@ -95,7 +44,7 @@
                 />
             </template>
             <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/lesya.gif" text="Далее!"
-            v-if="false" @hide="hide()"></TaskResultBanner>
+            v-else @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -105,6 +54,143 @@ import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+
+const startGame = ref(true);
+
+const option = ref(1);
+
+const words = ref({
+    1:{
+        1: {
+            word: 'КОНЬ',
+            audio: '/assets/audio/Task7/262.7.mp3',
+            correct: null,
+        },
+        2: {
+            word: 'ТОПЬ',
+            audio: '/assets/audio/Task7/263.7.mp3',
+            correct: null,
+        },
+        3: {
+            word: 'ТОП',
+            audio: '/assets/audio/Task7/264.7.mp3',
+            correct: null,
+        },
+        4: {
+            word: 'КОН',
+            audio: '/assets/audio/Task7/265.7.mp3',
+            correct: null,
+        },
+    },
+    2:{
+        1: {
+            word: 'СЕЛ',
+            audio: '/assets/audio/Task7/270.7.mp3',
+            correct: null,
+        },
+        2: {
+            word: 'СЪЕЛ',
+            audio: '/assets/audio/Task7/271.7.mp3',
+            correct: null,
+        },
+        3: {
+            word: 'МЕЛ',
+            audio: '/assets/audio/Task7/272.7.mp3',
+            correct: null,
+        },
+        4: {
+            word: 'МЕЛЬ',
+            audio: '/assets/audio/Task7/273.7.mp3',
+            correct: null,
+        },
+    },
+})
+
+const sentences = ref({
+    1:{
+        1: {
+            sentence: 'одна партия какой-либо игры',
+            audio: '/assets/audio/Task7/266.7.mp3',
+            correct: null,
+        },
+        2: {
+            sentence: 'легкая женская одежда для верхней половины тела',
+            audio: '/assets/audio/Task7/267.7.mp3',
+            correct: null,
+        },
+        3: {
+            sentence: 'топкое, болотистое место',
+            audio: '/assets/audio/Task7/268.7.mp3',
+            correct: null,
+        },
+        4: {
+            sentence: 'то же, что лошадь, вьючное животное',
+            audio: '/assets/audio/Task7/269.7.mp3',
+            correct: null,
+        },
+    },
+    2:{
+        1: {
+            sentence: 'принял пищу, покушал',
+            audio: '/assets/audio/Task7/275.7.mp3',
+            correct: null,
+        },
+        2: {
+            sentence: 'принял положение сидя',
+            audio: '/assets/audio/Task7/274.7.mp3',
+            correct: null,
+        },
+        3: {
+            sentence: 'неглубокое место в реке, озере или в море',
+            audio: '/assets/audio/Task7/277.7.mp3',
+            correct: null,
+        },
+        4: {
+            sentence: 'белый известняк для окраски, писания (на доске)',
+            audio: '/assets/audio/Task7/276.7.mp3',
+            correct: null,
+        },
+    },
+}) 
+
+const images = ref({
+    1:{
+        1: {
+            url: "assets/creatures/SeventhTask/girl's-top.png",
+            correct: null,
+        },
+        2: {
+            url: "assets/creatures/SeventhTask/chess.png",
+            correct: null,
+        },
+        3: {
+            url: "assets/creatures/SeventhTask/horse.png",
+            correct: null,
+        },
+        4: {
+            url: "assets/creatures/SeventhTask/swamp.png",
+            correct: null,
+        },
+    },
+    2:{
+        1: {
+            url: "assets/creatures/SeventhTask/chalk.png",
+            correct: null,
+        },
+        2: {
+            url: "assets/creatures/SeventhTask/shallow.png",
+            correct: null,
+        },
+        3: {
+            url: "assets/creatures/SeventhTask/food.png",
+            correct: null,
+        },
+        4: {
+            url: "assets/creatures/SeventhTask/sit.png",
+            correct: null,
+        },
+    },
+})
 
 const emit = defineEmits(['close']);
 const props = defineProps({
