@@ -122,7 +122,6 @@ onMounted(() => {
       position: absolute;
       top: 15px;
       right: 16px;
-
     }
   }
 }

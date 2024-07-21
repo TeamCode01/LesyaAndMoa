@@ -161,7 +161,7 @@ onMounted(() => {
     top: 0;
     right: 0;
     background-color: #F1FAFE;
-    overflow: hidden;
+    z-index: 1;
 }
 
 .icon {

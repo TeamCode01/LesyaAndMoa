@@ -16,26 +16,28 @@
                     </p>
                 </div>
                 <div class="draggable-list">
-                    <div class="draggable-list__words" v-if="countAnswers">
-                        <div v-for="answer in correctAnswers" :key="answer.id">
-                            <div class="draggable-list__word" v-if="answer.text">
-                                <p class="draggable-list__word-text" >{{ answer.text }}</p>
+                    <div class="draggable-list__column">
+                        <div class="draggable-list__words" v-if="countAnswers">
+                            <div v-for="answer in correctAnswers" :key="answer.id" class="draggable-list__words-container">
+                                <div class="draggable-list__word" v-if="answer.text">
+                                    <p class="draggable-list__word-text" >{{ answer.text }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="draggable-list__steps-wrapper">
-                        <div class="draggable-list__steps">
-                            <div class="draggable-list__step" v-for="(syllable, syllable_index) in syllables[1]" :key="syllable.id">
-                                <q-btn
-                                    :class="{'draggable-list__step-button': !syllable.hidden, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false}" 
-                                    :draggable="draggable"
-                                    @dragstart="drag($event, syllable, 1)" 
-                                    @dragover.prevent
-                                    @click="clickText(syllable)"
-                                    :value="syllable.text">
-                                    {{ syllable.text }}
-                                </q-btn>
-                                <div class="draggable-list__substep" :id="syllable.id_class"></div>
+                        <div class="draggable-list__steps-wrapper">
+                            <div class="draggable-list__steps">
+                                <div class="draggable-list__step" v-for="(syllable, syllable_index) in syllables[1]" :key="syllable.id">
+                                    <q-btn
+                                        :class="{'draggable-list__step-button': !syllable.hidden, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false}" 
+                                        :draggable="draggable"
+                                        @dragstart="drag($event, syllable, 1)" 
+                                        @dragover.prevent
+                                        @click="clickText(syllable)"
+                                        :value="syllable.text">
+                                        {{ syllable.text }}
+                                    </q-btn>
+                                    <div class="draggable-list__substep" :id="syllable.id_class"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -391,6 +393,7 @@ const hide = () => {
     display: none;
 }
 .answer{
+    text-align: center;
     width: 70px;
     height: 70px;
 }
@@ -415,16 +418,35 @@ const hide = () => {
     }
 }
 
-
 .draggable-list {
     display: flex;
     justify-content: space-between;
     width: 1100px;
-    height: 434px;
+    height: 468px;
     @media (max-width: 1024px) {
         width: 854px;
         height: 325px;  
     }
+}
+
+.draggable-list__column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.draggable-list__words-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 134px;
+    height: 40px;
+    border-radius: 6px;
+    @media (max-width: 1024px) {
+        width: 120px;
+        height: 28px;
+    }
+
 }
 
 .draggable-list__words {
@@ -432,12 +454,14 @@ const hide = () => {
     padding: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    width: 134px;
-    height: 376px;
+    flex-wrap: wrap;
+    width: 276px;
+    height: 184px;
+    gap: 8px;
     @media (max-width: 1024px) {
-        width: 120px;
-        height: 266px;
+        gap: 6px;
+        width: 246px;
+        height: 130px;
     }
 }
 
@@ -702,6 +726,9 @@ const hide = () => {
 }
 
 .draggable-list__right-answer-square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     min-width: 70px;
     height: 70px;
     border-radius: 6px;
