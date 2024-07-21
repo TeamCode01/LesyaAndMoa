@@ -1,13 +1,14 @@
 <template>
     <div class="main">
         <div class="main__wrapper">
-            <h1 class="title main__title">
-                Учимся играя. Игры для детей с дислексией
-            </h1>
-            <p class="text main__text">
-                Интерактивные задания и увлекательные сценарии помогают
-                развивать ключевые навыки чтения и письма
-            </p>
+            <div class="main__wrapper-text">
+                <h1 class="title main__title">
+                    Учимся, играя. Тренируем навыки чтения и письма.
+                </h1>
+                <p class="text main__text">
+                    Увлекательное приключение с интерактивными заданиями для профилактики и коррекции дислексии
+                </p>
+            </div>
             <router-link to="Registration" class="link">
                 <Button label="Зарегистрироваться" class="btn_primary main__btn"></Button></router-link>
         </div>
@@ -255,6 +256,9 @@ onMounted(() => {
 </script>
 <style lang="scss" scoped>
 .main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-top: 20px;
     height: 600px;
     position: relative;
@@ -262,18 +266,27 @@ onMounted(() => {
     background-size: cover;
 
     &__wrapper {
-        position: absolute;
-        top: 25%;
-        left: 25%;
-        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 452px;
+        margin: 0 auto;
+        min-width: 500px;
+        background-color: rgba(255, 255, 255, .8);
+        border-radius: 25%;
+        @media (max-width: 1024px) {
+            min-width: 446px;
+            height: 402px;
+        }
     }
 
     &__title {
         font-family: 'Nunito', sans-serif;
-        font-size: 50px;
+        font-size: 32px;
         font-weight: 500;
         color: $text-primary;
-        max-width: 563px;
+        max-width: 368px;
         line-height: 50px;
         text-align: center;
         margin: 0px auto;
@@ -282,7 +295,7 @@ onMounted(() => {
     &__text {
         text-align: center;
         font-weight: 400;
-        max-width: 483px;
+        max-width: 368px;
         margin: 16px auto;
     }
 
@@ -290,6 +303,10 @@ onMounted(() => {
         padding: 12px 104px;
         margin: 40px auto;
         margin-bottom: 0px;
+        max-width: 368px;
+        @media (max-width: 1024px) {
+            min-width: 372px;
+        }
     }
 }
 
@@ -361,6 +378,13 @@ onMounted(() => {
             font-family: 'Nunito';
             margin-top: 40px;
             max-width: 280px;
+        }
+
+        &-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
         }
 
         &_btn {

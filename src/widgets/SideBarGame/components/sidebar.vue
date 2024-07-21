@@ -11,22 +11,24 @@
                         v-else-if="item.disabled === true && item.done === false" src="@app/assets/icons/block.svg" />
                 </div>
             </div>
-            <FirstTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 1"></FirstTask>
-            <SecondTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 2"></SecondTask>
-            <ThirdTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 3"></ThirdTask>
-            <FourthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 4"></FourthTask>
-            <FifthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 5"></FifthTask>
-            <SeventhTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 7"></SeventhTask>
-            <EighthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 8"></EighthTask>
-            <TenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 10"></TenthTask>
-            <ThirteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 13"></ThirteenthTask>
-            <FourteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 14"></FourteenthTask>
-            <SixteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 16"></SixteenthTask>
-            <SeventeenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 17"></SeventeenthTask>
-            <EighteenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 18"></EighteenTask>
-            <NineTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 9"></NineTask>
-            <ElevenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 11"></ElevenTask>
-            <TwelfthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 12"></TwelfthTask>
+            <div class="modal_background" v-if="SeeTask">
+                <FirstTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 1"></FirstTask>
+                <SecondTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 2"></SecondTask>
+                <ThirdTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 3"></ThirdTask>
+                <FourthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 4"></FourthTask>
+                <FifthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 5"></FifthTask>
+                <SeventhTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 7"></SeventhTask>
+                <EighthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 8"></EighthTask>
+                <TenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 10"></TenthTask>
+                <ThirteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 13"></ThirteenthTask>
+                <FourteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 14"></FourteenthTask>
+                <SixteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 16"></SixteenthTask>
+                <SeventeenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 17"></SeventeenthTask>
+                <EighteenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 18"></EighteenTask>
+                <NineTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 9"></NineTask>
+                <ElevenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 11"></ElevenTask>
+                <TwelfthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 12"></TwelfthTask>
+            </div>
         </div>
 
         <Button class="start" label="Старт" :is-image="true" :image="arrow" @click="openTask(taskId)"></Button>
@@ -152,6 +154,16 @@ onMounted(() => {
 
 </script>
 <style lang="scss" scoped>
+.modal_background {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    right: 0;
+    background-color: #F1FAFE;
+    overflow: hidden;
+}
+
 .icon {
     height: 8px;
     width: 10px;
