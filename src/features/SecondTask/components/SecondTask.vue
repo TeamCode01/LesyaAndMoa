@@ -21,8 +21,8 @@
         </div>
     </template>
 
-    <TaskResultBanner :is-test="false" img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/Moa.png" text="Так держать!"
-        v-if="show === true" @hide="hideModal"></TaskResultBanner>
+    <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!"
+            v-else @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -84,6 +84,11 @@ const chooseTask = (event, status) => {
 }
 </script>
 <style lang="scss" scoped>
+.end-modal {
+    width: 1200px;
+    height: 600px;
+}
+
 .green {
     border: 2px solid green;
 }

@@ -1,5 +1,6 @@
 <template>
     <div class="main">
+        <img src="@app/assets/backgrounds/main-bg.jpg" alt="main-bg" class="main__bg">
         <div class="main__wrapper">
             <div class="main__wrapper-text">
                 <h1 class="title main__title">
@@ -17,10 +18,12 @@
         <p class="title-h2 Test__title">Тестовое задание</p>
         <div class="wrap" id="test">
             <div class="Test__wrapper">
-                <p class="Test__wrapper_title">Дорогие друзья!</p>
-                <p class="Test__wrapper_text">Мы услышали речь увиденных нами странных героев. Но как нам понять друг
-                    друга? Пройди задание и
-                    присоединяйся к тем, кто помогает инопланетянам понять нас. </p>
+                <div>
+                    <p class="Test__wrapper_title">Дорогие друзья!</p>
+                    <p class="Test__wrapper_text">Мы услышали речь увиденных нами странных героев. Но как нам понять друг
+                        друга? Пройди задание и
+                        присоединяйся к тем, кто помогает инопланетянам понять нас. </p>
+                </div>
                 <Button @click="openTest()" class="Test__wrapper_btn" :isImage="true" :image="arrow"
                     label="Начать"></Button>
             </div>
@@ -262,8 +265,22 @@ onMounted(() => {
     margin-top: 20px;
     height: 600px;
     position: relative;
-    background-image: url('@app/assets/backgrounds/main-bg.jpg');
-    background-size: cover;
+
+    &__bg {
+        position: absolute;
+        width: 1200px;
+        height: 600px;
+        z-index: -1;
+
+        @media (max-width: 1440px) {
+            width: 960px;
+        }
+
+        @media (max-width: 1024px) {
+            width: 944px;
+            height: 500px;
+        }
+    }
 
     &__wrapper {
         display: flex;
@@ -311,6 +328,9 @@ onMounted(() => {
 }
 
 .Test {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding-top: 100px;
     position: relative;
 
@@ -327,13 +347,20 @@ onMounted(() => {
         }
 
         &_wrap {
+            min-width: 136px;
+
             display: flex;
             column-gap: 8px;
             align-items: center;
             position: absolute;
             top: 15px;
             right: 50px;
-
+            @media (max-width: 1440px) {
+                left: 800px;
+            }
+            @media (max-width: 1024px) {
+                left: 780px;
+            }
         }
     }
 
@@ -348,23 +375,24 @@ onMounted(() => {
     }
 
     &__img {
-        img {
-            height: 580px;
+        height: 580px;
 
-            @media (max-width: 1024px) {
-                height: 470px;
-                max-width: 565px;
-                width: 100%;
-            }
+        @media (max-width: 1024px) {
+            height: 470px;
+            max-width: 565px;
+            width: 100%;
         }
     }
 
     &__wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         background-color: #FAE6F2;
         border-radius: 20px 0px 0px 20px;
         height: 580px;
         padding: 40px 40px 90px 40px;
-
+        height: 600px;
         &_title {
             font-size: 32px;
             font-family: 'Nunito';
@@ -388,7 +416,6 @@ onMounted(() => {
         }
 
         &_btn {
-            margin-top: 200px;
             max-width: 280px;
             width: 100%;
             height: 56px;
@@ -409,6 +436,14 @@ onMounted(() => {
 .wrap {
     display: flex;
     position: relative;
+    width: 1200px;
+    @media (max-width: 1440px) {
+            width: 960px;
+        }
+
+        @media (max-width: 1024px) {
+            width: 944px;
+        }
 }
 
 .about {
@@ -427,7 +462,11 @@ onMounted(() => {
         position: relative;
         display: flex;
         justify-content: center;
-        column-gap: 20px;
+        gap: 20px;
+        @media (max-width: 1024px) {
+            flex-direction: column;
+            align-items: center;  
+        }
 
         &-item {
             background-color: $light-green;
@@ -463,6 +502,9 @@ onMounted(() => {
         &-icon {
             position: absolute;
             top: 44%;
+            @media (max-width: 1024px) {
+                transform: rotate(90deg);
+        }
         }
     }
 }

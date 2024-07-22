@@ -12,21 +12,23 @@
                     </p>
                 </div>
 
-                <div class="draggable-list">
-                    <q-btn v-for="(item, index) in words" :key="item.id" :id="item.id + '_elem'"
-                        class="list-group-item item" draggable="true"
-                        @dragstart="drag($event, item.name, item.id, item.audio, index)" @dragover.prevent
-                        :value="item.name">
-                        {{ item.name }}
-                    </q-btn>
+                <div class="draggable-list__wrapper">
+                    <div class="draggable-list">
+                        <q-btn v-for="(item, index) in words" :key="item.id" :id="item.id + '_elem'"
+                            class="list-group-item item" draggable="true"
+                            @dragstart="drag($event, item.name, item.id, item.audio, index)" @dragover.prevent
+                            :value="item.name">
+                            {{ item.name }}
+                        </q-btn>
+                    </div>
+                    <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
+                        class="FirstTask__wrapper_answer" />
                 </div>
-                <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
-                    class="FirstTask__wrapper_answer" />
             </div>
         </div>
     </template>
-    <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png" text="Отлично!"
-        v-if="show === true" @hide="hideModal"></TaskResultBanner>
+    <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!"
+            v-else @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 
 <script setup>
@@ -141,6 +143,11 @@ const allowDrop = (event) => {
 };
 </script>
 <style lang="scss" scoped>
+.end-modal {
+    width: 1200px;
+    height: 600px;
+}
+
 .red {
     border: 2px solid red !important;
 }
@@ -158,10 +165,37 @@ const allowDrop = (event) => {
     width: 100%;
     max-width: 1020px;
     margin: 48px auto;
+    max-height: 240px;
+
+    @media (max-width: 1130px) {
+        column-gap: 70px;
+        row-gap: 30px;
+        max-height: 194px;
+    }
+
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 500px;
+
+        @media (max-width: 1130px) {
+        width: 904px;
+        // height: 322px;
+        }
+        @media (max-width: 1024px) {
+        
+        height: 322px;
+        }
+    }
+
+    
 }
 
 .FirstTask {
     &__wrapper {
+        display: flex;
+        flex-direction: column;
         padding: 30px 60px 67px 60px;
         position: relative;
         height: 600px;
@@ -195,13 +229,17 @@ const allowDrop = (event) => {
             font-weight: 700;
             font-family: 'Nunito', sans-serif;
             border-radius: 20px;
-            margin-top: 20px;
+            // margin-top: 20px;
             border: none;
             text-shadow: 0 0 0 black;
             outline: none;
             resize: none;
             overflow-y: hidden;
             height: 100px;
+
+            @media(max-width:1024px) {
+                min-height: 80px;
+            }
         }
     }
 }
