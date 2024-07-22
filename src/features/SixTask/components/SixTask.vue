@@ -94,8 +94,8 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
-import { tasksData } from './tasks';
-import dict from './dict';
+import { tasksData } from './tasks.js';
+import dict from './dict.js';
 
 const emit = defineEmits(['close']);
 const props = defineProps({
@@ -114,7 +114,7 @@ onMounted(() => {
     randomMusic();
 });
 
-const dictKeys = dict.keys().toArray(); // Массив разрешенных значений
+const dictKeys = Array.from(dict.keys()); // Массив разрешенных значений
 
 let legalWords = [];
 
