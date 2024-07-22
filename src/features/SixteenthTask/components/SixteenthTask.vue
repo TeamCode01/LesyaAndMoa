@@ -108,7 +108,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
@@ -124,6 +124,7 @@ const props = defineProps({
 });
 const hide = () => {
     emit('close');
+    resetTask();
 };
 
 const isActive = true;
@@ -147,29 +148,21 @@ const dropLetterNew = (event, wordID, letterID) => {
     if (wordID == dragwordID) {
         if (letterID == dragletterID) {
             answerArray.value.map((string) => {
-                return (
-                    string.id,
-                    string.string.map((word) => {
-                        if (word.wordid == wordID)
-                            word.word.map((letter) => {
-                                if (letter.id == letterID)
-                                    letter.isActive = true;
-                            });
-                    })
-                );
+                string.string.map((word) => {
+                    if (word.wordid == wordID)
+                        word.word.map((letter) => {
+                            if (letter.id == letterID) letter.isActive = true;
+                        });
+                });
             });
 
             taskArray.value.map((string) => {
-                return (
-                    string.id,
-                    string.string.map((word) => {
-                        if (word.wordid == wordID)
-                            word.word.map((letter) => {
-                                if (letter.id == letterID)
-                                    letter.isActive = false;
-                            });
-                    })
-                );
+                string.string.map((word) => {
+                    if (word.wordid == wordID)
+                        word.word.map((letter) => {
+                            if (letter.id == letterID) letter.isActive = false;
+                        });
+                });
             });
 
             let reactionAudio = new Audio(
@@ -209,6 +202,26 @@ const dropLetterNew = (event, wordID, letterID) => {
             );
         }, 2000);
     }
+};
+
+const resetTask = () => {
+    answerArray.value.map((string) => {
+        string.string.map((word) => {
+            word.word.map((letter) => {
+                letter.isActive = false;
+            });
+        });
+    });
+
+    taskArray.value.map((string) => {
+        string.string.map((word) => {
+            word.word.map((letter) => {
+                letter.isActive = true;
+            });
+        });
+    });
+
+    answersCounter.value = 0;
 };
 </script>
 
