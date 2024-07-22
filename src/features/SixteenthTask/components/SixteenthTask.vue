@@ -1,7 +1,7 @@
 <template>
     <div class="SixteenthTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="true">
+            <template v-if="answersCounter < 55">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -20,180 +20,775 @@
                     <div class="draggable-list__items">
                         <div class="draggable-list__item1">
                             <div class="draggable-list__letters" id="letters-1">
-                                <span class="draggable-list__letter1">Я</span>
-                                <span class="draggable-list__letter2">Л</span>
-                                <span class="draggable-list__letter3">Д</span>
+                                <span
+                                    class="draggable-list__letter1"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 1)"
+                                    >Я</span
+                                >
+                                <span
+                                    class="draggable-list__letter2"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 1)"
+                                    >Л</span
+                                >
+                                <span
+                                    class="draggable-list__letter3"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 1)"
+                                    >Д</span
+                                >
                             </div>
                             <div class="draggable-list__letters" id="letters-2">
-                                <span class="draggable-list__letter1">К</span>
-                                <span class="draggable-list__letter4">И</span>
-                                <span class="draggable-list__letter3">П</span>
-                                <span class="draggable-list__letter5">С</span>
-                                <span class="draggable-list__letter6">О</span>
-                                <span class="draggable-list__letter7">Т</span>
-                                <span class="draggable-list__letter8">о</span>
-                                <span class="draggable-list__letter9">й</span>
-                                <span class="draggable-list__letter10">Р</span>
+                                <span
+                                    class="draggable-list__letter1"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 2)"
+                                    >К</span
+                                >
+                                <span
+                                    class="draggable-list__letter4"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 2)"
+                                    >И</span
+                                >
+                                <span
+                                    class="draggable-list__letter3"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 2)"
+                                    >П</span
+                                >
+                                <span
+                                    class="draggable-list__letter5"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 2)"
+                                    >С</span
+                                >
+                                <span
+                                    class="draggable-list__letter6"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 2)"
+                                    >О</span
+                                >
+                                <span
+                                    class="draggable-list__letter7"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 2)"
+                                    >Т</span
+                                >
+                                <span
+                                    class="draggable-list__letter8"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 2)"
+                                    >о</span
+                                >
+                                <span
+                                    class="draggable-list__letter9"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 2)"
+                                    >й</span
+                                >
+                                <span
+                                    class="draggable-list__letter10"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 2)"
+                                    >Р</span
+                                >
                             </div>
                             <div class="draggable-list__letters" id="letters-3">
-
-                                <span class="draggable-list__letter6">О</span>
-                                <span class="draggable-list__letter5">М</span>
-                                <span class="draggable-list__letter3">Д</span>
-                                <span class="draggable-list__letter7">И</span>
-                                <span class="draggable-list__letter7">к</span>
-                                <span class="draggable-list__letter9">а</span>
-
+                                <span
+                                    class="draggable-list__letter6"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 3)"
+                                    >О</span
+                                >
+                                <span
+                                    class="draggable-list__letter5"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 3)"
+                                    >М</span
+                                >
+                                <span
+                                    class="draggable-list__letter3"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 3)"
+                                    >Д</span
+                                >
+                                <span
+                                    class="draggable-list__letter7"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 3)"
+                                    >И</span
+                                >
+                                <span
+                                    class="draggable-list__letter7"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 3)"
+                                    >к</span
+                                >
+                                <span
+                                    class="draggable-list__letter9"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 3)"
+                                    >а</span
+                                >
                             </div>
                             <div class="draggable-list__letters" id="letters-4">
-                                <span class="draggable-list__letter2">Ы</span>
-                                <span class="draggable-list__letter3">М</span>
+                                <span
+                                    class="draggable-list__letter2"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 4)"
+                                    >Ы</span
+                                >
+                                <span
+                                    class="draggable-list__letter3"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 4)"
+                                    >М</span
+                                >
                             </div>
                             <div class="draggable-list__letters" id="letters-5">
-                                <span class="draggable-list__letter10">М</span>
-                                <span class="draggable-list__letter7">ё</span>
-                                <span class="draggable-list__letter3">В</span>
-                                <span class="draggable-list__letter6">О</span>
-                                <span class="draggable-list__letter9">м</span>
-                                <span class="draggable-list__letter5">З</span>
-                                <span class="draggable-list__letter7">Ь</span>
+                                <span
+                                    class="draggable-list__letter10"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 5)"
+                                    >М</span
+                                >
+                                <span
+                                    class="draggable-list__letter7"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 5)"
+                                    >ё</span
+                                >
+                                <span
+                                    class="draggable-list__letter3"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 5)"
+                                    >В</span
+                                >
+                                <span
+                                    class="draggable-list__letter6"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 5)"
+                                    >О</span
+                                >
+                                <span
+                                    class="draggable-list__letter9"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 5)"
+                                    >м</span
+                                >
+                                <span
+                                    class="draggable-list__letter5"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 5)"
+                                    >З</span
+                                >
+                                <span
+                                    class="draggable-list__letter7"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 5)"
+                                    >Ь</span
+                                >
                             </div>
                         </div>
                         <div class="draggable-list__item2">
                             <div class="draggable-list__letters" id="letters-6">
-                                <span class="draggable-list__letter6">Е</span>
-                                <span class="draggable-list__letter7">Т</span>
-                                <span class="draggable-list__letter3">В</span>
-                                <span class="draggable-list__letter9">К</span>
-                                <span class="draggable-list__letter9">и</span>
+                                <span
+                                    class="draggable-list__letter6"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 6)"
+                                    >Е</span
+                                >
+                                <span
+                                    class="draggable-list__letter7"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 6)"
+                                    >Т</span
+                                >
+                                <span
+                                    class="draggable-list__letter3"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 6)"
+                                    >В</span
+                                >
+                                <span
+                                    class="draggable-list__letter9"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 6)"
+                                    >К</span
+                                >
+                                <span
+                                    class="draggable-list__letter9"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 6)"
+                                    >и</span
+                                >
                             </div>
                             <div class="draggable-list__letters" id="letters-7">
-                                <span class="draggable-list__letter6">О</span>
-                                <span class="draggable-list__letter8">к</span>
-                                <span class="draggable-list__letter9">у</span>
-                                <span class="draggable-list__letter5">Щ</span>
-                                <span class="draggable-list__letter7">Е</span>
-                                <span class="draggable-list__letter3">Д</span>
-                                <span class="draggable-list__letter10">Ч</span>
+                                <span
+                                    class="draggable-list__letter6"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 7)"
+                                    >О</span
+                                >
+                                <span
+                                    class="draggable-list__letter8"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 7)"
+                                    >к</span
+                                >
+                                <span
+                                    class="draggable-list__letter9"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 7)"
+                                    >у</span
+                                >
+                                <span
+                                    class="draggable-list__letter5"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 7)"
+                                    >Щ</span
+                                >
+                                <span
+                                    class="draggable-list__letter7"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 7)"
+                                    >Е</span
+                                >
+                                <span
+                                    class="draggable-list__letter3"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 7)"
+                                    >Д</span
+                                >
+                                <span
+                                    class="draggable-list__letter10"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 7)"
+                                    >Ч</span
+                                >
                             </div>
                             <div class="draggable-list__letters" id="letters-8">
-                                    <span class="draggable-list__letter6">Е</span>
-                                    <span class="draggable-list__letter5">Н</span>
-                                    <span class="draggable-list__letter3">В</span>
-                                    <span class="draggable-list__letter10">И</span>
-                                    <span class="draggable-list__letter1">к</span>
+                                <span
+                                    class="draggable-list__letter6"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 8)"
+                                    >Е</span
+                                >
+                                <span
+                                    class="draggable-list__letter5"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 8)"
+                                    >Н</span
+                                >
+                                <span
+                                    class="draggable-list__letter3"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 8)"
+                                    >В</span
+                                >
+                                <span
+                                    class="draggable-list__letter10"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 8)"
+                                    >И</span
+                                >
+                                <span
+                                    class="draggable-list__letter1"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 8)"
+                                    >к</span
+                                >
                             </div>
                             <div class="draggable-list__letters" id="letters-9">
-                                <span class="draggable-list__letter6">К</span>
-                                <span class="draggable-list__letter5">О</span>
-                                <span class="draggable-list__letter3">С</span>
-                                <span class="draggable-list__letter10">Т</span>
-                                <span class="draggable-list__letter9">ч</span>
+                                <span
+                                    class="draggable-list__letter6"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 9)"
+                                    >К</span
+                                >
+                                <span
+                                    class="draggable-list__letter5"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 9)"
+                                    >О</span
+                                >
+                                <span
+                                    class="draggable-list__letter3"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 9)"
+                                    >С</span
+                                >
+                                <span
+                                    class="draggable-list__letter10"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 9)"
+                                    >Т</span
+                                >
+                                <span
+                                    class="draggable-list__letter9"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 9)"
+                                    >ч</span
+                                >
                             </div>
-                            <div class="draggable-list__letters" id="letters-10">
-                                <span class="draggable-list__letter10">Т</span>
-                                <span class="draggable-list__letter8">о</span>
-                                <span class="draggable-list__letter3">П</span>
-                                <span class="draggable-list__letter5">Л</span>
-                                <span class="draggable-list__letter1">к</span>
-                                <span class="draggable-list__letter7">А</span>
+                            <div
+                                class="draggable-list__letters"
+                                id="letters-10"
+                            >
+                                <span
+                                    class="draggable-list__letter10"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 10)"
+                                    >Т</span
+                                >
+                                <span
+                                    class="draggable-list__letter8"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 10)"
+                                    >о</span
+                                >
+                                <span
+                                    class="draggable-list__letter3"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 10)"
+                                    >П</span
+                                >
+                                <span
+                                    class="draggable-list__letter5"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 10)"
+                                    >Л</span
+                                >
+                                <span
+                                    class="draggable-list__letter1"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 10)"
+                                    >к</span
+                                >
+                                <span
+                                    class="draggable-list__letter7"
+                                    draggable="true"
+                                    @dragstart="dragLetter($event, 10)"
+                                    >А</span
+                                >
                             </div>
                         </div>
                     </div>
                     <div class="draggable-list__containers">
                         <div class="draggable-list__container1">
                             <div class="draggable-list__subcontainer1">
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="Д"
+                                    @drop="dropLetter($event, 1)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="Л"
+                                    @drop="dropLetter($event, 1)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="Я"
+                                    @drop="dropLetter($event, 1)"
+                                    @dragover.prevent
+                                ></div>
                             </div>
                             <div class="draggable-list__subcontainer2">
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="П"
+                                    @drop="dropLetter($event, 2)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="О"
+                                    @drop="dropLetter($event, 2)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="С"
+                                    @drop="dropLetter($event, 2)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="Т"
+                                    @drop="dropLetter($event, 2)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="Р"
+                                    @drop="dropLetter($event, 2)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="О"
+                                    @drop="dropLetter($event, 2)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="Й"
+                                    @drop="dropLetter($event, 2)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="К"
+                                    @drop="dropLetter($event, 2)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="И"
+                                    @drop="dropLetter($event, 2)"
+                                    @dragover.prevent
+                                ></div>
                             </div>
                             <div class="draggable-list__subcontainer3">
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="Д"
+                                    @drop="dropLetter($event, 3)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="О"
+                                    @drop="dropLetter($event, 3)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="М"
+                                    @drop="dropLetter($event, 3)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="И"
+                                    @drop="dropLetter($event, 3)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="К"
+                                    @drop="dropLetter($event, 3)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="А"
+                                    @drop="dropLetter($event, 3)"
+                                    @dragover.prevent
+                                ></div>
                             </div>
                             <div class="draggable-list__subcontainer4">
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="М"
+                                    @drop="dropLetter($event, 4)"
+                                    @dragover.prevent
+                                ></div>
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    data-answer="Ы"
+                                    @drop="dropLetter($event, 4)"
+                                    @dragover.prevent
+                                ></div>
                             </div>
                         </div>
                         <div class="draggable-list__container2">
                             <div class="draggable-list__container2-1">
                                 <div class="draggable-list__subcontainer5">
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="В"
+                                        @drop="dropLetter($event, 5)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="О"
+                                        @drop="dropLetter($event, 5)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="З"
+                                        @drop="dropLetter($event, 5)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Ь"
+                                        @drop="dropLetter($event, 5)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="М"
+                                        @drop="dropLetter($event, 5)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Ё"
+                                        @drop="dropLetter($event, 5)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="М"
+                                        @drop="dropLetter($event, 5)"
+                                        @dragover.prevent
+                                    ></div>
                                 </div>
                                 <div class="draggable-list__subcontainer6">
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <img src="/assets/icons/comma.svg" alt="comma" v-if="false">
-                                    <img src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="true">
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="В"
+                                        @drop="dropLetter($event, 6)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Е"
+                                        @drop="dropLetter($event, 6)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Т"
+                                        @drop="dropLetter($event, 6)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="К"
+                                        @drop="dropLetter($event, 6)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="И"
+                                        @drop="dropLetter($event, 6)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <img
+                                        src="/assets/icons/comma.svg"
+                                        alt="comma"
+                                        v-if="false"
+                                    />
+                                    <img
+                                        src="/assets/icons/comma-blue.svg"
+                                        alt="comma-blue"
+                                        v-if="true"
+                                    />
                                 </div>
                                 <div class="draggable-list__subcontainer7">
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <img src="/assets/icons/comma.svg" alt="comma" v-if="false">
-                                    <img src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="true">
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Д"
+                                        @drop="dropLetter($event, 7)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="О"
+                                        @drop="dropLetter($event, 7)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Щ"
+                                        @drop="dropLetter($event, 7)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Е"
+                                        @drop="dropLetter($event, 7)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Ч"
+                                        @drop="dropLetter($event, 7)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="К"
+                                        @drop="dropLetter($event, 7)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="У"
+                                        @drop="dropLetter($event, 7)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <img
+                                        src="/assets/icons/comma.svg"
+                                        alt="comma"
+                                        v-if="false"
+                                    />
+                                    <img
+                                        src="/assets/icons/comma-blue.svg"
+                                        alt="comma-blue"
+                                        v-if="true"
+                                    />
                                 </div>
                             </div>
                             <div class="draggable-list__container2-2">
                                 <div class="draggable-list__subcontainer8">
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <img src="/assets/icons/comma.svg" alt="comma" v-if="false">
-                                    <img src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="true">
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="В"
+                                        @drop="dropLetter($event, 8)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Е"
+                                        @drop="dropLetter($event, 8)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Н"
+                                        @drop="dropLetter($event, 8)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="И"
+                                        @drop="dropLetter($event, 8)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="К"
+                                        @drop="dropLetter($event, 8)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <img
+                                        src="/assets/icons/comma.svg"
+                                        alt="comma"
+                                        v-if="false"
+                                    />
+                                    <img
+                                        src="/assets/icons/comma-blue.svg"
+                                        alt="comma-blue"
+                                        v-if="true"
+                                    />
                                 </div>
                                 <div class="draggable-list__subcontainer9">
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <img src="/assets/icons/comma.svg" alt="comma" v-if="false">
-                                    <img src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="true">
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="С"
+                                        @drop="dropLetter($event, 9)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="К"
+                                        @drop="dropLetter($event, 9)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="О"
+                                        @drop="dropLetter($event, 9)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Т"
+                                        @drop="dropLetter($event, 9)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Ч"
+                                        @drop="dropLetter($event, 9)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <img
+                                        src="/assets/icons/comma.svg"
+                                        alt="comma"
+                                        v-if="false"
+                                    />
+                                    <img
+                                        src="/assets/icons/comma-blue.svg"
+                                        alt="comma-blue"
+                                        v-if="true"
+                                    />
                                 </div>
                                 <div class="draggable-list__subcontainer10">
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__full-stop" v-if="false">
-                                        <img src="/assets/icons/full-stop.svg" alt="full-stop">
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="П"
+                                        @drop="dropLetter($event, 10)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Л"
+                                        @drop="dropLetter($event, 10)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="А"
+                                        @drop="dropLetter($event, 10)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="Т"
+                                        @drop="dropLetter($event, 10)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="О"
+                                        @drop="dropLetter($event, 10)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__subcontainer-square"
+                                        data-answer="К"
+                                        @drop="dropLetter($event, 10)"
+                                        @dragover.prevent
+                                    ></div>
+                                    <div
+                                        class="draggable-list__full-stop"
+                                        v-if="false"
+                                    >
+                                        <img
+                                            src="/assets/icons/full-stop.svg"
+                                            alt="full-stop"
+                                        />
                                     </div>
-                                    <div class="draggable-list__full-stop" v-if="true">
-                                        <img src="/assets/icons/full-stop-blue.svg" alt="full-stop-blue">
+                                    <div
+                                        class="draggable-list__full-stop"
+                                        v-if="true"
+                                    >
+                                        <img
+                                            src="/assets/icons/full-stop-blue.svg"
+                                            alt="full-stop-blue"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -207,8 +802,13 @@
                     class="task_block__wrapper_answer"
                 />
             </template>
-            <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Здорово!"
-            v-if="false" @hide="hide()"></TaskResultBanner>
+            <TaskResultBanner
+                img="/assets/backgrounds/flowers.png"
+                bg="/assets/backgrounds/moa.gif"
+                text="Здорово!"
+                v-if="answersCounter == 55"
+                @hide="hide()"
+            ></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -232,56 +832,153 @@ const hide = () => {
 
 const isActive = true;
 
+const refLetter = ref();
+const dragLetterWord = ref();
+const answersCounter = ref(0);
+
+onMounted(() => {
+    refLetter.value = '';
+    dragLetterWord.value = 0;
+    answersCounter.value = 0;
+});
+
+const dragLetter = (event, wordID = 1) => {
+    event.dataTransfer.setData('text', event.target.innerHTML.toUpperCase());
+    console.log(event.dataTransfer.getData('text'));
+    refLetter.value = event.target;
+    dragLetterWord.value = wordID;
+};
+
+const dropLetter = (event, wordID = 1) => {
+    if (wordID == dragLetterWord.value) {
+        if (
+            event.target.getAttribute('data-answer') ==
+            event.dataTransfer.getData('text')
+        ) {
+            event.target.innerHTML =
+                wordID == 1 && refLetter.value.innerHTML == 'Д'
+                    ? event.dataTransfer.getData('text').toUpperCase()
+                    : event.dataTransfer.getData('text').toLowerCase();
+            refLetter.value.innerHTML = '';
+            event.target.classList.add(
+                'draggable-list__subcontainer-square_right'
+            );
+            setTimeout(() => {
+                answersCounter.value += 1;
+                event.target.classList.remove(
+                    'draggable-list__subcontainer-square_right'
+                );
+            }, 2000);
+        } else {
+            event.target.innerHTML = '?';
+            event.target.classList.add(
+                'draggable-list__subcontainer-square_warning'
+            );
+            setTimeout(() => {
+                event.target.classList.remove(
+                    'draggable-list__subcontainer-square_warning'
+                );
+            }, 2000);
+        }
+    } else {
+        event.target.innerHTML = 'X';
+        event.target.classList.add('draggable-list__subcontainer-square_wrong');
+        setTimeout(() => {
+            event.target.classList.remove(
+                'draggable-list__subcontainer-square_wrong'
+            );
+        }, 2000);
+    }
+};
 
 // Для постройки домика мы
-// возьмем ветки дощечку 
+// возьмем ветки дощечку
 // веник скотч платок
 
-const data = 
-{
+const data = {
     1: {
-        1: [{classid: 1, text: 'Я'}, {classid: 2, text: 'Л'}, {classid: 3, text: 'Д'}],
-        2: [{classid: 1, text: 'К'}, {classid: 4, text: 'И'}, {classid: 3, text: 'П'},  {classid: 5, text: 'С'}, {classid: 6, text: 'О'}, {classid: 7, text: 'Т'}, {classid: 8, text: 'о'}, {classid: 9, text: 'й'}, {classid: 10, text: 'Р'}],
-        3: [[6, 'О'], [5, 'М'], [3, 'Д'], [7, 'И'], [7, 'к'], [9, 'а']],
-        4: [[2, 'М'], [3, 'Ы']],
-        5: [[10, 'М'], [7, 'ё'], [3, 'В'], [6, 'О'], [9, 'м'], [5, 'З'], [7, 'Ь']]
+        1: [
+            { id: 1, classid: 1, text: 'Я' },
+            { id: 2, classid: 2, text: 'Л' },
+            { id: 3, classid: 3, text: 'Д' },
+        ],
+        2: [
+            { id: 1, classid: 1, text: 'К' },
+            { id: 2, classid: 4, text: 'И' },
+            { id: 3, classid: 3, text: 'П' },
+            { id: 4, classid: 5, text: 'С' },
+            { id: 5, classid: 6, text: 'О' },
+            { id: 6, classid: 7, text: 'Т' },
+            { id: 7, classid: 8, text: 'о' },
+            { id: 8, classid: 9, text: 'й' },
+            { id: 9, classid: 10, text: 'Р' },
+        ],
+        3: [
+            { id: 1, classid: 6, text: 'М' },
+            { id: 2, classid: 5, text: 'М' },
+            { id: 3, classid: 3, text: 'Д' },
+            { id: 4, classid: 7, text: 'И' },
+            { id: 5, classid: 7, text: 'к' },
+            { id: 6, classid: 9, text: 'а' },
+        ],
+        4: [
+            { id: 1, classid: 2, text: 'М' },
+            { id: 2, classid: 3, text: 'Ы' },
+        ],
+        5: [
+            { id: 1, classid: 10, text: 'М' },
+            { id: 2, classid: 7, text: 'ё' },
+            { id: 3, classid: 3, text: 'В' },
+            { id: 4, classid: 6, text: 'О' },
+            { id: 5, classid: 9, text: 'м' },
+            { id: 6, classid: 5, text: 'З' },
+            { id: 7, classid: 7, text: 'ь' },
+        ],
     },
     2: {
-        1: {1: 'в', 2: 'о', 3: 'з', 4: 'ь', 5: 'м', 6: 'ё', 7: 'м'},
-        2: {1: 'в', 2: 'е', 3: 'т', 4: 'к', 5: 'и'},
-        3: {1: 'д', 2: 'о', 3: 'щ', 4: 'е', 5: 'ч', 6: 'к', 7: 'у'}
+        1: { 1: 'в', 2: 'о', 3: 'з', 4: 'ь', 5: 'м', 6: 'ё', 7: 'м' },
+        2: { 1: 'в', 2: 'е', 3: 'т', 4: 'к', 5: 'и' },
+        3: { 1: 'д', 2: 'о', 3: 'щ', 4: 'е', 5: 'ч', 6: 'к', 7: 'у' },
     },
     3: {
-        1: {1: 'в', 2: 'е', 3: 'н', 4: 'и', 5: 'к'},
-        2: {1: 'с', 2: 'к', 3: 'о', 4: 'т', 5: 'ч'},
-        3: {1: 'п', 2: 'л', 3: 'а', 4: 'т', 5: 'о', 6: 'к'}
-    }
-}
+        1: { 1: 'в', 2: 'е', 3: 'н', 4: 'и', 5: 'к' },
+        2: { 1: 'с', 2: 'к', 3: 'о', 4: 'т', 5: 'ч' },
+        3: { 1: 'п', 2: 'л', 3: 'а', 4: 'т', 5: 'о', 6: 'к' },
+    },
+};
 
-const answer = 
-{
+const answer = {
     1: {
-        1: {1: 'Д', 2: 'л', 3: 'я'},
-        2: {1: 'п', 2: 'о', 3: 'с', 4: 'т', 5: 'р', 6: 'о', 7: 'й', 8: 'к', 9: 'и'},
-        3: {1: 'д', 2: 'о', 3: 'м', 4: 'и', 5: 'к', 6: 'а'},
-        4: {1: 'м', 2: 'ы'}
+        1: { 1: 'Д', 2: 'л', 3: 'я' },
+        2: {
+            1: 'п',
+            2: 'о',
+            3: 'с',
+            4: 'т',
+            5: 'р',
+            6: 'о',
+            7: 'й',
+            8: 'к',
+            9: 'и',
+        },
+        3: { 1: 'д', 2: 'о', 3: 'м', 4: 'и', 5: 'к', 6: 'а' },
+        4: { 1: 'м', 2: 'ы' },
     },
     2: {
-        1: {1: 'в', 2: 'о', 3: 'з', 4: 'ь', 5: 'м', 6: 'ё', 7: 'м'},
-        2: {1: 'в', 2: 'е', 3: 'т', 4: 'к', 5: 'и'},
-        3: {1: 'д', 2: 'о', 3: 'щ', 4: 'е', 5: 'ч', 6: 'к', 7: 'у'}
+        1: { 1: 'в', 2: 'о', 3: 'з', 4: 'ь', 5: 'м', 6: 'ё', 7: 'м' },
+        2: { 1: 'в', 2: 'е', 3: 'т', 4: 'к', 5: 'и' },
+        3: { 1: 'д', 2: 'о', 3: 'щ', 4: 'е', 5: 'ч', 6: 'к', 7: 'у' },
     },
     3: {
-        1: {1: 'в', 2: 'е', 3: 'н', 4: 'и', 5: 'к'},
-        2: {1: 'с', 2: 'к', 3: 'о', 4: 'т', 5: 'ч'},
-        3: {1: 'п', 2: 'л', 3: 'а', 4: 'т', 5: 'о', 6: 'к'}
-    }
-}
-
+        1: { 1: 'в', 2: 'е', 3: 'н', 4: 'и', 5: 'к' },
+        2: { 1: 'с', 2: 'к', 3: 'о', 4: 'т', 5: 'ч' },
+        3: { 1: 'п', 2: 'л', 3: 'а', 4: 'т', 5: 'о', 6: 'к' },
+    },
+};
 </script>
 
 <style lang="scss" scoped>
-.SixteenthTask{
+.SixteenthTask {
     position: block;
 }
 
@@ -415,7 +1112,7 @@ const answer =
     cursor: pointer;
 }
 
-.draggable-list__letter2{
+.draggable-list__letter2 {
     height: 28px;
     font-family: 'Nunito', sans-serif;
     font-size: 28px;
@@ -569,9 +1266,22 @@ const answer =
     height: 48px;
     background-color: $blueGame;
     border-radius: 6px;
+
+    color: rgb(78, 59, 127);
+    font-family: Nunito;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 38px;
+    letter-spacing: 0%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+
     @media (max-width: 1024px) {
         width: 40px;
         height: 40px;
+        padding: 10px;
     }
 }
 
@@ -580,7 +1290,7 @@ const answer =
     width: 100%;
     height: 48px;
     justify-content: space-between;
-    @media (max-width: 1024px) {      
+    @media (max-width: 1024px) {
         height: 40px;
     }
 }
@@ -598,7 +1308,6 @@ const answer =
     display: flex;
     justify-content: space-between;
     gap: 2px;
-
 }
 
 .draggable-list__subcontainer1 {
@@ -646,7 +1355,7 @@ const answer =
 .comma {
     width: 11px;
     height: 52px;
-    
+
     @media (max-width: 1024px) {
         width: 8px;
         height: 44px;
@@ -699,7 +1408,7 @@ const answer =
     align-items: center;
     width: 1001px;
     height: 120px;
-    @media (max-width: 1024px) {      
+    @media (max-width: 1024px) {
         width: 844px;
         height: 100px;
         gap: 12px;
@@ -711,7 +1420,7 @@ const answer =
     width: 100%;
     height: 52px;
     justify-content: space-between;
-    @media (max-width: 1024px) {      
+    @media (max-width: 1024px) {
         height: 44px;
     }
 }
@@ -721,9 +1430,19 @@ const answer =
     width: 863px;
     height: 52px;
     justify-content: space-between;
-    @media (max-width: 1024px) {      
+    @media (max-width: 1024px) {
         width: 728px;
         height: 44px;
     }
+}
+
+.draggable-list__subcontainer-square_wrong {
+    border: 2px solid #db0000;
+}
+.draggable-list__subcontainer-square_right {
+    border: 2px solid #5ccf54;
+}
+.draggable-list__subcontainer-square_warning {
+    border: 2px solid #cfcd54;
 }
 </style>
