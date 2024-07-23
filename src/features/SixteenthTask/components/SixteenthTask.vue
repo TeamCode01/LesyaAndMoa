@@ -63,7 +63,7 @@
                                     :data-answer="letter.text.toUpperCase()"
                                     @drop="
                                         //dropLetter($event, wordid, letter);
-                                        dropLetterNew($event, wordid, letter.id)
+                                        dropLetterNew($event, wordid, letter.id,  letter.isActive)
                                     "
                                     @dragover.prevent
                                     v-for="letter in word"
@@ -97,9 +97,9 @@
                 />
             </template>
             <TaskResultBanner
-                img="/assets/backgrounds/flowers.png"
+                img="/assets/backgrounds/Diamond.png"
                 bg="/assets/backgrounds/moa.gif"
-                text="Здорово!"
+                text="Изумительно!"
                 v-if="answersCounter == 55"
                 @hide="hide()"
             ></TaskResultBanner>
@@ -141,7 +141,7 @@ const dragLetter = (event, wordID, letterID) => {
     event.dataTransfer.setData('text', `${wordID} ${letterID}`);
 };
 
-const dropLetterNew = (event, wordID, letterID) => {
+const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
     let dragwordID = event.dataTransfer.getData('text').split(' ')[0];
     let dragletterID = event.dataTransfer.getData('text').split(' ')[1];
 
@@ -179,16 +179,18 @@ const dropLetterNew = (event, wordID, letterID) => {
                 );
             }, 2000);
         } else {
-            event.target.classList.add(
+            if (!letterIsActive){
+                event.target.classList.add(
                 'draggable-list__subcontainer-square_warning'
             );
             setTimeout(() => {
                 event.target.classList.remove(
                     'draggable-list__subcontainer-square_warning'
                 );
-            }, 2000);
+            }, 2000);}
         }
     } else {
+        if (!letterIsActive){
         event.target.classList.add('draggable-list__subcontainer-square_wrong');
         let reactionAudio = new Audio(
             `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
@@ -198,7 +200,7 @@ const dropLetterNew = (event, wordID, letterID) => {
             event.target.classList.remove(
                 'draggable-list__subcontainer-square_wrong'
             );
-        }, 2000);
+        }, 2000);}
     }
 };
 

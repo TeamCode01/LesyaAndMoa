@@ -119,9 +119,9 @@
                 </div>
             </template>
             <TaskResultBanner
-                img="/assets/backgrounds/flowers.png"
-                bg="/assets/backgrounds/moa.gif"
-                text="Здорово!"
+                img="/assets/backgrounds/king.png"
+                bg="/assets/backgrounds/lesya.gif"
+                text="Блестяще!"
                 v-if="answersCounter == 26"
                 @hide="hide()"
             ></TaskResultBanner>
@@ -149,8 +149,8 @@ const hide = () => {
 };
 
 onMounted(() => {
-    let audio = new Audio('/assets/audio/Task6/79.6.mp3');
-    audio.play();
+    //let audio = new Audio('/assets/audio/Task6/79.6.mp3');
+    //audio.play();
 });
 
 let legalWords = [];

@@ -1,7 +1,7 @@
 <template>
     <div class="SixTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="usedWord.length < 5">
+            <template v-if="usedWord.length < 15">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -81,7 +81,7 @@
                 img="/assets/backgrounds/flowers.png"
                 bg="/assets/backgrounds/moa.gif"
                 text="Здорово!"
-                v-if="usedWord.length >= 5"
+                v-if="usedWord.length >= 15"
                 @hide="hide()"
             ></TaskResultBanner>
         </div>

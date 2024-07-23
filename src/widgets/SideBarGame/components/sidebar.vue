@@ -17,18 +17,22 @@
                 <ThirdTask :end="endTime" @close="close()" v-if="taskId === 3"></ThirdTask>
                 <FourthTask :end="endTime" @close="close()" v-if="taskId === 4"></FourthTask>
                 <FifthTask :end="endTime" @close="close()" v-if="taskId === 5"></FifthTask>
+                <SixTask :end="endTime" @close="close()" v-if="taskId === 6"></SixTask>
                 <SeventhTask :end="endTime" @close="close()" v-if="taskId === 7"></SeventhTask>
                 <EighthTask :end="endTime" @close="close()" v-if="taskId === 8"></EighthTask>
+                <NineTask :end="endTime" @close="close()" v-if="taskId === 9"></NineTask>
                 <TenthTask :end="endTime" @close="close()" v-if="taskId === 10"></TenthTask>
+                <ElevenTask :end="endTime" @close="close()" v-if="taskId === 11"></ElevenTask>
+                <TwelfthTask :end="endTime" @close="close()" v-if="taskId === 12"></TwelfthTask>
                 <ThirteenthTask :end="endTime" @close="close()" v-if="taskId === 13"></ThirteenthTask>
                 <FourteenthTask :end="endTime" @close="close()" v-if="taskId === 14"></FourteenthTask>
+                <FifteenTask :end="endTime" @close="close()" v-if="taskId === 15"></FifteenTask>
                 <SixteenthTask :end="endTime" @close="close()" v-show="taskId === 16"></SixteenthTask>
                 <SeventeenthTask :end="endTime" @close="close()" v-show="taskId === 17"></SeventeenthTask>
                 <EighteenTask :end="endTime" @close="close()" v-if="taskId === 18"></EighteenTask>
-                <NineTask :end="endTime" @close="close()" v-if="taskId === 9"></NineTask>
-                <ElevenTask :end="endTime" @close="close()" v-if="taskId === 11"></ElevenTask>
-                <TwelfthTask :end="endTime" @close="close()" v-if="taskId === 12"></TwelfthTask>
-                <FifteenTask :end="endTime" @close="close()" v-if="taskId === 15"></FifteenTask>
+
+
+
             </div>
         </div>
 
@@ -73,7 +77,7 @@ const tasks = ref([
     { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg', audio: '/assets/audio/Task3/31.3.mp3', startAudio: '/assets/audio/Task3/30.3_.mp3' },
     { id: 4, name: 'Задание 4', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task4.jpg' },
     { id: 5, name: 'Задание 5', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task5.jpg' },
-    { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task6.jpg' },
+    { id: 6, name: 'Задание 6', disabled: false, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task6.jpg' },
     { id: 7, name: 'Задание 7', disabled: false, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task7.jpg' },
     { id: 8, name: 'Задание 8', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 9, name: 'Задание 9', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task9.jpg' },
