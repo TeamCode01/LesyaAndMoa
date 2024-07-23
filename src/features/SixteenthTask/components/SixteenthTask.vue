@@ -179,7 +179,6 @@ const dropLetterNew = (event, wordID, letterID) => {
                 );
             }, 2000);
         } else {
-            event.target.innerHTML = '?';
             event.target.classList.add(
                 'draggable-list__subcontainer-square_warning'
             );
@@ -190,7 +189,6 @@ const dropLetterNew = (event, wordID, letterID) => {
             }, 2000);
         }
     } else {
-        event.target.innerHTML = '-';
         event.target.classList.add('draggable-list__subcontainer-square_wrong');
         let reactionAudio = new Audio(
             `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
@@ -671,13 +669,13 @@ const resetTask = () => {
     }
 }
 
+.draggable-list__subcontainer-square_warning {
+    border: 2px solid #cfcd54;
+}
 .draggable-list__subcontainer-square_wrong {
     border: 2px solid #db0000;
 }
 .draggable-list__subcontainer-square_right {
     border: 2px solid #5ccf54;
-}
-.draggable-list__subcontainer-square_warning {
-    border: 2px solid #cfcd54;
 }
 </style>

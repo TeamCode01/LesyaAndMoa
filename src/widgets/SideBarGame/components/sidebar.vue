@@ -3,27 +3,99 @@
         <p class="sidebar__title">Выбери задание!</p>
         <div class="sidebar__wrapper">
             <div class="sidebar__bg">
-                <div @click="switchTask(item.id, item.open, item.time, item.img, item.audio)"
-                    :class="{ disabled: item.disabled === true }" class="task" v-for="item in tasks" :key="item.id">{{
-                        item.name
-                    }} <img class="icon" v-if="item.disabled === false && item.done === false"
-                        src="@app/assets/icons/play.svg" /><img class="icon"
-                        v-else-if="item.disabled === true && item.done === false" src="@app/assets/icons/block.svg" />
+                <div
+                    @click="
+                        switchTask(
+                            item.id,
+                            item.open,
+                            item.time,
+                            item.img,
+                            item.audio
+                        )
+                    "
+                    :class="{ disabled: item.disabled === true }"
+                    class="task"
+                    v-for="item in tasks"
+                    :key="item.id"
+                >
+                    {{ item.name }}
+                    <img
+                        class="icon"
+                        v-if="item.disabled === false && item.done === false"
+                        src="@app/assets/icons/play.svg"
+                    /><img
+                        class="icon"
+                        v-else-if="
+                            item.disabled === true && item.done === false
+                        "
+                        src="@app/assets/icons/block.svg"
+                    />
                 </div>
             </div>
-            <FirstTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 1"></FirstTask>
-            <SecondTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 2"></SecondTask>
-            <ThirdTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 3"></ThirdTask>
-            <FourthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 4"></FourthTask>
-            <SixTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 6"></SixTask>
-            <ThirteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 13"></ThirteenthTask>
-            <SixteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 16"></SixteenthTask>
-            <EighteenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 18"></EighteenTask>
-            <NineTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 9"></NineTask>
-            <ElevenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 11"></ElevenTask>
+            <FirstTask
+                :end="endTime"
+                @close="close()"
+                v-if="SeeTask && taskId === 1"
+            ></FirstTask>
+            <SecondTask
+                :end="endTime"
+                @close="close()"
+                v-if="SeeTask && taskId === 2"
+            ></SecondTask>
+            <ThirdTask
+                :end="endTime"
+                @close="close()"
+                v-if="SeeTask && taskId === 3"
+            ></ThirdTask>
+            <FourthTask
+                :end="endTime"
+                @close="close()"
+                v-if="SeeTask && taskId === 4"
+            ></FourthTask>
+            <SixTask
+                :end="endTime"
+                @close="close()"
+                v-if="SeeTask && taskId === 6"
+            ></SixTask>
+            <ThirteenthTask
+                :end="endTime"
+                @close="close()"
+                v-if="SeeTask && taskId === 13"
+            ></ThirteenthTask>
+            <SixteenthTask
+                :end="endTime"
+                @close="close()"
+                v-show="SeeTask && taskId === 16"
+            ></SixteenthTask>
+            <EighteenTask
+                :end="endTime"
+                @close="close()"
+                v-if="SeeTask && taskId === 18"
+            ></EighteenTask>
+            <NineTask
+                :end="endTime"
+                @close="close()"
+                v-if="SeeTask && taskId === 9"
+            ></NineTask>
+            <ElevenTask
+                :end="endTime"
+                @close="close()"
+                v-if="SeeTask && taskId === 11"
+            ></ElevenTask>
+            <FifteenTask
+                :end="endTime"
+                @close="close()"
+                v-if="SeeTask && taskId === 15"
+            ></FifteenTask>
         </div>
 
-        <Button class="start" label="Старт" :is-image="true" :image="arrow" @click="openTask(taskId)"></Button>
+        <Button
+            class="start"
+            label="Старт"
+            :is-image="true"
+            :image="arrow"
+            @click="openTask(taskId)"
+        ></Button>
     </div>
 </template>
 <script setup>
@@ -37,32 +109,196 @@ import { FourthTask } from '@features/FourthTask/components';
 import { SixTask } from '@features/SixTask/components';
 import { SecondTask } from '@features/SecondTask';
 import { ThirteenthTask } from '@features/ThirteenthTask';
+import { FifteenTask } from '@features/FifteenTask';
 import { SixteenthTask } from '@features/SixteenthTask';
 import { EighteenTask } from '@features/EighteenTask';
 import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 const emit = defineEmits('sendImg');
 const tasks = ref([
-
-    { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/animals.jpg', audio: '/assets/audio/Task1/12.1.mp3' },
-    { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task2.jpg' },
-    { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg', audio: '/assets/audio/Task3/31.3.mp3' },
-    { id: 4, name: 'Задание 4', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task4.jpg' },
-    { id: 5, name: 'Задание 5', disabled: true, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task5.jpg' },
-    { id: 6, name: 'Задание 6', disabled: false, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task6.jpg' },
-    { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task7.jpg' },
-    { id: 8, name: 'Задание 8', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 9, name: 'Задание 9', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task9.jpg' },
-    { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task10.jpg' },
-    { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task12.jpg' },
-    { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task13.jpg' },
-    { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/task15.jpg' },
-    { id: 16, name: 'Задание 16', disabled: false, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 120, end: false, img: '/assets/backgrounds/animals.jpg' },
-])
+    {
+        id: 1,
+        name: 'Задание 1',
+        disabled: false,
+        done: false,
+        open: false,
+        time: 15,
+        end: false,
+        img: '/assets/backgrounds/animals.jpg',
+        audio: '/assets/audio/Task1/12.1.mp3',
+    },
+    {
+        id: 2,
+        name: 'Задание 2',
+        disabled: false,
+        done: false,
+        open: false,
+        time: 15,
+        end: false,
+        img: '/assets/backgrounds/task2.jpg',
+    },
+    {
+        id: 3,
+        name: 'Задание 3',
+        disabled: false,
+        done: false,
+        open: false,
+        time: 15,
+        end: false,
+        img: '/assets/backgrounds/task3.jpg',
+        audio: '/assets/audio/Task3/31.3.mp3',
+    },
+    {
+        id: 4,
+        name: 'Задание 4',
+        disabled: false,
+        done: false,
+        open: false,
+        time: 15,
+        end: false,
+        img: '/assets/backgrounds/task4.jpg',
+    },
+    {
+        id: 5,
+        name: 'Задание 5',
+        disabled: true,
+        done: false,
+        open: false,
+        time: 15,
+        end: false,
+        img: '/assets/backgrounds/task5.jpg',
+    },
+    {
+        id: 6,
+        name: 'Задание 6',
+        disabled: false,
+        done: false,
+        open: false,
+        time: 20,
+        end: false,
+        img: '/assets/backgrounds/task6.jpg',
+    },
+    {
+        id: 7,
+        name: 'Задание 7',
+        disabled: true,
+        done: false,
+        open: false,
+        time: 20,
+        end: false,
+        img: '/assets/backgrounds/task7.jpg',
+    },
+    {
+        id: 8,
+        name: 'Задание 8',
+        disabled: true,
+        done: false,
+        open: false,
+        time: 30,
+        end: false,
+        img: '/assets/backgrounds/animals.jpg',
+    },
+    {
+        id: 9,
+        name: 'Задание 9',
+        disabled: false,
+        done: false,
+        open: false,
+        time: 30,
+        end: false,
+        img: '/assets/backgrounds/task9.jpg',
+    },
+    {
+        id: 10,
+        name: 'Задание 10',
+        disabled: true,
+        done: false,
+        open: false,
+        time: 30,
+        end: false,
+        img: '/assets/backgrounds/task10.jpg',
+    },
+    {
+        id: 11,
+        name: 'Задание 11',
+        disabled: false,
+        done: false,
+        open: false,
+        time: 35,
+        end: false,
+        img: '/assets/backgrounds/animals.jpg',
+    },
+    {
+        id: 12,
+        name: 'Задание 12',
+        disabled: true,
+        done: false,
+        open: false,
+        time: 35,
+        end: false,
+        img: '/assets/backgrounds/task12.jpg',
+    },
+    {
+        id: 13,
+        name: 'Задание 13',
+        disabled: false,
+        done: false,
+        open: false,
+        time: 30,
+        end: false,
+        img: '/assets/backgrounds/task13.jpg',
+    },
+    {
+        id: 14,
+        name: 'Задание 14',
+        disabled: true,
+        done: false,
+        open: false,
+        time: 30,
+        end: false,
+        img: '/assets/backgrounds/animals.jpg',
+    },
+    {
+        id: 15,
+        name: 'Задание 15',
+        disabled: false,
+        done: false,
+        open: false,
+        time: 60,
+        end: false,
+        img: '/assets/backgrounds/task15.jpg',
+    },
+    {
+        id: 16,
+        name: 'Задание 16',
+        disabled: false,
+        done: false,
+        open: false,
+        time: 60,
+        end: false,
+        img: '/assets/backgrounds/animals.jpg',
+    },
+    {
+        id: 17,
+        name: 'Задание 17',
+        disabled: true,
+        done: false,
+        open: false,
+        time: 30,
+        end: false,
+        img: '/assets/backgrounds/animals.jpg',
+    },
+    {
+        id: 18,
+        name: 'Задание 18',
+        disabled: false,
+        done: false,
+        open: false,
+        time: 120,
+        end: false,
+        img: '/assets/backgrounds/animals.jpg',
+    },
+]);
 
 const SeeTask = ref(false);
 const taskId = ref(null);
@@ -75,7 +311,7 @@ const taskss = ref([]);
 const close = () => {
     SeeTask.value = false;
     endTime.value = false;
-    console.log('close yeah')
+    console.log('close yeah');
 };
 
 function playAudio(audioPath) {
@@ -85,7 +321,7 @@ function playAudio(audioPath) {
 
 const switchTask = (id, openId, time, img, audio) => {
     taskId.value = id;
-    console.log(taskId.value)
+    console.log(taskId.value);
     SeeTask.value = openId;
     timeVal.value = time;
     taskAudio.value = audio;
@@ -93,7 +329,7 @@ const switchTask = (id, openId, time, img, audio) => {
     taskImage.value = img;
     console.log(SeeTask.value);
     emit('sendImg', img);
-}
+};
 
 const startTask = async (id) => {
     try {
@@ -101,43 +337,42 @@ const startTask = async (id) => {
     } catch (e) {
         console.error('Error starting task', e);
     }
-
-}
+};
 
 const openTask = (taskId) => {
     SeeTask.value = true;
     setTimeout(() => {
         playAudio(taskAudio.value);
-    })
+    });
 
     setTimeout(() => {
-
         endTime.value = true;
     }, timeVal.value * 1000);
-}
+};
 
 const getTasks = async () => {
-    await HTTP.get('tasks').then((response) => {
-        taskss.value = response.data;
-    }).catch((error) => {
-        console.error(error);
-    });
-}
+    await HTTP.get('tasks')
+        .then((response) => {
+            taskss.value = response.data;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+};
 
 watch(
     () => taskId.value,
     (newId) => {
         if (!newId) {
-            return
+            return;
         }
         taskId.value = newId;
-    },
+    }
 );
 
 onMounted(() => {
     getTasks();
 });
-
 </script>
 <style lang="scss" scoped>
 .icon {
@@ -217,8 +452,6 @@ onMounted(() => {
                 font-size: 22px;
             }
         }
-
-
     }
 
     &__bg {
@@ -233,14 +466,12 @@ onMounted(() => {
             height: 185px;
             padding: 0px;
         }
-
     }
-
 }
 
 .task {
     border-radius: 30px;
-    background-color: #E6F2FA;
+    background-color: #e6f2fa;
     color: $black;
     max-width: 212px;
     width: 100%;
