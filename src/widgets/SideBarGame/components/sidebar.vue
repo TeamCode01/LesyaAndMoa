@@ -31,7 +31,13 @@
             </div>
         </div>
 
-        <Button class="start" label="Старт" :is-image="true" :image="arrow" @click="openTask(taskId)"></Button>
+        <Button
+            class="start"
+            label="Старт"
+            :is-image="true"
+            :image="arrow"
+            @click="openTask(taskId)"
+        ></Button>
     </div>
 </template>
 <script setup>
@@ -49,6 +55,10 @@ import { TenthTask } from '@features/TenthTask';
 import { SecondTask } from '@features/SecondTask';
 import { ThirteenthTask } from '@features/ThirteenthTask';
 import { FourteenthTask } from '@features/FourteenthTask';
+import { SixTask } from '@features/SixTask/components';
+import { SecondTask } from '@features/SecondTask';
+import { ThirteenthTask } from '@features/ThirteenthTask';
+import { FifteenTask } from '@features/FifteenTask';
 import { SixteenthTask } from '@features/SixteenthTask';
 import { SeventeenthTask } from '@features/SeventeenthTask';
 import { EighteenTask } from '@features/EighteenTask';
@@ -109,7 +119,7 @@ const switchTask = (id, openId, time, img, audio, startAudioV) => {
     emit('sendAudio', startAudioV);
     console.log(startAudioV)
     emit('sendImg', img);
-}
+};
 
 const startTask = async (id) => {
     try {
@@ -117,41 +127,39 @@ const startTask = async (id) => {
     } catch (e) {
         console.error('Error starting task', e);
     }
-
-}
+};
 
 const openTask = (taskId) => {
     SeeTask.value = true;
     playAudio(taskAudio.value);
-
-
     setTimeout(() => {
         endTime.value = true;
     }, timeVal.value * 1000);
-}
+};
 
 const getTasks = async () => {
-    await HTTP.get('tasks').then((response) => {
-        taskss.value = response.data;
-    }).catch((error) => {
-        console.error(error);
-    });
-}
+    await HTTP.get('tasks')
+        .then((response) => {
+            taskss.value = response.data;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+};
 
 watch(
     () => taskId.value,
     (newId) => {
         if (!newId) {
-            return
+            return;
         }
         taskId.value = newId;
-    },
+    }
 );
 
 onMounted(() => {
     getTasks();
 });
-
 </script>
 <style lang="scss" scoped>
 .modal_background {
@@ -241,8 +249,6 @@ onMounted(() => {
                 font-size: 22px;
             }
         }
-
-
     }
 
     &__bg {
@@ -257,14 +263,12 @@ onMounted(() => {
             height: 185px;
             padding: 0px;
         }
-
     }
-
 }
 
 .task {
     border-radius: 30px;
-    background-color: #E6F2FA;
+    background-color: #e6f2fa;
     color: $black;
     max-width: 212px;
     width: 100%;
