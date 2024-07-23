@@ -11,20 +11,24 @@
                         v-else-if="item.disabled === true && item.done === false" src="@app/assets/icons/block.svg" />
                 </div>
             </div>
-            <FirstTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 1"></FirstTask>
-            <SecondTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 2"></SecondTask>
-            <ThirdTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 3"></ThirdTask>
-            <FourthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 4"></FourthTask>
-            <FifthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 5"></FifthTask>
-            <EighthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 8"></EighthTask>
-            <TenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 10"></TenthTask>
-            <ThirteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 13"></ThirteenthTask>
-            <FourteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 14"></FourteenthTask>
-            <SixteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 16"></SixteenthTask>
-            <EighteenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 18"></EighteenTask>
-            <NineTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 9"></NineTask>
-            <ElevenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 11"></ElevenTask>
-            <TwelfthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 12"></TwelfthTask>
+            <div class="modal_background" v-if="SeeTask">
+                <FirstTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 1"></FirstTask>
+                <SecondTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 2"></SecondTask>
+                <ThirdTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 3"></ThirdTask>
+                <FourthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 4"></FourthTask>
+                <FifthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 5"></FifthTask>
+                <SeventhTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 7"></SeventhTask>
+                <EighthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 8"></EighthTask>
+                <TenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 10"></TenthTask>
+                <ThirteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 13"></ThirteenthTask>
+                <FourteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 14"></FourteenthTask>
+                <SixteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 16"></SixteenthTask>
+                <SeventeenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 17"></SeventeenthTask>
+                <EighteenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 18"></EighteenTask>
+                <NineTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 9"></NineTask>
+                <ElevenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 11"></ElevenTask>
+                <TwelfthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 12"></TwelfthTask>
+            </div>
         </div>
 
         <Button class="start" label="Старт" :is-image="true" :image="arrow" @click="openTask(taskId)"></Button>
@@ -39,12 +43,14 @@ import { FirstTask } from '@features/FirstTask/components';
 import { ThirdTask } from '@features/ThirdTask/components';
 import { FourthTask } from '@features/FourthTask/components';
 import { FifthTask } from '@features/FifthTask/components';
+import { SeventhTask } from '@features/SeventhTask/components';
 import { EighthTask } from '@features/EighthTask/components';
 import { TenthTask } from '@features/TenthTask';
 import { SecondTask } from '@features/SecondTask';
 import { ThirteenthTask } from '@features/ThirteenthTask';
 import { FourteenthTask } from '@features/FourteenthTask';
 import { SixteenthTask } from '@features/SixteenthTask';
+import { SeventeenthTask } from '@features/SeventeenthTask';
 import { EighteenTask } from '@features/EighteenTask';
 import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
@@ -59,7 +65,7 @@ const tasks = ref([
     { id: 4, name: 'Задание 4', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task4.jpg' },
     { id: 5, name: 'Задание 5', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task5.jpg' },
     { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task6.jpg' },
-    { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task7.jpg' },
+    { id: 7, name: 'Задание 7', disabled: false, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task7.jpg' },
     { id: 8, name: 'Задание 8', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 9, name: 'Задание 9', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task9.jpg' },
     { id: 10, name: 'Задание 10', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task10.jpg' },
@@ -69,7 +75,7 @@ const tasks = ref([
     { id: 14, name: 'Задание 14', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/task15.jpg' },
     { id: 16, name: 'Задание 16', disabled: false, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
+    { id: 17, name: 'Задание 17', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 120, end: false, img: '/assets/backgrounds/task18.jpg', startAudio: '/assets/audio/Task18/470.18_.mp3' },
 ])
 
@@ -148,6 +154,16 @@ onMounted(() => {
 
 </script>
 <style lang="scss" scoped>
+.modal_background {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    right: 0;
+    background-color: #F1FAFE;
+    z-index: 1;
+}
+
 .icon {
     height: 8px;
     width: 10px;

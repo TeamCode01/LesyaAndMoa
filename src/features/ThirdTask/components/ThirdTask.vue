@@ -7,7 +7,7 @@
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
-                    <p class="title-h4 ThirdTask__title">
+                    <p class="title-h4 task_block__title ThirdTask__title">
                         Распредели звуки по коробкам на образуемые с помощью только
                         шума, голоса и шума, только голоса.
                     </p>
@@ -46,7 +46,7 @@
         </div>
     </template>
     <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Великолепно!"
-        v-if="show === true" @hide="hideModal"></TaskResultBanner>
+        v-if="show === false" @hide="hideModal" class="end-modal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -163,6 +163,11 @@ const allowDrop = (event) => {
 };
 </script>
 <style lang="scss" scoped>
+.end-modal {
+    width: 1200px;
+    height: 600px;
+}
+
 .box {
     background-image: url('@app/assets/creatures/box1.png');
     width: 279px;
