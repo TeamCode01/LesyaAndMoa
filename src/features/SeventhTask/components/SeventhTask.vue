@@ -15,33 +15,28 @@
                         Верно соотнеси слово, его толкование и картинку.
                     </p>
                 </div>
-                <div class="draggable-list">
+                <canvas @mousedown="engage" @mouseup="disengage" @mousemove="drawDot" ref="canvasRef" class="canvas_draw"></canvas>
+                <div  class="draggable-list">
                     <div class="draggable-list__words">
                         <div class="draggable-list__word-container" v-for="(word, word_index) in words[option]" :key="word_index">
                             <div class="draggable-list__word">{{ word.word }}</div>
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
+                            <img @mousedown="test" @mouseup="test" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
                     <div class="draggable-list__sentences">
                         <div class="draggable-list__sentence-container" v-for="(sentence, sentence_index) in sentences[option]" :key="sentence_index">
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
+                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <div class="draggable-list__sentence">{{ sentence.sentence }}</div>
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
+                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
                     <div class="draggable-list__pictures">
                         <div class="draggable-list__picture-container" v-for="(img, img_index) in images[option]" :key="img_index">
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle"/>
+                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <img :src="img.url" class="draggable-list__image">
                         </div>
                     </div>
                 </div>
-                <input
-                    @drop="drop($event)"
-                    @dragover="allowDrop($event)"
-                    v-model="answer"
-                    class="task_block__wrapper_answer"
-                />
             </template>
             <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/lesya.gif" text="Далее!"
             v-else @hide="hide()"></TaskResultBanner>
@@ -56,8 +51,28 @@ import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
 const startGame = ref(true);
-
+const isDrawing = ref(false);
 const option = ref(1);
+const lines = ref([]);
+const startCords = ref({
+    x: 0,
+    y: 0,
+    column: 0,
+    number: 0,
+})
+const endCords = ref({
+    x: 0,
+    y: 0,
+    column: 0,
+    number: 0,
+})
+const currCords = ref({
+    x: 0,
+    y: 0,
+})
+const canvasRef = ref(null);
+let canvas;
+let ctx;
 
 const words = ref({
     1:{
@@ -202,10 +217,110 @@ const props = defineProps({
 const hide = () => {
     emit('close');
 };
+
+const test = () => {
+    console.log(123);
+}
+
+const getCursorPosition = (event) => {
+    const rect = canvas.getBoundingClientRect();
+    return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+    };
+}
+
+const drawDot = (event) => {
+    if (isDrawing.value) {
+        const pos = getCursorPosition(event);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        redraw();
+        ctx.strokeStyle = "green";
+        ctx.lineWidth = 2; 
+        ctx.setLineDash([5, 5]); 
+        ctx.beginPath();
+        ctx.moveTo(startCords.value.x, startCords.value.y);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.fillStyle = "green";
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+    }
+}
+
+const engage = (event) => {
+    const pos = getCursorPosition(event);
+    isDrawing.value = true;
+    startCords.value.x = pos.x;
+    startCords.value.y = pos.y;
+}
+
+const disengage = (event) => {
+    if (isDrawing.value) {
+        const pos = getCursorPosition(event);
+        lines.value.push({
+          startX: startCords.value.x,
+          startY: startCords.value.y,
+          endX: pos.x,
+          endY: pos.y
+        });
+        isDrawing.value = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        redraw();
+    }
+}
+
+const redraw = () => {
+    lines.value.forEach(line => {
+        ctx.strokeStyle = "green";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([]);
+        ctx.beginPath();
+        ctx.moveTo(line.startX, line.startY);
+        ctx.lineTo(line.endX, line.endY);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.fillStyle = "green";
+        ctx.beginPath();
+        ctx.arc(line.endX, line.endY, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+    });
+}
+
+const resizeCanvas = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    redraw(); 
+}
+
+onMounted(()=>{
+    canvas = canvasRef.value;
+    ctx = canvas.getContext('2d');
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+})
 </script>
 
 <style lang="scss" scoped>
-
+.canvas_draw{
+    border: 1px solid black;
+    position: absolute;
+    z-index: 2;
+    margin: 0 auto;
+    pointer-events: auto;
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    // width: 100%;
+    // height: 100%;
+    // pointer-events: auto;
+}
 .SeventhTask {
     width: 1200px;
 }
@@ -220,6 +335,8 @@ const hide = () => {
 }
 
 .draggable-list {
+    position: relative;
+    z-index: 3;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -350,4 +467,4 @@ const hide = () => {
         width: 96px;
     }
 }
-</style>
+</style>s
