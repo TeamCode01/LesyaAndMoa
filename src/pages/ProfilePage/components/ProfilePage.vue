@@ -17,7 +17,7 @@
         <div class="profile-child__wrapper">
             <div class="delete-profile">Удалить профиль</div>
             <div class="child__form">
-                <p class="child__name">Мария Иванова</p>
+                <p class="child__name">{{ child.last_name }}</p>
                 <p class="child__school">Школа №1514</p>
                 <div class="child__scale">
                     <v-progress-linear
@@ -167,12 +167,15 @@
 import { Button } from '@shared/components/buttons';
 import { modalWindow } from '@shared/components/modals';
 import { HTTP } from '@app/http';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { SelectSort } from '@shared/components/selects';
+import { useRoute } from 'vue-router';
 const skill = ref(20);
 const isError = ref([]);
 const error = ref([]);
+// const route = useRoute();
+// let id = route.params.id;
 
 const tasksChoose = ref([
     { value: 'Женский', name: 'Женский' },
@@ -190,6 +193,7 @@ const form = ref({
     sex: null,
     data_processing_agreement: false,
 });
+const child = ref([]);
 
 const AddChild = async () => {
     try {
@@ -222,6 +226,25 @@ const GetRegion = async () => {
         console.error('There was an error!', error);
     }
 };
+const GetChild = async () => {
+    try {
+        const response = await HTTP.get(`/children/`, child.value, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        child.value = response.data;
+        console.log(response.data);
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+    }
+};
+onMounted(() => {
+    GetChild();
+});
 </script>
 <style lang="scss" scoped>
 .profile {
