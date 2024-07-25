@@ -20,19 +20,19 @@
                     <div class="draggable-list__words">
                         <div class="draggable-list__word-container" v-for="(word, word_index) in words[option]" :key="word_index">
                             <div class="draggable-list__word">{{ word.word }}</div>
-                            <img @mousedown="test" @mouseup="test" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[1][word_index - 1] = el" @mousedown="test" @mouseup="test" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
                     <div class="draggable-list__sentences">
                         <div class="draggable-list__sentence-container" v-for="(sentence, sentence_index) in sentences[option]" :key="sentence_index">
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[2][sentence_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <div class="draggable-list__sentence">{{ sentence.sentence }}</div>
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[3][sentence_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
                     <div class="draggable-list__pictures">
                         <div class="draggable-list__picture-container" v-for="(img, img_index) in images[option]" :key="img_index">
-                            <img alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[4][img_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <img :src="img.url" class="draggable-list__image">
                         </div>
                     </div>
@@ -54,6 +54,18 @@ const startGame = ref(true);
 const isDrawing = ref(false);
 const option = ref(1);
 const lines = ref([]);
+const refColumns = ref({
+    1:[],
+    2:[],
+    3:[],
+    4:[],
+});
+const centralCords = ref({
+    1:[{x: 0, y: 0},{x: 0, y: 0},{x: 0, y: 0},{x: 0, y: 0}],
+    2:[{x: 0, y: 0},{x: 0, y: 0},{x: 0, y: 0},{x: 0, y: 0}],
+    3:[{x: 0, y: 0},{x: 0, y: 0},{x: 0, y: 0},{x: 0, y: 0}],
+    4:[{x: 0, y: 0},{x: 0, y: 0},{x: 0, y: 0},{x: 0, y: 0}],
+})
 const startCords = ref({
     x: 0,
     y: 0,
@@ -299,7 +311,28 @@ const resizeCanvas = () => {
     redraw(); 
 }
 
+const getCenterCords = () => {
+    for (const columnsId in centralCords.value) {
+        for (const imgData in centralCords.value[columnsId]) {
+            const img = refColumns.value[columnsId][imgData];
+            if (img) {
+                const rect = img.getBoundingClientRect();
+                
+                centralCords.value[columnsId][imgData].x = rect.left + rect.width / 2;
+                centralCords.value[columnsId][imgData].maxX = rect.left + rect.width / 2 + 10;
+                centralCords.value[columnsId][imgData].minX = rect.left + rect.width / 2 - 10;
+
+                centralCords.value[columnsId][imgData].y = rect.top + rect.height / 2;
+                centralCords.value[columnsId][imgData].maxY = rect.top + rect.height / 2 + 10;
+                centralCords.value[columnsId][imgData].minY = rect.top + rect.height / 2 - 10;
+            }
+        }
+    }
+    console.log(centralCords.value);
+}
+
 onMounted(()=>{
+    getCenterCords();
     canvas = canvasRef.value;
     ctx = canvas.getContext('2d');
     resizeCanvas();
