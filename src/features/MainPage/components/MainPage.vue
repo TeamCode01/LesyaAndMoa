@@ -20,12 +20,13 @@
             <div class="Test__wrapper">
                 <div>
                     <p class="Test__wrapper_title">Дорогие друзья!</p>
-                    <p class="Test__wrapper_text">Мы услышали речь увиденных нами странных героев. Но как нам понять друг
+                    <p class="Test__wrapper_text">Мы услышали речь увиденных нами странных героев. Но как нам понять
+                        друг
                         друга? Пройди задание и
                         присоединяйся к тем, кто помогает инопланетянам понять нас. </p>
                 </div>
-                <Button @click="openTest()" class="Test__wrapper_btn" :isImage="true" :image="arrow"
-                    label="Начать"></Button>
+                <Button v-if="showBtn === true" @click="openTest()" class="Test__wrapper_btn" :isImage="true"
+                    :image="arrow" label="Начать"></Button>
             </div>
             <div class="Test_icons_wrap">
                 <div class="Test_icons_item" @click="mute()"><img v-show="isMuted === false"
@@ -197,64 +198,67 @@ const slideItems = ref([
 ])
 
 const isOpen = ref(false);
-// const audio = new Audio('/assets/audio/TestTask/3.тестовое задание.mp3');
-const isPlaying = ref(false);
+const audio = ref(new Audio());
+const showBtn = ref(false);
 const isMuted = ref(false);
 const close = () => {
     isOpen.value = false;
 }
 
 
-function playAudio(audioPath) {
-    const audio = new Audio(audioPath);
-    audio.play(audioPath);
-    // if (!isPlaying.value) {
+const playAudio = (audioPath) => {
+    audio.value.src = audioPath;
+    audio.value.play();
+}
 
-    // isPlaying.value = true;
-    // } else {
-    //     audio.pause();
-    //     isPlaying.value = false;
-    // }
+const playTestAudio = (audioPath) => {
+    audio.value.src = audioPath;
+    audio.value.play();
 }
 
 const mute = () => {
-    console.log('skip')
-    const audio = new Audio('/assets/audio/TestTask/3.тестовое задание.mp3');
-    isMuted.value = !isMuted.value;
-    audio.muted = isMuted.value;
+    isMuted.value = !isMuted.value
+    if (isMuted.value === true) {
+        audio.value.volume = 0
+    } else {
+        audio.value.volume = 1;
+    }
 }
 
 const refresh = () => {
-    console.log('skip')
-    const audio = new Audio('/assets/audio/TestTask/3.тестовое задание.mp3');
-    audio.currentTime = 0;
-    audio.play();
+    console.log('refresh')
+    audio.value.currentTime = 0;
 }
 
 const skip = () => {
-    console.log('skip')
-    const audio = new Audio('/assets/audio/TestTask/3.тестовое задание.mp3');
-    audio.currentTime = 0;
+    audio.value.src = ''
+    showBtn.value = true;
 }
 
 const openTest = () => {
     isOpen.value = true;
-    playAudio('/assets/audio/TestTask/4.тестовое задание.mp3');
+    playTestAudio('/assets/audio/TestTask/4.тестовое задание.mp3');
 }
 
 onMounted(() => {
     const test = document.getElementById('test');
+    document.addEventListener('scroll', handleScroll);
     function handleScroll() {
         const posTop = test.getBoundingClientRect().top;
         if (posTop + test.clientHeight <= window.innerHeight && posTop >= 0) {
             playAudio('/assets/audio/Music/звук 1_.mp3');
             setTimeout(() => {
                 playAudio('/assets/audio/TestTask/3.тестовое задание.mp3');
+                audio.value.addEventListener('ended', () => {
+                    audio.value.src = '';
+                    showBtn.value = true;
+                })
             }, 14000)
-            window.removeEventListener('scroll', handleScroll);
+
+            document.removeEventListener('scroll', handleScroll);
         }
     }
-    window.addEventListener('scroll', handleScroll);
+
 })
 </script>
 <style lang="scss" scoped>
@@ -292,6 +296,7 @@ onMounted(() => {
         min-width: 500px;
         background-color: rgba(255, 255, 255, .8);
         border-radius: 25%;
+
         @media (max-width: 1024px) {
             min-width: 446px;
             height: 402px;
@@ -321,6 +326,7 @@ onMounted(() => {
         margin: 40px auto;
         margin-bottom: 0px;
         max-width: 368px;
+
         @media (max-width: 1024px) {
             min-width: 372px;
         }
@@ -355,9 +361,11 @@ onMounted(() => {
             position: absolute;
             top: 15px;
             right: 50px;
+
             @media (max-width: 1440px) {
                 left: 800px;
             }
+
             @media (max-width: 1024px) {
                 left: 780px;
             }
@@ -393,6 +401,7 @@ onMounted(() => {
         height: 580px;
         padding: 40px 40px 90px 40px;
         height: 600px;
+
         &_title {
             font-size: 32px;
             font-family: 'Nunito';
@@ -437,13 +446,14 @@ onMounted(() => {
     display: flex;
     position: relative;
     width: 1200px;
-    @media (max-width: 1440px) {
-            width: 960px;
-        }
 
-        @media (max-width: 1024px) {
-            width: 944px;
-        }
+    @media (max-width: 1440px) {
+        width: 960px;
+    }
+
+    @media (max-width: 1024px) {
+        width: 944px;
+    }
 }
 
 .about {
@@ -463,9 +473,10 @@ onMounted(() => {
         display: flex;
         justify-content: center;
         gap: 20px;
+
         @media (max-width: 1024px) {
             flex-direction: column;
-            align-items: center;  
+            align-items: center;
         }
 
         &-item {
@@ -502,9 +513,10 @@ onMounted(() => {
         &-icon {
             position: absolute;
             top: 44%;
+
             @media (max-width: 1024px) {
                 transform: rotate(90deg);
-        }
+            }
         }
     }
 }
