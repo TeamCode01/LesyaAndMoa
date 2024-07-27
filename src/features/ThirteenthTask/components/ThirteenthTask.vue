@@ -1,5 +1,5 @@
 <template>
-    <template v-if="endGame === true">
+    <template v-if="endGame === false">
         <div class="ThirteenthTask task_block">
             <div class="ThirteenthTask__wrapper">
                 <div class="task_block__close" @click="hide">
@@ -40,8 +40,8 @@
         </div>
     </template>
 
-    <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png" text="Чудесно!"
-        v-if="show === true" @hide="hideModal"></TaskResultBanner>
+    <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.gif" text="Чудесно!"
+        v-if="show === true" @hide="hide"></TaskResultBanner>
 </template>
 
 <script setup>
@@ -68,6 +68,7 @@ const show = ref(false);
 const hideModal = () => {
     show.value = false;
 }
+
 
 const words = ref([
     'РАДЫ',
