@@ -34,7 +34,7 @@
         </div>
 
         <Button
-        v-if="props.show"
+        v-if="props.show === true"
             class="start"
             label="Старт"
             :is-image="true"
@@ -67,10 +67,11 @@ import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 import { TwelfthTask } from '@features/TwelfthTask';
 // import FourteenthTask from '@features/FourteenthTask/components/FourteenthTask.vue';
-const emit = defineEmits(['sendImg', 'sendAudio']);
+const emit = defineEmits(['sendImg', 'sendAudio', 'show']);
 const props = defineProps({
     show: {
         type: Boolean,
+        default: false,
     }
 })
 const audio = ref(new Audio());
@@ -105,11 +106,14 @@ const taskAudio = ref('/assets/audio/Task1/12.1.mp3');
 const startAudio = ref('/assets/audio/Task1/11.1_.mp3');
 const endTime = ref(false);
 const taskss = ref([]);
+const show = ref(props.show);
 
 const close = () => {
     SeeTask.value = false;
     endTime.value = false;
     finish.value = false;
+    show.value = false;
+    emit('show', show.value);
 };
 
 const playAudio = (audioPath) => {
@@ -125,12 +129,14 @@ const switchTask = (id, openId, time, img, audio, startAudioV) => {
     SeeTask.value = openId;
     startAudio.value = startAudioV;
     timeVal.value = time;
+    show.value = false;
     taskAudio.value = audio;
     endTime.value = false;
     finish.value = false;
     taskImage.value = img;
     emit('sendAudio', startAudioV);
     emit('sendImg', img);
+    emit('show', show.value);
 };
 
 const startTask = async (id) => {

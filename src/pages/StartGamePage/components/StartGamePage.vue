@@ -1,9 +1,10 @@
 <template>
   <div class="container-game">
     <div class="game">
-      <Sidebar :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" />
+      <Sidebar :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" />
       <div class="game_icons_wrap">
-        <div class="game_icons_item" @click="mute()"><img v-show="isMuted === false" src="@app/assets/icons/sound.svg" alt="sound"><img v-show="isMuted === true" src="@app/assets/icons/muted.svg" alt=""></div>
+        <div class="game_icons_item" @click="mute()"><img v-show="isMuted === false" src="@app/assets/icons/sound.svg"
+            alt="sound"><img v-show="isMuted === true" src="@app/assets/icons/muted.svg" alt=""></div>
         <div class="game_icons_item" @click="refresh()"><img src="@app/assets/icons/refresh.svg" alt="refresh"></div>
         <div class="game_icons_item" @click="skip()">
           <img src="@app/assets/icons/playGame.svg" alt="play">
@@ -37,12 +38,16 @@ const sendAudio = (music) => {
   audio.value = music;
 }
 
+const showButton = (show) => {
+  showBtn.value = show;
+}
+
 const mute = () => {
   isMuted.value = !isMuted.value
-  if(isMuted.value === true) {
+  if (isMuted.value === true) {
     startAudio.value.volume = 0
   } else {
-   startAudio.value.volume = 1;
+    startAudio.value.volume = 1;
   }
 }
 const skip = () => {
@@ -58,7 +63,7 @@ const playSound = () => {
   startAudio.value.src = audio.value;
   startAudio.value.play();
   startAudio.value.addEventListener('ended', () => {
-      showBtn.value = true;
+    showBtn.value = true;
   })
 }
 
