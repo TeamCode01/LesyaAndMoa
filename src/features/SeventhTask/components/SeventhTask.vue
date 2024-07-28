@@ -23,17 +23,31 @@
                             <img :ref="el => refColumns[1][word_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
-                    <div class="draggable-list__sentences">
+                    <div class="draggable-list__sentences" v-if="!showCorrectRow">
                         <div class="draggable-list__sentence-container" v-for="(sentence, sentence_index) in sentences[option]" :key="sentence_index">
                             <img :ref="el => refColumns[2][sentence_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <div :ref="el => refBlockSound[2][sentence_index - 1] = el" :class="{'draggable-list__sentence': true, correct_select: sentence.correct, not_correct_select: sentence.correct === false}">{{ sentence.sentence }}</div>
                             <img :ref="el => refColumns[3][sentence_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
-                    <div class="draggable-list__pictures">
+                    <div class="draggable-list__sentences" v-else>
+                        <div class="draggable-list__sentence-container" v-for="(rowId, rowId_index) in correctRowId[option][2]" :key="rowId_index">
+                            <img :ref="el => refColumns[2][rowId_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <div :ref="el => refBlockSound[2][rowId_index - 1] = el" class="draggable-list__sentence">{{ sentences[option][rowId].sentence }}</div>
+                            <img :ref="el => refColumns[3][rowId_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                        </div>
+                    </div>
+                    
+                    <div class="draggable-list__pictures" v-if="!showCorrectRow">
                         <div class="draggable-list__picture-container" v-for="(img, img_index) in images[option]" :key="img_index">
                             <img :ref="el => refColumns[4][img_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
-                            <img :src="img.url" :class="{'draggable-list__image': true, correct_select: img.correct, not_correct_select: img.correct === false }">
+                            <img :src="img.url" class="draggable-list__image">
+                        </div>
+                    </div>
+                    <div class="draggable-list__pictures" v-else>
+                        <div class="draggable-list__picture-container" v-for="(rowId, rowId_index) in correctRowId[option][3]" :key="rowId_index">
+                            <img :ref="el => refColumns[4][rowId_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :src="images[option][rowId].url" class="draggable-list__image">
                         </div>
                     </div>
                 </div>
@@ -52,7 +66,7 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
 const startGame = ref(true);
 const isDrawing = ref(false);
-const option = ref(1);
+const option = ref(2);
 const lines = ref([]);
 const refBlockSound = ref({
     1: [],
@@ -61,6 +75,19 @@ const refBlockSound = ref({
 const blockSoundCords = ref({
     1: [],
     2: []
+});
+const showCorrectRow = ref(false);
+const correctRowId = ref({
+    1: {
+        1: [1, 2, 3, 4],
+        2: [4, 3, 2, 1],
+        3: [3, 4, 1, 2],
+    },
+    2: {
+        1: [1, 2, 3, 4],
+        2: [2, 1, 4, 3],
+        3: [4, 3, 1, 2],
+    }
 });
 const refColumns = ref({
     1:[],
@@ -122,21 +149,29 @@ const words = ref({
             word: 'СЕЛ',
             audio: '/assets/audio/Task7/270.7.mp3',
             correct: null,
+            correctRight: false,
+            correctRightRow: 2,
         },
         2: {
             word: 'СЪЕЛ',
             audio: '/assets/audio/Task7/271.7.mp3',
             correct: null,
+            correctRight: false,
+            correctRightRow: 1,
         },
         3: {
             word: 'МЕЛ',
             audio: '/assets/audio/Task7/272.7.mp3',
             correct: null,
+            correctRight: false,
+            correctRightRow: 4,
         },
         4: {
             word: 'МЕЛЬ',
             audio: '/assets/audio/Task7/273.7.mp3',
             correct: null,
+            correctRight: false,
+            correctRightRow: 3,
         },
     },
 })
@@ -185,21 +220,37 @@ const sentences = ref({
             sentence: 'принял пищу, покушал',
             audio: '/assets/audio/Task7/275.7.mp3',
             correct: null,
+            correctLeft: false,
+            correctRight: false,
+            correctRightRow: 3,
+            correctLeftRow: 2,
         },
         2: {
             sentence: 'принял положение сидя',
             audio: '/assets/audio/Task7/274.7.mp3',
             correct: null,
+            correctLeft: false,
+            correctRight: false,
+            correctRightRow: 4,
+            correctLeftRow: 1,
         },
         3: {
             sentence: 'неглубокое место в реке, озере или в море',
             audio: '/assets/audio/Task7/277.7.mp3',
             correct: null,
+            correctLeft: false,
+            correctRight: false,
+            correctRightRow: 2,
+            correctLeftRow: 4,
         },
         4: {
             sentence: 'белый известняк для окраски, писания (на доске)',
             audio: '/assets/audio/Task7/276.7.mp3',
             correct: null,
+            correctLeft: false,
+            correctRight: false,
+            correctRightRow: 1,
+            correctLeftRow: 3,
         },
     },
 }) 
@@ -235,18 +286,26 @@ const images = ref({
         1: {
             url: "assets/creatures/SeventhTask/chalk.png",
             correct: null,
+            correctLeft: false,
+            correctLeftRow: 4
         },
         2: {
             url: "assets/creatures/SeventhTask/shallow.png",
             correct: null,
+            correctLeft: false,
+            correctLeftRow: 3
         },
         3: {
             url: "assets/creatures/SeventhTask/food.png",
             correct: null,
+            correctLeft: false,
+            correctLeftRow: 1
         },
         4: {
             url: "assets/creatures/SeventhTask/sit.png",
             correct: null,
+            correctLeft: false,
+            correctLeftRow: 2
         },
     },
 })
@@ -462,6 +521,38 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
     }
 }
 
+const redrawCorrectRows = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for(let i = 0; i <= 1; ++i) {
+        for ( let j = 0; j <= 3; ++j) {
+            console.log(centralCords.value);
+            console.log(centralCords.value[i * 2 + 1][j].x, centralCords.value[i * 2 + 1][j].y);
+            ctx.fillStyle = "green";
+            ctx.beginPath();
+            ctx.arc(centralCords.value[i * 2 + 1][j].x, centralCords.value[i * 2 + 1][j].y, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.closePath();
+            
+            ctx.strokeStyle = "green";
+            ctx.lineWidth = 2;
+            ctx.setLineDash([]);
+            ctx.beginPath();
+            ctx.moveTo(centralCords.value[i * 2 + 1][j].x, centralCords.value[i * 2 + 1][j].y);
+            ctx.lineTo(centralCords.value[i * 2 + 2][j].x, centralCords.value[i * 2 + 2][j].y);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.fillStyle = "green";
+            ctx.beginPath();
+            ctx.arc(centralCords.value[i * 2 + 2][j].x, centralCords.value[i * 2 + 2][j].y, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.closePath();
+        }
+    }
+}
+
 const disengage = (event) => {
     if (isDrawing.value) {
         const pos = getCursorPosition(event);
@@ -482,9 +573,13 @@ const disengage = (event) => {
 
                 if(countAnswers.value == 8){
                     setTimeout(() => {
-                        startGame.value = false;
+                        showCorrectRow.value = true;
                         playAudio(`/assets/audio/Task7/278.7.mp3`);
-                    }, 2000);
+                        redrawCorrectRows();
+                    }, 1000);
+                    setTimeout(() => {
+                        startGame.value = false;
+                    }, 11000);
                 }
             } else {
                 playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
@@ -554,7 +649,6 @@ const getCenterCords = () => {
         for(let rowsId = 0; rowsId < 4; rowsId++) {
             const block = refBlockSound.value[columnsId][rowsId];
             if(block) {
-                console.log(columnsId);
                 const rect = block.getBoundingClientRect();
                 const canvasRect = canvas.getBoundingClientRect();
 
@@ -577,10 +671,12 @@ const getCenterCords = () => {
 }
 
 onMounted(()=>{
+    option.value = Math.floor(Math.random() * 2) + 1;
     canvas = canvasRef.value;
     getCenterCords();
     ctx = canvas.getContext('2d');
     resizeCanvas();
+    // redrawCorrectRows();
     window.addEventListener('resize', resizeCanvas);
 })
 </script>
