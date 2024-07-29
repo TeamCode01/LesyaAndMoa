@@ -1,7 +1,7 @@
 <template>
-    <template v-if="endGame === false">
-        <div class="ThirdTask task_block">
-            <div class="ThirdTask__wrapper">
+    <div class="ThirdTask task_block">
+        <div class="task_block__wrapper">
+            <template v-if="endGame === false">
                 <div class="task_block__close" @click="hide">
                     <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
@@ -42,11 +42,11 @@
                         </div>
                     </div>
                 </div>
+                </template>
+                <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Великолепно!"
+                v-else @hide="hideModal" class="end-modal"></TaskResultBanner>
             </div>
         </div>
-    </template>
-    <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Великолепно!"
-        v-if="show === false" @hide="hideModal" class="end-modal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';

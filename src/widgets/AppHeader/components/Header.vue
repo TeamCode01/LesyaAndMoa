@@ -11,7 +11,6 @@
                         />
                     </a>
                 </div>
-
                 <ul class="header__wrapper_links">
                     <li>
                         <a href="/about-project" class="link-small"
@@ -24,8 +23,11 @@
                         <a href="#" class="link-small">Поддержать проект</a>
                     </li>
                 </ul>
+                <!-- <router-link class="link" :to="{ name: 'Login' }">
+                        <Button class="btn_info" label="Войти"></Button>
+                </router-link> -->
                 <div class="header__wrapper_adaptive">
-                    <div class="header__wrapper_avatar">
+                    <!-- <div class="header__wrapper_avatar">
                         <img
                             src="@app/assets/icons/avatar.png"
                             alt="Аватарка"
@@ -37,7 +39,10 @@
                                 alt="arrow"
                             />
                         </div>
-                    </div>
+                    </div> -->
+                    <router-link  class="link" :to="{ name: 'Login' }">
+                            <Button class="btn_info" label="Войти"></Button>
+                    </router-link>
                     <div
                         class="header__wrapper_burger"
                         @click="showModal = true"
@@ -59,7 +64,7 @@
                         </a>
                     </div>
                     <router-link class="link" :to="{ name: 'Login' }">
-                        <Button class="btn_info" label="Войти"></Button>
+                            <Button class="btn_info" label="Войти"></Button>
                     </router-link>
                 </div>
             </div>
@@ -87,9 +92,9 @@
                 <li><a href="#" class="link-small">О проекте</a></li>
                 <li><a href="#" class="link-small">Новости</a></li>
                 <li><a href="#" class="link-small">Контакты</a></li>
-                <li>
-                    <a href="#" class="link-small">Поддержать проект</a>
-                </li>
+                <li><a href="#" class="link-small">Поддержать проект</a></li>
+                <li><a href="#" class="link-small">Выйти</a></li>
+                <li><a href="#" class="link-small">Удалить профиль</a></li>
             </ul>
             <div class="header__logo">
                 <a href="#" target="_blank">
@@ -102,7 +107,7 @@
             </div>
         </div>
     </div>
-    <div class="modal-mini" v-if="showModalMini">
+    <!-- <div class="modal-mini" v-if="showModalMini">
         <div class="close" @click="showModalMini = false">
             <img
                 class="close-icon"
@@ -121,7 +126,7 @@
                 <li><a href="#" class="link-small">Удалить профиль</a></li>
             </ul>
         </div>
-    </div>
+    </div> -->
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
@@ -133,7 +138,6 @@ const showModalMini = ref(false);
 .header {
     background-color: $header;
     padding: 30px 0;
-
     &__logo {
         &_main {
             height: 40px;
@@ -160,7 +164,14 @@ const showModalMini = ref(false);
         display: flex;
         justify-content: space-between;
         align-items: center;
-
+        padding: 0 40px;
+        @media(max-width:568px) {
+            &_adaptive {
+                display: flex;
+                justify-content: space-between;
+                width: 60%;
+            }
+        }
         &_avatar {
             display: flex;
             align-items: baseline;
