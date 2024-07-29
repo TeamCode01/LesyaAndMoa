@@ -105,6 +105,9 @@ const startCords = ref({
     x: 0,
     y: 0,
 })
+const isFirstPassing = ref(true);
+const isFirstOptionCompleted = ref(false);
+const isSecondOptionCompleted = ref(false);
 const countAnswers = ref(0);
 let startIds = {};
 let endIds = {};
@@ -572,14 +575,49 @@ const disengage = (event) => {
                 });
 
                 if(countAnswers.value == 8){
-                    setTimeout(() => {
-                        showCorrectRow.value = true;
-                        playAudio(`/assets/audio/Task7/278.7.mp3`);
-                        redrawCorrectRows();
-                    }, 1000);
-                    setTimeout(() => {
-                        startGame.value = false;
-                    }, 11000);
+                    if(isFirstPassing.value){
+                        setTimeout(() => {
+                            showCorrectRow.value = true;
+                            playAudio(`/assets/audio/Task7/278.7.mp3`);
+                            redrawCorrectRows();
+                        }, 1000);
+                        setTimeout(() => {
+                            startGame.value = false;
+                        }, 11000);
+                    } else {
+                        if(option.value == 1){
+                            isFirstOptionCompleted.value = true;
+                            if(!isSecondOptionCompleted.value) {
+                                setTimeout(() => {
+                                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                    lines.value = [];
+                                    option.value = 2;
+                                    countAnswers.value = 0;
+                                }, 2000);
+                            }
+                        } else {
+                            isSecondOptionCompleted.value = true;
+                            if(!isFirstOptionCompleted.value) {
+                                setTimeout(() => {
+                                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                    lines.value = [];
+                                    option.value = 1;
+                                    countAnswers.value = 0;
+                                }, 2000);
+                            }
+                        }
+                        console.log(isFirstOptionCompleted.value, isSecondOptionCompleted.value);
+                        if(isFirstOptionCompleted.value && isSecondOptionCompleted.value){
+                            setTimeout(() => {
+                                showCorrectRow.value = true;
+                                playAudio(`/assets/audio/Task7/278.7.mp3`);
+                                redrawCorrectRows();
+                            }, 1000);
+                            setTimeout(() => {
+                                startGame.value = false;
+                            }, 11000);
+                        }
+                    }
                 }
             } else {
                 playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
