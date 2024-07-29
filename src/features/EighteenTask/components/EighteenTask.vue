@@ -15,13 +15,13 @@
                 <div class="EighteenTask__task">
                     <img src="@app/assets/backgrounds/pictureWords.png" />
                 </div>
-                <input class="EighteenTask__answer" v-model="answer" />
-                <Button class="send" :isImage="true" :image="arrow" label="Ответить" />
+                <textarea class="EighteenTask__answer" id="input" v-model="answer" />
+                <Button class="send" :isImage="true" :image="arrow" label="Ответить" @click="sendAnswer" />
             </div>
         </div>
     </template>
     <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png" text="Отлично!"
-        v-if="show === true" @hide="hideModal"></TaskResultBanner>
+        v-else  @hide="hide()"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -31,6 +31,7 @@ import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 const emit = defineEmits(['close']);
 const endGame = ref(false);
+
 const hide = () => {
     emit('close');
     endGame.value = true;
@@ -43,13 +44,37 @@ const props = defineProps({
     },
 });
 
+const audio = ref(new Audio());
 
-const show = ref(false);
-const hideModal = () => {
-    show.value = false;
+
+const playAudio = (audioPath) => {
+    audio.value.src = audioPath;
+    audio.value.play();
 }
 
 const answer = ref('');
+const correct_answer = ref('Я рада была подружиться с ребятами. Они научили нас с Моа понимать их язык. Я узнала много новых слов. Мне нравится на Земле')
+
+const sendAnswer = () => {
+    const answer_input = document.getElementById('input');
+    if (answer.value === correct_answer.value) {
+        answer_input.classList.add('green');
+        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        setTimeout(() => {
+            answer_input.classList.remove('green');
+            endGame.value = true;
+        }, 2000)
+
+
+
+    } else {
+        answer_input.classList.add('red');
+        playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+        setTimeout(() => {
+            answer_input.classList.remove('red');
+        }, 2000)
+    }
+}
 </script>
 <style lang="scss" scoped>
 .send {
@@ -119,5 +144,13 @@ const answer = ref('');
             column-gap: 28px;
         }
     }
+}
+
+.red {
+    border: 2px solid red !important;
+}
+
+.green {
+    border: 2px solid green !important;
 }
 </style>
