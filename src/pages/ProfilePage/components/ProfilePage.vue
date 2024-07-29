@@ -169,6 +169,7 @@
                     </div>
                     <div class="regCheck">
                         <input
+                            :dialog="false"
                             type="checkbox"
                             v-model="form.data_processing_agreement"
                         />
@@ -213,9 +214,7 @@ import { useRoute } from 'vue-router';
 const isError = ref([]);
 const error = ref([]);
 const swal = inject('$swal');
-
 const route = useRoute();
-// const isComingFromSignUpPage = ref($route.name === 'Registration');
 
 const tasksChoose = ref([
     { value: 'Женский', name: 'Женский' },
@@ -291,6 +290,7 @@ const AddChild = async () => {
             timer: 1500,
         });
         await GetChild();
+        await fetchSkills();
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -327,7 +327,6 @@ const GetChild = async () => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        console.log(localStorage.getItem('Token'));
         child.value = response.data;
         console.log(response.data);
     } catch (error) {
@@ -352,7 +351,6 @@ const GetUser = async () => {
         console.error('There was an error!', error);
     }
 };
-
 const GetSkill = async (id, index) => {
     try {
         const response = await HTTP.get(`/answers/${id}/check_progress/`, {
@@ -369,11 +367,16 @@ const GetSkill = async (id, index) => {
         console.error('There was an error!', error);
     }
 };
-
+const fetchSkills = async () => {
+    for (let i = 0; i < child.value.length; i++) {
+        const id = child.value[i].id;
+        await GetSkill(id, i);
+    }
+};
 onMounted(async () => {
-    await GetChild();
     await GetUser();
-    await GetSkill();
+    await GetChild();
+    await fetchSkills();
 });
 </script>
 <style lang="scss" scoped>

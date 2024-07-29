@@ -11,6 +11,14 @@
                     <span>{{ label }}</span>
                 </div>
             </template>
+            <div class="close icon-closed">
+                <img
+                    @click="closeDialog"
+                    class="close-icon"
+                    src="@app/assets/icons/icon-close.svg"
+                    alt="крест"
+                />
+            </div>
             <slot></slot>
         </v-dialog>
     </div>
@@ -26,5 +34,16 @@ const props = defineProps({
         default: 'Button',
     },
 });
+
+const closeDialog = () => {
+    dialog.value = false;
+};
 </script>
-<style></style>
+<style>
+.icon-closed {
+    position: absolute;
+    z-index: 1;
+    right: 10%;
+    top: 10px;
+}
+</style>
