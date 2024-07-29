@@ -83,8 +83,8 @@ import { SelectSort } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
 
 const tasksChoose = ref([
-    { value: 'Групповые занятия', name: 'Групповые занятия' },
-    { value: 'Индивидуальные занятия', name: 'Индивидуальные занятия' },
+    { value: 'групповой', name: 'Групповые занятия' },
+    { value: 'индивидуальный', name: 'Индивидуальные занятия' },
 ]);
 
 const router = useRouter();

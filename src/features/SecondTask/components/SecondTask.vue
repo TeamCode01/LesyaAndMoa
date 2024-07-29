@@ -11,7 +11,7 @@
                     <p class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</p>
                 </div>
                 <div class="SecondTask__wrapper_block">
-                    <div @mouseenter="playAudio(item.audio)"
+                    <div @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
                         @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"
                         class="SecondTask__wrapper_block_item">
                         <img id="image" :src="item.src" alt="alphabet">
@@ -21,20 +21,22 @@
         </div>
     </template>
 
-    <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!"
-            v-else @hide="hide()" class="end-modal"></TaskResultBanner>
+    <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!" v-else
+        @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-import { event } from 'quasar';
 const emit = defineEmits(['close']);
 const props = defineProps({
     end: {
         type: Boolean,
         required: false,
     },
+    finish: {
+        type: Boolean,
+    }
 });
 const hide = () => {
     emit('close');
@@ -42,21 +44,19 @@ const hide = () => {
 };
 const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false, audio: '/assets/audio/Task2/27.2.mp3' }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true, audio: '/assets/audio/Task2/26.2.mp3' }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false, audio: '/assets/audio/Task2/28.2.mp3' }])
 const endGame = ref(false);
-const show = ref(false);
-let audio = ref(null);
-const hideModal = () => {
-    show.value = false;
-}
+const isPlaying = ref(false);
+const audio = ref(new Audio());
 const music = ref(null);
 
-const playAudio = (audioPath, end) => {
-    audio.value = new Audio(audioPath);
-    audio.value.play();
-    if(end) {
-        audio.pause();
-        audio.currentTime = 0;
-        // audio.removeEventListener('ended', playAudio);
+const playAudio = (audioPath) => {
+    audio.value.src = audioPath;
+    if(props.finish === true) {
+        audio.value.play();
     }
+}
+
+const stopAudio = (audioPath) => {
+    audio.value.src = '';
 }
 
 const chooseTask = (event, status) => {
@@ -68,7 +68,6 @@ const chooseTask = (event, status) => {
         event.target.classList.add('green');
         playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
-            show.value = true;
             endGame.value = true;
             event.target.classList.remove('green');
         }, 2000);

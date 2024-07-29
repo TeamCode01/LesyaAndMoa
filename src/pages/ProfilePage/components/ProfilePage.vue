@@ -1,27 +1,64 @@
 <template>
-    <!-- <div class="profile">
-        <div class="profile__wrapper">
-            <p class="text text__profile">Спасибо за регистрацию!</p>
-            <p class="text profile__text">
-                Чтобы начать обучение, создайте новую группу
-            </p>
-            <Button label="Добавить ребенка" class="profile__btn"></Button>
-            <img
-                class="profile__img"
-                src="@app/assets/img/Profile/Moa.png"
-                alt=""
-            />
-        </div>
-    </div> -->
+    <div class="profile__wrapper" v-if="!child.length">
+        <p class="text text__profile">Спасибо за регистрацию!</p>
+        <p
+            class="text profile__text"
+            v-if="user.tasks_type === 'индивидуальный'"
+        >
+            Чтобы начать обучение, добавьте ребенка
+        </p>
+        <p class="text profile__text" v-if="user.tasks_type === 'групповой'">
+            Чтобы начать обучение, создайте новую группу
+        </p>
+    </div>
     <div class="profile-child">
-        <div class="profile-child__wrapper">
-            <div class="delete-profile">Удалить профиль</div>
+        <div
+            class="profile-child__wrapper"
+            v-for="(block, index) in child"
+            :key="index"
+        >
+            <div class="delete-profile">
+                <modalConfirm label="Удалить профиль">
+                    <div class="delete-profile__wrapper">
+                        <h3 class="delete-profile__title">
+                            Удаление профиля ребенка
+                        </h3>
+                        <div>
+                            <div class="delete-profile_content">
+                                <p>
+                                    Все данные {{ block.last_name }}&nbsp;{{
+                                        block.first_name
+                                    }}
+                                    будут удалены.
+                                </p>
+                                <div class="regCheck delete-check">
+                                    <input type="checkbox" />
+                                    <div>&nbsp;Да, я хочу удалить профиль</div>
+                                </div>
+                            </div>
+                            <div class="delete-profile_btn">
+                                <Button
+                                    class="delete-btn"
+                                    label="Удалить"
+                                    @click="deleteChild(block.id, index)"
+                                ></Button>
+                                <Button
+                                    label="Отмена"
+                                    class="delete-btn"
+                                ></Button>
+                            </div>
+                        </div>
+                    </div>
+                </modalConfirm>
+            </div>
             <div class="child__form">
-                <p class="child__name">{{ child.last_name }}</p>
-                <p class="child__school">Школа №1514</p>
+                <p class="child__name">
+                    {{ block.first_name }}&nbsp;{{ block.last_name }}
+                </p>
+                <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
                     <v-progress-linear
-                        v-model="skill"
+                        v-model:value="block.progress"
                         height="30"
                         class="scale"
                     >
@@ -48,7 +85,7 @@
                     <div class="form-input">
                         <label>Фамилия</label>
                         <Input
-                            placeholder="Введите логин"
+                            placeholder="Фамилия"
                             name="login"
                             class="form-input"
                             v-model:value="form.first_name"
@@ -132,6 +169,7 @@
                     </div>
                     <div class="regCheck">
                         <input
+                            :dialog="false"
                             type="checkbox"
                             v-model="form.data_processing_agreement"
                         />
@@ -143,11 +181,6 @@
                 </v-card-text>
 
                 <v-card-actions>
-                    <!-- <v-btn
-                        text="Close"
-                        variant="plain"
-                        @click="dialog = false"
-                    ></v-btn> -->
                     <Button
                         label="Добавить ребёнка"
                         class="profile__btn add-child-btn"
@@ -157,25 +190,31 @@
             </v-card>
         </modalWindow>
         <img
+            v-if="child.length"
             class="profile-child__img"
             src="@app/assets/img/Profile/LesyaMoa.png"
+            alt=""
+        />
+        <img
+            v-if="!child.length"
+            class="profile__img"
+            src="@app/assets/img/Profile/Moa.png"
             alt=""
         />
     </div>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { modalWindow } from '@shared/components/modals';
+import { modalWindow, modalConfirm } from '@shared/components/modals';
 import { HTTP } from '@app/http';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { SelectSort } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
-const skill = ref(20);
 const isError = ref([]);
 const error = ref([]);
-// const route = useRoute();
-// let id = route.params.id;
+const swal = inject('$swal');
+const route = useRoute();
 
 const tasksChoose = ref([
     { value: 'Женский', name: 'Женский' },
@@ -193,7 +232,45 @@ const form = ref({
     sex: null,
     data_processing_agreement: false,
 });
-const child = ref([]);
+const user = ref({});
+const child = ref([
+    {
+        id: '',
+        first_name: '',
+        last_name: '',
+        school: '',
+    },
+]);
+const skill = ref({});
+
+const deleteChild = async (id, index) => {
+    try {
+        const response = await HTTP.delete(`/children/${id}/`, {
+            headers: {
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        child.value.splice(index, 1);
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: `ошибка`,
+            showConfirmButton: false,
+            timer: 2500,
+        });
+    }
+};
 
 const AddChild = async () => {
     try {
@@ -205,10 +282,26 @@ const AddChild = async () => {
         });
         form.value = response.data;
         console.log(response.data);
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        await GetChild();
+        await fetchSkills();
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
         console.error('There was an error!', error);
+        swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: `ошибка`,
+            showConfirmButton: false,
+            timer: 2500,
+        });
     }
 };
 const GetRegion = async () => {
@@ -228,7 +321,7 @@ const GetRegion = async () => {
 };
 const GetChild = async () => {
     try {
-        const response = await HTTP.get(`/children/`, child.value, {
+        const response = await HTTP.get(`/children/`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
@@ -242,8 +335,48 @@ const GetChild = async () => {
         console.error('There was an error!', error);
     }
 };
-onMounted(() => {
-    GetChild();
+const GetUser = async () => {
+    try {
+        const response = await HTTP.get(`/users/me/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        user.value = response.data;
+        console.log(response.data);
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+    }
+};
+const GetSkill = async (id, index) => {
+    try {
+        const response = await HTTP.get(`/answers/${id}/check_progress/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        skill.value = response.data;
+        console.log(response.data);
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+    }
+};
+const fetchSkills = async () => {
+    for (let i = 0; i < child.value.length; i++) {
+        const id = child.value[i].id;
+        await GetSkill(id, i);
+    }
+};
+onMounted(async () => {
+    await GetUser();
+    await GetChild();
+    await fetchSkills();
 });
 </script>
 <style lang="scss" scoped>
@@ -257,6 +390,7 @@ onMounted(() => {
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin-top: 60px;
     }
 
     &__text {
@@ -274,7 +408,8 @@ onMounted(() => {
 
 .profile__img {
     position: absolute;
-    top: 50px;
+    top: -50px;
+    z-index: -1;
 }
 
 .text__profile {
@@ -295,7 +430,7 @@ onMounted(() => {
 .profile-child {
     position: relative;
     min-height: 640px;
-    margin: 60px auto 0 auto;
+    margin: 40px auto 0 auto;
     max-width: 1200px;
 
     &__wrapper {
@@ -305,6 +440,7 @@ onMounted(() => {
         background-color: #b3cdf9;
         border-radius: 20px;
         padding: 20px;
+        margin-bottom: 20px;
     }
 
     &__text {
@@ -375,5 +511,54 @@ onMounted(() => {
 }
 .add-child-btn {
     margin: 0 0 32px 0;
+}
+
+// ///////////////////////////
+.delete-profile__wrapper {
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 10px;
+    max-width: 464px;
+    min-height: 326px;
+}
+.delete-profile__title {
+    font-size: 28px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #313131;
+}
+.delete-profile_content {
+    padding-left: 5px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}
+.delete-check {
+    margin-top: 15px;
+}
+.delete-check input {
+    margin-top: 5px;
+    font-size: 20px;
+    color: #313131;
+}
+.delete-check div {
+    color: #313131;
+    font-size: 20px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.delete-profile_content p {
+    color: #313131;
+    font-size: 20px;
+    font-family: 'Nunito', sans-serif;
+}
+.delete-profile_btn {
+    display: flex;
+    justify-content: space-between;
+}
+.delete-btn {
+    width: 182px;
 }
 </style>
