@@ -20,8 +20,7 @@
             </div>
         </div>
     </template>
-    <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png" text="Отлично!"
-        v-else  @hide="hide()"></TaskResultBanner>
+    <TaskResultBanner :is_end="true" bg="/assets/backgrounds/bg_end.jpg" v-else @hide="hide()"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
