@@ -16,7 +16,7 @@ const userStore = useUserStore();
 
 onMounted(() => {
     userStore.getUser();
-    userStore.getChild();
+    userStore.getChildren();
 })
 
 </script>

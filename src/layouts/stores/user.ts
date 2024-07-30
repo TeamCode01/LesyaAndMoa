@@ -5,7 +5,7 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     user: {},
     currentChild: {},
-    child: [],
+    children: [],
     users: [],
     currentUser: {},
     isLoading: false,
@@ -26,13 +26,10 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    async getChild() {
+    async getChildren() {
       try {
-        const responseChild = await HTTP.get('children/');
-        if (!Number.isInteger(localStorage.getItem('child'))) {
-          localStorage.setItem('child', responseChild.data.id);
-        }
-        this.currentChild = responseChild.data;
+        const responseChildren = await HTTP.get('children/');
+        this.children = responseChildren.data;
       } catch (error) {
         console.log('an error occured ' + error);
       }
@@ -40,7 +37,7 @@ export const useUserStore = defineStore('user', {
     async getChildId(id: Number) {
       try {
         const responseChildId = await HTTP.get(`children/${id}/`);
-        this.child = responseChildId.data;
+        this.currentChild = responseChildId.data;
       } catch (error) {
         console.log('an error occured ' + error);
       }
