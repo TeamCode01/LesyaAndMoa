@@ -7,14 +7,17 @@
         >
             Чтобы начать обучение, добавьте ребенка
         </p>
-        <p class="text profile__text" v-if="userStore.currentUser.tasks_type === 'групповой'">
+        <p
+            class="text profile__text"
+            v-if="userStore.currentUser.tasks_type === 'групповой'"
+        >
             Чтобы начать обучение, создайте новую группу
         </p>
     </div>
     <div class="profile-child">
         <div
             class="profile-child__wrapper"
-            v-for="(block, index) in child"
+            v-for="(block, index) in userStore.child"
             :key="index"
         >
             <div class="delete-profile">
