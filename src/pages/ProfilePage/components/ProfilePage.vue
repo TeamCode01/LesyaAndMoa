@@ -1,5 +1,5 @@
 <template>
-    <div class="profile__wrapper" v-if="!userStore.child.length">
+    <div class="profile__wrapper" v-if="!userStore.children.length">
         <p class="text text__profile">Спасибо за регистрацию!</p>
         <p
             class="text profile__text"
@@ -17,7 +17,7 @@
     <div class="profile-child">
         <div
             class="profile-child__wrapper"
-            v-for="(block, index) in userStore.child"
+            v-for="(block, index) in userStore.children"
             :key="index"
         >
             <div class="delete-profile">
@@ -193,13 +193,13 @@
             </v-card>
         </modalWindow>
         <img
-            v-if="userStore.child.length"
+            v-if="userStore.children.length"
             class="profile-child__img"
             src="@app/assets/img/Profile/LesyaMoa.png"
             alt=""
         />
         <img
-            v-if="!userStore.child.length"
+            v-if="!userStore.children.length"
             class="profile__img"
             src="@app/assets/img/Profile/Moa.png"
             alt=""
@@ -262,7 +262,7 @@ const deleteChild = async (id, index) => {
             showConfirmButton: false,
             timer: 1500,
         });
-        userStore.child.splice(index, 1);
+        userStore.children.splice(index, 1);
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -294,7 +294,7 @@ const AddChild = async () => {
             showConfirmButton: false,
             timer: 1500,
         });
-        await GetChild();
+        // await GetChild();
         await fetchSkills();
     } catch (error) {
         console.log('errr', error);
@@ -358,8 +358,8 @@ const GetSkill = async (id, index) => {
     }
 };
 const fetchSkills = async () => {
-    for (let i = 0; i < userStore.child.length; i++) {
-        const id = userStore.child[i].id;
+    for (let i = 0; i < userStore.children.length; i++) {
+        const id = userStore.children[i].id;
         await GetSkill(id, i);
     }
 };
