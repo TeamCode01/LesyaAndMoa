@@ -13,7 +13,8 @@ const dataFirstTask = [
             { id: 6, isActive: true, draggable: true, answer: 3, src: 'assets/creatures/SeventeenthTask/figure-in-va.svg', class: 'figure-in', text: 'ВА', error: 0, srcError: 'assets/creatures/SeventeenthTask/wrong/figure-in-va-wrong.png', srcRight: 'assets/creatures/SeventeenthTask/right/figure-in-va-right.png' },
             { id: 7, isActive: true, draggable: true, answer: 0, src: 'assets/creatures/SeventeenthTask/figure-out-so.svg', class: 'figure-out', text: 'СО', error: 0, srcError: 'assets/creatures/SeventeenthTask/wrong/figure-out-so-wrong.png', srcRight: 'assets/creatures/SeventeenthTask/right/figure-out-so-right.png' },
             { id: 8, isActive: true, draggable: true, answer: 5, src: 'assets/creatures/SeventeenthTask/figure-out-re.svg', class: 'figure-out', text: 'РЕ', error: 0, srcError: 'assets/creatures/SeventeenthTask/wrong/figure-out-re-wrong.png', srcRight: 'assets/creatures/SeventeenthTask/right/figure-out-re-right.png' },
-            { id: 9, isActive: true, draggable: true, answer: 2, src: 'assets/creatures/SeventeenthTask/figure-in-ob.svg', class: 'figure-in', text: 'ОБ', error: 0, srcError: 'assets/creatures/SeventeenthTask/wrong/figure-in-ob-wrong.png', srcRight: 'assets/creatures/SeventeenthTask/right/figure-in-ob-right.png' }],
+            { id: 9, isActive: true, draggable: true, answer: 2, src: 'assets/creatures/SeventeenthTask/figure-in-ob.svg', class: 'figure-in', text: 'ОБ', error: 0, srcError: 'assets/creatures/SeventeenthTask/wrong/figure-in-ob-wrong.png', srcRight: 'assets/creatures/SeventeenthTask/right/figure-in-ob-right.png' }
+        ],
         [
             { id: 10, isActive: true, draggable: true, answer: 0, src: 'assets/creatures/SeventeenthTask/figure-in-ba.svg', class: 'figure-in', text: 'БА', error: 0, srcError: 'assets/creatures/SeventeenthTask/wrong/figure-in-ba-wrong.png', srcRight: 'assets/creatures/SeventeenthTask/right/figure-in-ba-right.png' },
             { id: 11, isActive: true, draggable: true, answer: 4, src: 'assets/creatures/SeventeenthTask/figure-out-dere.svg', class: 'figure-out', text: 'ДЕРЕ', error: 0, srcError: 'assets/creatures/SeventeenthTask/wrong/figure-out-dere-wrong.png', srcRight: 'assets/creatures/SeventeenthTask/right/figure-out-dere-right.png' },
@@ -29,7 +30,7 @@ const dataFirstTask = [
 
 const dataSecondTask = [
     [
-        { id: 1, text: 'Ромашка', isActive: false }, { id: 2, text: 'Дерево', isActive: false }, { id: 3, text: 'Корова', isActive: false }, { id: 4, text: 'Река', isActive: false }, { id: 5, text: 'Облака', isActive: false }
+        { id: 1, text: 'РОМАШКА', isActive: false }, { id: 2, text: 'ДЕРЕВО', isActive: false }, { id: 3, text: 'КОРОВА', isActive: false }, { id: 4, text: 'РЕКА', isActive: false }, { id: 5, text: 'ОБЛАКА', isActive: false }
     ],
     [
         { id: 1, src: '/assets/creatures/SeventeenthTask/tree.png', alt: 'tree' },

@@ -17,7 +17,19 @@
                     </p>
                 </div>
                 <canvas class="canvas_draw" ref="canvasRef" @mousedown="engage" @mouseup="disengage" @mousemove="draw" @click="voiceActing" v-show="endFirstTask && true"></canvas>
-                <div class="draggable-list" ref="taskBlock" @dragover.prevent @dragleave="missDrop($event)">
+                <div class="draggable-list" ref="taskBlock" @dragover.prevent @drop="missDrop($event)">
+
+                    <DragndropComponent :left = "PuzzleCords.x" :top="PuzzleCords.y" v-if="isDrag">
+                        <template v-slot:task>
+                            <div draggable="false">
+                                <img :src="draggableBlock.src" :alt="draggableBlock.class" :class="[draggableBlock.class]" draggable="false"
+                                @mouseup="endPosition($event)" 
+                                @mousemove="($event)=>{getPuzzleCords($event)}"
+                                @mouseleave="isDrag = false">
+                            </div>
+                        </template>
+                    </DragndropComponent>
+
                     <transition name="fade-words-top">
                         <div class="draggable-list__words-top" v-if="endFirstTask && !(getCenterCords())">
                             <div class="draggable-list__word-top" v-for="word in secondTask[0]" :key="word.id">
@@ -28,20 +40,27 @@
                     </transition>
                     
                     <div class="draggable-list__syllables"  v-if="!endFirstTask" >
-                        <div class="draggable-list__set-syllables" v-for="row in firstTask[0]" :key="row" draggable="false" @dragstart="()=>{return false}">
-                            <div v-for="word in row" :key="word.id">
+                        <div class="draggable-list__set-syllables" v-for="row in firstTask[0]" :key="row" draggable="false">
+                            <div v-for="word in row" :key="word.id" 
+                            @mousedown.left="$event=>startPosition($event, word)"
+                            :ref="(el)=>{refPuzzles[word.id - 1] = el}"
+                            draggable="false">
+
                                 <img :src="word.error == 0 ? word.src : word.error == 1 ? word.srcRight : word.srcError" 
                                 :alt="word.class" :class="[word.class]"
-                                :style="{opacity : (word.isActive ? '100%' : '0%'), cursor : (word.isActive ? 'pointer' : 'auto')}"
-                                :draggable="word.draggable" @dragstart="dragWord($event, word.id, word.answer)" 
-                                @dragover.prevent @drop="dropWord($event, word.id)">
+                                draggable="false"
+                                :style="{opacity : (word.isActive ? '100%' : '0%'), cursor : (word.isActive ? 'pointer' : 'auto')}">
+
                             </div>
                         </div>
                         
                     </div>
+                    
                     <transition name="fade-words">
                         <div class="draggable-list__words" v-if="!endFirstTask">
-                            <div class="draggable-list__word" v-for="word in firstTask[1]" :key="word.id" :style="{opacity : (word.isActive ? '100%' : '0%')}">{{   word.text  }}</div>
+                            <transition-group name="fade-word">
+                                <div class="draggable-list__word" v-for="word in firstTask[1]" :key="word.id">{{ word.text }}</div>
+                            </transition-group>
                         </div>
                     </transition>
 
@@ -68,6 +87,8 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
+import DragndropComponent from './DragndropComponent.vue';
+
 import { dataFirstTask, dataSecondTask } from './task.js'
 
 const emit = defineEmits(['close']);
@@ -85,112 +106,181 @@ const hide = () => {
 // ПЕРВЫЙ ЭТАП ЗАДАНИЯ
 //
 
-const test = true
+const startGame = ref(true)
 
 const firstTask = ref()
 const secondTask = ref()
 const firstTaskAnswerCounter = ref(0)
+
 const endFirstTask = ref(false)
-const startGame = ref(true)
+const isDrag = ref(false)
+const PuzzleCords = ref({
+    x: 0,
+    y: 0
+})
+const draggableBlock = ref({
+    src: '',
+    class: '',
+})
+const refPuzzles = ref([])
+const centralPuzzleCords = ref([])
+const startId = ref(0)
 
 firstTask.value = structuredClone(dataFirstTask)
+firstTask.value[1] = []
 secondTask.value = structuredClone(dataSecondTask)
 
 
-const dragWord = (event, wordId, answerId) => {
-
-    firstTask.value[0].map((row)=>{
-        row.map((word)=>{
-            if (word.id == wordId && word.isActive == true) {
-                word.isActive = false
-                event.dataTransfer.setData('wordId', wordId);
-                event.dataTransfer.setData('answerId', answerId);
-                return
-            }
-        })
-    })
-
-    return false
+const getPuzzleCords = (event) => {
+    PuzzleCords.value.x = event.clientX - taskBlock.value.getBoundingClientRect().x - event.target.getBoundingClientRect().width / 2 ; 
+    PuzzleCords.value.y = event.clientY - taskBlock.value.getBoundingClientRect().y - event.target.getBoundingClientRect().height / 2 ; 
+    
 }
 
-const dropWord = (event, wordId) => {
-    const dragId = event.dataTransfer.getData('wordId')
-    const answerId = event.dataTransfer.getData('answerId')
+const startPosition = (event, word) => {
+    if (!word.isActive) return
+    draggableBlock.value.src = word.src; 
+    draggableBlock.value.class = word.class; 
+    getPuzzleCords(event);
+    isDrag.value = true;
+    startId.value = word.id
 
-    if (answerId == wordId) {
-        let ok = false
-        firstTask.value[0].map((row)=>{
-            row.map((word)=>{
-                if ((word.id == wordId || word.id == dragId)) {
-                    word.error = 1
-                    word.isActive = true
-                    word.draggable = false
-                    setTimeout(()=>{
-                        word.error = 0;
-                        word.isActive = false
-                    }, 1000)
-                }
+    getCentralPuzzleCords()
+}
+
+const getCentralPuzzleCords = () => {
+    refPuzzles.value.forEach((puzzle, index) => {
+        centralPuzzleCords.value[index] = ({
+            x: puzzle.getBoundingClientRect().x + puzzle.getBoundingClientRect().width / 2,
+            y: puzzle.getBoundingClientRect().y + puzzle.getBoundingClientRect().height / 2,
+            xmin: puzzle.getBoundingClientRect().x,
+            xmax: puzzle.getBoundingClientRect().x + puzzle.getBoundingClientRect().width,
+            ymin: puzzle.getBoundingClientRect().y,
+            ymax: puzzle.getBoundingClientRect().y + puzzle.getBoundingClientRect().height
+        })
+    });
+
+}
+
+const getPuzzleUnderMouse = (event) => {
+    let correctIndex = -1
+    centralPuzzleCords.value.forEach((puzzle, index) => {
+        if (event.clientX > puzzle.xmin && event.clientX < puzzle.xmax && event.clientY > puzzle.ymin && event.clientY < puzzle.ymax) {
+            correctIndex = index
+        }
+    })
+    return correctIndex
+
+
+}
+
+const endPosition = (event) => {
+    if (getPuzzleUnderMouse(event) != -1 )
+    {
+        let index = getPuzzleUnderMouse(event)
+        let answertId = index + 1
+        
+        if (rightAnswer(index)) {
+            firstTask.value[0].map((row)=>{
+                row.map((word)=>{
+                    if (word.id == answertId || word.id == startId.value) {
+                        word.error = 1
+
+                        setTimeout(()=>{
+                            word.isActive = false
+                            word.error = 0
+                        }, 1000)
+                    }
+                })
             })
-        })
-        playAudio(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`)
+            playAudio(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`)
 
-        firstTask.value[1].map((word)=>{
-            if ((wordId == 1 || wordId == 14) && word.id == 1) word.isActive = true
-            if ((wordId == 2 || wordId == 9) && word.id == 5) word.isActive = true
-            if ((wordId == 3 || wordId == 6) && word.id == 3) word.isActive = true
-            if ((wordId == 4 || wordId == 11) && word.id == 2) word.isActive = true
-            if ((wordId == 5 || wordId == 8) && word.id == 4) word.isActive = true
-        })
 
-        setTimeout(()=>{
-                
-            firstTaskAnswerCounter.value += 1
-
-            if (firstTaskAnswerCounter.value == 5) {
-                endFirstTask.value = true
+            let word = {}
+            if (startId.value == 1 || startId.value == 14) {
+                word.id = 1
+                word.text = 'РОМАШКА'
             }
-        })
-    }
-    else {
-        if (dragId != wordId)
-        {
+            else if (startId.value == 2 || startId.value == 9) {
+                word.id = 5
+                word.text = 'ОБЛАКА'
+
+            }
+            else if (startId.value == 3 || startId.value == 6) {
+                word.id = 3
+                word.text = 'КОРОВА'
+            }
+            else if (startId.value == 4 || startId.value == 11) {
+                word.id = 2
+                word.text = 'ДЕРЕВО'
+            }
+            else if (startId.value == 5 || startId.value == 8) {
+                word.id = 4
+                word.text = 'РЕКА'
+            }
+            if (firstTask.value[1].length >= word.id){
+                firstTask.value[1].splice(word.id - 1, 0, word)
+            }
+            else{
+                firstTask.value[1].push(word)
+            }
+
+            
+            setTimeout(()=>{
+                firstTaskAnswerCounter.value += 1
+                if (firstTaskAnswerCounter.value == 5) {
+                    endFirstTask.value = true
+                }}, 1000)
+
+        }
+        else {
             let flag = false
             firstTask.value[0].map((row)=>{
-            row.map((word)=>{
-                if (word.id == wordId || word.id == dragId) {
-                    if (!word.isActive) flag = true
-                }
+                row.map((word)=>{
+                    if (word.id == answertId || word.id == startId.value) {
+                        if (word.isActive == false) flag = true 
+                    }
                 })
             })
 
-            row.map((word)=>{
-                if (word.id == wordId || word.id == dragId) {
-                    word.error = -1
-                    word.draggable = false
-                    word.isActive = true
-                
-                    setTimeout(()=>{
-                        word.error = 0;
-                        word.draggable = true
-                    }, 1000)
-                }
-            })
-            if (!flag) playAudio(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`)
+            if (!flag ) {
+                firstTask.value[0].map((row)=>{
+                    row.map((word)=>{
+                        if (word.id == answertId || word.id == startId.value ) {
+                            word.error = -1
+
+                            setTimeout(()=>{
+                                word.isActive = true
+                                word.error = 0
+                            }, 1000)
+                        }
+                    })
+                })
+                playAudio(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`)
+            }
         }
     }
+    isDrag.value = false;
 }
 
-const missDrop = (event) =>{
-    const dragId = event.dataTransfer.getData('wordId')
-    firstTask.value[0].map((row)=>{
-        row.map((word)=>{
-        if (word.id == dragId) {
-            word.isActive = true
-        }
-    })
-    })
-}
+const rightAnswer = (index) => {
 
+    let correctId = index + 1
+
+    if (startId.value == 1 && correctId == 14)      return true
+    else if (startId.value == 2 && correctId == 9)  return true
+    else if (startId.value == 3 && correctId == 6)  return true
+    else if (startId.value == 4 && correctId == 11) return true
+    else if (startId.value == 5 && correctId == 8)  return true
+
+    else if (startId.value == 6  && correctId == 3)  return true
+    else if (startId.value == 8  && correctId == 5)  return true
+    else if (startId.value == 9  && correctId == 2)  return true
+    else if (startId.value == 11 && correctId == 4)  return true
+    else if (startId.value == 14 && correctId == 1)  return true
+
+    return false
+}
 
 //
 // ВТОРОЙ ЭТАП ЗАДАНИЯ
@@ -251,7 +341,6 @@ const getCursorPosition = (event) => {
 }
 
 const getCenterCords = () => {
-    console.log('get')
     for (const rowId in refPoints.value) {
         for (const pointId in refPoints.value[rowId]) {
             const point = refPoints.value[rowId][pointId];
@@ -261,19 +350,18 @@ const getCenterCords = () => {
 
                 const x = rect.left + rect.width / 2 - canvasRect.left;
                 centralCords.value[rowId][pointId].x = x;
-                centralCords.value[rowId][pointId].maxX = x + 8;
-                centralCords.value[rowId][pointId].minX = x - 8;
+                centralCords.value[rowId][pointId].maxX = x + rect.width;
+                centralCords.value[rowId][pointId].minX = x - rect.width;
 
                 const y = rect.top + rect.height / 2 - canvasRect.top;
                 centralCords.value[rowId][pointId].y = y;
-                centralCords.value[rowId][pointId].maxY = y + 8;
-                centralCords.value[rowId][pointId].minY = y - 8;
+                centralCords.value[rowId][pointId].maxY = y + rect.width;
+                centralCords.value[rowId][pointId].minY = y - rect.width;
 
                 if (!centralCords.value[rowId][pointId]?.done) centralCords.value[rowId][pointId].done = false;
             }
         }
     }
-    console.log(centralCords.value)
 }
 
 const checkRowsAndColumnsIds = (pos) => {
@@ -299,7 +387,6 @@ const isDone = (row, column) => {
 const engage = (event) => {
     const pos = getCursorPosition(event);
     startIds = checkRowsAndColumnsIds(pos)
-    console.log(centralCords.value)
     const done = isDone(startIds.row, startIds.column);
     if(startIds.column && startIds.row && !done) {
         isDrawing.value = true;
@@ -436,7 +523,6 @@ const disengage = (event) => {
             const correct = correctAnswer(startIds.column, startIds.row, endIds.column, endIds.row);
             if(correct) {
                 SecondTaskAnswerCounter.value++;
-                console.log(SecondTaskAnswerCounter.value)
                 centralCords.value[startIds.row][startIds.column-1].done = true
                 centralCords.value[endIds.row][endIds.column-1].done = true
                 playAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
@@ -486,6 +572,10 @@ watch (
 
 
 <style lang="scss" scoped>
+
+*{
+    user-select: none;
+}
 
 .SeventeenthTask {
     width: 1200px;
@@ -567,11 +657,12 @@ watch (
 
 .draggable-list__words {
     display: flex;
-    justify-content: space-between;
+    column-gap: 50px;
     width: 100%;
     height: 48px;
     @media (max-width: 1024px) {
         height: 40px;
+        column-gap: 40px;
     }
 }
 
@@ -702,6 +793,25 @@ watch (
 }
 .fade-pictures-enter-to{
     opacity: 100;
+}
+
+
+.fade-word-enter-active{
+    position: relative;
+
+    animation: fade-word 0.5s;
+}
+
+@keyframes fade-word{
+    0%{
+        scale: 0;
+    }
+    50%{
+        scale: 1.1;
+    }
+    100%{
+        scale: 1;
+    }
 }
 
 
