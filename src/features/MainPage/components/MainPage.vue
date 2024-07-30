@@ -189,7 +189,7 @@
         <!-- <Carousel :data="slideItems"></Carousel> -->
         <Carousel :items-to-show="2" :items-to-scroll="2" v-model="currentSlide" ref="carousel">
             <Slide v-for="slide in slideItems" :key="slide.id">
-                <div class="carousel-item">
+                <!-- <div class="carousel-item">
                     <img :src="slide.img" alt="img" />
                     <div class="carousel-item__info">
                         <p class="carousel-item__date">{{ slide.date }}</p>
@@ -197,13 +197,15 @@
                             {{ slide.name }}
                         </p>
                     </div>
-                </div>
+                </div> -->
+                <CarouselItem :item_data="slide"></CarouselItem>
             </Slide>
-            <!-- <CarouselItem v-for="item in slideItems" :key="item.id" :item_data="item">
-            </CarouselItem> -->
         </Carousel>
-            <img v-if="currentSlide > 0"  class="left" @click="prev" src="@app/assets/icons/arrow-left.svg" alt="left">
-            <img v-if="currentSlide < slideItems.length - 1"  class="right" @click="next" src="@app/assets/icons/icon-pink.svg" alt="right">
+
+        <img v-if="currentSlide > 0" class="left" @click="prev" src="@app/assets/icons/arrow-left.svg"
+            alt="left">
+        <img v-if="currentSlide < slideItems.length - 1" class="right" @click="next"
+            src="@app/assets/icons/icon-pink.svg" alt="right">
 
     </div>
 
@@ -223,7 +225,6 @@ import { Carousel, Slide } from 'vue3-carousel'
 import { TestTask } from '@features/TestTask';
 
 const carousel = ref(null);
-const shown = ref(false);
 
 const currentSlide = ref(0);
 
@@ -235,8 +236,6 @@ const prev = () => {
     carousel.value.prev();
 
 }
-
-
 
 const slideItems = ref([
     {
@@ -430,17 +429,17 @@ onMounted(() => {
 }
 
 .left {
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  left: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 0;
 }
 
 .right {
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  right: 20px;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 20px;
 }
 
 .main {
