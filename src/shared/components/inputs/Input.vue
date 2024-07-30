@@ -51,9 +51,7 @@ const props = defineProps({
 });
 
 const updateValue = (event) => {
-    console.log('textt');
     emit('update:value', event.target.value);
-    console.log('textt', event.target.value);
 };
 </script>
 <style lang="scss" scoped>
