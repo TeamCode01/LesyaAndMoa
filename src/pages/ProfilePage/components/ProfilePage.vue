@@ -1,20 +1,20 @@
 <template>
-    <div class="profile__wrapper" v-if="!child.length">
+    <div class="profile__wrapper" v-if="!userStore.children.length">
         <p class="text text__profile">Спасибо за регистрацию!</p>
         <p
             class="text profile__text"
-            v-if="user.tasks_type === 'индивидуальный'"
+            v-if="userStore.currentUser.tasks_type === 'индивидуальный'"
         >
             Чтобы начать обучение, добавьте ребенка
         </p>
-        <p class="text profile__text" v-if="user.tasks_type === 'групповой'">
+        <p class="text profile__text" v-if="userStore.currentUser.tasks_type === 'групповой'">
             Чтобы начать обучение, создайте новую группу
         </p>
     </div>
     <div class="profile-child">
         <div
             class="profile-child__wrapper"
-            v-for="(block, index) in child"
+            v-for="(block, index) in userStore.children"
             :key="index"
         >
             <div class="delete-profile">
@@ -190,13 +190,13 @@
             </v-card>
         </modalWindow>
         <img
-            v-if="child.length"
+            v-if="userStore.children.length"
             class="profile-child__img"
             src="@app/assets/img/Profile/LesyaMoa.png"
             alt=""
         />
         <img
-            v-if="!child.length"
+            v-if="!userStore.children.length"
             class="profile__img"
             src="@app/assets/img/Profile/Moa.png"
             alt=""
@@ -211,10 +211,13 @@ import { ref, onMounted, inject } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { SelectSort } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
+import { useUserStore } from '@layouts/stores/user';
 const isError = ref([]);
 const error = ref([]);
 const swal = inject('$swal');
 const route = useRoute();
+
+const userStore = useUserStore();
 
 const tasksChoose = ref([
     { value: 'Женский', name: 'Женский' },
@@ -232,15 +235,14 @@ const form = ref({
     sex: null,
     data_processing_agreement: false,
 });
-const user = ref({});
-const child = ref([
-    {
-        id: '',
-        first_name: '',
-        last_name: '',
-        school: '',
-    },
-]);
+// const child = ref([
+//     {
+//         id: '',
+//         first_name: '',
+//         last_name: '',
+//         school: '',
+//     },
+// ]);
 const skill = ref({});
 
 const deleteChild = async (id, index) => {
@@ -257,7 +259,7 @@ const deleteChild = async (id, index) => {
             showConfirmButton: false,
             timer: 1500,
         });
-        child.value.splice(index, 1);
+        userStore.children.splice(index, 1);
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -289,7 +291,7 @@ const AddChild = async () => {
             showConfirmButton: false,
             timer: 1500,
         });
-        await GetChild();
+        // await GetChild();
         await fetchSkills();
     } catch (error) {
         console.log('errr', error);
@@ -319,38 +321,23 @@ const GetRegion = async () => {
         console.error('There was an error!', error);
     }
 };
-const GetChild = async () => {
-    try {
-        const response = await HTTP.get(`/children/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        child.value = response.data;
-        console.log(response.data);
-    } catch (error) {
-        console.log('errr', error);
-        isError.value = error.response.data;
-        console.error('There was an error!', error);
-    }
-};
-const GetUser = async () => {
-    try {
-        const response = await HTTP.get(`/users/me/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        user.value = response.data;
-        console.log(response.data);
-    } catch (error) {
-        console.log('errr', error);
-        isError.value = error.response.data;
-        console.error('There was an error!', error);
-    }
-};
+// const GetChild = async () => {
+//     try {
+//         const response = await HTTP.get(`/children/`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: 'Token ' + localStorage.getItem('Token'),
+//             },
+//         });
+//         child.value = response.data;
+//         console.log(response.data);
+//     } catch (error) {
+//         console.log('errr', error);
+//         isError.value = error.response.data;
+//         console.error('There was an error!', error);
+//     }
+// };
+
 const GetSkill = async (id, index) => {
     try {
         const response = await HTTP.get(`/answers/${id}/check_progress/`, {
@@ -368,14 +355,12 @@ const GetSkill = async (id, index) => {
     }
 };
 const fetchSkills = async () => {
-    for (let i = 0; i < child.value.length; i++) {
-        const id = child.value[i].id;
+    for (let i = 0; i < userStore.children.length; i++) {
+        const id = userStore.children[i].id;
         await GetSkill(id, i);
     }
 };
 onMounted(async () => {
-    await GetUser();
-    await GetChild();
     await fetchSkills();
 });
 </script>

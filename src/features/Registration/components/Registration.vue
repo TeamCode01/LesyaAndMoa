@@ -100,16 +100,10 @@ const form = ref({
 
 const RegisterUser = async () => {
     try {
-        const response = await HTTP.post('/users/', form.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await HTTP.post('/users/', form.value);
         form.value = response.data;
-        console.log(response.data);
         router.push({
-            name: 'profile',
-            params: { id: response.data.id },
+            name: 'Login',
         });
         swal.fire({
             position: 'top-center',
@@ -121,7 +115,6 @@ const RegisterUser = async () => {
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
-        console.error('There was an error!', error);
         if (isError.value) {
             swal.fire({
                 position: 'center',

@@ -44,6 +44,7 @@ const emit = defineEmits(['click']);
     color: $text-primary;
     font-family: 'Nunito', sans-serif;
     max-width: 375px;
+    text-align: left;
 
     @media (max-width: 1024px) {
       max-width: 300px;
@@ -65,6 +66,7 @@ const emit = defineEmits(['click']);
     color: $grey;
     margin-bottom: 20px;
     margin-top: 12px;
+    text-align: left;
   }
 }
 </style>
