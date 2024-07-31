@@ -19,13 +19,13 @@
                 <canvas class="canvas_draw" ref="canvasRef" @mousedown="engage" @mouseup="disengage" @mousemove="draw" @click="voiceActing" v-show="endFirstTask && true"></canvas>
                 <div class="draggable-list" ref="taskBlock" @dragover.prevent @drop="missDrop($event)">
 
-                    <DragndropComponent :left = "PuzzleCords.x" :top="PuzzleCords.y" v-if="isDrag">
+                    <DragndropComponent :left = "PuzzleCords.x" :top="PuzzleCords.y" v-if="isDrag && !endFirstTask">
                         <template v-slot:task>
                             <div draggable="false">
                                 <img :src="draggableBlock.src" :alt="draggableBlock.class" :class="[draggableBlock.class]" draggable="false"
                                 @mouseup="endPosition($event)" 
                                 @mousemove="($event)=>{getPuzzleCords($event)}"
-                                @mouseleave="isDrag = false">
+                                @mouseleave="mouseLeaveFromPuzzle()">
                             </div>
                         </template>
                     </DragndropComponent>
@@ -140,10 +140,11 @@ const getPuzzleCords = (event) => {
 const startPosition = (event, word) => {
     if (!word.isActive) return
     draggableBlock.value.src = word.src; 
-    draggableBlock.value.class = word.class; 
+    draggableBlock.value.class = word.class;
     getPuzzleCords(event);
     isDrag.value = true;
     startId.value = word.id
+    word.isActive = false
 
     getCentralPuzzleCords()
 }
@@ -238,7 +239,8 @@ const endPosition = (event) => {
             firstTask.value[0].map((row)=>{
                 row.map((word)=>{
                     if (word.id == answertId || word.id == startId.value) {
-                        if (word.isActive == false) flag = true 
+                        if (word.isActive == false) flag = true
+                        if (word.id == startId.value) word.isActive = true
                     }
                 })
             })
@@ -258,6 +260,7 @@ const endPosition = (event) => {
                 })
                 playAudio(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`)
             }
+            
         }
     }
     isDrag.value = false;
@@ -280,6 +283,18 @@ const rightAnswer = (index) => {
     else if (startId.value == 14 && correctId == 1)  return true
 
     return false
+}
+
+const mouseLeaveFromPuzzle = () => {
+    isDrag.value = false
+
+    if (startId.value != -1) {
+        firstTask.value[0].map((row)=>{
+            row.map((word)=>{
+                if (word.id == startId.value) word.isActive = true
+            })
+        })
+    }
 }
 
 //
@@ -347,6 +362,8 @@ const getCenterCords = () => {
             if (point) {
                 const rect = point.getBoundingClientRect();
                 const canvasRect = canvas.getBoundingClientRect();
+
+                console.log(rect.width)
 
                 const x = rect.left + rect.width / 2 - canvasRect.left;
                 centralCords.value[rowId][pointId].x = x;
@@ -708,6 +725,8 @@ watch (
 }
 
 .draggable-list__word-top-circle {
+    width: 16px;
+    height: 16px;
     @media (max-width: 1024px) {
         width: 14px;
         height: 14px;
