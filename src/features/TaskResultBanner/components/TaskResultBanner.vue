@@ -16,7 +16,7 @@
                     </button>
                 </div>
                 <div v-else>
-                    <button class="left-result__button left-result__text">
+                    <button @click="goToGames" class="left-result__button left-result__text">
                         <span class="left-result__text">К обучению</span>
                         <img src="@app\assets\icons\vector.svg" alt="vector" />
                     </button>
@@ -42,6 +42,7 @@
 </template>
 
 <script setup>
+import router from '@app/router';
 import Button from '@shared/components/buttons/button.vue';
 import { onMounted } from 'vue';
 const emit = defineEmits(['hide']);
@@ -68,6 +69,10 @@ const props = defineProps({
         default: false,
     }
 })
+
+const goToGames = () => {
+    router.push({name: 'Game'})
+}
 
 onMounted(() => {
     if (props.is_test === false & props.is_end === false) {

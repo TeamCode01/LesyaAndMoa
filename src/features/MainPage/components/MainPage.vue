@@ -19,7 +19,7 @@
     </div>
     <div class="Test">
         <p class="title-h2 Test__title">Тестовое задание</p>
-        <div class="wrap" id="test">
+        <div class="wrap" id="test" v-if="isOpen == false">
             <div class="Test__wrapper">
                 <div class="Test__wrapper-text">
                     <p class="Test__wrapper_title">Дорогие друзья!</p>
@@ -30,9 +30,9 @@
                 </div>
                 <Button @click="openTest()" class="Test__wrapper_btn" :isImage="true" :image="arrow"
                     label="Начать"></Button>
-                <img v-if="true" src="@app/assets/backgrounds/lesyaandmoaforest.png" alt="game" class="Test__img">
+                <img  src="@app/assets/backgrounds/lesyaandmoaforest.png" alt="game" class="Test__img">
             </div>
-            <div v-if="true" class="Test_icons_wrap">
+            <div  class="Test_icons_wrap">
                 <div class="Test_icons_item" @click="mute()"><img v-show="isMuted === false"
                         src="@app/assets/icons/sound.svg" alt="sound"><img v-show="isMuted === true"
                         src="@app/assets/icons/muted.svg" alt="mute"></div>
@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <TestTask @close="close()" v-if="isOpen == true"></TestTask>
+        <TestTask v-else @close="close()" ></TestTask>
     </div>
 
     <div class="about">
