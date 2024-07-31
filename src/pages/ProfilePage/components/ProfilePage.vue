@@ -78,7 +78,7 @@
                 ></RouterLink>
             </div>
         </div>
-        <modalWindow label="Добавить ребёнка"
+        <modalWindow label="Добавить ребёнка" v-model:dialog="dialog"
             ><v-card
                 prepend-icon="mdi-account"
                 title="Введите данные ребёнка"
@@ -184,6 +184,7 @@
                 </v-card-text>
 
                 <v-card-actions>
+                    <Button></Button>
                     <Button
                         label="Добавить ребёнка"
                         class="profile__btn add-child-btn"
@@ -221,6 +222,7 @@ const swal = inject('$swal');
 const route = useRoute();
 
 const userStore = useUserStore();
+const dialog = ref(false);
 
 const tasksChoose = ref([
     { value: 'Женский', name: 'Женский' },
@@ -246,6 +248,7 @@ const form = ref({
 //         school: '',
 //     },
 // ]);
+
 const skill = ref({});
 
 const deleteChild = async (id, index) => {
@@ -294,8 +297,8 @@ const AddChild = async () => {
             showConfirmButton: false,
             timer: 1500,
         });
-        // await GetChild();
         await fetchSkills();
+        dialog.value = false;
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
