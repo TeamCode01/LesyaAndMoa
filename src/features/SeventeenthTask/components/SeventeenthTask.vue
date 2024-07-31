@@ -186,7 +186,7 @@ const endPosition = (event) => {
                 row.map((word)=>{
                     if (word.id == answertId || word.id == startId.value) {
                         word.error = 1
-
+                        word.isActive = true
                         setTimeout(()=>{
                             word.isActive = false
                             word.error = 0
