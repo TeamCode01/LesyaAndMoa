@@ -172,7 +172,6 @@
                     </div>
                     <div class="regCheck">
                         <input
-                            :dialog="false"
                             type="checkbox"
                             v-model="form.data_processing_agreement"
                         />
@@ -184,7 +183,6 @@
                 </v-card-text>
 
                 <v-card-actions>
-                    <Button></Button>
                     <Button
                         label="Добавить ребёнка"
                         class="profile__btn add-child-btn"
