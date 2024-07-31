@@ -114,6 +114,7 @@
 
             <ul class="header__wrapper_links modal__menu_mini">
                 <div class="link-small" @click="logOut">Выйти</div>
+                <li v-if="Object.keys(userStore.currentUser).length"><a href="/profile-page" class="link-small">Мой профиль</a></li>
                 <li><a href="#" class="link-small">Удалить профиль</a></li>
             </ul>
         </div>
@@ -275,6 +276,7 @@ const Login = () => {
         position: fixed;
         right: 10%;
         top: 15%;
+        z-index: 99;
     }
 
     &__menu {

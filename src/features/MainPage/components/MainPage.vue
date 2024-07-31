@@ -186,18 +186,8 @@
 
     <div class="news">
         <h2 class="title-h2 news__title">Новости</h2>
-        <!-- <Carousel :data="slideItems"></Carousel> -->
-        <Carousel :items-to-show="2" :items-to-scroll="2" v-model="currentSlide" ref="carousel">
+        <Carousel :items-to-show="2" :itemsToScroll="2"  v-model="currentSlide" ref="carousel">
             <Slide v-for="slide in slideItems" :key="slide.id">
-                <!-- <div class="carousel-item">
-                    <img :src="slide.img" alt="img" />
-                    <div class="carousel-item__info">
-                        <p class="carousel-item__date">{{ slide.date }}</p>
-                        <p class="text-small carousel-item__text">
-                            {{ slide.name }}
-                        </p>
-                    </div>
-                </div> -->
                 <CarouselItem :item_data="slide"></CarouselItem>
             </Slide>
         </Carousel>
@@ -206,6 +196,8 @@
             alt="left">
         <img v-if="currentSlide < slideItems.length - 1" class="right" @click="next"
             src="@app/assets/icons/icon-pink.svg" alt="right">
+
+   <p>{{ currentSlide }}</p>
 
     </div>
 
@@ -380,6 +372,28 @@ onMounted(() => {
     z-index: 1;
 }
 
+.carousel {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0px auto;
+}
+
+.carousel__viewport {
+    max-width: 794px !important;
+    margin: 0px auto !important;
+    width: 100%;
+}
+// .carousel__slide {
+//     max-width: 387px;
+// }
+
+// .carousel__track {
+//     max-width: 794px;
+//     margin: 0px auto;
+//     width: 100%;
+// }
+
+
 
 
 .carousel-item {
@@ -387,6 +401,7 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
     width: 100%;
+    max-width: 387px;
 
     img {
         max-width: 387px;
