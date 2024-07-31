@@ -1,45 +1,48 @@
 <template>
     <div class="result-banner">
-        <div class="result-banner__wrapper">
+        <div v-if="props.is_end === false" class="result-banner__wrapper">
             <div class="close" @click="hide">
-                <img
-                    class="close-icon"
-                    src="@app/assets/icons/close-icon.svg"
-                    alt="крест"
-                />
+                <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
             </div>
             <div class="left-result">
                 <div class="left-result__greetings">
                     <h4 class="left-result__title-h4">{{ props.text }}</h4>
-                    <img v-if="props.is_test === false"
-                        class="left-result__flowers"
-                        id="result-banner"
-                    />
+                    <img v-if="props.is_test === false" class="left-result__flowers" id="result-banner" />
                 </div>
                 <div v-if="props.is_test === false">
                     <button class="left-result__button left-result__text">
                         <span class="left-result__text">Далее</span>
-                        <img src="@app\assets\icons\vector.svg" alt="vector"/>
+                        <img src="@app\assets\icons\vector.svg" alt="vector" />
                     </button>
                 </div>
                 <div v-else>
-                    <button class="left-result__button left-result__text">
+                    <button @click="goToGames" class="left-result__button left-result__text">
                         <span class="left-result__text">К обучению</span>
                         <img src="@app\assets\icons\vector.svg" alt="vector" />
                     </button>
                 </div>
             </div>
             <div class="right-result">
-                <img
-                    class="right-result__img-moa"
-                     id="result-bg"
-                />
+                <img class="right-result__img-moa" id="result-bg" />
             </div>
+        </div>
+        <div v-else class="result-banner__wrapper">
+            <div class="close" @click="hide">
+                <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+            </div>
+            <div class="end">
+                <div class="end_wrapper">
+                    <h4 class="left-result__title-h4 end_title">Друг, спасибо за помощь! До новых встреч!</h4>
+                    <img class="end_img" id="result-bg" />
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
 
 <script setup>
+import router from '@app/router';
 import Button from '@shared/components/buttons/button.vue';
 import { onMounted } from 'vue';
 const emit = defineEmits(['hide']);
@@ -52,7 +55,7 @@ const props = defineProps({
         type: String,
     },
     img: {
-      type: String,
+        type: String,
     },
     bg: {
         type: String,
@@ -60,11 +63,19 @@ const props = defineProps({
     is_test: {
         type: Boolean,
         default: false,
+    },
+    is_end: {
+        type: Boolean,
+        default: false,
     }
 })
 
+const goToGames = () => {
+    router.push({name: 'Game'})
+}
+
 onMounted(() => {
-    if(props.is_test === false) {
+    if (props.is_test === false & props.is_end === false) {
         document.getElementById('result-banner').src = props.img;
     }
     document.getElementById('result-bg').src = props.bg;
@@ -75,6 +86,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+
 .close {
     right: 20px;
     top: 20px;
@@ -96,6 +108,7 @@ onMounted(() => {
     width: 100%;
     height: 100%;
     background-color: #fff;
+
     @media (max-width: 1024px) {
         height: 100%;
         max-width: 944px;
@@ -131,6 +144,7 @@ onMounted(() => {
     width: 100%;
     height: 260px;
     gap: 28px;
+
     @media (max-width: 1024px) {
         height: 217px;
         width: 164px;
@@ -141,6 +155,7 @@ onMounted(() => {
 .left-result__flowers {
     width: 203px;
     height: 198px;
+
     @media (max-width: 1024px) {
         height: 160px;
         width: 164px;
@@ -163,6 +178,7 @@ onMounted(() => {
     width: 280px;
     height: 56px;
     border-radius: 30px;
+
     @media (max-width: 1024px) {
         height: 48px;
         width: 260px;
@@ -175,6 +191,7 @@ onMounted(() => {
     font-size: 20px;
     font-weight: 500;
     color: #fff;
+
     &-small {
         font-size: 16px;
         font-weight: 400;
@@ -195,15 +212,29 @@ onMounted(() => {
 .right-result__img-moa {
     width: 100%;
     height: 407px;
+
     @media (max-width: 1024px) {
         height: 327px;
         width: 320px;
     }
 }
 
+.end {
+    padding: 40px 0px 55px 0px;
+    width: 100%;
+    &_title {
+        text-align: center;
+        color: #313131;
+    }
+    &_img {
+        display: block;
+        margin: 10px auto;
+    }
+}
+
+
 // При планшетном варианте ломает адаптив
 // #result-bg {
 //     width: 403px;
 //     height: 407px;
-// }
-</style>
+// }</style>

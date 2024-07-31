@@ -1,23 +1,24 @@
 <template>
-    <template v-if="endGame === false">
-        <div class="ThirdTask task_block">
-            <div class="ThirdTask__wrapper">
+    <div class="ThirdTask task_block">
+        <div class="task_block__wrapper">
+            <template v-if="endGame === false">
                 <div class="task_block__close" @click="hide">
                     <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
                 <div class="task_block__time">
+
                     <Timer :end="end"></Timer>
                     <p class="title-h4 task_block__title ThirdTask__title">
                         Распредели звуки по коробкам на образуемые с помощью только
                         шума, голоса и шума, только голоса.
                     </p>
                 </div>
-
                 <div class="draggable-list">
                     <div class="list-group ThirdTask__wrapper_block">
                         <q-btn v-for="(item, index) in letters" :key="index" :id="item.id + '_elem'"
                             class="list-group-item item" draggable="true" @mouseover="playAudio(item.audio)"
-                            @dragstart="drag($event, item.name, item.id, index)" @dragover.prevent :value="item.name">
+                            @mouseout="stopAudio(item.audio)" @dragstart="drag($event, item.name, item.id, index)"
+                            @dragover.prevent :value="item.name">
                             {{ item.name }}
                         </q-btn>
                     </div>
@@ -42,11 +43,11 @@
                         </div>
                     </div>
                 </div>
+                </template>
+                <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Великолепно!"
+                v-else @hide="hideModal" class="end-modal"></TaskResultBanner>
             </div>
         </div>
-    </template>
-    <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Великолепно!"
-        v-if="show === false" @hide="hideModal" class="end-modal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -65,19 +66,25 @@ const props = defineProps({
         type: Boolean,
         required: false,
     },
+    finish: {
+        type: Boolean,
+    }
 });
 
+const audio = ref(new Audio());
+
 const playAudio = (audioPath) => {
-    const audio = new Audio(audioPath);
-    audio.play();
+    audio.value.src = audioPath;
+    if (props.finish === true) {
+        audio.value.play();
+    }
 }
 
+const stopAudio = (audioPath) => {
+    audio.value.src = '';
+}
 
 const endGame = ref(false);
-const show = ref(false);
-const hideModal = () => {
-    show.value = false;
-}
 
 const letters = ref([{ id: 1, name: 'к', type: 'глухой', audio: '/assets/audio/Task3/34.3.mp3' }, { id: 2, name: 'ч', type: 'глухой', audio: '/assets/audio/Task3/35.3.mp3' }, { id: 3, name: 'с', type: 'глухой', audio: '/assets/audio/Task3/36.3.mp3' }, { id: 4, name: 'о', type: 'звонкий', audio: '/assets/audio/Task3/37.3.mp3' }, { id: 5, name: 'ф', type: 'глухой', audio: '/assets/audio/Task3/38.3.mp3' }, { id: 6, name: 'з', type: 'средний', audio: '/assets/audio/Task3/39.3.mp3' }, { id: 7, name: 'и', type: 'звонкий', audio: '/assets/audio/Task3/40.3.mp3' }, { id: 8, name: 'г', type: 'средний', audio: '/assets/audio/Task3/41.3.mp3' }, { id: 9, name: 'д', type: 'средний', audio: '/assets/audio/Task3/42.3.mp3' }])
 const answer = ref('');
@@ -99,42 +106,32 @@ const drop = (event, index) => {
     event.preventDefault();
     let letter = event.dataTransfer.getData('text');
     let id = event.dataTransfer.getData('id');
-    // let id_box = document.getElementById(letter + '_box');
     let elem = document.getElementById(id + '_elem');
-    if (array_result.value.find((item) => item.name === letter) && index == 0) {
-        elem.classList.add('green');
-        setTimeout(() => {
-            elem.classList.remove('green');
-        }, 2000);
-
-        setTimeout(() => {
-            array.value.push(letter);
-            letters.value.splice(dropIndex.value, 1)
-        }, 2100);
-
-
+    if (array_result.value.find((item) => item.name === letter) && index === 0) {
+        // elem.classList.add('green');
+        array.value.push(letter);
+        letters.value.splice(dropIndex.value, 1)
+        // setTimeout(() => {
+        //     elem.classList.remove('green');
+        // }, 2000);
         playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
 
-    } else if (array_two_result.value.find((item) => item.name === letter) && index == 1) {
-        elem.classList.add('green');
-        setTimeout(() => {
-            elem.classList.remove('green');
-        }, 2000);
-        setTimeout(() => {
-            array_two.value.push(letter);
-            letters.value.splice(dropIndex.value, 1)
-        }, 2100);
+    } else if (array_two_result.value.find((item) => item.name === letter) && index === 1) {
+        // elem.classList.add('green');
+        // setTimeout(() => {
+        //     elem.classList.remove('green');
+        // }, 2000);
+        array_two.value.push(letter);
+        letters.value.splice(dropIndex.value, 1)
         playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
     }
-    else if (array_three_result.value.find((item) => item.name === letter) && index == 2) {
-        elem.classList.add('green');
-        setTimeout(() => {
-            elem.classList.remove('green');
-        }, 2000);
-        setTimeout(() => {
-            array_three.value.push(letter);
-            letters.value.splice(dropIndex.value, 1)
-        }, 2100);
+    else if (array_three_result.value.find((item) => item.name === letter) && index === 2) {
+        // elem.classList.add('green');
+        // setTimeout(() => {
+        //     elem.classList.remove('green');
+        // }, 2000);
+        array_three.value.push(letter);
+        letters.value.splice(dropIndex.value, 1)
 
         playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
 
@@ -147,12 +144,10 @@ const drop = (event, index) => {
 
         return false;
     }
-
-    if (array.value.length == array_result.value.length && array_two.value.length == array_two_result.value.length && array_three.value.length == array_three_result.value.length) {
+    if (array.value.length === array_result.value.length && array_two.value.length === array_two_result.value.length && array_three.value.length === array_three_result.value.length) {
         setTimeout(() => {
-            show.value = true;
             endGame.value = true;
-        }, 3000)
+        }, 1500)
     }
 
 

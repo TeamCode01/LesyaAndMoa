@@ -10,6 +10,14 @@
                     ><span>{{ label }}</span></v-btn
                 >
             </template>
+            <div class="close icon-close">
+                <img
+                    @click="closeDialog"
+                    class="close-icon"
+                    src="@app/assets/icons/icon-close.svg"
+                    alt="крест"
+                />
+            </div>
             <slot></slot>
         </v-dialog>
     </div>
@@ -25,6 +33,10 @@ const props = defineProps({
         default: 'Button',
     },
 });
+
+const closeDialog = () => {
+    dialog.value = false;
+};
 </script>
 <style>
 .v-dialog .v-overlay__content {
@@ -68,5 +80,11 @@ const props = defineProps({
 }
 .v-dialog > .v-overlay__content > .v-card > .v-card-actions {
     justify-content: center;
+}
+.icon-close {
+    position: absolute;
+    z-index: 1;
+    right: 10px;
+    top: 10px;
 }
 </style>

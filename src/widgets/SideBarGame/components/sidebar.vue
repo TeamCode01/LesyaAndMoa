@@ -12,9 +12,9 @@
                 </div>
             </div>
             <div class="modal_background" v-if="SeeTask">
-                <FirstTask :end="endTime" @close="close()" v-if="taskId === 1"></FirstTask>
-                <SecondTask :end="endTime" @close="close()" v-if="taskId === 2"></SecondTask>
-                <ThirdTask :end="endTime" @close="close()" v-if="taskId === 3"></ThirdTask>
+                <FirstTask :finish="finish" :end="endTime" @close="close()" v-if="taskId === 1"></FirstTask>
+                <SecondTask :finish="finish" :end="endTime" @close="close()" v-if="taskId === 2"></SecondTask>
+                <ThirdTask :finish="finish"  :end="endTime" @close="close()" v-if="taskId === 3"></ThirdTask>
                 <FourthTask :end="endTime" @close="close()" v-if="taskId === 4"></FourthTask>
                 <FifthTask :end="endTime" @close="close()" v-if="taskId === 5"></FifthTask>
                 <SixTask :end="endTime" @close="close()" v-if="taskId === 6"></SixTask>
@@ -30,13 +30,11 @@
                 <SixteenthTask :end="endTime" @close="close()" v-show="taskId === 16"></SixteenthTask>
                 <SeventeenthTask :end="endTime" @close="close()" v-show="taskId === 17"></SeventeenthTask>
                 <EighteenTask :end="endTime" @close="close()" v-if="taskId === 18"></EighteenTask>
-
-
-
             </div>
         </div>
 
         <Button
+        v-if="props.show === true"
             class="start"
             label="Старт"
             :is-image="true"
@@ -69,7 +67,14 @@ import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 import { TwelfthTask } from '@features/TwelfthTask';
 // import FourteenthTask from '@features/FourteenthTask/components/FourteenthTask.vue';
-const emit = defineEmits(['sendImg', 'sendAudio']);
+const emit = defineEmits(['sendImg', 'sendAudio', 'show']);
+const props = defineProps({
+    show: {
+        type: Boolean,
+        default: false,
+    }
+})
+const audio = ref(new Audio());
 const tasks = ref([
 
     { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 22, end: false, img: '/assets/backgrounds/animals.jpg', audio: '/assets/audio/Task1/12.1.mp3', startAudio: '/assets/audio/Task1/11.1_.mp3' },
@@ -94,21 +99,29 @@ const tasks = ref([
 
 const SeeTask = ref(false);
 const taskId = ref(null);
+const finish = ref(false);
 const taskImage = ref('/assets/backgrounds/animals.jpg');
 const timeVal = ref(15);
 const taskAudio = ref('/assets/audio/Task1/12.1.mp3');
 const startAudio = ref('/assets/audio/Task1/11.1_.mp3');
 const endTime = ref(false);
 const taskss = ref([]);
+const show = ref(props.show);
 
 const close = () => {
     SeeTask.value = false;
     endTime.value = false;
+    finish.value = false;
+    show.value = false;
+    emit('show', show.value);
 };
 
 const playAudio = (audioPath) => {
-    const audio = new Audio(audioPath);
-    audio.play();
+    audio.value.src = audioPath;
+    audio.value.play();
+    audio.value.addEventListener('ended', () => {
+        finish.value = true;
+    })
 }
 
 const switchTask = (id, openId, time, img, audio, startAudioV) => {
@@ -116,12 +129,14 @@ const switchTask = (id, openId, time, img, audio, startAudioV) => {
     SeeTask.value = openId;
     startAudio.value = startAudioV;
     timeVal.value = time;
+    show.value = false;
     taskAudio.value = audio;
     endTime.value = false;
+    finish.value = false;
     taskImage.value = img;
     emit('sendAudio', startAudioV);
-    console.log(startAudioV)
     emit('sendImg', img);
+    emit('show', show.value);
 };
 
 const startTask = async (id) => {

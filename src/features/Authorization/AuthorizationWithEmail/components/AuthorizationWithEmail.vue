@@ -45,7 +45,10 @@ import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { InputPass } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
+import { useUserStore } from '@layouts/stores/user';
 import { useRouter } from 'vue-router';
+
+const userStore = useUserStore();
 
 const swal = inject('$swal');
 const data = ref({
@@ -63,12 +66,7 @@ const LoginUser = async () => {
         data.value = response.data;
         localStorage.setItem('Token', response.data.auth_token);
         isLoading.value = false;
-        HTTP.get(`/users/me/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        userStore.getUser();
         router.push({
             name: 'profile-page',
             params: { id: response.data.id },
@@ -83,7 +81,6 @@ const LoginUser = async () => {
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
-        console.error('There was an error!', error);
         isLoading.value = false;
         if (isError.value) {
             swal.fire({
