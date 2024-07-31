@@ -67,7 +67,12 @@
                         </template>
                     </v-progress-linear>
                 </div>
-                <RouterLink to="/Game" class="router-link">
+                <RouterLink 
+                    :to="{
+                        name: 'Game',
+                        params: { idChild: block.id }
+                    }" 
+                    class="router-link">
                     <Button
                         label="Перейти к обучению"
                         class="profile__btn"
@@ -218,6 +223,8 @@ const swal = inject('$swal');
 const route = useRoute();
 
 const userStore = useUserStore();
+
+console.log(userStore.children);
 
 const tasksChoose = ref([
     { value: 'Женский', name: 'Женский' },
