@@ -45,15 +45,14 @@
                     </p>
                 </div>
                 <div class="description_block-img">
-                    <img src="@app/assets/img/AboutProject/Moa.png" alt="Moa" />
+                    <img src="@app/assets/img/AboutProject/Moa.svg" alt="Moa" class="img-moa" />
+                    <img src="@app/assets/img/AboutProject/moa-background.svg" alt="moa-background" class="moa-background"/>
                 </div>
             </div>
             <div class="description_block2">
                 <div class="description_block-img2">
-                    <img
-                        src="@app/assets/img/AboutProject/Lesya.png"
-                        alt="Lesya"
-                    />
+                    <img src="@app/assets/img/AboutProject/Lesya.svg" alt="Lesya" class="img-lesya"/>
+                    <img src="@app/assets/img/AboutProject/lesya-background.svg" alt="lesya-background" class="lesya-background"/>
                 </div>
                 <div class="description_block-text">
                     <p>
@@ -102,7 +101,7 @@
                     </p>
                 </div>
                 <div class="support_block-QR">
-                    <img src="@app/assets/img/AboutProject/qr.png" alt="QR" />
+                    <img src="@app/assets/img/AboutProject/qr.png" alt="QR" class="support_block-QR-img"/>
                 </div>
             </div>
         </div>
@@ -125,6 +124,16 @@ h1 {
     max-width: 666px;
     display: block;
     margin: 60px auto;
+    line-height: 50px;
+    
+    @media (max-width: 1024px) {
+        font-size: 40px;
+        line-height: 40px;
+    }
+    @media (max-width: 568px) {
+        font-size: 24px;
+        line-height: 30px;
+    }
 }
 .description {
     display: flex;
@@ -136,42 +145,76 @@ h1 {
     flex-direction: row;
     max-width: 1200px;
     position: relative;
+    @media (max-width: 940px) {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 .description_block2 {
     display: flex;
-    flex-direction: row-reverse;
     max-width: 1200px;
     position: relative;
-}
-.description_block-img {
-    width: 25%;
-    float: left;
-    position: absolute;
-    top: 20px;
-    right: 100px;
-    z-index: -1;
-    @media (max-width: 1350px) {
-        width: 33%;
-    }
-    @media (max-width: 1200px) {
-        width: 33%;
-        top: 20%;
+    @media (max-width: 940px) {
+        flex-direction: column-reverse;
+        align-items: center;
     }
 }
+// .description_block-img {
+    // width: 25%;
+    // float: left;
+    // position: absolute;
+    // top: 20px;
+    // right: 100px;
+    // z-index: -1;
+    // @media (max-width: 1350px) {
+    //     width: 33%;
+    // }
+    // @media (max-width: 1200px) {
+    //     width: 33%;
+    //     top: 20%;
+    // }
+// }
+
+.description_block-img,
 .description_block-img2 {
-    width: 25%;
-    float: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    width: 285px;
+    height: 389px;
+}
+
+.img-moa,
+.img-lesya {
+    max-width: 100%;
+}
+
+.moa-background {
     position: absolute;
-    top: 10px;
-    left: -90px;
+    top: 180px;
     z-index: -1;
-    @media (max-width: 1350px) {
-        width: 33%;
+    object-fit: cover;
+    width: 360px;
+    @media (max-width: 568px) {
+        width: 360px;
+        top: 200px;
     }
-    @media (max-width: 1200px) {
-        width: 33%;
-        top: 20%;
+}
+
+.lesya-background {
+    position: absolute;
+    bottom: -150px;
+    z-index: -1;
+    @media (max-width: 568px) {
+        width: 360px;
+        bottom: -80px;
     }
+}
+
+.description_block-img2 {
+    height: 385px;
 }
 .description_block-text {
     width: 75%;
@@ -213,10 +256,46 @@ h4 {
     background-color: #c8efc5;
     border-radius: 20px;
     display: flex;
-    column-gap: 357px;
+    max-width: 100%;
+    justify-content: space-between;
     padding: 20px;
     margin-bottom: 100px;
+    gap: 20px;
+    @media (max-width: 1024px) {
+        align-items: center;
+    }
+    @media (max-width: 568px) {
+        flex-direction: column;
+        align-items: center;
+        height: 270px;
+    }
+    &-QR {
+        @media (max-width: 568px) {
+            width: 145px;
+            height: 145px;
+        }
+        @media (max-width: 400px) {
+                width: 120px;
+                height: 120px;
+            }
+        &-img {
+            @media (max-width: 568px) {
+                width: 145px;
+                height: 145px;
+            }
+            @media (max-width: 400px) {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    }
 }
+
+.support_block-text {
+    max-width: 100%;
+    height: 50px;
+}
+
 .support_block-text p {
     font-family: Nunito;
 }
