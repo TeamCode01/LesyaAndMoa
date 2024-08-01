@@ -251,14 +251,6 @@ const form = ref({
     sex: null,
     data_processing_agreement: false,
 });
-// const child = ref([
-//     {
-//         id: '',
-//         first_name: '',
-//         last_name: '',
-//         school: '',
-//     },
-// ]);
 
 const skill = ref({});
 
@@ -308,6 +300,7 @@ const AddChild = async () => {
             showConfirmButton: false,
             timer: 1500,
         });
+        await userStore.getChildren();
         await fetchSkills();
     } catch (error) {
         console.log('errr', error);
@@ -337,22 +330,6 @@ const GetRegion = async () => {
         console.error('There was an error!', error);
     }
 };
-// const GetChild = async () => {
-//     try {
-//         const response = await HTTP.get(`/children/`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: 'Token ' + localStorage.getItem('Token'),
-//             },
-//         });
-//         child.value = response.data;
-//         console.log(response.data);
-//     } catch (error) {
-//         console.log('errr', error);
-//         isError.value = error.response.data;
-//         console.error('There was an error!', error);
-//     }
-// };
 
 const GetSkill = async (id, index) => {
     try {

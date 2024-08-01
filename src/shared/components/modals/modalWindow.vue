@@ -38,9 +38,6 @@ const closeDialog = () => {
     console.log(123);
     dialog.value = false;
 };
-// const emitUpdate = () => {
-//     emit('update:dialog', dialog.value);
-// };
 </script>
 <style>
 .v-dialog .v-overlay__content {
