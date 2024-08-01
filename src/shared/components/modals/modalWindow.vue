@@ -1,6 +1,6 @@
 <template>
     <div class="pa-4 text-center">
-        <v-dialog v-model:dialog="dialog" max-width="505">
+        <v-dialog v-model="dialog" max-width="505">
             <template v-slot:activator="{ props: activatorProps }">
                 <v-btn
                     class="text-none font-weight-regular"
@@ -18,7 +18,7 @@
                     alt="крест"
                 />
             </div>
-            <slot></slot>
+            <slot :close="closeDialog"></slot>
         </v-dialog>
     </div>
 </template>
@@ -35,11 +35,12 @@ const props = defineProps({
 });
 
 const closeDialog = () => {
+    console.log(123);
     dialog.value = false;
 };
-const emitUpdate = () => {
-    emit('update:dialog', dialog.value);
-};
+// const emitUpdate = () => {
+//     emit('update:dialog', dialog.value);
+// };
 </script>
 <style>
 .v-dialog .v-overlay__content {
