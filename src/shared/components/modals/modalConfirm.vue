@@ -19,7 +19,7 @@
                     alt="крест"
                 />
             </div>
-            <slot></slot>
+            <slot :close="closeDialog"></slot>
         </v-dialog>
     </div>
 </template>
