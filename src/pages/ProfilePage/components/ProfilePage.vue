@@ -93,6 +93,9 @@
                             class="form-input"
                             v-model:value="form.first_name"
                         ></Input>
+                        <p class="error" v-if="isError.first_name">
+                            {{ isError.first_name[0] }}
+                        </p>
                     </div>
                     <div class="form-input">
                         <label>Имя</label>
@@ -102,6 +105,9 @@
                             class="form-input"
                             v-model:value="form.last_name"
                         ></Input>
+                        <p class="error" v-if="isError.last_name">
+                            {{ isError.last_name[0] }}
+                        </p>
                     </div>
                     <div class="form-input">
                         <label>Пол</label>
@@ -119,6 +125,9 @@
                             @update:value="changeOption"
                             v-bind="props"
                         />
+                        <p class="error" v-if="isError.sex">
+                            {{ isError.sex[0] }}
+                        </p>
                     </div>
                     <div class="form-input">
                         <label>Возраст</label>
@@ -127,6 +136,9 @@
                             class="form-input"
                             v-model:value="form.age"
                         ></Input>
+                        <p class="error" v-if="isError.age">
+                            {{ isError.age[0] }}
+                        </p>
                     </div>
                     <div class="form-input">
                         <label>Регион</label>
@@ -144,6 +156,9 @@
                             :sorts-boolean="false"
                             @update:value="changeOption"
                         />
+                        <p class="error" v-if="isError.region">
+                            {{ isError.region[0] }}
+                        </p>
                     </div>
                     <div class="form-input">
                         <label>Школа</label>
@@ -152,6 +167,9 @@
                             class="form-input"
                             v-model:value="form.school"
                         ></Input>
+                        <p class="error" v-if="isError.school">
+                            {{ isError.school[0] }}
+                        </p>
                     </div>
                     <div class="form-input">
                         <label>Класс</label>
@@ -160,6 +178,9 @@
                             class="form-input"
                             v-model:value="form.grade"
                         ></Input>
+                        <p class="error" v-if="isError.grade">
+                            {{ isError.grade[0] }}
+                        </p>
                     </div>
                     <div class="regCheck">
                         <input
@@ -549,5 +570,14 @@ onMounted(async () => {
 }
 .delete-btn {
     width: 182px;
+}
+.error {
+    font-family: 'Nunito', sans-serif;
+    color: #ff535c;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21.82px;
+    margin-top: -15px;
+    margin-bottom: 10px;
 }
 </style>
