@@ -98,9 +98,10 @@ const LoginUser = async () => {
 .d-flex {
     display: flex;
     row-gap: 50px;
-    justify-content: center;
     position: relative;
+    justify-content: center;
 }
+
 .Login {
     margin: 50px 0 200px 0;
     display: flex;
@@ -109,11 +110,23 @@ const LoginUser = async () => {
     padding: 32px 60px 32px 60px;
     background-color: #fae6f2;
     border-radius: 20px;
+
+    @media (max-width: 1140px) {
+        margin-bottom: 550px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+    @media (max-width: 568px) {
+        min-width: 320px;
+    }
 }
 .Login h2 {
     font-size: 32px;
     font-family: 'Nunito', sans-serif;
     font-weight: normal;
+    @media (max-width: 768px) {
+        font-size: 24px;
+    }
 }
 .Form {
     padding: 28px 0;
@@ -167,8 +180,17 @@ const LoginUser = async () => {
 }
 .img-auth {
     position: absolute;
-    right: -15px;
-    top: 100px;
+    left: 75%;
+    top: 125px;
+    @media (max-width: 1200px) {
+        width: 213px;
+        height: 403px;
+    }
+    @media (max-width: 1140px) {
+        top: 620px;
+        left: 50%;
+        margin-left: -106px;
+    }
 }
 </style>
 <<<<<<< HEAD <<<<<<< HEAD ======= >>>>>>>
