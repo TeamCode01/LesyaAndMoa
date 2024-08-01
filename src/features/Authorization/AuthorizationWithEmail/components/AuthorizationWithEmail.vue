@@ -115,9 +115,10 @@ const LoginUser = async () => {
         margin-bottom: 550px;
         padding-left: 30px;
         padding-right: 30px;
+        min-width: 415px;
     }
     @media (max-width: 568px) {
-        min-width: 320px;
+        min-width: 90vw;
     }
 }
 .Login h2 {
@@ -126,6 +127,9 @@ const LoginUser = async () => {
     font-weight: normal;
     @media (max-width: 768px) {
         font-size: 24px;
+    }
+    @media (max-width: 768px) {
+        font-size: 22px;
     }
 }
 .Form {

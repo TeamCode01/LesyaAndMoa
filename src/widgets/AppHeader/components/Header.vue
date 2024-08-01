@@ -187,6 +187,7 @@ const Login = () => {
         padding: 0 40px;
 
         @media(max-width:568px) {
+            padding: 0;
             &_adaptive {
                 display: flex;
                 justify-content: space-between;
@@ -250,7 +251,7 @@ const Login = () => {
     position: fixed;
     right: 5%;
     top: 15%;
-
+    z-index: 1;
     &__wrapper {
         &_mini {
             &_info {
