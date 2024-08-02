@@ -198,7 +198,7 @@
         <img
             v-if="!userStore.children.length"
             class="profile__img"
-            src="@app/assets/img/Profile/Moa.png"
+            src="@app/assets/img/Profile/lesyaandmoa.svg"
             alt=""
         />
     </div>
@@ -379,6 +379,7 @@ onMounted(async () => {
     }
 
     &__text {
+        text-align: center;
         font-size: 28px;
         font-family: 'Nunito', sans-serif;
         font-weight: normal;
@@ -392,9 +393,25 @@ onMounted(async () => {
 }
 
 .profile__img {
+    max-width: 100%;
     position: absolute;
     top: -50px;
     z-index: -1;
+    
+    @media (max-width: 1200px) {
+        object-fit: cover;
+        height: 100%;
+        left: 50%;
+        margin-left: -490px;
+    }
+    @media (max-width: 975px) {
+        margin-left: 0;
+        left: 0;
+    }
+    @media (max-width: 568px) {
+        top: 50px;
+        height: 80%;
+    }
 }
 
 .text__profile {
@@ -419,7 +436,6 @@ onMounted(async () => {
     min-height: 640px;
     margin: 40px auto 0 auto;
     max-width: 1200px;
-
     &__wrapper {
         display: flex;
         flex-direction: column;
