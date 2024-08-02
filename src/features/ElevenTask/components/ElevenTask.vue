@@ -59,19 +59,24 @@
     </template>
 
     <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Молодец!"
-        v-if="show === true" @hide="hideModal"></TaskResultBanner>
+        v-else @next="next" @hide="hide"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'next-modal']);
 
 const endGame = ref(false);
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
+
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+}
 
 const props = defineProps({
     end: {
@@ -80,10 +85,6 @@ const props = defineProps({
     },
 });
 
-const show = ref(false);
-const hideModal = () => {
-    show.value = false;
-}
 
 const syllables = ref([
     { id: 1, name: 'МЫШ', part: 1 },
