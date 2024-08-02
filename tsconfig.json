@@ -10,7 +10,8 @@
             "@widgets/*": ["./src/widgets/*"],
             "@features/*": ["./src/features/*"],
             "@entities/*": ["./src/entities/*"],
-            "@shared/*": ["./src/shared/*"]
+            "@shared/*": ["./src/shared/*"],
+            "@mixins/*": ["./src/mixins/*"]
         },
         "target": "ESNext",
         "useDefineForClassFields": true,
