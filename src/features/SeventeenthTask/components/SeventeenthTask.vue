@@ -13,7 +13,7 @@
                     <Timer :end="end"></Timer>
                     <p class="title-h4 task_block__title SeventeenthTask__title">
                         Собери слова из двух частей. <br/>
-                        Соедини полученные слова с картинками. 
+                        Соедини полученные слова с картинками.
                     </p>
                 </div>
                 <div class="draggable-list">
@@ -127,7 +127,7 @@
                 />
             </template>
             <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/lesya.gif" text="Потрясающе!"
-            v-if="false" @hide="hide()"></TaskResultBanner>
+            v-if="false" @next="next()" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -138,7 +138,7 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -148,6 +148,10 @@ const props = defineProps({
 const hide = () => {
     emit('close');
 };
+
+const next = () => {
+    emit('next-modal');
+}
 </script>
 
 <style lang="scss" scoped>

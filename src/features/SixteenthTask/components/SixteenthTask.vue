@@ -102,6 +102,7 @@
                 text="Изумительно!"
                 v-if="answersCounter == 55"
                 @hide="hide()"
+                @next="next()"
             ></TaskResultBanner>
         </div>
     </div>
@@ -115,7 +116,7 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
 import { dataTask, dataAnswer } from './task';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -126,6 +127,11 @@ const hide = () => {
     emit('close');
     resetTask();
 };
+
+const next = () => {
+    emit('next-modal');
+    resetTask();
+}
 
 const isActive = true;
 

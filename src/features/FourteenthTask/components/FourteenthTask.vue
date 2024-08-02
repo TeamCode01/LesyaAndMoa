@@ -64,10 +64,10 @@
                     class="task_block__wrapper_answer"
                 />
             </template>
-            <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/moa.gif" text="Друзья заметили, что письменная б (БЭ), которая звучит, 
-            как [б] или [б'] похожа на белку с поднятым хвостом. В слове «белка» звучит [б']. А письменная д, которая звучит, как [д] или [д'], похожа на дятла, 
+            <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/moa.gif" text="Друзья заметили, что письменная б (БЭ), которая звучит,
+            как [б] или [б'] похожа на белку с поднятым хвостом. В слове «белка» звучит [б']. А письменная д, которая звучит, как [д] или [д'], похожа на дятла,
             у которого хвостик вниз. В слове «дятел» звучит [д']."
-            v-if="true" @hide="hide()"></TaskResultBanner>
+            v-if="true" @next="next()" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -78,7 +78,7 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -88,6 +88,9 @@ const props = defineProps({
 const hide = () => {
     emit('close');
 };
+const next = () => {
+    emit('next-modal');
+}
 </script>
 
 <style lang="scss" scoped>

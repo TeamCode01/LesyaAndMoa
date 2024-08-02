@@ -43,23 +43,29 @@
                         </div>
                     </div>
                 </div>
-                </template>
-                <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Великолепно!"
-                v-else @hide="hideModal" class="end-modal"></TaskResultBanner>
-            </div>
+            </template>
+            <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Великолепно!"
+                v-else @next="next()" @hide="hide" class="end-modal"></TaskResultBanner>
         </div>
+    </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-const emit = defineEmits(['close']);
-
+const emit = defineEmits(['close', 'next-modal']);
+const endGame = ref(false);
+const audio = ref(new Audio());
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
+
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+}
 
 const props = defineProps({
     end: {
@@ -71,11 +77,12 @@ const props = defineProps({
     }
 });
 
-const audio = ref(new Audio());
+
 
 const playAudio = (audioPath) => {
     audio.value.src = audioPath;
-    if (props.finish === true) {
+    console.log(props.finish)
+    if(props.finish === true) {
         audio.value.play();
     }
 }
@@ -84,7 +91,7 @@ const stopAudio = (audioPath) => {
     audio.value.src = '';
 }
 
-const endGame = ref(false);
+
 
 const letters = ref([{ id: 1, name: 'к', type: 'глухой', audio: '/assets/audio/Task3/34.3.mp3' }, { id: 2, name: 'ч', type: 'глухой', audio: '/assets/audio/Task3/35.3.mp3' }, { id: 3, name: 'с', type: 'глухой', audio: '/assets/audio/Task3/36.3.mp3' }, { id: 4, name: 'о', type: 'звонкий', audio: '/assets/audio/Task3/37.3.mp3' }, { id: 5, name: 'ф', type: 'глухой', audio: '/assets/audio/Task3/38.3.mp3' }, { id: 6, name: 'з', type: 'средний', audio: '/assets/audio/Task3/39.3.mp3' }, { id: 7, name: 'и', type: 'звонкий', audio: '/assets/audio/Task3/40.3.mp3' }, { id: 8, name: 'г', type: 'средний', audio: '/assets/audio/Task3/41.3.mp3' }, { id: 9, name: 'д', type: 'средний', audio: '/assets/audio/Task3/42.3.mp3' }])
 const answer = ref('');
