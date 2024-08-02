@@ -1,9 +1,11 @@
 import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
 
 const gameActions = {
     methods: {
-        startGame(child_or_group_id: number, id: number) {
-            HTTP.post(`/answers/${child_or_group_id}/`, {
+        startGameReuest( id: number) {
+            const route = useRoute();
+            HTTP.post(`/answers/${route.params.idChildOrGroup}/`, {
                 task: id,
             }, {
                 headers: {
@@ -12,8 +14,9 @@ const gameActions = {
                 }
             })
         },
-        endGame(child_or_group_id: number, id: number) {
-            HTTP.post(`/answers/${child_or_group_id}/${id}`, {
+        endGameReuest(id: number) {
+            const route = useRoute();
+            HTTP.put(`/answers/${route.params.idChildOrGroup}/${id}/`, {
                 is_correct: true
             }, {
                 headers: {
