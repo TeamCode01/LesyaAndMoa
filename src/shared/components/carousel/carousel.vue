@@ -62,6 +62,7 @@ onMounted(() => {
 
   &__carousel {
     display: flex;
+    justify-content: center;
     column-gap: 20px;
     transition: all ease .5s;
   }

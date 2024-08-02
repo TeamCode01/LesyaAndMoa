@@ -20,7 +20,7 @@
             </div>
         </div>
     </template>
-    <TaskResultBanner :is_end="true" bg="/assets/backgrounds/bg_end.jpg" v-else @hide="hide()"></TaskResultBanner>
+    <TaskResultBanner :is_end="true" bg="/assets/backgrounds/bg_end.jpg" class="end-modal" v-else @hide="hide()"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -76,6 +76,10 @@ const sendAnswer = () => {
 }
 </script>
 <style lang="scss" scoped>
+.end-modal {
+    width: 1200px;
+    height: 600px;
+}
 .send {
     max-width: 280px;
     width: 100%;

@@ -6,4 +6,10 @@
 <script setup>
 import { Main } from '@features/MainPage/components';
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.container:first-child {
+  padding: 0;
+  // margin: 0 auto;
+}
+
+</style>

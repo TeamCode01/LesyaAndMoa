@@ -8,4 +8,15 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useUserStore } from '@layouts/stores/user';
+import { onMounted } from 'vue';
+
+const userStore = useUserStore();
+
+onMounted(() => {
+    userStore.getUser();
+    userStore.getChildren();
+})
+
+</script>

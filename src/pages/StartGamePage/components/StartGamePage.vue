@@ -19,7 +19,6 @@
 </template>
 <script setup>
 import { Sidebar } from "@widgets/SideBarGame";
-import { event } from "quasar";
 import { ref, onMounted } from 'vue';
 
 let img = ref('/assets/backgrounds/animals.jpg');
