@@ -1,7 +1,7 @@
 <template>
     <div class="SeventhTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="startGame">
+            <template v-if="!endGame">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -64,7 +64,7 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
-const startGame = ref(true);
+const endGame = ref(false);
 const isDrawing = ref(false);
 const option = ref(2);
 const lines = ref([]);
