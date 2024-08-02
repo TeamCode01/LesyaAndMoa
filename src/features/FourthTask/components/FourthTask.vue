@@ -19,10 +19,10 @@
                     <div class="draggable-list__items">
                         <div v-for="(line, line_index) in syllables" :key="line_index">
                             <div :class="{'draggable-list__item1': 1 == line_index, 'draggable-list__item2': 2 == line_index, 'draggable-list__item3': 3 == line_index }">
-                                <button 
+                                <button
                                     v-for="(item, item_index) in line"
                                     :key="item_index"
-                                    @click="onSelection(line_index, item_index)" 
+                                    @click="onSelection(line_index, item_index)"
                                     :class="{'draggable-list__button': true, correct_select: item.correct, not_correct_select: item.correct === false}"
                                 > {{ item.name }}</button>
                             </div>
@@ -59,7 +59,7 @@
                 />
             </template>
             <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Здорово!"
-            v-else @hide="hide()"></TaskResultBanner>
+            v-else  @next="next()" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -72,7 +72,7 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
 const startGame = ref(true);
 const firstListen = ref(true);
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close','next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -81,6 +81,11 @@ const props = defineProps({
 });
 
 const countAnswers = ref(0);
+
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+}
 
 const currSyllable = ref();
 const played = ref([])

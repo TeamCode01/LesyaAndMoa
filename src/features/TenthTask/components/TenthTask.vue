@@ -1,7 +1,7 @@
 <template>
     <div class="TenthTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="true">
+            <template v-if="endGame === false">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -79,7 +79,7 @@
                 />
             </template>
             <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/moa.gif" text="Замечательно!"
-            v-if="false" @hide="hide()"></TaskResultBanner>
+            v-else @hide="hide()" @next="next()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -89,8 +89,8 @@ import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-
-const emit = defineEmits(['close']);
+const endGame = ref(false);
+const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -99,7 +99,12 @@ const props = defineProps({
 });
 const hide = () => {
     emit('close');
+    endGame.value = true;
 };
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+}
 </script>
 
 <style lang="scss" scoped>

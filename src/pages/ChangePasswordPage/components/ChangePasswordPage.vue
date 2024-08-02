@@ -85,6 +85,8 @@ const changePass = async () => {
     row-gap: 50px;
     justify-content: center;
     position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .Login {
@@ -95,12 +97,22 @@ const changePass = async () => {
     padding: 32px 60px 32px 60px;
     background-color: #fae6f2;
     border-radius: 20px;
+
+    @media (max-width: 1024px) {
+        margin-bottom: 500px;
+    }
+    @media (max-width: 768px) {
+        min-width: 90vw;
+    }
 }
 
 .Login h2 {
     font-size: 32px;
     font-family: 'Nunito', sans-serif;
     font-weight: normal;
+    @media (max-width: 768px) {
+        font-size: 24px;
+    }
 }
 
 .Form {
@@ -169,7 +181,20 @@ const changePass = async () => {
 
 .img-auth {
     position: absolute;
-    right: -15px;
+    right: -100px;
     top: 100px;
+    
+    @media (max-width: 1200px) {
+        width: 213px;
+        height: 403px;
+    }
+    @media (max-width: 1024px) {
+        top: 500px;
+        left: 50%;
+        margin-left: -106px;
+    }
+    @media (max-width: 440px) {
+        top: 570px;
+    }
 }
 </style>

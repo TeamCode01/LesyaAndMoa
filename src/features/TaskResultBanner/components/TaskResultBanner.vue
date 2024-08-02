@@ -10,7 +10,7 @@
                     <img v-if="props.is_test === false" class="left-result__flowers" id="result-banner" />
                 </div>
                 <div v-if="props.is_test === false">
-                    <button class="left-result__button left-result__text">
+                    <button @click="next" class="left-result__button left-result__text">
                         <span class="left-result__text">Далее</span>
                         <img src="@app\assets\icons\vector.svg" alt="vector" />
                     </button>
@@ -45,7 +45,7 @@
 import router from '@app/router';
 import Button from '@shared/components/buttons/button.vue';
 import { onMounted } from 'vue';
-const emit = defineEmits(['hide']);
+const emit = defineEmits(['hide', 'next']);
 const hide = () => {
     emit('hide');
 };
@@ -71,7 +71,10 @@ const props = defineProps({
 })
 
 const goToGames = () => {
-    router.push({name: 'Game'})
+    router.push({ name: 'Game' })
+}
+const next = () => {
+    emit('next');
 }
 
 onMounted(() => {
@@ -86,7 +89,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-
 .close {
     right: 20px;
     top: 20px;
@@ -222,10 +224,12 @@ onMounted(() => {
 .end {
     padding: 40px 0px 55px 0px;
     width: 100%;
+
     &_title {
         text-align: center;
         color: #313131;
     }
+
     &_img {
         display: block;
         margin: 10px auto;

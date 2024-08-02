@@ -37,7 +37,7 @@
                             <img :ref="el => refColumns[3][rowId_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
-                    
+
                     <div class="draggable-list__pictures" v-if="!showCorrectRow">
                         <div class="draggable-list__picture-container" v-for="(img, img_index) in images[option]" :key="img_index">
                             <img :ref="el => refColumns[4][img_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
@@ -53,7 +53,7 @@
                 </div>
             </template>
             <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/lesya.gif" text="Далее!"
-            v-else @hide="hide()"></TaskResultBanner>
+            v-else @hide="hide()" @next="next()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -256,7 +256,7 @@ const sentences = ref({
             correctLeftRow: 3,
         },
     },
-}) 
+})
 
 const images = ref({
     1:{
@@ -313,7 +313,7 @@ const images = ref({
     },
 })
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close','next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -324,6 +324,10 @@ const hide = () => {
     emit('close');
 };
 
+const next = () => {
+    emit('next-modal');
+}
+
 const voiceActing = () => {
     let onBlock = false;
     let clickOnColumn = 0;
@@ -332,9 +336,9 @@ const voiceActing = () => {
     for (const columnId in blockSoundCords.value) {
         for(const rowId in blockSoundCords.value[columnId]) {
             if (
-                pos.x >= blockSoundCords.value[columnId][rowId].leftUpperCornerCords.x && 
+                pos.x >= blockSoundCords.value[columnId][rowId].leftUpperCornerCords.x &&
                 pos.y >= blockSoundCords.value[columnId][rowId].leftUpperCornerCords.y &&
-                pos.x <= blockSoundCords.value[columnId][rowId].rightLowerCornerCords.x && 
+                pos.x <= blockSoundCords.value[columnId][rowId].rightLowerCornerCords.x &&
                 pos.y <= blockSoundCords.value[columnId][rowId].rightLowerCornerCords.y
             ){
                 clickOnColumn = columnId;
@@ -373,8 +377,8 @@ const draw = (event) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             redraw();
             ctx.strokeStyle = "green";
-            ctx.lineWidth = 2; 
-            ctx.setLineDash([5, 5]); 
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
             ctx.beginPath();
             ctx.moveTo(startCords.value.x, startCords.value.y);
             ctx.lineTo(pos.x, pos.y);
@@ -414,7 +418,7 @@ const checkRowsAndColumnsIds = (pos) => {
 const isDone = (column, row) => {
     if(column == 1){
         return words.value[option.value][row].correctRight;
-    } else if (column == 2){ 
+    } else if (column == 2){
         return sentences.value[option.value][row].correctLeft;
     } else if (column == 3){
         return sentences.value[option.value][row].correctRight
@@ -450,7 +454,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             sentences.value[option.value][endRow].correct = true;
             setTimeout(() => {
                 words.value[option.value][startRow].correct = null;
-                sentences.value[option.value][endRow].correct = null;  
+                sentences.value[option.value][endRow].correct = null;
             }, 1000);
             return true;
         } else {
@@ -458,7 +462,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             sentences.value[option.value][endRow].correct = false;
             setTimeout(() => {
                 words.value[option.value][startRow].correct = null;
-                sentences.value[option.value][endRow].correct = null;  
+                sentences.value[option.value][endRow].correct = null;
             }, 1000);
             return false;
         }
@@ -470,14 +474,14 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             sentences.value[option.value][startRow].correct = true;
             setTimeout(() => {
                 words.value[option.value][endRow].correct = null;
-                sentences.value[option.value][startRow].correct = null;  
+                sentences.value[option.value][startRow].correct = null;
             }, 1000);
         } else {
             words.value[option.value][endRow].correct = false;
             sentences.value[option.value][startRow].correct = false;
             setTimeout(() => {
                 words.value[option.value][endRow].correct = null;
-                sentences.value[option.value][startRow].correct = null;  
+                sentences.value[option.value][startRow].correct = null;
             }, 1000);
             return false;
         }
@@ -489,7 +493,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             images.value[option.value][endRow].correct = true;
             setTimeout(() => {
                 sentences.value[option.value][startRow].correct = null;
-                images.value[option.value][endRow].correct = null;  
+                images.value[option.value][endRow].correct = null;
             }, 1000);
             return true;
         } else {
@@ -497,7 +501,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             images.value[option.value][endRow].correct = false;
             setTimeout(() => {
                 sentences.value[option.value][startRow].correct = null;
-                images.value[option.value][endRow].correct = null;  
+                images.value[option.value][endRow].correct = null;
             }, 1000);
             return false;
         }
@@ -509,7 +513,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             sentences.value[option.value][endRow].correct = true;
             setTimeout(() => {
                 images.value[option.value][startRow].correct = null;
-                sentences.value[option.value][endRow].correct = null;  
+                sentences.value[option.value][endRow].correct = null;
             }, 1000);
             return true;
         } else {
@@ -517,7 +521,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             sentences.value[option.value][endRow].correct = false;
             setTimeout(() => {
                 images.value[option.value][startRow].correct = null;
-                sentences.value[option.value][endRow].correct = null;  
+                sentences.value[option.value][endRow].correct = null;
             }, 1000);
             return false;
         }
@@ -536,7 +540,7 @@ const redrawCorrectRows = () => {
             ctx.fill();
             ctx.stroke();
             ctx.closePath();
-            
+
             ctx.strokeStyle = "green";
             ctx.lineWidth = 2;
             ctx.setLineDash([]);
@@ -637,7 +641,7 @@ const redraw = () => {
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
-        
+
         ctx.strokeStyle = "green";
         ctx.lineWidth = 2;
         ctx.setLineDash([]);
@@ -659,7 +663,7 @@ const redraw = () => {
 const resizeCanvas = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    redraw(); 
+    redraw();
 }
 
 const getCenterCords = () => {
