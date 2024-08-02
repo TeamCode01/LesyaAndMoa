@@ -413,6 +413,8 @@ onMounted(async () => {
 }
 
 .profile-child {
+    display: flex;
+    flex-direction: column;
     position: relative;
     min-height: 640px;
     margin: 40px auto 0 auto;

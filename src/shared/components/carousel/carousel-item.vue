@@ -9,6 +9,7 @@
       <p class="text-small carousel-item__author-name">{{ item_data.author_name }}</p>
       <p class="text-small carousel-item__author-about">{{ item_data.author_about_top }}</p>
       <p class="text-small carousel-item__author-about">{{ item_data.author_about_bottom }}</p>
+      <p>{{ item_data.id }}</p>
     </div>
   </div>
 </template>
@@ -28,6 +29,7 @@ const emit = defineEmits(['click']);
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: 100%;
   img {
     max-width: 387px;
     height: 220px;
@@ -53,10 +55,12 @@ const emit = defineEmits(['click']);
 
   &__author-name {
     font-size: 20px;
+    text-align: left;
   }
 
   &__author-about {
     width: 214px;
+    text-align: left;
   }
 
   &__date {
