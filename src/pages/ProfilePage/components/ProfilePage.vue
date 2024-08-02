@@ -67,7 +67,11 @@
                         </template>
                     </v-progress-linear>
                 </div>
-                <RouterLink to="/Game" class="router-link">
+                <RouterLink 
+                    :to="{
+                        name: 'game',
+                        params: { idChildOrGroup: block.id }
+                    }" class="router-link">
                     <Button
                         label="Перейти к обучению"
                         class="profile__btn"
