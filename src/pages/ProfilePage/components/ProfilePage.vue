@@ -67,7 +67,11 @@
                         </template>
                     </v-progress-linear>
                 </div>
-                <RouterLink to="/Game" class="router-link">
+                <RouterLink 
+                    :to="{
+                        name: 'Game',
+                        params: { idChildOrGroup: block.id }
+                    }" class="router-link">
                     <Button
                         label="Перейти к обучению"
                         class="profile__btn"
@@ -191,14 +195,13 @@
         </modalWindow>
         <img
             v-if="userStore.children.length"
-            class="profile-child__img"
-            src="@app/assets/img/Profile/LesyaMoa.png"
-            alt=""
+            class="profile__img"
+            src="@app/assets/img/Profile/lesyaandmoa.svg"
         />
         <img
             v-if="!userStore.children.length"
-            class="profile__img"
-            src="@app/assets/img/Profile/lesyaandmoa.svg"
+            class="profile-child__img"
+            src="@app/assets/img/Profile/Moa.png"
             alt=""
         />
     </div>
@@ -392,7 +395,8 @@ onMounted(async () => {
     margin-bottom: 0px;
 }
 
-.profile__img {
+.profile__img,
+.profile-child__img {
     max-width: 100%;
     position: absolute;
     top: -50px;
@@ -486,7 +490,26 @@ onMounted(async () => {
 }
 
 .profile-child__img {
-    margin: 0 45px -120px 45px;
+    max-width: 100%;
+    position: absolute;
+    top: -30px;
+    z-index: -1;
+    
+    @media (max-width: 1200px) {
+        top: 60px;
+        object-fit: cover;
+        height: 100%;
+        left: 50%;
+        margin-left: -490px;
+    }
+    @media (max-width: 975px) {
+        margin-left: 0;
+        left: 0;
+    }
+    @media (max-width: 568px) {
+        top: 50px;
+        height: 80%;
+    }
 }
 .router-link {
     text-decoration-line: none;
