@@ -69,7 +69,7 @@
                 </div>
                 <RouterLink 
                     :to="{
-                        name: 'game',
+                        name: 'Game',
                         params: { idChildOrGroup: block.id }
                     }" class="router-link">
                     <Button
