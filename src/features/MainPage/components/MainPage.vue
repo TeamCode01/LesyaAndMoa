@@ -113,7 +113,7 @@
     </div>
     <div class="author" id="author">
         <h2 class="title-h2 author__title">Создатели проекта</h2>
-        <div class="author__wrapper" v-if="false">
+        <div class="author__wrapper" v-if="windowWidth >= 768">
             <div class="author__wrapper-item">
                 <img src="@app/assets/backgrounds/nastya.png" alt="фото" />
                 <p class="text author__name-text">Анастасия Полежаева</p>
@@ -144,8 +144,21 @@
                 </div>
             </div>
         </div>
-        <div class="author__wrapper-second" v-if="true">
+        <div class="author__wrapper-second" v-else>
             <!-- <Carousel :data="slideAuthors"></Carousel> -->
+            <Carousel :items-to-show="authorsToShow" :itemsToScroll="authorsToShow" :wrap-around="false" snapAlign ='start'  v-model="currentSlideAuthor" ref="carousel_authors">
+                <Slide v-for="slide in slideAuthors" :key="slide.id">
+                    <CarouselItem :item_data="slide"></CarouselItem>
+                </Slide>
+            </Carousel>
+
+            <div class="arrows">
+                <img v-if="currentSlideAuthor > 0 && windowWidth < 768" @click="prev('carousel_authors')" 
+                    src="@app/assets/icons/arrow-left.svg" alt="left">
+                <img v-if="currentSlideAuthor < slideAuthors.length - authorsToShow && windowWidth < 768" @click="next('carousel_authors')"
+                    src="@app/assets/icons/icon-pink.svg" alt="right">
+            </div>
+
         </div>
     </div>
     <div class="advantages">
@@ -186,19 +199,27 @@
 
     <div class="news">
         <h2 class="title-h2 news__title">Новости</h2>
-        <Carousel :items-to-show="2" :itemsToScroll="2"  v-model="currentSlide" ref="carousel">
+        
+        <Carousel :items-to-show="itemsToShow" :itemsToScroll="itemsToShow" :wrap-around="false" snapAlign ='start'  v-model="currentSlide" ref="carousel">
             <Slide v-for="slide in slideItems" :key="slide.id">
                 <CarouselItem :item_data="slide"></CarouselItem>
             </Slide>
         </Carousel>
 
-        <img v-if="currentSlide > 0" class="left" @click="prev" src="@app/assets/icons/arrow-left.svg"
+        <img v-if="currentSlide > 0 && windowWidth >= 768" class="left" @click="prev()" src="@app/assets/icons/arrow-left.svg"
             alt="left">
-        <img v-if="currentSlide < slideItems.length - 1" class="right" @click="next"
+        <img v-if="currentSlide < slideItems.length - itemsToShow && windowWidth >= 768" class="right" @click="next()"
             src="@app/assets/icons/icon-pink.svg" alt="right">
 
-   <p>{{ currentSlide }}</p>
+        <div class="arrows">
+            <img v-if="currentSlide > 0 && windowWidth < 768" @click="prev()" 
+                src="@app/assets/icons/arrow-left.svg" alt="left">
+            <img v-if="currentSlide < slideItems.length - itemsToShow && windowWidth < 768" @click="next()"
+                src="@app/assets/icons/icon-pink.svg" alt="right">
+        </div>
 
+
+    
     </div>
 
 </template>
@@ -216,16 +237,30 @@ import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide } from 'vue3-carousel'
 import { TestTask } from '@features/TestTask';
 
+const windowWidth = ref(window.innerWidth);
+const carousel_authors = ref(null);
 const carousel = ref(null);
-
+const itemsToShow = ref(2)
+const authorsToShow = ref(2)
 const currentSlide = ref(0);
+const currentSlideAuthor = ref(0)
 
-const next = () => {
-    carousel.value.next();
+const next = (carousel_name) => {
+    if (carousel_name == 'carousel_authors') {
+        carousel_authors.value.next();
+    }
+    else {
+        carousel.value.next()
+    };
 }
 
-const prev = () => {
-    carousel.value.prev();
+const prev = (carousel_name) => {
+    if (carousel_name == 'carousel_authors') {
+        carousel_authors.value.prev();
+    }
+    else {
+        carousel.value.prev()
+    };
 
 }
 
@@ -262,6 +297,12 @@ const slideItems = ref([
     },
     {
         id: 6,
+        img: news,
+        name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
+        date: '22.12.2028'
+    },
+    {
+        id: 7,
         img: news,
         name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2028'
@@ -353,6 +394,18 @@ onMounted(() => {
             document.removeEventListener('scroll', handleScroll);
         }
     }
+    
+
+    windowWidth.value = window.innerWidth;
+    itemsToShow.value = windowWidth.value >= 660 ? 2 : 1
+    authorsToShow.value = windowWidth.value >= 500 ? 2 : 1
+
+    window.addEventListener('resize', () => {
+        windowWidth.value = window.innerWidth;
+        itemsToShow.value = windowWidth.value >= 660 ? 2 : 1
+        authorsToShow.value = windowWidth.value >= 500 ? 2 : 1
+    });
+
 
 })
 </script>
@@ -373,9 +426,13 @@ onMounted(() => {
 }
 
 .carousel {
-    max-width: 1200px;
+    max-width: 800px;
     width: 100%;
     margin: 0px auto;
+
+    @media (max-width: 1024px) {
+        max-width: 622px;
+    }
 }
 
 .carousel__viewport {
@@ -1233,9 +1290,17 @@ onMounted(() => {
     }
 }
 
+.arrows{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
 .speciality {
     @media (max-width: 1024px) {
         font-size: 14px;
     }
 }
+
 </style>

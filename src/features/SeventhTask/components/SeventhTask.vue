@@ -20,33 +20,33 @@
                     <div class="draggable-list__words">
                         <div class="draggable-list__word-container" v-for="(word, word_index) in words[option]" :key="word_index">
                             <div :ref="el => refBlockSound[1][word_index - 1] = el" :class="{ 'draggable-list__word': true, correct_select: word.correct, not_correct_select: word.correct === false}">{{ word.word }}</div>
-                            <img :ref="el => refColumns[1][word_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[1][word_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
                     <div class="draggable-list__sentences" v-if="!showCorrectRow">
                         <div class="draggable-list__sentence-container" v-for="(sentence, sentence_index) in sentences[option]" :key="sentence_index">
-                            <img :ref="el => refColumns[2][sentence_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[2][sentence_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <div :ref="el => refBlockSound[2][sentence_index - 1] = el" :class="{'draggable-list__sentence': true, correct_select: sentence.correct, not_correct_select: sentence.correct === false}">{{ sentence.sentence }}</div>
-                            <img :ref="el => refColumns[3][sentence_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[3][sentence_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
                     <div class="draggable-list__sentences" v-else>
                         <div class="draggable-list__sentence-container" v-for="(rowId, rowId_index) in correctRowId[option][2]" :key="rowId_index">
-                            <img :ref="el => refColumns[2][rowId_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[2][rowId_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <div :ref="el => refBlockSound[2][rowId_index - 1] = el" class="draggable-list__sentence">{{ sentences[option][rowId].sentence }}</div>
-                            <img :ref="el => refColumns[3][rowId_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[3][rowId_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
 
                     <div class="draggable-list__pictures" v-if="!showCorrectRow">
                         <div class="draggable-list__picture-container" v-for="(img, img_index) in images[option]" :key="img_index">
-                            <img :ref="el => refColumns[4][img_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[4][img_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <img :src="img.url" class="draggable-list__image">
                         </div>
                     </div>
                     <div class="draggable-list__pictures" v-else>
                         <div class="draggable-list__picture-container" v-for="(rowId, rowId_index) in correctRowId[option][3]" :key="rowId_index">
-                            <img :ref="el => refColumns[4][rowId_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[4][rowId_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <img :src="images[option][rowId].url" class="draggable-list__image">
                         </div>
                     </div>
@@ -261,25 +261,25 @@ const sentences = ref({
 const images = ref({
     1:{
         1: {
-            url: "assets/creatures/SeventhTask/girl's-top.png",
+            url: "/assets/creatures/SeventhTask/girl's-top.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 2,
         },
         2: {
-            url: "assets/creatures/SeventhTask/chess.png",
+            url: "/assets/creatures/SeventhTask/chess.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 1,
         },
         3: {
-            url: "assets/creatures/SeventhTask/horse.png",
+            url: "/assets/creatures/SeventhTask/horse.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 4,
         },
         4: {
-            url: "assets/creatures/SeventhTask/swamp.png",
+            url: "/assets/creatures/SeventhTask/swamp.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 3,
@@ -287,25 +287,25 @@ const images = ref({
     },
     2:{
         1: {
-            url: "assets/creatures/SeventhTask/chalk.png",
+            url: "/assets/creatures/SeventhTask/chalk.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 4
         },
         2: {
-            url: "assets/creatures/SeventhTask/shallow.png",
+            url: "/assets/creatures/SeventhTask/shallow.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 3
         },
         3: {
-            url: "assets/creatures/SeventhTask/food.png",
+            url: "/assets/creatures/SeventhTask/food.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 1
         },
         4: {
-            url: "assets/creatures/SeventhTask/sit.png",
+            url: "/assets/creatures/SeventhTask/sit.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 2

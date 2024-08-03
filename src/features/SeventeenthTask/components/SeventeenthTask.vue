@@ -24,17 +24,17 @@
                             <div draggable="false">
                                 <img :src="draggableBlock.src" :alt="draggableBlock.class" :class="[draggableBlock.class]" draggable="false"
                                 @mouseup="endPosition($event)"
-                                @mousemove="($event)=>{getPuzzleCords($event)}"
+                                @mousemove="getPuzzleCords($event)"
                                 @mouseleave="mouseLeaveFromPuzzle()">
                             </div>
                         </template>
                     </DragndropComponent>
 
-                    <transition name="fade-words-top">
-                        <div class="draggable-list__words-top" v-if="endFirstTask && !(getCenterCords())">
+                    <transition name="fade-words-top" @after-enter="getCenterCords()">
+                        <div class="draggable-list__words-top" v-if="endFirstTask">
                             <div class="draggable-list__word-top" v-for="word in secondTask[0]" :key="word.id">
                                 <div class="draggable-list__word">{{  word.text  }}</div>
-                                <img height="16px" src="assets/creatures/SeventeenthTask/green-circle.svg" alt="green-circle" class="draggable-list__word-top-circle" :ref="(el)=>{refPoints[1][word.id - 1] = el}">
+                                <img height="16px" src="/assets/creatures/SeventeenthTask/green-circle.svg" alt="green-circle" class="draggable-list__word-top-circle" :ref="(el)=>{refPoints[1][word.id - 1] = el}">
                             </div>
                         </div>
                     </transition>
@@ -68,7 +68,8 @@
                         <div class="draggable-list__pictures" v-if="endFirstTask">
                             <div class="draggable-list__picture" v-for="picture in secondTask[1]" :key="picture.id">
                                 <img height="16px" src="/assets/creatures/SeventeenthTask/green-circle.svg" alt="green-circle" class="draggable-list__word-top-circle" :ref="(el)=>{refPoints[2][picture.id - 1] = el}">
-                                <img :src="picture.src" :alt="picture.alt" class="draggable-list__lesyaandmoa">
+                                <img :src="picture.src" :alt="picture.alt" class="draggable-list__lesyaandmoa" v-if="!endSecondTask">
+                                <img :src="picture.endsrc" :alt="picture.endalt" class="draggable-list__lesyaandmoa" v-else>
                             </div>
                         </div>
                     </transition>
@@ -181,9 +182,9 @@ const getPuzzleUnderMouse = (event) => {
 }
 
 const endPosition = (event) => {
-    if (getPuzzleUnderMouse(event) != -1 )
+    let index = getPuzzleUnderMouse(event)
+    if (index != -1 )
     {
-        let index = getPuzzleUnderMouse(event)
         let answertId = index + 1
 
         if (rightAnswer(index)) {
@@ -224,15 +225,13 @@ const endPosition = (event) => {
                 word.id = 4
                 word.text = 'РЕКА'
             }
-            if (firstTask.value[1].length >= word.id){
-                firstTask.value[1].splice(word.id - 1, 0, word)
-            }
-            else{
-                firstTask.value[1].push(word)
-            }
+
+            firstTask.value[1].push(word)
+            firstTask.value[1].sort((a, b) => a.id - b.id)
 
 
             setTimeout(()=>{
+                
                 firstTaskAnswerCounter.value += 1
                 if (firstTaskAnswerCounter.value == 5) {
                     endFirstTask.value = true
@@ -241,17 +240,20 @@ const endPosition = (event) => {
         }
         else {
             let flag = false
+
             firstTask.value[0].map((row)=>{
                 row.map((word)=>{
                     if (word.id == answertId || word.id == startId.value) {
-                        if (word.isActive == false) flag = true
                         if (word.id == startId.value) word.isActive = true
+                        if (word.isActive == false) flag = true
                     }
                 })
             })
 
             if (!flag ) {
-                firstTask.value[0].map((row)=>{
+                if (startId.value != answertId)
+                {
+                    firstTask.value[0].map((row)=>{
                     row.map((word)=>{
                         if (word.id == answertId || word.id == startId.value ) {
                             word.error = -1
@@ -263,12 +265,20 @@ const endPosition = (event) => {
                         }
                     })
                 })
-                playAudio(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`)
+                    playAudio(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`)
             }
-
+            }
         }
     }
     isDrag.value = false;
+
+    if (startId.value != -1) {
+        firstTask.value[0].map((row)=>{
+            row.map((word)=>{
+                if (word.id == startId.value) word.isActive = true
+            })
+        })
+    }
 }
 
 const rightAnswer = (index) => {
@@ -305,6 +315,8 @@ const mouseLeaveFromPuzzle = () => {
 //
 // ВТОРОЙ ЭТАП ЗАДАНИЯ
 //
+
+const endSecondTask = ref(false)
 
 const canvasRef = ref(null)
 const taskBlock = ref(null)
@@ -557,9 +569,10 @@ const disengage = (event) => {
                 });
 
                 if(SecondTaskAnswerCounter.value == 5){
+                    
                     setTimeout(() => {
-                        startGame.value = false;
-                        playAudio(`/assets/audio/Task7/278.7.mp3`);
+                        finalDraw();
+                        endSecondTask.value = true;
                     }, 2000);
                 }
             } else {
@@ -578,6 +591,46 @@ const playAudio = (file) => {
 }
 
 const voiceActing = () => {}
+
+const finalDraw = () => {
+    console.log(centralCords.value)
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let dot in centralCords.value[1]) {
+        console.log(dot)
+
+        let start = centralCords.value[1][dot];
+        let end = centralCords.value[2][dot];
+
+        ctx.strokeStyle = "green";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+
+        ctx.moveTo(start.x, start.y);
+        ctx.lineTo(end.x, end.y);
+        ctx.stroke();
+        ctx.closePath();
+
+
+        ctx.fillStyle = "green";
+        ctx.beginPath();
+        ctx.arc(start.x, start.y, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.fillStyle = "green";
+        ctx.beginPath();
+        ctx.arc(end.x, end.y, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    setTimeout(() => {
+        startGame.value = false;
+    }, 5000)
+}
 
 onMounted(async ()=>{
 

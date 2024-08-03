@@ -105,7 +105,7 @@ const syllables = ref({
     },
     3: {
         10: { name: "ЗИ", audio: '/assets/audio/Task4/55.4.mp3', correct: null},
-        11: { name: "ТЬ", audio: '/assets/audio/Task4/56.4.mp3', correct: null},
+        11: { name: "ТЫ", audio: '/assets/audio/Task4/56.4.mp3', correct: null},
         12: { name: "ВЕ", audio: '/assets/audio/Task4/57.4.mp3', correct: null},
         13: { name: "КЕ", audio: '/assets/audio/Task4/58.4.mp3', correct: null},
         14: { name: "РЮ", audio: '/assets/audio/Task4/59.4.mp3', correct: null},
