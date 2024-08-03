@@ -1,0 +1,1 @@
+export { default as SmallDisplayBanner } from './components/SmallDisplayBanner.vue';

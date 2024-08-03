@@ -37,6 +37,7 @@ import { HTTP } from '@app/http';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+import SmallDisplayBanner from '@features/SmallDisplayBanner/components/SmallDisplayBanner.vue';
 const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
