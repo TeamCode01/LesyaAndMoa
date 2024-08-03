@@ -1,10 +1,7 @@
 <template>
     <div class="profile__wrapper" v-if="!userStore.children.length">
         <p class="text text__profile">Спасибо за регистрацию!</p>
-        <p
-            class="text profile__text"
-            v-if="userStore.currentUser.tasks_type === 'индивидуальный'"
-        >
+        <p class="text profile__text" v-if="userStore.currentUser.tasks_type === 'индивидуальный'">
             Чтобы начать обучение, добавьте ребенка
         </p>
         <p class="text profile__text" v-if="userStore.currentUser.tasks_type === 'групповой'">
@@ -12,11 +9,7 @@
         </p>
     </div>
     <div class="profile-child">
-        <div
-            class="profile-child__wrapper"
-            v-for="(block, index) in userStore.children"
-            :key="index"
-        >
+        <div class="profile-child__wrapper" v-for="(block, index) in userStore.children" :key="index">
             <div class="delete-profile">
                 <modalConfirm label="Удалить профиль">
                     <div class="delete-profile__wrapper">
@@ -37,15 +30,9 @@
                                 </div>
                             </div>
                             <div class="delete-profile_btn">
-                                <Button
-                                    class="delete-btn"
-                                    label="Удалить"
-                                    @click="deleteChild(block.id, index)"
-                                ></Button>
-                                <Button
-                                    label="Отмена"
-                                    class="delete-btn"
-                                ></Button>
+                                <Button class="delete-btn" label="Удалить"
+                                    @click="deleteChild(block.id, index)"></Button>
+                                <Button label="Отмена" class="delete-btn"></Button>
                             </div>
                         </div>
                     </div>
@@ -57,122 +44,62 @@
                 </p>
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
-                    <v-progress-linear
-                        v-model:value="block.progress"
-                        height="30"
-                        class="scale"
-                    >
+                    <v-progress-linear v-model:value="block.progress" height="30" class="scale">
                         <template v-slot:default="{ value }">
                             <strong>{{ Math.ceil(value) }}%</strong>
                         </template>
                     </v-progress-linear>
                 </div>
-                <RouterLink to="/Game" class="router-link">
-                    <Button
-                        label="Перейти к обучению"
-                        class="profile__btn"
-                    ></Button
-                ></RouterLink>
+                <RouterLink :to="{ name: 'Game', params: { id: block.id } }" class="router-link">
+                    <Button label="Перейти к обучению" class="profile__btn"></Button>
+                </RouterLink>
             </div>
         </div>
-        <modalWindow label="Добавить ребёнка"
-            ><v-card
-                prepend-icon="mdi-account"
-                title="Введите данные ребёнка"
-                class="window"
-            >
+        <modalWindow label="Добавить ребёнка"><v-card prepend-icon="mdi-account" title="Введите данные ребёнка"
+                class="window">
                 <v-card-text>
                     <div class="form-input">
                         <label>Фамилия</label>
-                        <Input
-                            placeholder="Фамилия"
-                            name="login"
-                            class="form-input"
-                            v-model:value="form.first_name"
-                        ></Input>
+                        <Input placeholder="Фамилия" name="login" class="form-input"
+                            v-model:value="form.first_name"></Input>
                     </div>
                     <div class="form-input">
                         <label>Имя</label>
-                        <Input
-                            placeholder="Имя"
-                            name="login"
-                            class="form-input"
-                            v-model:value="form.last_name"
-                        ></Input>
+                        <Input placeholder="Имя" name="login" class="form-input" v-model:value="form.last_name"></Input>
                     </div>
                     <div class="form-input">
                         <label>Пол</label>
-                        <SelectSort
-                            v-model="form.sex"
-                            :items="tasksChoose"
-                            name="select_position"
-                            id="select-position"
-                            :options="tasksChoose"
-                            class="invents-select"
-                            clearable
-                            placeholder="Выберите пол"
-                            variant="outlined"
-                            :sorts-boolean="false"
-                            @update:value="changeOption"
-                            v-bind="props"
-                        />
+                        <SelectSort v-model="form.sex" :items="tasksChoose" name="select_position" id="select-position"
+                            :options="tasksChoose" class="invents-select" clearable placeholder="Выберите пол"
+                            variant="outlined" :sorts-boolean="false" @update:value="changeOption" v-bind="props" />
                     </div>
                     <div class="form-input">
                         <label>Возраст</label>
-                        <Input
-                            name="login"
-                            class="form-input"
-                            v-model:value="form.age"
-                        ></Input>
+                        <Input name="login" class="form-input" v-model:value="form.age"></Input>
                     </div>
                     <div class="form-input">
                         <label>Регион</label>
-                        <SelectSort
-                            @click="GetRegion"
-                            :items="reg"
-                            v-model="form.region"
-                            :options="reg"
-                            name="select_position"
-                            id="select-position"
-                            class="invents-select"
-                            clearable
-                            placeholder="Выберите регион из списка"
-                            variant="outlined"
-                            :sorts-boolean="false"
-                            @update:value="changeOption"
-                        />
+                        <SelectSort @click="GetRegion" :items="reg" v-model="form.region" :options="reg"
+                            name="select_position" id="select-position" class="invents-select" clearable
+                            placeholder="Выберите регион из списка" variant="outlined" :sorts-boolean="false"
+                            @update:value="changeOption" />
                     </div>
                     <div class="form-input">
                         <label>Школа</label>
-                        <Input
-                            name="login"
-                            class="form-input"
-                            v-model:value="form.school"
-                        ></Input>
+                        <Input name="login" class="form-input" v-model:value="form.school"></Input>
                     </div>
                     <div class="form-input">
                         <label>Класс</label>
-                        <Input
-                            name="login"
-                            class="form-input"
-                            v-model:value="form.grade"
-                        ></Input>
+                        <Input name="login" class="form-input" v-model:value="form.grade"></Input>
                     </div>
                     <div class="regCheck">
-                        <input
-                            type="checkbox"
-                            v-model="form.attended_speech_therapist"
-                        />
+                        <input type="checkbox" v-model="form.attended_speech_therapist" />
                         <div class="regCheck_text">
                             Ребенок ранее посещал логопеда?
                         </div>
                     </div>
                     <div class="regCheck">
-                        <input
-                            :dialog="false"
-                            type="checkbox"
-                            v-model="form.data_processing_agreement"
-                        />
+                        <input :dialog="false" type="checkbox" v-model="form.data_processing_agreement" />
                         <div class="regCheck_text">
                             даю согласие на обработку персональных данных
                             и ознакомлен с политикой конфиденциальности
@@ -181,26 +108,13 @@
                 </v-card-text>
 
                 <v-card-actions>
-                    <Button
-                        label="Добавить ребёнка"
-                        class="profile__btn add-child-btn"
-                        @click="AddChild"
-                    ></Button>
+                    <Button label="Добавить ребёнка" class="profile__btn add-child-btn" @click="AddChild"></Button>
                 </v-card-actions>
             </v-card>
         </modalWindow>
-        <img
-            v-if="userStore.children.length"
-            class="profile-child__img"
-            src="@app/assets/img/Profile/LesyaMoa.png"
-            alt=""
-        />
-        <img
-            v-if="!userStore.children.length"
-            class="profile__img"
-            src="@app/assets/img/Profile/Moa.png"
-            alt=""
-        />
+        <img v-if="userStore.children.length" class="profile-child__img" src="@app/assets/img/Profile/LesyaMoa.png"
+            alt="" />
+        <img v-if="!userStore.children.length" class="profile__img" src="@app/assets/img/Profile/Moa.png" alt="" />
     </div>
 </template>
 <script setup>
@@ -470,21 +384,26 @@ onMounted(async () => {
 .profile-child__img {
     margin: 0 45px -120px 45px;
 }
+
 .router-link {
     text-decoration-line: none;
 }
+
 .btn_primary {
     height: 58px;
 }
+
 .regCheck {
     margin-top: 8px;
     display: flex;
     margin-bottom: 20px;
+
     input {
         width: 20px;
         height: 20px;
         border: 1px solid black;
     }
+
     &_text {
         max-width: 320px;
         font-family: 'Nunito', sans-serif;
@@ -494,6 +413,7 @@ onMounted(async () => {
         margin-left: 8px;
     }
 }
+
 .add-child-btn {
     margin: 0 0 32px 0;
 }
@@ -506,6 +426,7 @@ onMounted(async () => {
     max-width: 464px;
     min-height: 326px;
 }
+
 .delete-profile__title {
     font-size: 28px;
     font-family: 'Nunito', sans-serif;
@@ -514,20 +435,24 @@ onMounted(async () => {
     margin-bottom: 20px;
     color: #313131;
 }
+
 .delete-profile_content {
     padding-left: 5px;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
 }
+
 .delete-check {
     margin-top: 15px;
 }
+
 .delete-check input {
     margin-top: 5px;
     font-size: 20px;
     color: #313131;
 }
+
 .delete-check div {
     color: #313131;
     font-size: 20px;
@@ -539,10 +464,12 @@ onMounted(async () => {
     font-size: 20px;
     font-family: 'Nunito', sans-serif;
 }
+
 .delete-profile_btn {
     display: flex;
     justify-content: space-between;
 }
+
 .delete-btn {
     width: 182px;
 }

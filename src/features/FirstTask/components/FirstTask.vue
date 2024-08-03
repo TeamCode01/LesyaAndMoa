@@ -33,6 +33,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { HTTP } from '@app/http';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
@@ -56,8 +57,6 @@ const next = () => {
     endGame.value = true;
 }
 
-
-const show = ref(false);
 
 const audio = ref(new Audio());
 const playAudio = (audioPath) => {
@@ -99,6 +98,14 @@ const drag = (event, word, id, index) => {
     event.dataTransfer.setData('id', id);
     dropIndex.value = index;
 };
+
+const correctTask = async (child_id, id) => {
+    try {
+        const resp = await HTTP.patch(`answers/${child_id}/${id}`);
+    } catch (e) {
+        console.error('Error starting task', e);
+    }
+}
 
 const drop = (event) => {
     event.preventDefault();
@@ -142,6 +149,7 @@ const drop = (event) => {
     }
     if (answer_arr.value.length === 5) {
         setTimeout(() => {
+            correctTask(child_id, id);
             endGame.value = true;
         }, 3000)
     }

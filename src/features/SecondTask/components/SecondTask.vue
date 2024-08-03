@@ -26,6 +26,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
+import { HTTP } from '@app/http';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 const emit = defineEmits(['close', 'next-modal']);
@@ -48,6 +49,14 @@ const next = () => {
     emit('next-modal');
     endGame.value = true;
 
+}
+
+const correctTask = async (child_id, id) => {
+    try {
+        const resp = await HTTP.patch(`answers/${child_id}/${id}`);
+    } catch (e) {
+        console.error('Error starting task', e);
+    }
 }
 const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false, audio: '/assets/audio/Task2/27.2.mp3' }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true, audio: '/assets/audio/Task2/26.2.mp3' }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false, audio: '/assets/audio/Task2/28.2.mp3' }])
 const endGame = ref(false);

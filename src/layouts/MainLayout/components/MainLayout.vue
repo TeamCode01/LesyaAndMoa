@@ -10,13 +10,22 @@
 
 <script setup>
 import { useUserStore } from '@layouts/stores/user';
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 
 const userStore = useUserStore();
 
+watch(() => userStore.currentUser,
+    (newUser) => {
+        if (!newUser && userStore.currentUser.tasks_type !== 'индивидуальный') {
+            return
+        }
+        userStore.getChildren();
+    })
+
 onMounted(() => {
-    userStore.getUser();
-    userStore.getChildren();
+    if (localStorage.getItem('Token') !== null) {
+        userStore.getUser();
+    }
 })
 
 </script>

@@ -62,7 +62,7 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/PolicyPage/components/PolicyPage.vue'),
             },
             {
-                path: '/game',
+                path: '/game/:id',
                 name: 'Game',
                 component: () =>
                     import('@pages/StartGamePage/components/StartGamePage.vue'),

@@ -1,7 +1,7 @@
 <template>
   <div class="container-game">
     <div class="game">
-      <Sidebar :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" />
+      <Sidebar :child-id="id" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" />
       <div class="game_icons_wrap">
         <div class="game_icons_item" @click="mute()"><img v-show="isMuted === false" src="@app/assets/icons/sound.svg"
             alt="sound"><img v-show="isMuted === true" src="@app/assets/icons/muted.svg" alt=""></div>
@@ -19,11 +19,15 @@
 </template>
 <script setup>
 import { Sidebar } from "@widgets/SideBarGame";
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 let img = ref('/assets/backgrounds/animals.jpg');
 let audio = ref('/assets/audio/Task1/11.1_.mp3');
 const showBtn = ref(false);
+const route = useRoute();
+
+let id = route.params.id;
 
 const startAudio = ref(new Audio());
 const isPlaying = ref(false)
@@ -65,6 +69,19 @@ const playSound = () => {
     showBtn.value = true;
   })
 }
+
+
+watch(
+  () => route.params.id,
+  (newId) => {
+    if (!newId) {
+      return;
+    }
+    id = newId;
+    console.log(id);
+  }
+);
+
 
 onMounted(() => {
   document.getElementById('background-banner').src = img.value
