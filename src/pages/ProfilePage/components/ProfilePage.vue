@@ -204,6 +204,18 @@
             src="@app/assets/img/Profile/Moa.png"
             alt=""
         />
+        <img
+            v-if="false"
+            class="profile-child__img"
+            src="@app/assets/img/Profile/lesyaMoaParentAndChild.svg"
+            alt=""
+        />
+        <img
+            v-if="false"
+            class="profile-child__img"
+            src="@app/assets/img/Profile/lesyaProfileGroup.svg"
+            alt=""
+        />
     </div>
 </template>
 <script setup>
