@@ -12,13 +12,13 @@
                 </div>
             </div>
             <div class="modal_background" v-if="SeeTask">
-                <FirstTask  :finish="finish"  :end="endTime" @close="close()"
+                <FirstTask :finish="finish" :end="endTime" @close="close()"
                     @next-modal="next(2, '/assets/audio/Task2/25.2.mp3')" v-if="taskId === 1">
                 </FirstTask>
-                <SecondTask  :finish="finish"   :end="endTime" @close="close()"
+                <SecondTask :finish="finish" :end="endTime" @close="close()"
                     @next-modal="next(3, '/assets/audio/Task3/31.3.mp3')" v-if="taskId === 2">
                 </SecondTask>
-                <ThirdTask :finish="finish"  :end="endTime" @close="close()" @next-modal="next(4)" v-if="taskId === 3">
+                <ThirdTask :finish="finish" :end="endTime" @close="close()" @next-modal="next(4)" v-if="taskId === 3">
                 </ThirdTask>
                 <FourthTask :end="endTime" @close="close()" @next-modal="next(5)" v-if="taskId === 4"></FourthTask>
                 <FifthTask :end="endTime" @close="close()" @next-modal="next(6)" v-if="taskId === 5"></FifthTask>
@@ -75,9 +75,11 @@ const props = defineProps({
     show: {
         type: Boolean,
         default: false,
+    },
+    childId: {
+        type: String,
     }
 })
-
 
 const audio = ref(new Audio());
 const tasks = ref([
@@ -110,7 +112,7 @@ const timeVal = ref(15);
 const taskAudio = ref('/assets/audio/Task1/12.1.mp3');
 const startAudio = ref('/assets/audio/Task1/11.1_.mp3');
 const endTime = ref(false);
-const taskss = ref([]);
+const tasks_server = ref([]);
 const show = ref(props.show);
 
 const close = () => {
@@ -145,7 +147,7 @@ const switchTask = (id, openId, time, img, audio, startAudioV) => {
 
 const startTask = async (id) => {
     try {
-        const resp = await HTTP.post(`answers/${id}`);
+        const resp = await HTTP.post(`answers/${id}/`, { task: taskId.value });
     } catch (e) {
         console.error('Error starting task', e);
     }
@@ -155,6 +157,7 @@ const openTask = (taskId) => {
     SeeTask.value = true;
     finish.value = false;
     playAudio(taskAudio.value);
+    startTask(props.childId);
     setTimeout(() => {
         endTime.value = true;
     }, timeVal.value * 1000);
@@ -172,7 +175,7 @@ const next = (id, audio) => {
 const getTasks = async () => {
     await HTTP.get('tasks')
         .then((response) => {
-            taskss.value = response.data;
+            tasks_server.value = response.data;
         })
         .catch((error) => {
             console.error(error);
@@ -186,6 +189,17 @@ watch(
             return;
         }
         taskId.value = newId;
+    }
+);
+
+watch(
+    () => props.childId,
+    (newId) => {
+        if (!newId) {
+            return;
+        }
+        console.log('child', props.childId);
+        props.childId = newId;
     }
 );
 

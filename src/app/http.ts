@@ -6,7 +6,7 @@ export const HTTP = axios.create({
 HTTP.interceptors.request.use(
     (config) => {
       if (
-        config.url == '/token/login/' || config.url == '/users/' && config.method == 'POST' ||
+        config.url == '/token/login/' || (config.url == '/users/' && config.method == 'post')  ||
         config.url == '/reset_password/' ||
         config.url == '/reset_password_confirm/'
       ) {
