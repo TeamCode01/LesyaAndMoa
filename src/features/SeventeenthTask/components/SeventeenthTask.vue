@@ -13,7 +13,7 @@
                     <Timer :end="end"></Timer>
                     <p class="title-h4 task_block__title SeventeenthTask__title">
                         Собери слова из двух частей. <br/>
-                        Соедини полученные слова с картинками. 
+                        Соедини полученные слова с картинками.
                     </p>
                 </div>
                 <canvas class="canvas_draw" ref="canvasRef" @mousedown="engage" @mouseup="disengage" @mousemove="draw" @click="voiceActing" v-show="endFirstTask && true"></canvas>
@@ -23,7 +23,7 @@
                         <template v-slot:task>
                             <div draggable="false">
                                 <img :src="draggableBlock.src" :alt="draggableBlock.class" :class="[draggableBlock.class]" draggable="false"
-                                @mouseup="endPosition($event)" 
+                                @mouseup="endPosition($event)"
                                 @mousemove="($event)=>{getPuzzleCords($event)}"
                                 @mouseleave="mouseLeaveFromPuzzle()">
                             </div>
@@ -38,24 +38,24 @@
                             </div>
                         </div>
                     </transition>
-                    
+
                     <div class="draggable-list__syllables"  v-if="!endFirstTask" >
                         <div class="draggable-list__set-syllables" v-for="row in firstTask[0]" :key="row" draggable="false">
-                            <div v-for="word in row" :key="word.id" 
+                            <div v-for="word in row" :key="word.id"
                             @mousedown.left="$event=>startPosition($event, word)"
                             :ref="(el)=>{refPuzzles[word.id - 1] = el}"
                             draggable="false">
 
-                                <img :src="word.error == 0 ? word.src : word.error == 1 ? word.srcRight : word.srcError" 
+                                <img :src="word.error == 0 ? word.src : word.error == 1 ? word.srcRight : word.srcError"
                                 :alt="word.class" :class="[word.class]"
                                 draggable="false"
                                 :style="{opacity : (word.isActive ? '100%' : '0%'), cursor : (word.isActive ? 'pointer' : 'auto')}">
 
                             </div>
                         </div>
-                        
+
                     </div>
-                    
+
                     <transition name="fade-words">
                         <div class="draggable-list__words" v-if="!endFirstTask">
                             <transition-group name="fade-word">
@@ -76,7 +76,7 @@
                 </div>
             </template>
             <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/lesya.gif" text="Потрясающе!"
-            v-if="!startGame" @hide="hide()"></TaskResultBanner>
+            v-if="!startGame"  @next="next()" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -91,7 +91,8 @@ import DragndropComponent from './DragndropComponent.vue';
 
 import { dataFirstTask, dataSecondTask } from './task.js'
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'next-modal']);
+
 const props = defineProps({
     end: {
         type: Boolean,
@@ -101,6 +102,10 @@ const props = defineProps({
 const hide = () => {
     emit('close');
 };
+
+const next = () => {
+    emit('next-modal');
+}
 
 //
 // ПЕРВЫЙ ЭТАП ЗАДАНИЯ
@@ -132,14 +137,14 @@ secondTask.value = structuredClone(dataSecondTask)
 
 
 const getPuzzleCords = (event) => {
-    PuzzleCords.value.x = event.clientX - taskBlock.value.getBoundingClientRect().x - event.target.getBoundingClientRect().width / 2 ; 
-    PuzzleCords.value.y = event.clientY - taskBlock.value.getBoundingClientRect().y - event.target.getBoundingClientRect().height / 2 ; 
-    
+    PuzzleCords.value.x = event.clientX - taskBlock.value.getBoundingClientRect().x - event.target.getBoundingClientRect().width / 2 ;
+    PuzzleCords.value.y = event.clientY - taskBlock.value.getBoundingClientRect().y - event.target.getBoundingClientRect().height / 2 ;
+
 }
 
 const startPosition = (event, word) => {
     if (!word.isActive) return
-    draggableBlock.value.src = word.src; 
+    draggableBlock.value.src = word.src;
     draggableBlock.value.class = word.class;
     getPuzzleCords(event);
     isDrag.value = true;
@@ -180,7 +185,7 @@ const endPosition = (event) => {
     {
         let index = getPuzzleUnderMouse(event)
         let answertId = index + 1
-        
+
         if (rightAnswer(index)) {
             firstTask.value[0].map((row)=>{
                 row.map((word)=>{
@@ -226,7 +231,7 @@ const endPosition = (event) => {
                 firstTask.value[1].push(word)
             }
 
-            
+
             setTimeout(()=>{
                 firstTaskAnswerCounter.value += 1
                 if (firstTaskAnswerCounter.value == 5) {
@@ -260,7 +265,7 @@ const endPosition = (event) => {
                 })
                 playAudio(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`)
             }
-            
+
         }
     }
     isDrag.value = false;
@@ -318,7 +323,7 @@ const SecondTaskAnswerCounter = ref(0)
 
 let canvas
 let ctx
-let leftBorder 
+let leftBorder
 let rightBorder
 
 let startIds = {};
@@ -342,9 +347,9 @@ const resizeCanvas = async () => {
         canvas.height = 332
     }
 
-    leftBorder = 0 
+    leftBorder = 0
     rightBorder = canvas.width
-    redraw(); 
+    redraw();
 }
 
 const getCursorPosition = (event) => {
@@ -419,8 +424,8 @@ const draw = (event) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             redraw();
             ctx.strokeStyle = "green";
-            ctx.lineWidth = 2; 
-            ctx.setLineDash([5, 5]); 
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
             ctx.beginPath();
             ctx.moveTo(startCords.value.x, startCords.value.y);
             ctx.lineTo(pos.x, pos.y);
@@ -448,7 +453,7 @@ const redraw = () => {
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
-        
+
         ctx.strokeStyle = "green";
         ctx.lineWidth = 2;
         ctx.setLineDash([]);
@@ -468,7 +473,7 @@ const redraw = () => {
 }
 
 const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
-    
+
     if (startRow == 1){
         if (endRow == 2){
             if (startColumn == 1) {
@@ -477,7 +482,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
                 }
             }
             if (startColumn == 2) {
-                if (endColumn == 1) { 
+                if (endColumn == 1) {
                     return true
                 }
             }
@@ -487,12 +492,12 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
                 }
             }
             if (startColumn == 4) {
-                if (endColumn == 5) { 
+                if (endColumn == 5) {
                     return true
                 }
             }
             if (startColumn == 5) {
-                if (endColumn == 3) { 
+                if (endColumn == 3) {
                     return true
                 }
             }
@@ -502,27 +507,27 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
     if (startRow == 2){
         if (endRow == 1){
             if (startColumn == 1) {
-                if (endColumn == 2) { 
+                if (endColumn == 2) {
                     return true
                 }
             }
             if (startColumn == 2) {
-                if (endColumn == 1) { 
+                if (endColumn == 1) {
                     return true
                 }
             }
             if (startColumn == 3) {
-                if (endColumn == 5) { 
+                if (endColumn == 5) {
                     return true
                 }
             }
             if (startColumn == 4) {
-                if (endColumn == 3) { 
+                if (endColumn == 3) {
                     return true
                 }
             }
             if (startColumn == 5) {
-                if (endColumn == 4) { 
+                if (endColumn == 4) {
                     return true
                 }
             }
@@ -577,7 +582,7 @@ const voiceActing = () => {}
 onMounted(async ()=>{
 
     canvas = canvasRef.value;
-    
+
     ctx = canvas.getContext('2d');
     await resizeCanvas();
     window.addEventListener('resize', ()=>{resizeCanvas()});

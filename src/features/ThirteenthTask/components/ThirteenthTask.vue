@@ -41,7 +41,7 @@
     </template>
 
     <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.gif" text="Чудесно!"
-        v-if="show === true" @hide="hide"></TaskResultBanner>
+        v-if="show === true" @next="next" @hide="hide"></TaskResultBanner>
 </template>
 
 <script setup>
@@ -49,12 +49,17 @@ import { ref } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'next-modal']);
 const endGame = ref(false);
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
+
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+}
 
 const props = defineProps({
     end: {
@@ -64,10 +69,6 @@ const props = defineProps({
 });
 
 
-const show = ref(false);
-const hideModal = () => {
-    show.value = false;
-}
 
 
 const words = ref([
@@ -107,7 +108,6 @@ const drop = (event) => {
 
         if (text === 'ДЕТСКУЮ') {
             endGame.value = true;
-            show.value = true;
         }
     }
     else {

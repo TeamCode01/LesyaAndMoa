@@ -82,7 +82,7 @@
                 bg="/assets/backgrounds/moa.gif"
                 text="Здорово!"
                 v-if="usedWord.length >= 15"
-                @hide="hide()"
+                @hide="hide()" @next="next()"
             ></TaskResultBanner>
         </div>
     </div>
@@ -97,7 +97,7 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import { tasksData } from './tasks.js';
 import dict from './dict.js';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close','next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -107,6 +107,10 @@ const props = defineProps({
 const hide = () => {
     emit('close');
 };
+
+const next = () => {
+    emit('next-modal');
+}
 
 onMounted(() => {
     let audio = new Audio('/assets/audio/Task6/79.6.mp3');

@@ -28,7 +28,7 @@
         </div>
     </template>
     <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!" v-else
-        @hide="hide()" class="end-modal"></TaskResultBanner>
+       @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 
 <script setup>
@@ -36,7 +36,7 @@ import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -51,12 +51,14 @@ const hide = () => {
     emit('close');
     endGame.value = true;
 };
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+}
 
 
 const show = ref(false);
-// const hideModal = () => {
-//     show.value = false;
-// }
+
 const audio = ref(new Audio());
 const playAudio = (audioPath) => {
     audio.value.src = audioPath;

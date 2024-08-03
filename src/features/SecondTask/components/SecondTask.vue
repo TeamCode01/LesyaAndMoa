@@ -22,13 +22,13 @@
     </template>
 
     <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!" v-else
-        @hide="hide()" class="end-modal"></TaskResultBanner>
+    @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -38,14 +38,21 @@ const props = defineProps({
         type: Boolean,
     }
 });
+const audio = ref(new Audio());
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
+
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+
+}
 const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false, audio: '/assets/audio/Task2/27.2.mp3' }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true, audio: '/assets/audio/Task2/26.2.mp3' }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false, audio: '/assets/audio/Task2/28.2.mp3' }])
 const endGame = ref(false);
 const isPlaying = ref(false);
-const audio = ref(new Audio());
+
 const music = ref(null);
 
 const playAudio = (audioPath) => {
