@@ -3,7 +3,7 @@ import { useRoute } from 'vue-router';
 
 const gameActions = {
     methods: {
-        startGameReuest( id: number) {
+        startGameRequest( id: number) {
             const route = useRoute();
             HTTP.post(`/answers/${route.params.idChildOrGroup}/`, {
                 task: id,
@@ -14,7 +14,7 @@ const gameActions = {
                 }
             })
         },
-        endGameReuest(id: number) {
+        endGameRequest(id: number) {
             const route = useRoute();
             HTTP.put(`/answers/${route.params.idChildOrGroup}/${id}/`, {
                 is_correct: true
