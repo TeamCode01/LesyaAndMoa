@@ -1,6 +1,6 @@
 <template>
   <div class="carousel-item">
-    <img :src="item_data.img" alt="img" />
+    <img :src="item_data.img" alt="img" class="carousel-item__author-img"/>
     <div class="carousel-item__info">
       <p class="carousel-item__date">{{ item_data.date }}</p>
       <p class="text-small carousel-item__text">
@@ -38,6 +38,19 @@ const emit = defineEmits(['click']);
       max-width: 300px;
       height: 220px;
     }
+    @media (max-width: 568px) {
+      max-width: 300px;
+      height: 220px;
+    }
+  }
+
+  &__author-img{
+    @media (max-width: 568px) {
+      object-fit: cover;
+      min-width: 320px;
+      min-height: 415px;
+      border-radius: 20px;
+    }
   }
 
   &__text {
@@ -59,7 +72,7 @@ const emit = defineEmits(['click']);
   }
 
   &__author-about {
-    width: 214px;
+    width: 320px;
     text-align: left;
   }
 

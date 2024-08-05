@@ -240,17 +240,17 @@ import { TestTask } from '@features/TestTask';
 const windowWidth = ref(window.innerWidth);
 const carousel_authors = ref(null);
 const carousel = ref(null);
-const itemsToShow = ref(2)
-const authorsToShow = ref(2)
+const itemsToShow = ref(2);
+const authorsToShow = ref(2);
 const currentSlide = ref(0);
-const currentSlideAuthor = ref(0)
+const currentSlideAuthor = ref(0);
 
 const next = (carousel_name) => {
     if (carousel_name == 'carousel_authors') {
         carousel_authors.value.next();
     }
     else {
-        carousel.value.next()
+        carousel.value.next();
     };
 }
 
@@ -266,43 +266,36 @@ const prev = (carousel_name) => {
 
 const slideItems = ref([
     {
-        id: 1,
         img: news,
         name: ' Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2023'
     },
     {
-        id: 2,
         img: news,
         name: ' Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2024'
     },
     {
-        id: 3,
         img: news,
         name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2025'
     },
     {
-        id: 4,
         img: news,
         name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2026'
     },
     {
-        id: 5,
         img: news,
         name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2027'
     },
     {
-        id: 6,
         img: news,
         name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2028'
     },
     {
-        id: 7,
         img: news,
         name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2028'
@@ -311,21 +304,18 @@ const slideItems = ref([
 
 const slideAuthors = ref([
     {
-        id: 1,
         img: nastya,
         author_name: 'Анастасия Полежаева',
         author_about_top: 'Учитель русского языка',
         author_about_bottom: 'Кандидат филологических наук',
     },
     {
-        id: 2,
         img: anna,
         author_name: ' Анна Филатова',
         author_about_top: 'Учитель начальных классов',
         author_about_bottom: 'Логопед',
     },
     {
-        id: 3,
         img: maria,
         author_name: 'Мария Криворотова',
         author_about_top: 'Педагог дополнительного образования',
@@ -398,12 +388,12 @@ onMounted(() => {
 
     windowWidth.value = window.innerWidth;
     itemsToShow.value = windowWidth.value >= 660 ? 2 : 1
-    authorsToShow.value = windowWidth.value >= 500 ? 2 : 1
+    authorsToShow.value = windowWidth.value >= 569 ? 2 : 1
 
     window.addEventListener('resize', () => {
         windowWidth.value = window.innerWidth;
         itemsToShow.value = windowWidth.value >= 660 ? 2 : 1
-        authorsToShow.value = windowWidth.value >= 500 ? 2 : 1
+        authorsToShow.value = windowWidth.value >= 569 ? 2 : 1
     });
 
 
