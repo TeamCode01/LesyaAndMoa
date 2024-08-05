@@ -11,22 +11,39 @@
                         v-else-if="item.disabled === true && item.done === false" src="@app/assets/icons/block.svg" />
                 </div>
             </div>
-            <FirstTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 1"></FirstTask>
-            <SecondTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 2"></SecondTask>
-            <ThirdTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 3"></ThirdTask>
-            <FourthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 4"></FourthTask>
-            <FifthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 5"></FifthTask>
-            <EighthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 8"></EighthTask>
-            <TenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 10"></TenthTask>
-            <ThirteenthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 13"></ThirteenthTask>
-            <SixteenthTask :end="endTime" @close="close()" v-show="SeeTask && taskId === 16"></SixteenthTask>
-            <EighteenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 18"></EighteenTask>
-            <NineTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 9"></NineTask>
-            <ElevenTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 11"></ElevenTask>
-            <TwelfthTask :end="endTime" @close="close()" v-if="SeeTask && taskId === 12"></TwelfthTask>
+            <div class="modal_background" v-if="SeeTask">
+                <FirstTask :finish="finish" :end="endTime" @close="close()"
+                    @next-modal="next(2, '/assets/audio/Task2/25.2.mp3')" v-if="taskId === 1">
+                </FirstTask>
+                <SecondTask :finish="finish" :end="endTime" @close="close()"
+                    @next-modal="next(3, '/assets/audio/Task3/31.3.mp3')" v-if="taskId === 2">
+                </SecondTask>
+                <ThirdTask :finish="finish" :end="endTime" @close="close()" @next-modal="next(4)" v-if="taskId === 3">
+                </ThirdTask>
+                <FourthTask :end="endTime" @close="close()" @next-modal="next(5)" v-if="taskId === 4"></FourthTask>
+                <FifthTask :end="endTime" @close="close()" @next-modal="next(6)" v-if="taskId === 5"></FifthTask>
+                <SixTask :end="endTime" @close="close()" @next-modal="next(7)" v-if="taskId === 6"></SixTask>
+                <SeventhTask :end="endTime" @close="close()" @next-modal="next(8)" v-if="taskId === 7"></SeventhTask>
+                <EighthTask :end="endTime" @close="close()" @next-modal="next(9)" v-if="taskId === 8"></EighthTask>
+                <NineTask :end="endTime" @close="close()" @next-modal="next(10)" v-if="taskId === 9"></NineTask>
+                <TenthTask :end="endTime" @close="close()" @next-modal="next(11)" v-if="taskId === 10"></TenthTask>
+                <ElevenTask :end="endTime" @close="close()" @next-modal="next(12)" v-if="taskId === 11"></ElevenTask>
+                <TwelfthTask :end="endTime" @close="close()" @next-modal="next(13)" v-if="taskId === 12"></TwelfthTask>
+                <ThirteenthTask :end="endTime" @close="close()" @next-modal="next(14)" v-if="taskId === 13">
+                </ThirteenthTask>
+                <FourteenthTask :end="endTime" @close="close()" @next-modal="next(15)" v-if="taskId === 14">
+                </FourteenthTask>
+                <FifteenTask :end="endTime" @close="close()" @next-modal="next(16)" v-if="taskId === 15"></FifteenTask>
+                <SixteenthTask :end="endTime" @close="close()" @next-modal="next(17)" v-show="taskId === 16">
+                </SixteenthTask>
+                <SeventeenthTask :end="endTime" @close="close()" @next-modal="next(18)" v-show="taskId === 17">
+                </SeventeenthTask>
+                <EighteenTask :end="endTime" @close="close()" v-if="taskId === 18"></EighteenTask>
+            </div>
         </div>
 
-        <Button class="start" label="Старт" :is-image="true" :image="arrow" @click="openTask(taskId)"></Button>
+        <Button v-if="props.show === true" class="start" label="Старт" :is-image="true" :image="arrow"
+            @click="openTask(taskId)"></Button>
     </div>
 </template>
 <script setup>
@@ -38,55 +55,80 @@ import { FirstTask } from '@features/FirstTask/components';
 import { ThirdTask } from '@features/ThirdTask/components';
 import { FourthTask } from '@features/FourthTask/components';
 import { FifthTask } from '@features/FifthTask/components';
+import { SeventhTask } from '@features/SeventhTask/components';
 import { EighthTask } from '@features/EighthTask/components';
 import { TenthTask } from '@features/TenthTask';
 import { SecondTask } from '@features/SecondTask';
 import { ThirteenthTask } from '@features/ThirteenthTask';
+import { FourteenthTask } from '@features/FourteenthTask';
+import { SixTask } from '@features/SixTask/components';
+import { FifteenTask } from '@features/FifteenTask';
 import { SixteenthTask } from '@features/SixteenthTask';
+import { SeventeenthTask } from '@features/SeventeenthTask';
 import { EighteenTask } from '@features/EighteenTask';
 import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 import { TwelfthTask } from '@features/TwelfthTask';
-const emit = defineEmits(['sendImg', 'sendAudio']);
+// import FourteenthTask from '@features/FourteenthTask/components/FourteenthTask.vue';
+const emit = defineEmits(['sendImg', 'sendAudio', 'show']);
+const props = defineProps({
+    show: {
+        type: Boolean,
+        default: false,
+    },
+    childId: {
+        type: String,
+    }
+})
+
+const audio = ref(new Audio());
 const tasks = ref([
 
     { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 22, end: false, img: '/assets/backgrounds/animals.jpg', audio: '/assets/audio/Task1/12.1.mp3', startAudio: '/assets/audio/Task1/11.1_.mp3' },
-    { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 17, end: false, img: '/assets/backgrounds/task2.jpg', audio: '/assets/audio/Task2/25.2.mp3',  startAudio: '/assets/audio/Task2/24.2_.mp3' },
+    { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 17, end: false, img: '/assets/backgrounds/task2.jpg', audio: '/assets/audio/Task2/25.2.mp3', startAudio: '/assets/audio/Task2/24.2_.mp3' },
     { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg', audio: '/assets/audio/Task3/31.3.mp3', startAudio: '/assets/audio/Task3/30.3_.mp3' },
     { id: 4, name: 'Задание 4', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task4.jpg' },
     { id: 5, name: 'Задание 5', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task5.jpg' },
-    { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task6.jpg' },
-    { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task7.jpg' },
+    { id: 6, name: 'Задание 6', disabled: false, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task6.jpg' },
+    { id: 7, name: 'Задание 7', disabled: false, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task7.jpg' },
     { id: 8, name: 'Задание 8', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 9, name: 'Задание 9', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task9.jpg' },
     { id: 10, name: 'Задание 10', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task10.jpg' },
     { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task11.jpg', },
     { id: 12, name: 'Задание 12', disabled: false, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task12.jpg' },
-    { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task13.jpg'},
-    { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/task15.jpg' },
+    { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task13.jpg' },
+    { id: 14, name: 'Задание 14', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
+    { id: 15, name: 'Задание 15', disabled: false, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/task15.jpg' },
     { id: 16, name: 'Задание 16', disabled: false, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
+    { id: 17, name: 'Задание 17', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
     { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 120, end: false, img: '/assets/backgrounds/task18.jpg', startAudio: '/assets/audio/Task18/470.18_.mp3' },
 ])
 
 const SeeTask = ref(false);
 const taskId = ref(null);
+const finish = ref(false);
 const taskImage = ref('/assets/backgrounds/animals.jpg');
 const timeVal = ref(15);
 const taskAudio = ref('/assets/audio/Task1/12.1.mp3');
 const startAudio = ref('/assets/audio/Task1/11.1_.mp3');
 const endTime = ref(false);
-const taskss = ref([]);
+const tasks_server = ref([]);
+const show = ref(props.show);
 
 const close = () => {
     SeeTask.value = false;
     endTime.value = false;
+    audio.value.src = '';
+    show.value = false;
+    emit('show', show.value);
 };
 
 const playAudio = (audioPath) => {
-    const audio = new Audio(audioPath);
-    audio.play();
+    audio.value.src = audioPath;
+    audio.value.play();
+    audio.value.addEventListener('ended', () => {
+        finish.value = true;
+    })
 }
 
 const switchTask = (id, openId, time, img, audio, startAudioV) => {
@@ -94,57 +136,88 @@ const switchTask = (id, openId, time, img, audio, startAudioV) => {
     SeeTask.value = openId;
     startAudio.value = startAudioV;
     timeVal.value = time;
+    show.value = false;
     taskAudio.value = audio;
     endTime.value = false;
     taskImage.value = img;
     emit('sendAudio', startAudioV);
-    console.log(startAudioV)
     emit('sendImg', img);
-}
+    emit('show', show.value);
+};
 
 const startTask = async (id) => {
     try {
-        const resp = await HTTP.post(`answers/${id}`);
+        const resp = await HTTP.post(`answers/${id}/`, { task: taskId.value });
     } catch (e) {
         console.error('Error starting task', e);
     }
-
-}
+};
 
 const openTask = (taskId) => {
     SeeTask.value = true;
+    finish.value = false;
     playAudio(taskAudio.value);
-
-
+    startTask(props.childId);
     setTimeout(() => {
         endTime.value = true;
     }, timeVal.value * 1000);
+};
+
+const next = (id, audio) => {
+    SeeTask.value = false;
+    endTime.value = false;
+    show.value = false;
+    taskAudio.value = audio;
+    taskId.value = id;
+    openTask(taskId);
 }
 
 const getTasks = async () => {
-    await HTTP.get('tasks').then((response) => {
-        taskss.value = response.data;
-    }).catch((error) => {
-        console.error(error);
-    });
-}
+    await HTTP.get('tasks')
+        .then((response) => {
+            tasks_server.value = response.data;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+};
 
 watch(
     () => taskId.value,
     (newId) => {
         if (!newId) {
-            return
+            return;
         }
         taskId.value = newId;
-    },
+    }
+);
+
+watch(
+    () => props.childId,
+    (newId) => {
+        if (!newId) {
+            return;
+        }
+        console.log('child', props.childId);
+        props.childId = newId;
+    }
 );
 
 onMounted(() => {
     getTasks();
 });
-
 </script>
 <style lang="scss" scoped>
+.modal_background {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    right: 0;
+    background-color: #F1FAFE;
+    z-index: 1;
+}
+
 .icon {
     height: 8px;
     width: 10px;
@@ -222,8 +295,6 @@ onMounted(() => {
                 font-size: 22px;
             }
         }
-
-
     }
 
     &__bg {
@@ -238,14 +309,12 @@ onMounted(() => {
             height: 185px;
             padding: 0px;
         }
-
     }
-
 }
 
 .task {
     border-radius: 30px;
-    background-color: #E6F2FA;
+    background-color: #e6f2fa;
     color: $black;
     max-width: 212px;
     width: 100%;

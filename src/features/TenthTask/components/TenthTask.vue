@@ -208,7 +208,12 @@ const playAudio = (audioPath) => {
 
 const hide = () => {
     emit('close');
+    endGame.value = true;
 };
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+}
 </script>
 
 <style lang="scss" scoped>

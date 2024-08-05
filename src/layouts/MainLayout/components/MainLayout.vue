@@ -8,4 +8,24 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useUserStore } from '@layouts/stores/user';
+import { onMounted, watch } from 'vue';
+
+const userStore = useUserStore();
+
+watch(() => userStore.currentUser,
+    (newUser) => {
+        if (!newUser && userStore.currentUser.tasks_type !== 'индивидуальный') {
+            return
+        }
+        userStore.getChildren();
+    })
+
+onMounted(() => {
+    if (localStorage.getItem('Token') !== null) {
+        userStore.getUser();
+    }
+})
+
+</script>

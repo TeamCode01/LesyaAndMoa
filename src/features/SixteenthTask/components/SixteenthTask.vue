@@ -1,7 +1,7 @@
 <template>
     <div class="SixteenthTask task_block">
-        <div class="wrapper">
-            <template v-if="false">
+        <div class="task_block__wrapper">
+            <template v-if="answersCounter < 55">
                 <div class="task_block__close" @click="hide">
                     <img
                         class="close-icon"
@@ -18,201 +18,72 @@
                 </div>
                 <div class="draggable-list">
                     <div class="draggable-list__items">
-                        <div class="draggable-list__item1">
-                            <div class="draggable-list__letters" id="letters-1">
-                                <div class="draggable-list__word1">
-                                    <span class="draggable-list__letter1">Я</span>
-                                    <span class="draggable-list__letter2">Л</span>
-                                    <span class="draggable-list__letter3">Д</span>
-                                </div>
-                            </div>
-                            <div class="draggable-list__letters" id="letters-2">
-                                <div class="draggable-list__word2">
-                                    <span class="draggable-list__letter1">К</span>
-                                    <span class="draggable-list__letter4">И</span>
-                                    <span class="draggable-list__letter3">П</span>
-                                    <span class="draggable-list__letter5">С</span>
-                                    <span class="draggable-list__letter6">О</span>
-                                    <span class="draggable-list__letter7">Т</span>
-                                    <span class="draggable-list__letter8">о</span>
-                                    <span class="draggable-list__letter9">й</span>
-                                    <span class="draggable-list__letter10">Р</span>
-                                </div>
-                            </div>
-                            <div class="draggable-list__letters" id="letters-3">
-                                <div class="draggable-list__word3">
-                                    <span class="draggable-list__letter6">О</span>
-                                    <span class="draggable-list__letter5">М</span>
-                                    <span class="draggable-list__letter3">Д</span>
-                                    <span class="draggable-list__letter7">И</span>
-                                    <span class="draggable-list__letter7">к</span>
-                                    <span class="draggable-list__letter9">а</span>
-                                </div>
-                            </div>
-                            <div class="draggable-list__letters" id="letters-4">
-                                <div class="draggable-list__word4">
-                                    <span class="draggable-list__letter2">Ы</span>
-                                    <span class="draggable-list__letter3">М</span>
-                                </div>
-                            </div>
-                            <div class="draggable-list__letters" id="letters-5">
-                                <div class="draggable-list__word5">
-                                    <span class="draggable-list__letter10">М</span>
-                                    <span class="draggable-list__letter7">ё</span>
-                                    <span class="draggable-list__letter3">В</span>
-                                    <span class="draggable-list__letter6">О</span>
-                                    <span class="draggable-list__letter9">м</span>
-                                    <span class="draggable-list__letter5">З</span>
-                                    <span class="draggable-list__letter7">Ь</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="draggable-list__item2">
-                            <div class="draggable-list__letters" id="letters-6">
-                                <div class="draggable-list__word6">
-                                    <span class="draggable-list__letter6">Е</span>
-                                    <span class="draggable-list__letter7">Т</span>
-                                    <span class="draggable-list__letter3">В</span>
-                                    <span class="draggable-list__letter9">К</span>
-                                    <span class="draggable-list__letter9">и</span>
-                                </div>
-                            </div>
-                            <div class="draggable-list__letters" id="letters-7">
-                                <div class="draggable-list__word7">
-                                    <span class="draggable-list__letter6">О</span>
-                                    <span class="draggable-list__letter8">к</span>
-                                    <span class="draggable-list__letter9">у</span>
-                                    <span class="draggable-list__letter5">Щ</span>
-                                    <span class="draggable-list__letter7">Е</span>
-                                    <span class="draggable-list__letter3">Д</span>
-                                    <span class="draggable-list__letter10">Ч</span>
-                                </div>
-                            </div>
-                            <div class="draggable-list__letters" id="letters-8">
-                                <div class="draggable-list__word8">
-                                    <span class="draggable-list__letter6">Е</span>
-                                    <span class="draggable-list__letter5">Н</span>
-                                    <span class="draggable-list__letter3">В</span>
-                                    <span class="draggable-list__letter10">И</span>
-                                    <span class="draggable-list__letter1">к</span>
-                                </div>
-                            </div>
-                            <div class="draggable-list__letters" id="letters-9">
-                                <div class="draggable-list__word9">
-                                    <span class="draggable-list__letter6">К</span>
-                                    <span class="draggable-list__letter5">О</span>
-                                    <span class="draggable-list__letter3">С</span>
-                                    <span class="draggable-list__letter10">Т</span>
-                                    <span class="draggable-list__letter9">ч</span>
-                                </div>
-                            </div>
-                            <div class="draggable-list__letters" id="letters-10">
-                                <div class="draggable-list__word10">
-                                    <span class="draggable-list__letter10">Т</span>
-                                    <span class="draggable-list__letter8">о</span>
-                                    <span class="draggable-list__letter3">П</span>
-                                    <span class="draggable-list__letter5">Л</span>
-                                    <span class="draggable-list__letter1">к</span>
-                                    <span class="draggable-list__letter7">А</span>
-                                </div>
+                        <div
+                            :class="'draggable-list__item' + stringid"
+                            v-for="{ stringid, string } in taskArray"
+                            :key="stringid"
+                        >
+                            <div
+                                class="draggable-list__letters"
+                                :id="'letters-' + wordid"
+                                v-for="{ wordid, word } in string"
+                                :key="wordid"
+                            >
+                                <span
+                                    :class="
+                                        'draggable-list__letter' +
+                                        letter.classid
+                                    "
+                                    v-for="letter in word"
+                                    :key="letter.id"
+                                    draggable="true"
+                                    @dragstart="
+                                        dragLetter($event, wordid, letter.id)
+                                    "
+                                    >{{
+                                        letter.isActive ? letter.text : ''
+                                    }}</span
+                                >
                             </div>
                         </div>
                     </div>
                     <div class="draggable-list__containers">
-                        <div class="draggable-list__container1">
-                            <div class="draggable-list__subcontainer1">
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                            </div>
-                            <div class="draggable-list__subcontainer2">
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                            </div>
-                            <div class="draggable-list__subcontainer3">
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                            </div>
-                            <div class="draggable-list__subcontainer4">
-                                <div class="draggable-list__subcontainer-square"></div>
-                                <div class="draggable-list__subcontainer-square"></div>
-                            </div>
-                        </div>
-                        <div class="draggable-list__container2">
-                            <div class="draggable-list__container2-1">
-                                <div class="draggable-list__subcontainer5">
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
+                        <div
+                            :class="'draggable-list__container' + stringid"
+                            v-for="{ stringid, string } in answerArray"
+                            :key="stringid"
+                        >
+                            <div
+                                :class="'draggable-list__subcontainer' + wordid"
+                                v-for="{ wordid, word } in string"
+                                :key="wordid"
+                            >
+                                <div
+                                    class="draggable-list__subcontainer-square"
+                                    :data-answer="letter.text.toUpperCase()"
+                                    @drop="
+                                        //dropLetter($event, wordid, letter);
+                                        dropLetterNew($event, wordid, letter.id,  letter.isActive)
+                                    "
+                                    @dragover.prevent
+                                    v-for="letter in word"
+                                    :key="letter.id"
+                                >
+                                    {{ letter.isActive ? letter.text : '' }}
                                 </div>
-                                <div class="draggable-list__subcontainer6">
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <img src="/assets/icons/comma.svg" alt="comma" v-if="false">
-                                    <img src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="true">
-                                </div>
-                                <div class="draggable-list__subcontainer7">
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <img src="/assets/icons/comma.svg" alt="comma" v-if="false">
-                                    <img src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="true">
-                                </div>
-                            </div>
-                            <div class="draggable-list__container2-2">
-                                <div class="draggable-list__subcontainer8">
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <img src="/assets/icons/comma.svg" alt="comma" v-if="false">
-                                    <img src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="true">
-                                </div>
-                                <div class="draggable-list__subcontainer9">
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <img src="/assets/icons/comma.svg" alt="comma" v-if="false">
-                                    <img src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="true">
-                                </div>
-                                <div class="draggable-list__subcontainer10">
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__subcontainer-square"></div>
-                                    <div class="draggable-list__full-stop" v-if="false">
-                                        <img src="/assets/icons/full-stop.svg" alt="full-stop">
-                                    </div>
-                                    <div class="draggable-list__full-stop" v-if="true">
-                                        <img src="/assets/icons/full-stop-blue.svg" alt="full-stop-blue">
-                                    </div>
+                                <img
+                                    src="/assets/icons/comma-blue.svg"
+                                    alt="comma-blue"
+                                    v-if="[6, 7, 8, 9].includes(wordid)"
+                                />
+                                <div
+                                    class="draggable-list__full-stop"
+                                    v-if="wordid == 10"
+                                >
+                                    <img
+                                        src="/assets/icons/full-stop-blue.svg"
+                                        alt="full-stop-blue"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -225,19 +96,27 @@
                     class="task_block__wrapper_answer"
                 />
             </template>
-            <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/moa.gif" text="Изумительно!"
-            v-if="true" @hide="hide()"></TaskResultBanner>
+            <TaskResultBanner
+                img="/assets/backgrounds/Diamond.png"
+                bg="/assets/backgrounds/moa.gif"
+                text="Изумительно!"
+                v-if="answersCounter == 55"
+                @hide="hide()"
+                @next="next()"
+            ></TaskResultBanner>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
-const emit = defineEmits(['close']);
+import { dataTask, dataAnswer } from './task';
+
+const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -246,30 +125,115 @@ const props = defineProps({
 });
 const hide = () => {
     emit('close');
+    resetTask();
 };
 
+const next = () => {
+    emit('next-modal');
+    resetTask();
+}
+
 const isActive = true;
+
+const taskArray = ref([]);
+taskArray.value = dataTask;
+
+const answerArray = ref([]);
+answerArray.value = dataAnswer;
+
+const answersCounter = ref(0);
+
+const dragLetter = (event, wordID, letterID) => {
+    event.dataTransfer.setData('text', `${wordID} ${letterID}`);
+};
+
+const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
+    let dragwordID = event.dataTransfer.getData('text').split(' ')[0];
+    let dragletterID = event.dataTransfer.getData('text').split(' ')[1];
+
+    if (wordID == dragwordID) {
+        if (letterID == dragletterID) {
+            answerArray.value.map((string) => {
+                string.string.map((word) => {
+                    if (word.wordid == wordID)
+                        word.word.map((letter) => {
+                            if (letter.id == letterID) letter.isActive = true;
+                        });
+                });
+            });
+
+            taskArray.value.map((string) => {
+                string.string.map((word) => {
+                    if (word.wordid == wordID)
+                        word.word.map((letter) => {
+                            if (letter.id == letterID) letter.isActive = false;
+                        });
+                });
+            });
+
+            let reactionAudio = new Audio(
+                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
+            );
+            reactionAudio.play();
+            event.target.classList.add(
+                'draggable-list__subcontainer-square_right'
+            );
+            setTimeout(() => {
+                answersCounter.value += 1;
+                event.target.classList.remove(
+                    'draggable-list__subcontainer-square_right'
+                );
+            }, 2000);
+        } else {
+            if (!letterIsActive){
+                event.target.classList.add(
+                'draggable-list__subcontainer-square_warning'
+            );
+            setTimeout(() => {
+                event.target.classList.remove(
+                    'draggable-list__subcontainer-square_warning'
+                );
+            }, 2000);}
+        }
+    } else {
+        if (!letterIsActive){
+        event.target.classList.add('draggable-list__subcontainer-square_wrong');
+        let reactionAudio = new Audio(
+            `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
+        );
+        reactionAudio.play();
+        setTimeout(() => {
+            event.target.classList.remove(
+                'draggable-list__subcontainer-square_wrong'
+            );
+        }, 2000);}
+    }
+};
+
+const resetTask = () => {
+    answerArray.value.map((string) => {
+        string.string.map((word) => {
+            word.word.map((letter) => {
+                letter.isActive = false;
+            });
+        });
+    });
+
+    taskArray.value.map((string) => {
+        string.string.map((word) => {
+            word.word.map((letter) => {
+                letter.isActive = true;
+            });
+        });
+    });
+
+    answersCounter.value = 0;
+};
 </script>
 
 <style lang="scss" scoped>
-.SixteenthTask{
-    width: 1200px;
-    @media (max-width: 1024px) {
-        min-width: 944px;
-    }
-}
-
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 60px 67px 60px;
-    position: relative;
-    height: 600px;
-
-    @media (max-width: 1024px) {
-        padding: 30px 20px 43px 20px;
-    }
+.SixteenthTask {
+    position: block;
 }
 
 .SixteenthTask__title {
@@ -320,14 +284,20 @@ const isActive = true;
 }
 
 .draggable-list__letters {
+    padding: 16px 13px;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 60px;
     border-radius: 6px;
     background-color: $puppe;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
     @media (max-width: 1024px) {
         height: 52px;
+        padding: 9px 13px;
     }
 }
 
@@ -396,7 +366,7 @@ const isActive = true;
     cursor: pointer;
 }
 
-.draggable-list__letter2{
+.draggable-list__letter2 {
     height: 28px;
     font-family: 'Nunito', sans-serif;
     font-size: 28px;
@@ -550,9 +520,22 @@ const isActive = true;
     height: 48px;
     background-color: $blueGame;
     border-radius: 6px;
+
+    color: rgb(78, 59, 127);
+    font-family: Nunito;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 38px;
+    letter-spacing: 0%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+
     @media (max-width: 1024px) {
         width: 40px;
         height: 40px;
+        padding: 10px;
     }
 }
 
@@ -561,8 +544,30 @@ const isActive = true;
     width: 100%;
     height: 48px;
     justify-content: space-between;
-    @media (max-width: 1024px) {      
+    @media (max-width: 1024px) {
         height: 40px;
+    }
+}
+
+.draggable-list__container2 {
+    display: flex;
+    width: 1001px;
+    height: 52px;
+    justify-content: space-between;
+    @media (max-width: 1024px) {
+        height: 44px;
+        width: 844px;
+    }
+}
+
+.draggable-list__container3 {
+    display: flex;
+    width: 863px;
+    height: 52px;
+    justify-content: space-between;
+    @media (max-width: 1024px) {
+        width: 728px;
+        height: 44px;
     }
 }
 
@@ -579,7 +584,6 @@ const isActive = true;
     display: flex;
     justify-content: space-between;
     gap: 2px;
-
 }
 
 .draggable-list__subcontainer1 {
@@ -627,7 +631,7 @@ const isActive = true;
 .comma {
     width: 11px;
     height: 52px;
-    
+
     @media (max-width: 1024px) {
         width: 8px;
         height: 44px;
@@ -673,38 +677,13 @@ const isActive = true;
     }
 }
 
-.draggable-list__container2 {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    align-items: center;
-    width: 1001px;
-    height: 120px;
-    @media (max-width: 1024px) {      
-        width: 844px;
-        height: 100px;
-        gap: 12px;
-    }
+.draggable-list__subcontainer-square_warning {
+    border: 2px solid #cfcd54;
 }
-
-.draggable-list__container2-1 {
-    display: flex;
-    width: 100%;
-    height: 52px;
-    justify-content: space-between;
-    @media (max-width: 1024px) {      
-        height: 44px;
-    }
+.draggable-list__subcontainer-square_wrong {
+    border: 2px solid #db0000;
 }
-
-.draggable-list__container2-2 {
-    display: flex;
-    width: 863px;
-    height: 52px;
-    justify-content: space-between;
-    @media (max-width: 1024px) {      
-        width: 728px;
-        height: 44px;
-    }
+.draggable-list__subcontainer-square_right {
+    border: 2px solid #5ccf54;
 }
 </style>

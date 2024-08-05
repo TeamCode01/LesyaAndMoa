@@ -1,13 +1,9 @@
 <template>
     <div class="EighthTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="true">
+            <template v-if="startGame">
                 <div class="task_block__close" @click="hide">
-                    <img
-                        class="close-icon"
-                        src="@app/assets/icons/close-icon.svg"
-                        alt="крест"
-                    />
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
@@ -16,88 +12,66 @@
                     </p>
                 </div>
                 <div class="draggable-list">
-                    <div class="draggable-list__words" v-if="false">
-                        <div class="draggable-list__word"><p class="draggable-list__word-text">По</p><p class="draggable-list__word-text">ле</p></div>
-                        <div class="draggable-list__word"><p class="draggable-list__word-text">Ле</p><p class="draggable-list__word-text">то</p></div>
-                        <div class="draggable-list__word"><p class="draggable-list__word-text">Ве</p><p class="draggable-list__word-text">тер</p></div>
-                        <div class="draggable-list__word"><p class="draggable-list__word-text">Тро</p><p class="draggable-list__word-text">па</p></div>
-                        <div class="draggable-list__word"><p class="draggable-list__word-text">Ко</p><p class="draggable-list__word-text">рабль</p></div>
-                        <div class="draggable-list__word"><p class="draggable-list__word-text">Сол</p><p class="draggable-list__word-text">нце</p></div>
-                        <div class="draggable-list__word"><p class="draggable-list__word-text">Тра</p><p class="draggable-list__word-text">ва</p></div>
-                        <div class="draggable-list__word"><p class="draggable-list__word-text">Ут</p><p class="draggable-list__word-text">ро</p></div>
-                    </div>
-                    <div class="draggable-list__steps-wrapper">
-                        <div class="draggable-list__steps">
-                            <div class="draggable-list__step">
-                                <button class="draggable-list__step-button">ПО</button>
-                                <div class="draggable-list__substep" id="step1"></div>
+                    <div class="draggable-list__column">
+                        <div class="draggable-list__words" v-if="countAnswers">
+                            <div v-for="answer in correctAnswers" :key="answer.id"
+                                class="draggable-list__words-container">
+                                <div class="draggable-list__word" v-if="answer.text">
+                                    <p class="draggable-list__word-text">{{ answer.text }}</p>
+                                </div>
                             </div>
-                            <div class="draggable-list__step">
-                                <button class="draggable-list__step-button">ЛЕ</button>
-                                <div class="draggable-list__substep" id="step2"></div>
+                        </div>
+                        <div class="draggable-list__steps-wrapper">
+                            <div class="draggable-list__steps">
+                                <div class="draggable-list__step" v-for="(syllable, syllable_index) in syllables[1]"
+                                    :key="syllable.id">
+                                    <q-btn
+                                        :class="{ 'draggable-list__step-button': !syllable.hidden, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false }"
+                                        :draggable="draggable" @dragstart="drag($event, syllable, 1)" @dragover.prevent
+                                        @click="clickText(syllable)" :value="syllable.text">
+                                        {{ syllable.text }}
+                                    </q-btn>
+                                    <div class="draggable-list__substep" :id="syllable.id_class"></div>
+                                </div>
                             </div>
-                            <div class="draggable-list__step">
-                                <button class="draggable-list__step-button">ВЕ</button>
-                                <div class="draggable-list__substep" id="step3"></div>
-                            </div>
-                            <div class="draggable-list__step">
-                                <button class="draggable-list__step-button">ТРО</button>
-                                <div class="draggable-list__substep" id="step4"></div>
-                            </div>
-                            <div class="draggable-list__step">
-                                <button class="draggable-list__step-button">КО</button>
-                                <div class="draggable-list__substep" id="step5"></div>
-                            </div>
-                            <div class="draggable-list__step">
-                                <button class="draggable-list__step-button">СОЛ</button>
-                                <div class="draggable-list__substep" id="step6"></div>
-                            </div>
-                            <div class="draggable-list__step">
-                                <button class="draggable-list__step-button">ТРА</button>
-                                <div class="draggable-list__substep" id="step7"></div>
-                            </div>
-                            <div class="draggable-list__step">
-                                <button class="draggable-list__step-button">УТ</button>
-                                <div class="draggable-list__substep" id="step8"></div>
-                            </div>
-                            <img src="/assets/backgrounds/square.png" alt="square" class="draggable-list__square"/>
                         </div>
                     </div>
                     <div class="draggable-list__right-wrapper">
                         <div class="draggable-list__right-wrapper-cloud">
                             <img class="draggable-list__cloud" src="/assets/backgrounds/cloud.png" alt="cloud">
                             <div class="draggable-list__set-syllables">
-                                <div class="draggable-list__set-syllables1">
-                                    <button class="draggable-list__syllable">ПА</button>
-                                    <button class="draggable-list__syllable">ТЕР</button>
-                                    <button class="draggable-list__syllable">РО</button>
-                                    <button class="draggable-list__syllable">ЛЕ</button>
-                                </div>
-                                <div class="draggable-list__set-syllables2">
-                                    <button class="draggable-list__syllable">НЦЕ</button>
-                                    <button class="draggable-list__syllable">ТО</button>
-                                    <button class="draggable-list__syllable">РАБЛЬ</button>
-                                    <button class="draggable-list__syllable">ВА</button>
+                                <div class="draggable-list__set-syllables1"
+                                    v-for="(syllables_row, syllables_row_index) in syllables[2]"
+                                    :key="syllables_row_index">
+                                    <div v-for="syllable in syllables_row" :key="syllable.id">
+                                        <q-btn
+                                            :class="{ 'draggable-list__syllable': !syllable.hidden, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false }"
+                                            :draggable="draggable" @dragstart="drag($event, syllable, 2)"
+                                            @dragover.prevent @click="clickText(syllable)" :value="syllable.text">
+                                            {{ syllable.text }}
+                                        </q-btn>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="draggable-list__right-wrapper-answer">
                             <div class="draggable-list__right-answer">
-                                <div class="draggable-list__right-answer-square"></div>
-                                <div class="draggable-list__right-answer-circle"></div>
+                                <div class="draggable-list__right-answer-square">
+                                    <input @drop="drop($event, 1)" @dragover="allowDrop($event)"
+                                        class="answer draggable-list__step-button" readonly
+                                        v-model="squareAnswer.text" />
+                                </div>
+                                <div class="draggable-list__right-answer-circle">
+                                    <input @drop="drop($event, 2)" @dragover="allowDrop($event)"
+                                        class="answer draggable-list__syllable" readonly v-model="circleAnswer.text" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <input
-                    @drop="drop($event)"
-                    @dragover="allowDrop($event)"
-                    v-model="answer"
-                    class="task_block__wrapper_answer"
-                />
             </template>
             <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!"
-            v-if="false" @hide="hide()"></TaskResultBanner>
+                v-else @hide="hide()" @next="next()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -108,19 +82,332 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
-const emit = defineEmits(['close']);
+const startGame = ref(true);
+const draggable = ref(true);
+let soundPlayed = false;
+const squareAnswer = ref(
+    {
+        text: "",
+        firstIndex: 0,
+        secondIndex: 0,
+    });
+
+const circleAnswer = ref(
+    {
+        text: "",
+        firstIndex: 0,
+        secondIndex: 0,
+        thirdIndex: 0,
+    }
+);
+
+const syllables = ref({
+    1: [{
+        id: 1,
+        id_class: 'step1',
+        text: 'ПО',
+        audio: '/assets/audio/Task8/281.8.mp3',
+        correct: null,
+        hidden: false,
+    }, {
+        id: 2,
+        id_class: 'step2',
+        text: 'ЛЕ',
+        audio: '/assets/audio/Task8/282.8.mp3',
+        correct: null,
+        hidden: false,
+    }, {
+        id: 3,
+        id_class: 'step3',
+        text: 'ВЕ',
+        audio: '/assets/audio/Task8/283.8.mp3',
+        correct: null,
+        hidden: false,
+    }, {
+        id: 4,
+        id_class: 'step4',
+        text: 'ТРО',
+        audio: '/assets/audio/Task8/284.8.mp3',
+        correct: null,
+        hidden: false,
+    }, {
+        id: 5,
+        id_class: 'step5',
+        text: 'КО',
+        audio: '/assets/audio/Task8/285.8.mp3',
+        correct: null,
+        hidden: false,
+    }, {
+        id: 6,
+        id_class: 'step6',
+        text: 'СОЛ',
+        audio: '/assets/audio/Task8/286.8.mp3',
+        correct: null,
+        hidden: false,
+    }, {
+        id: 7,
+        id_class: 'step7',
+        text: 'ТРА',
+        audio: '/assets/audio/Task8/287.8.mp3',
+        correct: null,
+        hidden: false,
+    }, {
+        id: 8,
+        id_class: 'step8',
+        text: 'УТ',
+        audio: '/assets/audio/Task8/288.8.mp3',
+        correct: null,
+        hidden: false,
+    }],
+    2: {
+        1: [{
+            id: 1,
+            text: 'ПА',
+            audio: '/assets/audio/Task8/289.8.mp3',
+            correct: null,
+            hidden: false,
+        }, {
+            id: 2,
+            text: 'ТЕР',
+            audio: '/assets/audio/Task8/290.8.mp3',
+            correct: null,
+            hidden: false,
+        }, {
+            id: 3,
+            text: 'РО',
+            audio: '/assets/audio/Task8/291.8.mp3',
+            correct: null,
+            hidden: false,
+        }, {
+            id: 4,
+            text: 'ЛЕ',
+            audio: '/assets/audio/Task8/292.8.mp3',
+            correct: null,
+            hidden: false,
+        }],
+        2: [{
+            id: 5,
+            text: 'НЦЕ',
+            audio: '/assets/audio/Task8/293.8.mp3',
+            correct: null,
+            hidden: false,
+        }, {
+            id: 6,
+            text: 'ТО',
+            audio: '/assets/audio/Task8/294.8.mp3',
+            correct: null,
+            hidden: false,
+        }, {
+            id: 7,
+            text: 'РАБЛЬ',
+            audio: '/assets/audio/Task8/295.8.mp3',
+            correct: null,
+            hidden: false,
+        }, {
+            id: 8,
+            text: 'ВА',
+            audio: '/assets/audio/Task8/296.8.mp3',
+            correct: null,
+            hidden: false,
+        }]
+    }
+})
+
+const countAnswers = ref(0);
+
+const correctAnswers = ref([{}, {}, {}, {}, {}, {}, {}, {}])
+
+const answers = ref([
+    {
+        id: 1,
+        text: 'Поле',
+        audio: '/assets/audio/Task8/поле.mp3',
+        answered: false
+    },
+    {
+        id: 2,
+        text: 'Лето',
+        audio: '/assets/audio/Task8/лето.mp3',
+        answered: false
+    },
+    {
+        id: 3,
+        text: 'Ветер',
+        audio: '/assets/audio/Task8/ветер.mp3',
+        answered: false
+    },
+    {
+        id: 4,
+        text: 'Тропа',
+        audio: '/assets/audio/Task8/тропа.mp3',
+        answered: false
+    },
+    {
+        id: 5,
+        text: 'Корабль',
+        audio: '/assets/audio/Task8/корабль.mp3',
+        answered: false
+    },
+    {
+        id: 6,
+        text: 'Солнце',
+        audio: '/assets/audio/Task8/солнце.mp3',
+        answered: false
+    },
+    {
+        id: 7,
+        text: 'Трава',
+        audio: '/assets/audio/Task8/трава.mp3',
+        answered: false
+    },
+    {
+        id: 8,
+        text: 'Утро',
+        audio: '/assets/audio/Task8/утро.mp3',
+        answered: false
+    },
+])
+
+const clickText = (syllable) => {
+    if (soundPlayed) return;
+    playAudio(syllable.audio)
+    soundPlayed = true;
+    setTimeout(() => {
+        soundPlayed = false;
+    }, 500);
+}
+
+const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
         required: false,
     },
 });
+
+const playAudio = (audioPath) => {
+    const audio = new Audio(audioPath);
+    audio.play();
+    if (!soundPlayed) {
+        soundPlayed = true;
+        setTimeout(() => {
+            soundPlayed = false;
+        }, 2000);
+    }
+}
+
+const drag = (event, syllable, fromPlace) => {
+    event.dataTransfer.setData('id', syllable.id);
+    event.dataTransfer.setData('fromPlace', fromPlace)
+    // playAudio(syllable.audio);
+};
+
+const drop = (event, place) => {
+    event.preventDefault();
+    const id = event.dataTransfer.getData('id');
+    const fromPlace = event.dataTransfer.getData('fromPlace');
+    if (fromPlace == place) {
+        if (place == 1) {
+            squareAnswer.value.text = syllables.value[fromPlace][id - 1].text;
+            squareAnswer.value.firstIndex = fromPlace;
+            squareAnswer.value.secondIndex = id - 1;
+        } else {
+            if (id < 5) {
+                circleAnswer.value.text = syllables.value[fromPlace][1][id - 1].text;
+                circleAnswer.value.firstIndex = fromPlace;
+                circleAnswer.value.secondIndex = 1;
+                circleAnswer.value.thirdIndex = id - 1;
+            } else {
+                circleAnswer.value.text = syllables.value[fromPlace][2][id - 5].text;
+                circleAnswer.value.firstIndex = fromPlace;
+                circleAnswer.value.secondIndex = 2;
+                circleAnswer.value.thirdIndex = id - 5;
+            }
+        }
+    }
+    if (squareAnswer.value.text && circleAnswer.value.text) {
+        let strAnswer = squareAnswer.value.text + circleAnswer.value.text;
+        strAnswer = strAnswer.toLowerCase()
+        strAnswer = strAnswer[0].toUpperCase() + strAnswer.slice(1);
+        let find = false;
+        for (const obj of answers.value) {
+            if (obj.text == strAnswer) {
+                find = true;
+                correctAnswers.value[countAnswers.value] = obj;
+                countAnswers.value++;
+                playAudio(obj.audio);
+                setTimeout(() => playAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`), 1000)
+                break;
+            }
+        }
+        draggable.value = false;
+        if (!find) {
+            syllables.value[squareAnswer.value.firstIndex][squareAnswer.value.secondIndex].correct = false;
+            syllables.value[circleAnswer.value.firstIndex][circleAnswer.value.secondIndex][circleAnswer.value.thirdIndex].correct = false;
+            playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+            setTimeout(() => {
+                syllables.value[squareAnswer.value.firstIndex][squareAnswer.value.secondIndex].correct = null;
+                syllables.value[circleAnswer.value.firstIndex][circleAnswer.value.secondIndex][circleAnswer.value.thirdIndex].correct = null;
+                squareAnswer.value = {};
+                circleAnswer.value = {};
+                draggable.value = true;
+            }, 1000);
+        } else {
+            syllables.value[squareAnswer.value.firstIndex][squareAnswer.value.secondIndex].correct = true;
+            syllables.value[circleAnswer.value.firstIndex][circleAnswer.value.secondIndex][circleAnswer.value.thirdIndex].correct = true;
+            setTimeout(() => {
+                syllables.value[squareAnswer.value.firstIndex][squareAnswer.value.secondIndex].hidden = true;
+                syllables.value[circleAnswer.value.firstIndex][circleAnswer.value.secondIndex][circleAnswer.value.thirdIndex].hidden = true;
+                syllables.value[squareAnswer.value.firstIndex][squareAnswer.value.secondIndex].correct = null;
+                syllables.value[circleAnswer.value.firstIndex][circleAnswer.value.secondIndex][circleAnswer.value.thirdIndex].correct = null;
+                squareAnswer.value = {};
+                circleAnswer.value = {};
+                draggable.value = true;
+            }, 2000);
+        }
+        if (countAnswers.value == 8) {
+            setTimeout(() => {
+                startGame.value = false;
+                playAudio('/assets/audio/Task8/297.8_.mp3')
+            }, 2000);
+        }
+    }
+
+
+};
+
+const allowDrop = (event) => {
+    event.preventDefault();
+};
+
 const hide = () => {
     emit('close');
 };
+const next = () => {
+    emit('next-modal');
+}
 </script>
 
 <style lang="scss" scoped>
+.hidden {
+    display: none;
+}
+
+.answer {
+    text-align: center;
+    width: 70px;
+    height: 70px;
+}
+
+.correct_select {
+    border: 2px solid;
+    border-color: #5CCF54;
+}
+
+.not_correct_select {
+    border: 2px solid;
+    border-color: #DB0000;
+}
 
 .EighthTask {
     width: 1200px;
@@ -128,6 +415,7 @@ const hide = () => {
 
 .EighthTask__title {
     width: 677px;
+
     @media (max-width: 1024px) {
         width: 560px;
         font-size: 20px;
@@ -135,16 +423,37 @@ const hide = () => {
     }
 }
 
-
 .draggable-list {
     display: flex;
     justify-content: space-between;
     width: 1100px;
-    height: 434px;
+    height: 468px;
+
     @media (max-width: 1024px) {
         width: 854px;
-        height: 325px;  
+        height: 325px;
     }
+}
+
+.draggable-list__column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.draggable-list__words-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 134px;
+    height: 40px;
+    border-radius: 6px;
+
+    @media (max-width: 1024px) {
+        width: 120px;
+        height: 28px;
+    }
+
 }
 
 .draggable-list__words {
@@ -152,12 +461,15 @@ const hide = () => {
     padding: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    width: 134px;
-    height: 376px;
+    flex-wrap: wrap;
+    width: 276px;
+    height: 184px;
+    gap: 8px;
+
     @media (max-width: 1024px) {
-        width: 120px;
-        height: 266px;
+        gap: 6px;
+        width: 246px;
+        height: 130px;
     }
 }
 
@@ -169,6 +481,7 @@ const hide = () => {
     height: 40px;
     border-radius: 6px;
     background-color: $blueGame;
+
     @media (max-width: 1024px) {
         width: 120px;
         height: 28px;
@@ -180,6 +493,7 @@ const hide = () => {
     font-family: 'Nunito', sans-serif;
     font-size: 20px;
     font-weight: 600;
+
     @media (max-width: 1024px) {
         font-size: 16px;
     }
@@ -197,6 +511,7 @@ const hide = () => {
     height: 284px;
     position: relative;
     bottom: 0;
+
     @media (max-width: 1024px) {
         width: 554px;
         height: 207px;
@@ -223,6 +538,7 @@ const hide = () => {
     font-family: 'Nunito', sans-serif;
     font-size: 18px;
     font-weight: bold;
+
     @media (max-width: 1024px) {
         width: 63px;
         height: 63px;
@@ -239,6 +555,7 @@ const hide = () => {
     border-bottom-left-radius: 6px;
     width: 80px;
     height: 8px;
+
     @media (max-width: 1024px) {
         width: 68px;
     }
@@ -247,60 +564,67 @@ const hide = () => {
 #step2 {
     width: 80px;
     height: 30px;
+
     @media (max-width: 1024px) {
         width: 68px;
         height: 20px;
     }
 }
 
-#step3{
+#step3 {
     width: 80px;
     height: 60px;
+
     @media (max-width: 1024px) {
         width: 68px;
         height: 40px;
     }
 }
 
-#step4{
+#step4 {
     width: 80px;
     height: 90px;
+
     @media (max-width: 1024px) {
         width: 68px;
         height: 60px;
     }
 }
 
-#step5{
+#step5 {
     width: 80px;
     height: 120px;
+
     @media (max-width: 1024px) {
         width: 68px;
         height: 80px;
     }
 }
 
-#step6{
+#step6 {
     width: 80px;
     height: 150px;
+
     @media (max-width: 1024px) {
         width: 68px;
         height: 100px;
     }
 }
 
-#step7{
+#step7 {
     width: 80px;
     height: 180px;
+
     @media (max-width: 1024px) {
         width: 68px;
         height: 120px;
     }
 }
 
-#step8{
+#step8 {
     width: 80px;
     height: 210px;
+
     @media (max-width: 1024px) {
         width: 68px;
         height: 140px;
@@ -310,6 +634,7 @@ const hide = () => {
 .draggable-list__square {
     width: 14px;
     height: 210px;
+
     @media (max-width: 1024px) {
         width: 10px;
         height: 140px;
@@ -322,6 +647,7 @@ const hide = () => {
     height: 434px;
     flex-direction: column;
     align-items: center;
+
     @media (max-width:1024px) {
         width: 284px;
         height: 325px;
@@ -332,6 +658,7 @@ const hide = () => {
     position: relative;
     width: 374px;
     height: 198px;
+
     @media (max-width: 1024px) {
         width: 284px;
         height: 151px;
@@ -343,6 +670,7 @@ const hide = () => {
     z-index: -1;
     width: 374px;
     height: 198px;
+
     @media (max-width: 1024px) {
         width: 284px;
         height: 151px;
@@ -356,6 +684,7 @@ const hide = () => {
     margin: 30px auto 15px auto;
     width: 292px;
     height: 144px;
+
     @media (max-width: 1024px) {
         width: 264px;
         height: 130px;
@@ -368,6 +697,7 @@ const hide = () => {
     width: 100%;
     height: 70px;
     justify-content: space-between;
+
     @media (max-width: 1024px) {
         height: 63px;
     }
@@ -385,6 +715,7 @@ const hide = () => {
     font-family: 'Nunito', sans-serif;
     font-size: 18px;
     font-weight: bold;
+
     @media (max-width: 1024px) {
         font-size: 16px;
         width: 63px;
@@ -399,6 +730,7 @@ const hide = () => {
     justify-content: center;
     width: 100%;
     height: 236px;
+
     @media (max-width: 1024px) {
         height: 174px;
     }
@@ -415,6 +747,7 @@ const hide = () => {
     border-radius: 6px;
     border: 2px solid $footer;
     gap: 4px;
+
     @media (max-width: 1024px) {
         width: 146px;
         height: 79px;
@@ -422,10 +755,14 @@ const hide = () => {
 }
 
 .draggable-list__right-answer-square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     min-width: 70px;
     height: 70px;
     border-radius: 6px;
     background-color: $blueGame;
+
     @media (max-width: 1024px) {
         min-width: 63px;
         height: 63px;
@@ -437,6 +774,7 @@ const hide = () => {
     height: 70px;
     border-radius: 50%;
     background-color: $blueGame;
+
     @media (max-width: 1024px) {
         min-width: 63px;
         height: 63px;

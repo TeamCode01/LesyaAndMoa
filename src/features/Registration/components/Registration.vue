@@ -83,8 +83,8 @@ import { SelectSort } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
 
 const tasksChoose = ref([
-    { value: 'Групповые занятия', name: 'Групповые занятия' },
-    { value: 'Индивидуальные занятия', name: 'Индивидуальные занятия' },
+    { value: 'групповой', name: 'Групповые занятия' },
+    { value: 'индивидуальный', name: 'Индивидуальные занятия' },
 ]);
 
 const router = useRouter();
@@ -100,16 +100,10 @@ const form = ref({
 
 const RegisterUser = async () => {
     try {
-        const response = await HTTP.post('/users/', form.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await HTTP.post('/users/', form.value);
         form.value = response.data;
-        console.log(response.data);
         router.push({
-            name: 'profile',
-            params: { id: response.data.id },
+            name: 'Login',
         });
         swal.fire({
             position: 'top-center',
@@ -121,7 +115,6 @@ const RegisterUser = async () => {
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
-        console.error('There was an error!', error);
         if (isError.value) {
             swal.fire({
                 position: 'center',
@@ -150,17 +143,32 @@ const RegisterUser = async () => {
     background-color: #fae6f2;
     border-radius: 20px;
     align-items: center;
+
+    @media (max-width: 1140px) {
+        margin-bottom: 550px;
+        padding-left: 30px;
+        padding-right: 30px;
+        min-width: 415px;
+    }
+    @media (max-width: 568px) {
+        min-width: 90vw;
+    }
 }
 .Reg h2 {
     font-size: 32px;
     font-family: 'Nunito', sans-serif;
     font-weight: normal;
+    @media (max-width: 768px) {
+        font-size: 24px;
+    }
+    @media (max-width: 768px) {
+        font-size: 22px;
+    }
 }
 .Form {
     padding: 28px 0 0 0;
     display: flex;
     flex-direction: column;
-    width: 380px;
 }
 .Form p {
     font-family: 'Nunito', sans-serif;
@@ -219,7 +227,16 @@ const RegisterUser = async () => {
 .img-auth {
     position: absolute;
     left: -15px;
-    top: 100px;
+    top: 170px;
+    @media (max-width: 1300px) {
+        width: 219px;
+        height: 403px;
+    }
+    @media (max-width: 1140px) {
+        top: 870px;
+        left: 50%;
+        margin-left: -106px;
+    }
 }
 
 .regCheck {

@@ -4,13 +4,14 @@
             <div class="d-flex">
                 <div class="Login">
                     <h2>Восстановление пароля</h2>
-                    <div class="Form">
+                    <form class="Form" @submit.prevent="recoveryPass">
                         <div class="login-input-pass">
                             <label>Введите новый пароль</label>
                             <Input
                                 placeholder="Введите пароль"
                                 name="password"
                                 class="form-input"
+                                v-model:value="new_pass"
                             ></Input>
                         </div>
                         <div class="login-input-pass">
@@ -19,10 +20,11 @@
                                 placeholder="Введите пароль"
                                 name="password"
                                 class="form-input"
+                                v-model:value="new_pass_confirm"
                             ></Input>
                         </div>
                         <Button class="form-btn">Сохранить пароль</Button>
-                    </div>
+                    </form>
                 </div>
                 <img
                     class="img-auth"
@@ -35,6 +37,60 @@
 </template>
 <script setup>
 import { Input } from '@shared/components/inputs';
+import {ref, inject} from 'vue'
+import { HTTP } from '@app/http';
+import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { computed } from 'vue';
+
+const swal = inject('$swal');
+const isError = ref([]);
+const user = ref({});
+const new_pass = ref('');
+const router = useRouter();
+const route = useRoute();
+const new_pass_confirm = ref('');
+
+const auth = computed(() => ({
+    uid: route.params.uid,
+    token: route.params.token,
+}));
+
+const recoveryPass = async () => {
+    if (new_pass.value !== new_pass_confirm.value) {
+        console.error('Passwords do not match');
+        return;
+    }
+
+    try {
+        const response = await HTTP.post('/reset_password_confirm/', {
+            ...auth.value,
+            new_password: new_pass.value,
+        });
+        router.push({
+            name: 'Login',
+        });
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+    } catch (error) {
+        isError.value = error.response.data;
+        console.error(error);
+        if (isError.value) {
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `ошибка`,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
+    }
+};
 </script>
 <style lang="scss" scoped>
 .AuthWrapper {
@@ -44,7 +100,7 @@ import { Input } from '@shared/components/inputs';
 }
 .container {
     margin: 0 auto;
-    padding: 0 120px;
+    padding: 0 90px;
     max-width: 1440px;
 }
 .d-flex {
@@ -52,6 +108,7 @@ import { Input } from '@shared/components/inputs';
     row-gap: 50px;
     justify-content: center;
     position: relative;
+    margin: 0 auto;
 }
 .Login {
     margin: 50px 0 260px 0;
@@ -61,11 +118,20 @@ import { Input } from '@shared/components/inputs';
     padding: 32px 60px 32px 60px;
     background-color: #fae6f2;
     border-radius: 20px;
+    @media (max-width: 1024px) {
+        margin-bottom: 500px;
+    }
+    @media (max-width: 768px) {
+        min-width: 90vw;
+    }
 }
 .Login h2 {
     font-size: 32px;
     font-family: 'Nunito', sans-serif;
     font-weight: normal;
+    @media (max-width: 768px) {
+        font-size: 24px;
+    }
 }
 .Form {
     padding: 28px 0 0 0;
@@ -126,5 +192,18 @@ import { Input } from '@shared/components/inputs';
     position: absolute;
     left: -15px;
     top: 100px;
+
+    @media (max-width: 1200px) {
+        width: 213px;
+        height: 403px;
+    }
+    @media (max-width: 1024px) {
+        top: 500px;
+        left: 50%;
+        margin-left: -106px;
+    }
+    @media (max-width: 440px) {
+        top: 570px;
+    }
 }
 </style>

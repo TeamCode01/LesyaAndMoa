@@ -23,7 +23,7 @@
         @update:model-value="changeOption"
         :items="options"
         :placeholder="placeholder"
-        item-title="name"
+        item-title="id"
         item-value="value"
         v-else
     >
@@ -40,6 +40,10 @@
 const props = defineProps({
     modelValue: {
         type: String,
+    },
+    items: {
+        type: Array,
+        default: () => [],
     },
     options: {
         type: Array,

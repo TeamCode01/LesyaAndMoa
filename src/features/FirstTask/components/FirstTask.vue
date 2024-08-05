@@ -12,52 +12,65 @@
                     </p>
                 </div>
 
-                <div class="draggable-list">
-                    <q-btn v-for="(item, index) in words" :key="item.id" :id="item.id + '_elem'"
-                        class="list-group-item item" draggable="true"
-                        @dragstart="drag($event, item.name, item.id, item.audio, index)" @dragover.prevent
-                        :value="item.name">
-                        {{ item.name }}
-                    </q-btn>
+                <div class="draggable-list__wrapper">
+                    <div class="draggable-list">
+                        <q-btn v-for="(item, index) in words" :key="item.id" :id="item.id + '_elem'"
+                            class="list-group-item item" draggable="true" @mouseover="playAudio(item.audio)"
+                            @mouseout="stopAudio(item.audio)" @dragstart="drag($event, item.name, item.id, index)"
+                            @dragover.prevent :value="item.name">
+                            {{ item.name }}
+                        </q-btn>
+                    </div>
+                    <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
+                        class="FirstTask__wrapper_answer" />
                 </div>
-                <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
-                    class="FirstTask__wrapper_answer" />
             </div>
         </div>
     </template>
-    <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png" text="Отлично!"
-        v-if="show === true" @hide="hideModal"></TaskResultBanner>
+    <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!" v-else
+       @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { HTTP } from '@app/http';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-const emit = defineEmits(['close']);
+import SmallDisplayBanner from '@features/SmallDisplayBanner/components/SmallDisplayBanner.vue';
+const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
         required: false,
     },
+    finish: {
+        type: Boolean
+    }
 });
 const endGame = ref(false);
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
-
-
-const show = ref(false);
-const hideModal = () => {
-    show.value = false;
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
 }
 
+
+const audio = ref(new Audio());
 const playAudio = (audioPath) => {
-    const audio = new Audio(audioPath);
-    audio.play();
+    audio.value.src = audioPath;
+    if (props.finish === true) {
+        audio.value.play();
+    }
+
 }
 
+const stopAudio = (audioPath) => {
+    audio.value.src = '';
+}
 const words = ref([
     { id: 1, name: 'медведи и зайцы', index: 11, audio: '/assets/audio/Task1/13.1.mp3' },
     { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2, audio: '/assets/audio/Task1/14.1.mp3' },
@@ -81,12 +94,19 @@ const answer = ref('');
 
 const answer_arr = ref([]);
 const dropIndex = ref(words.value.length - 1);
-const drag = (event, word, id, audio, index) => {
+const drag = (event, word, id, index) => {
     event.dataTransfer.setData('text', word);
     event.dataTransfer.setData('id', id);
     dropIndex.value = index;
-    playAudio(audio);
 };
+
+const correctTask = async (child_id, id) => {
+    try {
+        const resp = await HTTP.patch(`answers/${child_id}/${id}`);
+    } catch (e) {
+        console.error('Error starting task', e);
+    }
+}
 
 const drop = (event) => {
     event.preventDefault();
@@ -128,12 +148,12 @@ const drop = (event) => {
             return false;
         }
     }
-if (answer_arr.value.length === 5) {
-    setTimeout(() => {
-        show.value = true;
-        endGame.value = true;
-    }, 3000)
-}
+    if (answer_arr.value.length === 5) {
+        setTimeout(() => {
+            correctTask(child_id, id);
+            endGame.value = true;
+        }, 3000)
+    }
 };
 
 const allowDrop = (event) => {
@@ -141,6 +161,11 @@ const allowDrop = (event) => {
 };
 </script>
 <style lang="scss" scoped>
+.end-modal {
+    width: 1200px;
+    height: 600px;
+}
+
 .red {
     border: 2px solid red !important;
 }
@@ -158,10 +183,38 @@ const allowDrop = (event) => {
     width: 100%;
     max-width: 1020px;
     margin: 48px auto;
+    max-height: 240px;
+
+    @media (max-width: 1130px) {
+        column-gap: 70px;
+        row-gap: 30px;
+        max-height: 194px;
+    }
+
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 500px;
+
+        @media (max-width: 1130px) {
+            width: 904px;
+            // height: 322px;
+        }
+
+        @media (max-width: 1024px) {
+
+            height: 322px;
+        }
+    }
+
+
 }
 
 .FirstTask {
     &__wrapper {
+        display: flex;
+        flex-direction: column;
         padding: 30px 60px 67px 60px;
         position: relative;
         height: 600px;
@@ -195,13 +248,17 @@ const allowDrop = (event) => {
             font-weight: 700;
             font-family: 'Nunito', sans-serif;
             border-radius: 20px;
-            margin-top: 20px;
+            // margin-top: 20px;
             border: none;
             text-shadow: 0 0 0 black;
             outline: none;
             resize: none;
             overflow-y: hidden;
             height: 100px;
+
+            @media(max-width:1024px) {
+                min-height: 80px;
+            }
         }
     }
 }

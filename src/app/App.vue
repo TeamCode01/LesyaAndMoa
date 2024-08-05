@@ -12,3 +12,7 @@
 import { Header } from '@widgets/AppHeader';
 import { Footer } from '@widgets/AppFooter';
 </script>
+
+<style lang="scss">
+
+</style>

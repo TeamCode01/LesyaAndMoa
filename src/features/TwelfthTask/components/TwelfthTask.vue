@@ -1,7 +1,7 @@
 <template>
     <div class="TwelfthTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="endGame === false">
+            <template v-if="answersCounter < 11">
                 <!-- ВЫХОД ИЗ ИГРЫ -->
                 <div class="task_block__close" @click="hide">
                     <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="Выйти из игры" />
@@ -20,27 +20,11 @@
                 <div class="draggable-list">
                     <!-- ВАРИАНТЫ ОТВЕТОВ -->
                     <div class="draggable-list__words">
-                        <div class="draggable-list__set-words">
-                            <button class="draggable-list__word">ВЕС</button>
-                            <button class="draggable-list__word">ВЕ</button>
-                            <button class="draggable-list__word">СЁ</button>
-                            <button class="draggable-list__word">СЁЛ</button>
-                            <button class="draggable-list__word">ЛЫ</button>
-                            <button class="draggable-list__word">Е</button>
-                            <button class="draggable-list__word">РЕ</button>
-                            <button class="draggable-list__word">РЕБ</button>
-                            <button class="draggable-list__word">БЯ</button>
-                            <button class="draggable-list__word">ЯТА</button>
-                            <button class="draggable-list__word">ТА</button>
-                        </div>
-                        <div class="draggable-list__set-words">
-                            <button class="draggable-list__word">НАШ</button>
-                            <button class="draggable-list__word">НА</button>
-                            <button class="draggable-list__word">ШИ</button>
-                            <button class="draggable-list__word">Д</button>
-                            <button class="draggable-list__word">ДРУ</button>
-                            <button class="draggable-list__word">ЗЬ</button>
-                            <button class="draggable-list__word">ЗЬЯ</button>
+                        <div class="draggable-list__set-words" v-for="row in Task" :key="row">
+                            <button class="draggable-list__word" v-for="word in row" :key="word" :class="{void : !word.isActive, item_wrong : word.error == -1 }"
+                            :draggable="word.isActive" @dragstart="dragLetter($event, word.id)">
+                                {{ word.text }}
+                            </button>
                         </div>
                     </div>
 
@@ -51,57 +35,10 @@
                     <div class="draggable-list__answer">
                         <!-- ВЕРХНИЕ ЛОДОЧКИ -->
                         <div class="draggable-list__answer-wrapper">
-                            <!-- ПЕРВОЕ СЛОВО: "ВЕСЁЛЫЕ" -->
-                            <div class="draggable-list__question-word">
-                                <!-- ВЕ -->
-                                <div class="draggable-list__question-block">
+                            <div class="draggable-list__question-word" v-for="word in Answer[0]" :key="word">
+                                <div class="draggable-list__question-block" v-for="letter in word" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
                                     <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
-                                    {{}} 
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
-                                </div>
-
-                                <!-- СЁ -->
-                                <div class="draggable-list__question-block">
-                                     <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
-                                    {{}} 
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">   
-                                </div>
-
-                                <!-- ЛЫ -->
-                                <div class="draggable-list__question-block">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
-                                    {{}} 
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
-                                </div>
-
-                                <!-- Е -->
-                                <div class="draggable-list__question-block">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
-                                    {{}} 
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
-                                </div>
-                            </div>
-
-                            <!-- ВТОРОЕ СЛОВО: "РЕБЯТА" -->
-                            <div class="draggable-list__question-word">
-                                <!-- РЕ -->
-                                <div class="draggable-list__question-block">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
-                                    {{}} 
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
-                                </div>
-
-                                <!-- БЯ -->
-                                <div class="draggable-list__question-block">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
-                                    {{}} 
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
-                                </div>
-
-                                <!-- ТА -->
-                                <div class="draggable-list__question-block">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
-                                    {{}} 
+                                    <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }"> {{ letter.text }} </div>
                                     <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
                                 </div>
                             </div>
@@ -113,37 +50,13 @@
                         </div>
 
                         <!-- НИЖНИЕ ЛОДОЧКИ -->
-                        <div class="draggable-list__answer-wrapper">
-                            <!-- ТРЕТЬЕ СЛОВО: "НАШИ" -->
-                            <div class="draggable-list__question-word">
-                                <!-- НА -->
-                                <div class="draggable-list__question-block">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
-                                    {{}} 
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
-                                </div>
-
-                                <!-- ШИ -->
-                                <div class="draggable-list__question-block">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
-                                    {{}} 
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
-                                </div>
-                            </div>
-
-                            <!-- ЧЕТВЁРТОЕ СЛОВО: "ДРУЗЬЯ" -->
-                            <div class="draggable-list__question-word">
-                                <!-- ДРУ -->
-                                <div class="draggable-list__question-block">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
-                                    {{}} 
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
-                                </div>
-
-                                <!-- ЗЬЯ -->
-                                <div class="draggable-list__question-block">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
-                                    {{}} 
+                        <div class="draggable-list__answer-wrapper" >
+                            <div class="draggable-list__question-word" v-for="word in Answer[1]" :key="word">
+                                <div class="draggable-list__question-block" v-for="letter in word" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
+                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" >
+                                    <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }">
+                                        {{ letter.text }}
+                                    </div>
                                     <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
                                 </div>
                             </div>
@@ -157,7 +70,7 @@
                 </div>
             </template>
             <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Превосходно!"
-                v-if="show === true" @hide="hideModal"></TaskResultBanner>
+                v-if="answersCounter == 11" @next="next" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -167,16 +80,23 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
-const emit = defineEmits(['close']);
+import { dataTask, dataAnswer } from './task.js'
+
+const emit = defineEmits(['close', 'next-modal']);
 
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
+
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+}
 
 const props = defineProps({
     end: {
@@ -189,6 +109,87 @@ const endGame = ref(false);
 const show = ref(false);
 const hideModal = () => {
     show.value = false;
+}
+
+const Task = ref()
+const Answer = ref()
+
+Task.value = structuredClone(dataTask)
+Answer.value = structuredClone(dataAnswer)
+
+const answersCounter = ref(0)
+
+watch(answersCounter, (NewValue)=>{
+    if (NewValue == 11){
+        endGame.value == true
+        show.value == true
+
+        console.log(endGame.value, show.value)
+    }
+    console.log(NewValue)
+})
+
+const dragLetter = (event, id) => {
+    event.dataTransfer.setData('text', `${id}`);
+};
+
+const dropLetter = (event, id, isActive) => {
+    let dragid = event.dataTransfer.getData('text')
+
+    if (!isActive) {
+        if (dragid == id){
+            Answer.value.map((row) =>
+                row.map((word) => {
+                    word.map((letter) => {
+                        if (letter.id == id) {
+                            letter.isActive = !letter.isActive;
+                            letter.error = 1;
+                            setTimeout(()=>{
+                                letter.error = 0;
+                            }, 1000)
+                        }
+                    });
+                })
+            );
+
+            Task.value.map((row) =>
+                row.map((word) => {
+
+                    if (word.id == id) {
+                        word.isActive = !word.isActive;
+                        console.log(word)
+                    }
+                })
+            );
+
+            answersCounter.value += 1;
+            let reactionAudio = new Audio(
+                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
+            );
+            reactionAudio.play();
+
+            setTimeout(() => {
+            }, 2000);
+        }
+        else {
+            Task.value.map((row) =>
+                row.map((word) => {
+
+                    if (word.id == dragid) {
+                        word.error = -1;
+                        setTimeout(()=>{
+                            word.error = 0;
+                        }, 1000)
+
+                    }
+                })
+            );
+            let reactionAudio = new Audio(
+                `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
+            );
+            reactionAudio.play();
+        }
+    }
 }
 </script>
 
@@ -204,7 +205,7 @@ const hideModal = () => {
 .TwelfthTask__title {
     width: 640px;
     font-weight: 500;
-    font-size: 24px; 
+    font-size: 24px;
 
     @media (max-width: 1024px) {
         width: 550px;
@@ -244,7 +245,7 @@ const hideModal = () => {
     justify-content: center;
     width: 100%;
     height: 40px;
-    margin-bottom: 40px; 
+    margin-bottom: 40px;
 
     @media (max-width: 1024px) {
         height: 38px;
@@ -283,8 +284,8 @@ const hideModal = () => {
     align-items: stretch;
     justify-content: space-evenly;
     height: 49px;
-    margin-top: 30px; 
-    
+    margin-top: 30px;
+
 
     @media (max-width: 1024px) {
         margin-top: 5px;
@@ -300,6 +301,9 @@ const hideModal = () => {
     margin-left: 8px;
     width: 100px;
     height: 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .draggable-list__answer-water {
@@ -311,6 +315,24 @@ const hideModal = () => {
 
 .boat-frontside{
     position: relative;
-    bottom: 44px;
+    bottom: 77px;
+}
+
+.draggable-list__question-text{
+    position: relative;
+    transform: translateY(-65px);
+    z-index: -1;
+    margin: auto;
+}
+
+.item_right {
+    border: 2px solid #5ccf54;
+}
+.item_wrong {
+    border: 2px solid #db0000;
+}
+
+.void {
+    opacity: 0%;
 }
 </style>
