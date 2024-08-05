@@ -11,11 +11,8 @@
                     <p class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</p>
                 </div>
                 <div class="SecondTask__wrapper_block">
-                    <div @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
-                        @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"
-                        class="SecondTask__wrapper_block_item">
-                        <img id="image" :src="item.src" alt="alphabet">
-                    </div>
+                    <img @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
+                    @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"  :src="item.src" alt="alphabet"   class="SecondTask__wrapper_block_item">
                 </div>
             </div>
         </div>
@@ -82,7 +79,7 @@ const chooseTask = (event, status) => {
             (item) => item.isCorrect == true,
         );
         event.target.classList.add('green');
-        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        playAudio('assets/audio/Common/1.2.mp3');
         setTimeout(() => {
             endGame.value = true;
             event.target.classList.remove('green');
@@ -90,7 +87,7 @@ const chooseTask = (event, status) => {
 
     } else {
         event.target.value = status;
-        playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+        playAudio('assets/audio/Common/2.1.mp3');
         event.target.classList.add('red');
         setTimeout(() => {
             event.target.classList.remove('red');
@@ -105,12 +102,13 @@ const chooseTask = (event, status) => {
 }
 
 .green {
-    border: 2px solid green;
+    border: 2px solid #5ccf54;
 }
 
 .red {
-    border: 2px solid red;
+    border: 2px solid #DB0000
 }
+
 
 .SecondTask {
     &__wrapper {
