@@ -15,7 +15,7 @@
                 <FirstTask :finish="finish" :end="endTime" @close="close()"
                     @next-modal="next(2, '/assets/audio/Task2/25.2.mp3')" v-if="taskId === 1">
                 </FirstTask>
-                <SecondTask :finish="finish" :end="endTime" @close="close()"
+                <SecondTask :childId="props.childId" :finish="finish" :end="endTime" @close="close()"
                     @next-modal="next(3, '/assets/audio/Task3/31.3.mp3')" v-if="taskId === 2">
                 </SecondTask>
                 <ThirdTask :finish="finish" :end="endTime" @close="close()" @next-modal="next(4)" v-if="taskId === 3">
@@ -50,7 +50,7 @@
 import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import { FirstTask } from '@features/FirstTask/components';
 import { ThirdTask } from '@features/ThirdTask/components';
 import { FourthTask } from '@features/FourthTask/components';
@@ -69,19 +69,21 @@ import { EighteenTask } from '@features/EighteenTask';
 import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 import { TwelfthTask } from '@features/TwelfthTask';
-// import FourteenthTask from '@features/FourteenthTask/components/FourteenthTask.vue';
-const emit = defineEmits(['sendImg', 'sendAudio', 'show']);
+import { useAnswerStore } from '@layouts/stores/answers';
+
+const emit = defineEmits(['sendImg', 'sendAudio', 'show', 'startTask']);
 const props = defineProps({
     show: {
         type: Boolean,
         default: false,
     },
     childId: {
-        type: String,
-    }
+        type: Number
+    },
 })
 
 const audio = ref(new Audio());
+const answerStore = useAnswerStore();
 const tasks = ref([
 
     { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 22, end: false, img: '/assets/backgrounds/animals.jpg', audio: '/assets/audio/Task1/12.1.mp3', startAudio: '/assets/audio/Task1/11.1_.mp3' },
@@ -104,6 +106,8 @@ const tasks = ref([
     { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 120, end: false, img: '/assets/backgrounds/task18.jpg', startAudio: '/assets/audio/Task18/470.18_.mp3' },
 ])
 
+
+
 const SeeTask = ref(false);
 const taskId = ref(null);
 const finish = ref(false);
@@ -113,6 +117,10 @@ const taskAudio = ref('/assets/audio/Task1/12.1.mp3');
 const startAudio = ref('/assets/audio/Task1/11.1_.mp3');
 const endTime = ref(false);
 const tasks_server = ref([]);
+const answers = ref([]);
+
+// answers.value = answerStore.answers.find((item) => item.id === 4);
+// console.log(answerStore.answers);
 const show = ref(props.show);
 
 const close = () => {
@@ -145,19 +153,12 @@ const switchTask = (id, openId, time, img, audio, startAudioV) => {
     emit('show', show.value);
 };
 
-const startTask = async (id) => {
-    try {
-        const resp = await HTTP.post(`answers/${id}/`, { task: taskId.value });
-    } catch (e) {
-        console.error('Error starting task', e);
-    }
-};
 
 const openTask = (taskId) => {
     SeeTask.value = true;
     finish.value = false;
     playAudio(taskAudio.value);
-    startTask(props.childId);
+    // emit('startTask', taskId);
     setTimeout(() => {
         endTime.value = true;
     }, timeVal.value * 1000);
@@ -182,6 +183,18 @@ const getTasks = async () => {
         });
 };
 
+// const getAnswers = async () => {
+//     try {
+//         const response = await HTTP.get(`answers/${props.childId}/`);
+//         answers.value = response.data;
+//         console.log(answers.value);
+//     } catch (error) {
+//         console.error(error);
+//     }
+// }
+
+// console.log(answers.value);
+
 watch(
     () => taskId.value,
     (newId) => {
@@ -192,18 +205,8 @@ watch(
     }
 );
 
-watch(
-    () => props.childId,
-    (newId) => {
-        if (!newId) {
-            return;
-        }
-        console.log('child', props.childId);
-        props.childId = newId;
-    }
-);
-
 onMounted(() => {
+
     getTasks();
 });
 </script>

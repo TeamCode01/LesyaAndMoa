@@ -29,7 +29,13 @@ import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+import { useAnswerStore } from '@layouts/stores/answers';
+import gameActions from '@mixins/gameAction';
+
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest } = methods;
 const emit = defineEmits(['close', 'next-modal']);
+const answerStore = useAnswerStore();
 const props = defineProps({
     end: {
         type: Boolean,
@@ -37,6 +43,10 @@ const props = defineProps({
     },
     finish: {
         type: Boolean,
+    },
+    childId: {
+        type: Number,
+        required: false,
     }
 });
 const audio = ref(new Audio());
@@ -51,13 +61,6 @@ const next = () => {
 
 }
 
-const correctTask = async (child_id, id) => {
-    try {
-        const resp = await HTTP.patch(`answers/${child_id}/${id}`);
-    } catch (e) {
-        console.error('Error starting task', e);
-    }
-}
 const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false, audio: '/assets/audio/Task2/27.2.mp3' }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true, audio: '/assets/audio/Task2/26.2.mp3' }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false, audio: '/assets/audio/Task2/28.2.mp3' }])
 const endGame = ref(false);
 const isPlaying = ref(false);
@@ -70,6 +73,8 @@ const playAudio = (audioPath) => {
         audio.value.play();
     }
 }
+
+console.log('ans', answerStore.answers);
 
 const stopAudio = (audioPath) => {
     audio.value.src = '';
@@ -84,6 +89,7 @@ const chooseTask = (event, status) => {
         event.target.classList.add('green');
         playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
+            endGameRequest(props.childId, 2);
             endGame.value = true;
             event.target.classList.remove('green');
         }, 2000);
@@ -97,6 +103,12 @@ const chooseTask = (event, status) => {
         }, 2000);
     }
 }
+
+onMounted(() => {
+    startGameRequest(props.childId, 2)
+    answerStore.getAnswers(props.childId);
+    // deleteGameRequest(props.childId, 6);
+})
 </script>
 <style lang="scss" scoped>
 .end-modal {
