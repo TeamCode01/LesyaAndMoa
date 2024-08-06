@@ -1,25 +1,27 @@
 <template>
   <template v-if="endGame === false">
-    <div class="TestTask task_block">
-      <div class="TestTask__wrapper">
-        <div class="task_block__close" @click="hide">
-          <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+    <div class="modal-background">
+      <div class="TestTask task_block">
+        <div class="TestTask__wrapper">
+          <div class="task_block__close" @click="hide">
+            <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+          </div>
+          <p class="title-h4 TestTask__title"> Вставь пропущенные слова.</p>
+          <div class="TestTask__task">
+            Необыкновенные пришельцы Леся и Моа, не знающие нашего<br> <input class="answer_input" v-model="answer"
+              maxlength="5" type="text" placeholder="_ _ _ _ _">, оказались на нашей планете. Они, словно немые <input
+              class="answer_input" v-model="answer_two" type="text" maxlength="4" placeholder="_ _ _ _ _">,<br> не могут
+            объяснить нам на своём языке, который для
+            нас звучит,<br> как <input class="answer_input" v-model="answer_three" type="text" maxlength="6"
+              placeholder="_ _ _ _ _ _">,
+            чего же они хотят. Мы постараемся <input class="answer_input" v-model="answer_four" maxlength="7" type="text"
+              placeholder="_ _ _ _ _ _ _"> стекло<br> недопонимания между нами и <input class="answer_input"
+              v-model="answer_five" type="text" maxlength="6" placeholder="_ _ _ _ _ _ "> им.
+          </div>
+          <Button class="TestTask__btn" :isImage="true" :image="arrow" @click="checkAnswer()" label="Ответить" />
         </div>
-        <p class="title-h4 TestTask__title"> Вставь пропущенные слова.</p>
-        <div class="TestTask__task">
-          Необыкновенные пришельцы Леся и Моа, не знающие нашего<br> <input class="answer_input" v-model="answer"
-            maxlength="5" type="text" placeholder="_ _ _ _ _">, оказались на нашей планете. Они, словно немые <input
-            class="answer_input" v-model="answer_two" type="text" maxlength="4" placeholder="_ _ _ _ _">,<br> не могут
-          объяснить нам на своём языке, который для
-          нас звучит,<br> как <input class="answer_input" v-model="answer_three" type="text" maxlength="6"
-            placeholder="_ _ _ _ _ _">,
-          чего же они хотят. Мы постараемся <input class="answer_input" v-model="answer_four" maxlength="7" type="text"
-            placeholder="_ _ _ _ _ _ _"> стекло<br> недопонимания между нами и <input class="answer_input"
-            v-model="answer_five" type="text" maxlength="6" placeholder="_ _ _ _ _ _ "> им.
-        </div>
-        <Button class="TestTask__btn" :isImage="true" :image="arrow" @click="checkAnswer()" label="Ответить" />
+  
       </div>
-
     </div>
   </template>
   <TaskResultBanner class="end-modal" :is-end="false" :is_test="true"  bg="/assets/backgrounds/Moa.png"
@@ -91,6 +93,16 @@ const checkAnswer = () => {
 
 </script>
 <style lang="scss" scoped>
+.modal-background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  right: 0;
+  background-color: #F1FAFE;
+  z-index: 1;
+}
+
 .end-modal {
     width: 1200px;
     height: 600px;

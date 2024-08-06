@@ -30,9 +30,7 @@
                                 alt="arrow" />
                         </div>
                     </div>
-
-                    <Button class="btn_info" v-else label="Войти" @click="Login"></Button>
-
+                    <Button class="btn_info" id="btn-mini" v-else label="Войти" @click="Login"></Button>
 
                     <div class="header__wrapper_burger" @click="showBurger()">
                         <img src="@app/assets/icons/burger.png" alt="Бургер меню" />
@@ -187,6 +185,10 @@ const Login = () => {
                 height: 30px;
                 width: 80px;
             }
+            @media (max-width: 580px) {
+                height: 23px;
+                width: 62px;
+            }
         }
 
         &_yt {
@@ -201,6 +203,7 @@ const Login = () => {
     }
 
     &__wrapper {
+        position: relative;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -212,7 +215,18 @@ const Login = () => {
             &_adaptive {
                 display: flex;
                 justify-content: space-between;
-                width: 60%;
+            }
+        }
+
+        &-btn-mini {
+            @media (max-width: 580px) {
+                position: absolute;
+                left: 50%;
+                margin-left: -39.5px;
+                width: 79px;
+                height: 30px;
+                font-size: 16px !important;
+                padding: 8px 16px !important;
             }
         }
 
@@ -261,6 +275,18 @@ const Login = () => {
                 display: none;
             }
         }
+    }
+}
+
+#btn-mini {
+    @media (max-width: 580px) {
+        position: absolute;
+        left: 50%;
+        margin-left: -39.5px;
+        width: 79px;
+        height: 30px;
+        font-size: 16px;
+        padding: 4px 16px;
     }
 }
 
