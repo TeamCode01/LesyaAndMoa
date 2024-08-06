@@ -102,6 +102,11 @@
                                 class="form-input"
                                 v-model:value="form.first_name"
                             ></Input>
+                            <span
+                                v-if="isError.first_name"
+                                class="error-message"
+                                >{{ isError.first_name[0] }}</span
+                            >
                         </div>
                         <div class="form-input">
                             <label>Имя</label>
@@ -110,7 +115,13 @@
                                 name="login"
                                 class="form-input"
                                 v-model:value="form.last_name"
+                                @blur="v$.value.last_name.$touch()"
                             ></Input>
+                            <span
+                                v-if="isError.last_name"
+                                class="error-message"
+                                >{{ isError.last_name[0] }}</span
+                            >
                         </div>
                         <div class="form-input">
                             <label>Пол</label>
@@ -128,6 +139,9 @@
                                 @update:value="changeOption"
                                 v-bind="props"
                             />
+                            <span v-if="isError.sex" class="error-message">{{
+                                isError.sex[0]
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Возраст</label>
@@ -136,6 +150,9 @@
                                 class="form-input"
                                 v-model:value="form.age"
                             ></Input>
+                            <span v-if="isError.age" class="error-message">{{
+                                isError.age[0]
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Регион</label>
@@ -153,6 +170,9 @@
                                 :sorts-boolean="false"
                                 @update:value="changeOption"
                             />
+                            <span v-if="isError.region" class="error-message">{{
+                                isError.region[0]
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Школа</label>
@@ -161,6 +181,9 @@
                                 class="form-input"
                                 v-model:value="form.school"
                             ></Input>
+                            <span v-if="isError.school" class="error-message">{{
+                                isError.school[0]
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Класс</label>
@@ -169,6 +192,9 @@
                                 class="form-input"
                                 v-model:value="form.grade"
                             ></Input>
+                            <span v-if="isError.grade" class="error-message">{{
+                                isError.grade[0]
+                            }}</span>
                         </div>
                         <div class="regCheck">
                             <input
@@ -227,7 +253,11 @@ import { Input } from '@shared/components/inputs';
 import { SelectSort } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@layouts/stores/user';
-const isError = ref([]);
+import { useVuelidate } from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import { watchEffect } from 'vue';
+
+// const isError = ref([]);
 const error = ref([]);
 const swal = inject('$swal');
 const route = useRoute();
@@ -253,6 +283,27 @@ const form = ref({
 });
 
 const skill = ref({});
+const rules = {
+    first_name: { required },
+    last_name: { required },
+    age: { required },
+    region: { required },
+    school: { required },
+    grade: { required },
+    sex: { required },
+};
+
+const v$ = useVuelidate(rules, form);
+const isError = ref({});
+
+watchEffect(() => {
+    isError.value = {};
+    if (v$.value.$invalid) {
+        if (v$.value.last_name.$error) {
+            isError.value.last_name = ['Имя обязательно для заполнения'];
+        }
+    }
+});
 
 const deleteChild = async (id, index) => {
     try {
@@ -539,13 +590,16 @@ onMounted(async () => {
 .delete-btn {
     width: 182px;
 }
-.error {
+
+.error-message {
     font-family: 'Nunito', sans-serif;
     color: #ff535c;
     font-size: 16px;
     font-weight: 400;
     line-height: 21.82px;
-    margin-top: -15px;
-    margin-bottom: 10px;
+}
+
+.error-border {
+    border: 2px solid #ff535c !important;
 }
 </style>
