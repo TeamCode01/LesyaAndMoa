@@ -52,7 +52,7 @@ const playAudio = (audioPath) => {
 }
 
 const answer = ref('');
-const correct_answer = ref('Я рада была подружиться с ребятами. Они научили нас с Моа понимать их язык. Я узнала много новых слов. Мне нравится на Земле')
+const correct_answer = ref('Я рада была подружиться с ребятами. Они научили нас с Моа понимать их язык. Я узнала много новых слов. Мне нравится на Земле!')
 
 const sendAnswer = () => {
     const answer_input = document.getElementById('input');

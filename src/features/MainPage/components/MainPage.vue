@@ -148,7 +148,7 @@
             <!-- <Carousel :data="slideAuthors"></Carousel> -->
             <Carousel :items-to-show="authorsToShow" :itemsToScroll="authorsToShow" :wrap-around="false" snapAlign ='start'  v-model="currentSlideAuthor" ref="carousel_authors">
                 <Slide v-for="slide in slideAuthors" :key="slide.id">
-                    <CarouselItem :item_data="slide"></CarouselItem>
+                    <CarouselItem :item_data="slide" :corousel_type="'authors'"></CarouselItem>
                 </Slide>
             </Carousel>
 
@@ -202,7 +202,7 @@
         
         <Carousel :items-to-show="itemsToShow" :itemsToScroll="itemsToShow" :wrap-around="false" snapAlign ='start'  v-model="currentSlide" ref="carousel">
             <Slide v-for="slide in slideItems" :key="slide.id">
-                <CarouselItem :item_data="slide"></CarouselItem>
+                <CarouselItem :item_data="slide" :corousel_type="'news'"></CarouselItem>
             </Slide>
         </Carousel>
 
@@ -388,12 +388,12 @@ onMounted(() => {
 
     windowWidth.value = window.innerWidth;
     itemsToShow.value = windowWidth.value >= 660 ? 2 : 1
-    authorsToShow.value = windowWidth.value >= 569 ? 2 : 1
+    authorsToShow.value = windowWidth.value >= 650 ? 2 : 1
 
     window.addEventListener('resize', () => {
         windowWidth.value = window.innerWidth;
         itemsToShow.value = windowWidth.value >= 660 ? 2 : 1
-        authorsToShow.value = windowWidth.value >= 569 ? 2 : 1
+        authorsToShow.value = windowWidth.value >= 650 ? 2 : 1
     });
 
 
@@ -421,7 +421,7 @@ onMounted(() => {
     margin: 0px auto;
 
     @media (max-width: 1024px) {
-        max-width: 622px;
+        max-width: 650px;
     }
 }
 

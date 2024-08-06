@@ -18,7 +18,7 @@
                 <div class="draggable-list">
                     <div class="draggable-list__words">
                         <div class="draggable-list__set-words" v-for="(line, index_line) in prepositions" :key="index_line">
-                            <q-btn 
+                            <q-btn
                                 v-for="(item, index) in line" 
                                 :key="item.id" 
                                 :id="item.id + '_elem'"

@@ -26,20 +26,24 @@
                                 class="draggable-list__button"
                                 :class="{
                                     item_right:
-                                        taskWord == word &&
-                                        selectedWord == taskWord &&
-                                        selectedWord != '',
+                                        word.text == taskWord &&
+                                        word.text == selectedWord &&
+                                        word.text != '',
                                     item_wrong:
-                                        selectedWord != taskWord &&
-                                        selectedWord != '' &&
-                                        selectedWord == word,
+                                        word.text != taskWord &&
+                                        word.text == selectedWord &&
+                                        word.text != '',
                                 }"
                                 v-for="word in row"
-                                :key="word"
-                                :disabled="word.trim().length < 2"
+                                :key="word.id"
+                                :disabled="
+                                    word.text.trim().length < 2 ||
+                                    taskWord == '' ||
+                                    blockButtons == true
+                                "
                                 @click="clickItem(word)"
                             >
-                                {{ word }}
+                                {{ word.text }}
                             </button>
                         </div>
                     </div>
@@ -48,6 +52,7 @@
                             class="draggable-list__button_final"
                             @click="
                                 () => {
+                                    if (firstMusic) randomMusic();
                                     playMusic();
                                 }
                             "
@@ -65,6 +70,7 @@
                         <button
                             class="draggable-list__button_final"
                             @click="playMusic()"
+                            :disabled="blockButtons == true"
                         >
                             <span class="draggable-list__button-repeat"
                                 >Повторить</span
@@ -82,7 +88,8 @@
                 bg="/assets/backgrounds/moa.gif"
                 text="Здорово!"
                 v-if="usedWord.length >= 15"
-                @hide="hide()" @next="next()"
+                @hide="hide()"
+                @next="next()"
             ></TaskResultBanner>
         </div>
     </div>
@@ -97,7 +104,7 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import { tasksData } from './tasks.js';
 import dict from './dict.js';
 
-const emit = defineEmits(['close','next-modal']);
+const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -110,30 +117,34 @@ const hide = () => {
 
 const next = () => {
     emit('next-modal');
-}
+};
 
 onMounted(() => {
     let audio = new Audio('/assets/audio/Task6/79.6.mp3');
     audio.play();
-    randomMusic();
 });
 
 const dictKeys = Array.from(dict.keys()); // Массив разрешенных значений
 
 let legalWords = [];
 
-const taskData = tasksData[Math.floor(tasksData.length * Math.random())];
+const taskData = structuredClone(
+    tasksData[Math.floor(tasksData.length * Math.random())]
+);
 
 for (let row = 1; row in taskData; row++) {
     for (let column = 1; column in taskData[row]; column++) {
-        taskData[row][column] = taskData[row][0] + taskData[0][column];
-        if (!dictKeys.includes(taskData[row][column])) {
-            taskData[row][column] = '';
+        taskData[row][column].text =
+            taskData[row][0].text + taskData[0][column].text;
+        if (!dictKeys.includes(taskData[row][column].text)) {
+            taskData[row][column].text = '';
         } else {
-            legalWords.push(taskData[row][column]);
+            legalWords.push(taskData[row][column].text);
         }
     }
 }
+
+const firstMusic = ref(true);
 
 const taskWord = ref(''); // Заданное слово в текущей итерации
 
@@ -141,9 +152,11 @@ const repeated = ref(false); // Повторяется ли слово в тек
 
 const usedWord = ref([]); // Использованные слова
 
+const blockButtons = ref(true);
+
 let audio = new Audio();
 
-const randomMusic = () => {
+const randomMusic = (first = false) => {
     let randomNumber = Math.floor(Math.random() * legalWords.length);
     let item = legalWords[randomNumber];
     while (usedWord.value.includes(item)) {
@@ -159,11 +172,13 @@ const randomMusic = () => {
     usedWord.value.push(item);
 
     repeated.value = false;
+    firstMusic.value = false;
 
     console.log(item);
 };
 
 const playMusic = () => {
+    blockButtons.value = false;
     repeated.value = true;
     audio.play();
 };
@@ -173,21 +188,24 @@ const lastItem = ref();
 const selectedWord = ref();
 
 const clickItem = (word) => {
-    if (word == taskWord.value) {
+    if (word.text == taskWord.value) {
         let reactionAudio = new Audio(
             `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
         );
         reactionAudio.play();
+        blockButtons.value = true;
     } else {
         let reactionAudio = new Audio(
             `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
         );
         reactionAudio.play();
     }
-    selectedWord.value = word;
+
+    selectedWord.value = word.text;
+
     setTimeout(() => {
         selectedWord.value = '';
-        if (word == taskWord.value) randomMusic();
+        if (word.text == taskWord.value) randomMusic();
     }, 2000);
 };
 </script>
