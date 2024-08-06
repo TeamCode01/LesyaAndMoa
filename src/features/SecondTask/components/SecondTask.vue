@@ -11,11 +11,8 @@
                     <p class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</p>
                 </div>
                 <div class="SecondTask__wrapper_block">
-                    <div @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
-                        @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"
-                        class="SecondTask__wrapper_block_item">
-                        <img id="image" :src="item.src" alt="alphabet">
-                    </div>
+                    <img @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
+                    @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"  :src="item.src" alt="alphabet"   class="SecondTask__wrapper_block_item">
                 </div>
             </div>
         </div>
@@ -60,19 +57,26 @@ const correctTask = async (child_id, id) => {
 }
 const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false, audio: '/assets/audio/Task2/27.2.mp3' }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true, audio: '/assets/audio/Task2/26.2.mp3' }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false, audio: '/assets/audio/Task2/28.2.mp3' }])
 const endGame = ref(false);
-const isPlaying = ref(false);
 
-const music = ref(null);
-
-const playAudio = (audioPath) => {
+const playAudio = async (audioPath) => {
     audio.value.src = audioPath;
-    if(props.finish === true) {
-        audio.value.play();
+    if (props.finish === true) {
+        await audio.value.play();
     }
 }
 
+const playEndAudio = (audioPath) => {
+    const end_audio = new Audio();
+    end_audio.src = audioPath;
+    end_audio.play();
+}
+
 const stopAudio = (audioPath) => {
-    audio.value.src = '';
+    if (audio.value.paused) {
+        playAudio(audioPath);
+    } else {
+        audio.value.pause();
+    }
 }
 
 const chooseTask = (event, status) => {
@@ -82,7 +86,7 @@ const chooseTask = (event, status) => {
             (item) => item.isCorrect == true,
         );
         event.target.classList.add('green');
-        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('/assets/audio/Common/1.2.mp3');
         setTimeout(() => {
             endGame.value = true;
             event.target.classList.remove('green');
@@ -90,7 +94,7 @@ const chooseTask = (event, status) => {
 
     } else {
         event.target.value = status;
-        playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+        playEndAudio('/assets/audio/Common/2.1.mp3');
         event.target.classList.add('red');
         setTimeout(() => {
             event.target.classList.remove('red');
@@ -102,14 +106,6 @@ const chooseTask = (event, status) => {
 .end-modal {
     width: 1200px;
     height: 600px;
-}
-
-.green {
-    border: 2px solid green;
-}
-
-.red {
-    border: 2px solid red;
 }
 
 .SecondTask {

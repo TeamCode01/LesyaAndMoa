@@ -1,8 +1,8 @@
 <template>
   <template v-if="endGame === false">
-    <div class="TestTask">
+    <div class="TestTask task_block">
       <div class="TestTask__wrapper">
-        <div class="close" @click="hide">
+        <div class="task_block__close" @click="hide">
           <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
         </div>
         <p class="title-h4 TestTask__title"> Вставь пропущенные слова.</p>
@@ -98,22 +98,6 @@ const checkAnswer = () => {
 }
 
 .TestTask {
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  z-index: 999;
-  border-radius: 20px;
-  height: 600px;
-  width: 100%;
-  max-width: 1200px;
-
-  @media (max-width: 1024px) {
-    height: 470px;
-    max-width: 944px;
-    width: 100%;
-  }
 
   &__title {
     text-align: center;

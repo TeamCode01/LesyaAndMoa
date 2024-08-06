@@ -28,7 +28,7 @@
         </div>
     </template>
     <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!" v-else
-       @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
+        @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 
 <script setup>
@@ -60,17 +60,27 @@ const next = () => {
 
 
 const audio = ref(new Audio());
-const playAudio = (audioPath) => {
+
+const playAudio = async (audioPath) => {
     audio.value.src = audioPath;
     if (props.finish === true) {
-        audio.value.play();
+        await audio.value.play();
     }
-
 }
 
+const playEndAudio = (audioPath) => {
+    const end_audio = new Audio();
+    end_audio.src = audioPath;
+    end_audio.play();
+}
 const stopAudio = (audioPath) => {
-    audio.value.src = '';
+    if (audio.value.paused) {
+        playAudio(audioPath);
+    } else {
+        audio.value.pause();
+    }
 }
+
 const words = ref([
     { id: 1, name: 'медведи и зайцы', index: 11, audio: '/assets/audio/Task1/13.1.mp3' },
     { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2, audio: '/assets/audio/Task1/14.1.mp3' },
@@ -120,13 +130,13 @@ const drop = (event) => {
             words.value.splice(dropIndex.value, 1);
             answer.value += text + ' ';
             answer_arr.value.push(0);
-            playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+            playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
         } else {
             elem.classList.add('red');
             setTimeout(() => {
                 elem.classList.remove('red');
             }, 2000);
-            playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+            playEndAudio('/assets/audio/Other/2. общее для разных заданий.mp3');
             return false;
         }
     } else {
@@ -137,13 +147,13 @@ const drop = (event) => {
             words.value.splice(dropIndex.value, 1);
             answer.value += text + ' ';
             answer_arr.value.push(index);
-            playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+            playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
         } else {
             elem.classList.add('red');
             setTimeout(() => {
                 elem.classList.remove('red');
             }, 2000);
-            playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+            playEndAudio('/assets/audio/Other/2. общее для разных заданий.mp3');
 
             return false;
         }
@@ -164,14 +174,6 @@ const allowDrop = (event) => {
 .end-modal {
     width: 1200px;
     height: 600px;
-}
-
-.red {
-    border: 2px solid red !important;
-}
-
-.green {
-    border: 2px solid green !important;
 }
 
 .draggable-list {

@@ -30,9 +30,9 @@
                 </div>
                 <Button @click="openTest()" class="Test__wrapper_btn" :isImage="true" :image="arrow"
                     label="Начать"></Button>
-                <img  src="@app/assets/backgrounds/lesyaandmoaforest.png" alt="game" class="Test__img">
+                <img src="@app/assets/backgrounds/lesyaandmoaforest.png" alt="game" class="Test__img">
             </div>
-            <div  class="Test_icons_wrap">
+            <div class="Test_icons_wrap">
                 <div class="Test_icons_item" @click="mute()"><img v-show="isMuted === false"
                         src="@app/assets/icons/sound.svg" alt="sound"><img v-show="isMuted === true"
                         src="@app/assets/icons/muted.svg" alt="mute"></div>
@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <TestTask v-else @close="close()" ></TestTask>
+        <TestTask v-else @close="close()"></TestTask>
     </div>
 
     <div class="about">
@@ -146,17 +146,18 @@
         </div>
         <div class="author__wrapper-second" v-else>
             <!-- <Carousel :data="slideAuthors"></Carousel> -->
-            <Carousel :items-to-show="authorsToShow" :itemsToScroll="authorsToShow" :wrap-around="false" snapAlign ='start'  v-model="currentSlideAuthor" ref="carousel_authors">
+            <Carousel :items-to-show="authorsToShow" :itemsToScroll="authorsToShow" :wrap-around="false"
+                snapAlign='start' v-model="currentSlideAuthor" ref="carousel_authors">
                 <Slide v-for="slide in slideAuthors" :key="slide.id">
                     <CarouselItem :item_data="slide" :corousel_type="'authors'"></CarouselItem>
                 </Slide>
             </Carousel>
 
             <div class="arrows">
-                <img v-if="currentSlideAuthor > 0 && windowWidth < 768" @click="prev('carousel_authors')" 
+                <img v-if="currentSlideAuthor > 0 && windowWidth < 768" @click="prev('carousel_authors')"
                     src="@app/assets/icons/arrow-left.svg" alt="left">
-                <img v-if="currentSlideAuthor < slideAuthors.length - authorsToShow && windowWidth < 768" @click="next('carousel_authors')"
-                    src="@app/assets/icons/icon-pink.svg" alt="right">
+                <img v-if="currentSlideAuthor < slideAuthors.length - authorsToShow && windowWidth < 768"
+                    @click="next('carousel_authors')" src="@app/assets/icons/icon-pink.svg" alt="right">
             </div>
 
         </div>
@@ -199,27 +200,28 @@
 
     <div class="news">
         <h2 class="title-h2 news__title">Новости</h2>
-        
-        <Carousel :items-to-show="itemsToShow" :itemsToScroll="itemsToShow" :wrap-around="false" snapAlign ='start'  v-model="currentSlide" ref="carousel">
+
+        <Carousel :items-to-show="itemsToShow" :itemsToScroll="itemsToShow" :wrap-around="false" snapAlign='start'
+            v-model="currentSlide" ref="carousel">
             <Slide v-for="slide in slideItems" :key="slide.id">
                 <CarouselItem :item_data="slide" :corousel_type="'news'"></CarouselItem>
             </Slide>
         </Carousel>
 
-        <img v-if="currentSlide > 0 && windowWidth >= 768" class="left" @click="prev()" src="@app/assets/icons/arrow-left.svg"
-            alt="left">
+        <img v-if="currentSlide > 0 && windowWidth >= 768" class="left" @click="prev()"
+            src="@app/assets/icons/arrow-left.svg" alt="left">
         <img v-if="currentSlide < slideItems.length - itemsToShow && windowWidth >= 768" class="right" @click="next()"
             src="@app/assets/icons/icon-pink.svg" alt="right">
 
         <div class="arrows">
-            <img v-if="currentSlide > 0 && windowWidth < 768" @click="prev()" 
-                src="@app/assets/icons/arrow-left.svg" alt="left">
+            <img v-if="currentSlide > 0 && windowWidth < 768" @click="prev()" src="@app/assets/icons/arrow-left.svg"
+                alt="left">
             <img v-if="currentSlide < slideItems.length - itemsToShow && windowWidth < 768" @click="next()"
                 src="@app/assets/icons/icon-pink.svg" alt="right">
         </div>
 
 
-    
+
     </div>
 
 </template>
@@ -327,8 +329,17 @@ const isOpen = ref(false);
 const audio = ref(new Audio());
 const showBtn = ref(false);
 const isMuted = ref(false);
+const openTest = () => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty('--scroll-position', `${scrollY}px`);
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+    isOpen.value = true;
+    playTestAudio('/assets/audio/TestTask/4.тестовое задание.mp3');
+}
+
 const close = () => {
     isOpen.value = false;
+    document.body.classList.remove('no-scroll');
 }
 
 
@@ -361,10 +372,7 @@ const skip = () => {
     showBtn.value = true;
 }
 
-const openTest = () => {
-    isOpen.value = true;
-    playTestAudio('/assets/audio/TestTask/4.тестовое задание.mp3');
-}
+
 
 onMounted(() => {
     const test = document.getElementById('test');
@@ -384,7 +392,7 @@ onMounted(() => {
             document.removeEventListener('scroll', handleScroll);
         }
     }
-    
+
 
     windowWidth.value = window.innerWidth;
     itemsToShow.value = windowWidth.value >= 660 ? 2 : 1
@@ -415,6 +423,19 @@ onMounted(() => {
     z-index: 1;
 }
 
+
+.no-scroll {
+    overflow-y: scroll;
+    /* Разрешает видимость полосы прокрутки */
+    position: fixed;
+    /* Запрещает прокрутку страницы */
+    width: 100%;
+    /* Фиксирует ширину страницы */
+    top: calc(-1 * var(--scroll-position));
+    /* Запоминает место прокрутки */
+}
+
+
 .carousel {
     max-width: 800px;
     width: 100%;
@@ -430,6 +451,7 @@ onMounted(() => {
     margin: 0px auto !important;
     width: 100%;
 }
+
 // .carousel__slide {
 //     max-width: 387px;
 // }
@@ -1280,7 +1302,7 @@ onMounted(() => {
     }
 }
 
-.arrows{
+.arrows {
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -1292,5 +1314,4 @@ onMounted(() => {
         font-size: 14px;
     }
 }
-
 </style>
