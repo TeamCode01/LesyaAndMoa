@@ -13,26 +13,26 @@
                 </div>
 
                 <div class="draggable-list">
-                    <q-btn v-for="(item, index) in words" :id="item.id" :key="index.id" class="list-group-item item" draggable="true"
-                        @dragstart="drag($event, item.id, index)" @dragover.prevent :value="item">
+                    <div v-for="(item, index) in words" :id="item.id + '_elem'" :key="index.id" class="list-group-item item" draggable="true"
+                        @dragstart="drag($event, item.name, item.id, index)" @dragover.prevent :value="item.name">
                         {{ item.name }}
-                    </q-btn>
+                    </div>
                 </div>
                 <div class="ThirteenthTask__wrapper_answer" v-show="answer === ''">
                     Мы очень
-                    <input :class="{ correct: answer_drop === 'РАДЫ' }" @drop="drop($event)"
+                    <input readonly :class="{ correct: answer_drop === 'РАДЫ' }" @drop="drop($event)"
                         @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
                     с вами познакомиться.
                 </div>
                 <div v-show="answer === 'РАДЫ'" class="ThirteenthTask__wrapper_answer">
                     Нам нравится
-                    <input :class="{ correct: answer_drop === 'ОБЩАТЬСЯ' }" @drop="drop($event)"
+                    <input readonly :class="{ correct: answer_drop === 'ОБЩАТЬСЯ' }" @drop="drop($event)"
                         @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
                     с вами.
                 </div>
                 <div v-show="answer === 'ОБЩАТЬСЯ'" class="ThirteenthTask__wrapper_answer">
                     Приходите чаще на
-                    <input :class="{ correct: answer_drop === 'ДЕТСКУЮ' }" @drop="drop($event)"
+                    <input readonly :class="{ correct: answer_drop === 'ДЕТСКУЮ' }" @drop="drop($event)"
                         @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
                     площадку.
                 </div>
@@ -41,7 +41,7 @@
     </template>
 
     <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.gif" text="Чудесно!"
-        v-if="show === true" @next="next" @hide="hide"></TaskResultBanner>
+        v-else class="end-modal" @next="next" @hide="hide"></TaskResultBanner>
 </template>
 
 <script setup>
@@ -87,10 +87,9 @@ const answer = ref('');
 const answer_two = ref('');
 const answer_three = ref('');
 const dropIndex = ref(words.value.length - 1);
-const drag = (event, id, index) => {
-    event.dataTransfer.setData('text', event.target.value);
+const drag = (event, word, id, index) => {
+    event.dataTransfer.setData('text', word);
     event.dataTransfer.setData('id', id);
-    console.log('id', id);
     dropIndex.value = index;
 };
 
@@ -98,8 +97,7 @@ const drop = (event) => {
     event.preventDefault();
     let text = event.dataTransfer.getData('text');
     let id = event.dataTransfer.getData('id');
-    console.log('id', id);
-    let elem = document.getElementById(id);
+    let elem = document.getElementById(id + '_elem');
     if (
         (answer.value === '' && text === 'РАДЫ') ||
         (answer.value === 'РАДЫ' && text === 'ОБЩАТЬСЯ') ||
@@ -134,6 +132,12 @@ const allowDrop = (event) => {
 };
 </script>
 <style lang="scss" scoped>
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
+}
+
 .draggable-list {
     display: flex;
     flex-wrap: wrap;
