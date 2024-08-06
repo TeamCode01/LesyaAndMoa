@@ -20,7 +20,7 @@
                 </div>
                 <div class="ThirteenthTask__wrapper_answer" v-show="answer === ''">
                     Мы очень
-                    <input :class="{ correct: answer_drop === 'РАДЫ' }" @drop="drop($event)"
+                    <input  :class="{ correct: answer_drop === 'РАДЫ' }" @drop="drop($event)"
                         @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
                     с вами познакомиться.
                 </div>
@@ -32,7 +32,7 @@
                 </div>
                 <div v-show="answer === 'ОБЩАТЬСЯ'" class="ThirteenthTask__wrapper_answer">
                     Приходите чаще на
-                    <input :class="{ correct: answer_drop === 'ДЕТСКУЮ' }" @drop="drop($event)"
+                    <input  :class="{ correct: answer_drop === 'ДЕТСКУЮ' }" @drop="drop($event)"
                         @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
                     площадку.
                 </div>
@@ -169,6 +169,7 @@ const allowDrop = (event) => {
                 outline: none;
                 font-family: 'Nunito';
                 text-align: center;
+
             }
         }
     }

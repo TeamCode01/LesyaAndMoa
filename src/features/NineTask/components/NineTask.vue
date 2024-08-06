@@ -16,7 +16,7 @@
                 <div class="NineTask__content">
                     <div class="draggable-list">
                         <q-btn class="list-group-item item" v-for="(item, index) in letterss" :id="item.id"
-                            :key="item.id" draggable="true" @dragstart="drag($event, item.name, index)"
+                            :key="item.id" draggable="true" @dragstart="drag($event, item.name, item.id,  index)"
                             @dragover.prevent :value="item">
                             {{ item.name }}
                         </q-btn>
@@ -63,8 +63,8 @@
             </div>
         </div>
     </template>
-    <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png" text="Восхитительно!"
-        v-else @hide="hide"></TaskResultBanner>
+    <TaskResultBanner class="end-modal" img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png" text="Восхитительно!" v-else
+        @hide="hide"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -88,6 +88,13 @@ const props = defineProps({
         required: false,
     },
 });
+
+const audio = ref(new Audio());
+
+const playAudio = (audioPath) => {
+    audio.value.src = audioPath;
+    audio.value.play();
+}
 
 
 const letterss = ref([
@@ -113,8 +120,9 @@ const letterss = ref([
     { id: 'ch', name: 'Ч' },
     { id: 'A', name: 'А' },
 ]);
-const drag = (event, letter, index) => {
+const drag = (event, letter, id, index) => {
     event.dataTransfer.setData('text', letter);
+    event.dataTransfer.setData('id', id);
     dropIndex.value = index;
 };
 const dropIndex = ref(letterss.value.length - 1);
@@ -153,11 +161,29 @@ const arr = ref({
 const drop = (event, word, letter) => {
     event.preventDefault();
     let text = event.dataTransfer.getData('text');
+    let id = event.dataTransfer.getData('id');
+    console.log('id', id);
+    let elem = document.getElementById(id);
     if (arr.value[word][letter].answer === text.toLowerCase()) {
         event.target.value = text;
         letterss.value.splice(dropIndex.value, 1);
-        event.target.classList.add(arr.value[word][letter].className);
+        event.target.classList.add(arr.value[word][letter].className, 'green');
+
+        setTimeout(() => {
+            event.target.classList.remove('green');
+        }, 2000)
+        playAudio('assets/audio/Common/1.2.mp3');
+        if (letterss.value.length === 0) {
+            setTimeout(() => {
+                endGame.value = true;
+            }, 1500)
+        }
     } else {
+      elem.classList.add('red');
+        playAudio('assets/audio/Common/2.1.mp3');
+        setTimeout(() => {
+            elem.classList.remove('red');
+        }, 2000);
         return false;
     }
 };
@@ -167,6 +193,19 @@ const allowDrop = (event) => {
 };
 </script>
 <style lang="scss" scoped>
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
+}
+.red {
+    border: 2px solid #DB0000 !important;
+}
+
+.green {
+    border: 2px solid #5CCF54 !important;
+}
+
 .input {
     &-item {
         width: 48px;
