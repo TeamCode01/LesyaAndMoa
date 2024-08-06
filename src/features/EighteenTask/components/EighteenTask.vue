@@ -58,7 +58,7 @@ const sendAnswer = () => {
     const answer_input = document.getElementById('input');
     if (answer.value === correct_answer.value) {
         answer_input.classList.add('green');
-        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        playAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
             answer_input.classList.remove('green');
             endGame.value = true;
@@ -68,7 +68,7 @@ const sendAnswer = () => {
 
     } else {
         answer_input.classList.add('red');
-        playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+        playAudio('/assets/audio/Other/2. общее для разных заданий.mp3');
         setTimeout(() => {
             answer_input.classList.remove('red');
         }, 2000)
@@ -149,11 +149,4 @@ const sendAnswer = () => {
     }
 }
 
-.red {
-    border: 2px solid red !important;
-}
-
-.green {
-    border: 2px solid green !important;
-}
 </style>

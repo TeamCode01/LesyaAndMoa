@@ -13,14 +13,14 @@
                 </div>
 
                 <div class="draggable-list">
-                    <q-btn v-for="(item, index) in words" :key="index" class="list-group-item item" draggable="true"
-                        @dragstart="drag($event, index)" @dragover.prevent :value="item">
-                        {{ item }}
+                    <q-btn v-for="(item, index) in words" :id="item.id" :key="index.id" class="list-group-item item" draggable="true"
+                        @dragstart="drag($event, item.id, index)" @dragover.prevent :value="item">
+                        {{ item.name }}
                     </q-btn>
                 </div>
                 <div class="ThirteenthTask__wrapper_answer" v-show="answer === ''">
                     Мы очень
-                    <input  :class="{ correct: answer_drop === 'РАДЫ' }" @drop="drop($event)"
+                    <input :class="{ correct: answer_drop === 'РАДЫ' }" @drop="drop($event)"
                         @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
                     с вами познакомиться.
                 </div>
@@ -32,7 +32,7 @@
                 </div>
                 <div v-show="answer === 'ОБЩАТЬСЯ'" class="ThirteenthTask__wrapper_answer">
                     Приходите чаще на
-                    <input  :class="{ correct: answer_drop === 'ДЕТСКУЮ' }" @drop="drop($event)"
+                    <input :class="{ correct: answer_drop === 'ДЕТСКУЮ' }" @drop="drop($event)"
                         @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
                     площадку.
                 </div>
@@ -55,6 +55,7 @@ const hide = () => {
     emit('close');
     endGame.value = true;
 };
+const audio = ref(new Audio());
 
 const next = () => {
     emit('next-modal');
@@ -68,40 +69,48 @@ const props = defineProps({
     },
 });
 
-
-
+const playAudio = (audioPath) => {
+    audio.value.src = audioPath;
+    audio.value.play();
+}
 
 const words = ref([
-    'РАДЫ',
-    'РАССТРОЕНЫ',
-    'ДЕТСКУЮ',
-    'ВЗРОСЛУЮ',
-    'ОБЩАТЬСЯ',
-    'РУГАТЬСЯ',
+    { id: 1, name: 'РАДЫ' },
+    { id: 2, name: 'РАССТРОЕНЫ' },
+    { id: 3, name: 'ДЕТСКУЮ' },
+    { id: 4, name: 'ВЗРОСЛУЮ' },
+    { id: 5, name: 'ОБЩАТЬСЯ' },
+    { id: 6, name: 'РУГАТЬСЯ' }
 ]);
 const answer_drop = ref('?');
 const answer = ref('');
 const answer_two = ref('');
 const answer_three = ref('');
 const dropIndex = ref(words.value.length - 1);
-const drag = (event, index) => {
+const drag = (event, id, index) => {
     event.dataTransfer.setData('text', event.target.value);
-    console.log(event.target.value);
+    event.dataTransfer.setData('id', id);
+    console.log('id', id);
     dropIndex.value = index;
 };
 
 const drop = (event) => {
     event.preventDefault();
     let text = event.dataTransfer.getData('text');
-
+    let id = event.dataTransfer.getData('id');
+    console.log('id', id);
+    let elem = document.getElementById(id);
     if (
         (answer.value === '' && text === 'РАДЫ') ||
         (answer.value === 'РАДЫ' && text === 'ОБЩАТЬСЯ') ||
         (answer.value === 'ОБЩАТЬСЯ' && text === 'ДЕТСКУЮ')
     ) {
         words.value.splice(dropIndex.value, 1);
+        elem.classList.add('green');
+        playAudio('/assets/audio/Common/1.2.mp3');
         answer_drop.value = text;
         setTimeout(() => {
+            elem.classList.remove('green');
             answer.value = text;
             answer_drop.value = '?';
         }, 2000);
@@ -111,6 +120,11 @@ const drop = (event) => {
         }
     }
     else {
+        elem.classList.add('red');
+        setTimeout(() => {
+         elem.classList.remove('red');
+        })
+        playAudio('/assets/audio/Common/2.1.mp3');
         return false;
     }
 };

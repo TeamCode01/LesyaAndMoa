@@ -79,16 +79,24 @@ const props = defineProps({
 
 
 
-const playAudio = (audioPath) => {
+const playAudio = async (audioPath) => {
     audio.value.src = audioPath;
-    console.log(props.finish)
-    if(props.finish === true) {
-        audio.value.play();
+    if (props.finish === true) {
+        await audio.value.play();
+    }
+}
+const stopAudio = (audioPath) => {
+    if (audio.value.paused) {
+        playAudio(audioPath);
+    } else {
+        audio.value.pause();
     }
 }
 
-const stopAudio = (audioPath) => {
-    audio.value.src = '';
+const playEndAudio = (audioPath) => {
+    const end_audio = new Audio();
+    end_audio.src = audioPath;
+    end_audio.play();
 }
 
 
@@ -121,7 +129,7 @@ const drop = (event, index) => {
         // setTimeout(() => {
         //     elem.classList.remove('green');
         // }, 2000);
-        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
 
     } else if (array_two_result.value.find((item) => item.name === letter) && index === 1) {
         // elem.classList.add('green');
@@ -130,7 +138,7 @@ const drop = (event, index) => {
         // }, 2000);
         array_two.value.push(letter);
         letters.value.splice(dropIndex.value, 1)
-        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
     }
     else if (array_three_result.value.find((item) => item.name === letter) && index === 2) {
         // elem.classList.add('green');
@@ -140,14 +148,14 @@ const drop = (event, index) => {
         array_three.value.push(letter);
         letters.value.splice(dropIndex.value, 1)
 
-        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
 
     } else {
         elem.classList.add('red');
         setTimeout(() => {
             elem.classList.remove('red');
         }, 2000);
-        playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+        playEndAudio('/assets/audio/Other/2. общее для разных заданий.mp3');
 
         return false;
     }
@@ -216,14 +224,6 @@ const allowDrop = (event) => {
         width: 250px;
         height: 186px;
     }
-}
-
-.red {
-    border: 2px solid red !important;
-}
-
-.green {
-    border: 2px solid green !important;
 }
 
 .ThirdTask {

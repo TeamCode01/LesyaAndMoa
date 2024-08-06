@@ -172,7 +172,7 @@ const drop = (event, word, letter) => {
         setTimeout(() => {
             event.target.classList.remove('green');
         }, 2000)
-        playAudio('assets/audio/Common/1.2.mp3');
+        playAudio('/assets/audio/Common/1.2.mp3');
         if (letterss.value.length === 0) {
             setTimeout(() => {
                 endGame.value = true;
@@ -180,7 +180,7 @@ const drop = (event, word, letter) => {
         }
     } else {
       elem.classList.add('red');
-        playAudio('assets/audio/Common/2.1.mp3');
+        playAudio('/assets/audio/Common/2.1.mp3');
         setTimeout(() => {
             elem.classList.remove('red');
         }, 2000);
@@ -197,13 +197,6 @@ const allowDrop = (event) => {
 .end-modal {
     width: 1200px;
     height: 600px;
-}
-.red {
-    border: 2px solid #DB0000 !important;
-}
-
-.green {
-    border: 2px solid #5CCF54 !important;
 }
 
 .input {
