@@ -54,6 +54,11 @@ import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+import { useAnswerStore } from '@layouts/stores/answers';
+import gameActions from '@mixins/gameAction';
+
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest } = methods;
 const emit = defineEmits(['close', 'next-modal']);
 const endGame = ref(false);
 const audio = ref(new Audio());
@@ -74,10 +79,14 @@ const props = defineProps({
     },
     finish: {
         type: Boolean,
+    },
+    childId: {
+        type: Number,
+        required: false,
     }
 });
 
-
+const answerStore = useAnswerStore();
 
 const playAudio = (audioPath) => {
     audio.value.src = audioPath;
@@ -98,6 +107,8 @@ const answer = ref('');
 const array = ref([]);
 const array_two = ref([]);
 const array_three = ref([]);
+
+let correctId = ref(0);
 
 const array_result = ref([{ name: 'к', type: 'глухой' }, { name: 'ч', type: 'глухой' }, { name: 'с', type: 'глухой' }, { name: 'ф', type: 'глухой' }]);
 const array_two_result = ref([{ name: 'г', type: 'средний' }, { name: 'д', type: 'средний' }, { name: 'з', type: 'средний' }]);
@@ -153,6 +164,7 @@ const drop = (event, index) => {
     }
     if (array.value.length === array_result.value.length && array_two.value.length === array_two_result.value.length && array_three.value.length === array_three_result.value.length) {
         setTimeout(() => {
+            endGameRequest(props.childId, correctId.value);
             endGame.value = true;
         }, 1500)
     }
@@ -163,6 +175,15 @@ const drop = (event, index) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+onMounted(async () => {
+    await answerStore.getAnswers(props.childId);
+    const correctAnswer = answerStore.answers.find((item) => item.task.id === 3);
+    correctId.value = correctAnswer.id;
+    if (correctAnswer.is_started === false) {
+        startGameRequest(props.childId, 3)
+    }
+})
 </script>
 <style lang="scss" scoped>
 .end-modal {

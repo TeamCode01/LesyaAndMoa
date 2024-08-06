@@ -12,13 +12,13 @@
                 </div>
             </div>
             <div class="modal_background" v-if="SeeTask">
-                <FirstTask :finish="finish" :end="endTime" @close="close()"
+                <FirstTask :childId="props.childId" :finish="finish" :end="endTime" @close="close()"
                     @next-modal="next(2, '/assets/audio/Task2/25.2.mp3')" v-if="taskId === 1">
                 </FirstTask>
                 <SecondTask :childId="props.childId" :finish="finish" :end="endTime" @close="close()"
                     @next-modal="next(3, '/assets/audio/Task3/31.3.mp3')" v-if="taskId === 2">
                 </SecondTask>
-                <ThirdTask :finish="finish" :end="endTime" @close="close()" @next-modal="next(4)" v-if="taskId === 3">
+                <ThirdTask :childId="props.childId" :finish="finish" :end="endTime" @close="close()" @next-modal="next(4)" v-if="taskId === 3">
                 </ThirdTask>
                 <FourthTask :end="endTime" @close="close()" @next-modal="next(5)" v-if="taskId === 4"></FourthTask>
                 <FifthTask :end="endTime" @close="close()" @next-modal="next(6)" v-if="taskId === 5"></FifthTask>
@@ -87,9 +87,9 @@ const answerStore = useAnswerStore();
 const tasks = ref([
 
     { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 22, end: false, img: '/assets/backgrounds/animals.jpg', audio: '/assets/audio/Task1/12.1.mp3', startAudio: '/assets/audio/Task1/11.1_.mp3' },
-    { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 17, end: false, img: '/assets/backgrounds/task2.jpg', audio: '/assets/audio/Task2/25.2.mp3', startAudio: '/assets/audio/Task2/24.2_.mp3' },
-    { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg', audio: '/assets/audio/Task3/31.3.mp3', startAudio: '/assets/audio/Task3/30.3_.mp3' },
-    { id: 4, name: 'Задание 4', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task4.jpg' },
+    { id: 2, name: 'Задание 2', disabled: true, done: false, open: false, time: 17, end: false, img: '/assets/backgrounds/task2.jpg', audio: '/assets/audio/Task2/25.2.mp3', startAudio: '/assets/audio/Task2/24.2_.mp3' },
+    { id: 3, name: 'Задание 3', disabled: true, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg', audio: '/assets/audio/Task3/31.3.mp3', startAudio: '/assets/audio/Task3/30.3_.mp3' },
+    { id: 4, name: 'Задание 4', disabled: true, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task4.jpg' },
     { id: 5, name: 'Задание 5', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task5.jpg' },
     { id: 6, name: 'Задание 6', disabled: false, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task6.jpg' },
     { id: 7, name: 'Задание 7', disabled: false, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task7.jpg' },
@@ -164,11 +164,13 @@ const openTask = (taskId) => {
     }, timeVal.value * 1000);
 };
 
-const next = (id, audio) => {
+const next = (id, audio, correct) => {
     SeeTask.value = false;
     endTime.value = false;
     show.value = false;
     taskAudio.value = audio;
+    console.log(correct);
+
     taskId.value = id;
     openTask(taskId);
 }
@@ -183,18 +185,6 @@ const getTasks = async () => {
         });
 };
 
-// const getAnswers = async () => {
-//     try {
-//         const response = await HTTP.get(`answers/${props.childId}/`);
-//         answers.value = response.data;
-//         console.log(answers.value);
-//     } catch (error) {
-//         console.error(error);
-//     }
-// }
-
-// console.log(answers.value);
-
 watch(
     () => taskId.value,
     (newId) => {
@@ -205,8 +195,8 @@ watch(
     }
 );
 
-onMounted(() => {
-
+onMounted(async() => {
+    await answerStore.getAnswers(props.childId);
     getTasks();
 });
 </script>

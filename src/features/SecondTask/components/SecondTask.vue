@@ -22,7 +22,7 @@
     </template>
 
     <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!" v-else
-    @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
+        @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -69,16 +69,16 @@ const music = ref(null);
 
 const playAudio = (audioPath) => {
     audio.value.src = audioPath;
-    if(props.finish === true) {
+    if (props.finish === true) {
         audio.value.play();
     }
 }
 
-console.log('ans', answerStore.answers);
-
 const stopAudio = (audioPath) => {
     audio.value.src = '';
 }
+
+let correctId = ref(0);
 
 const chooseTask = (event, status) => {
     if (status === true) {
@@ -89,7 +89,7 @@ const chooseTask = (event, status) => {
         event.target.classList.add('green');
         playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
-            endGameRequest(props.childId, 2);
+            endGameRequest(props.childId, correctId.value);
             endGame.value = true;
             event.target.classList.remove('green');
         }, 2000);
@@ -104,10 +104,13 @@ const chooseTask = (event, status) => {
     }
 }
 
-onMounted(() => {
-    startGameRequest(props.childId, 2)
-    answerStore.getAnswers(props.childId);
-    // deleteGameRequest(props.childId, 6);
+onMounted(async () => {
+    await answerStore.getAnswers(props.childId);
+    const correctAnswer = answerStore.answers.find((item) => item.task.id === 2);
+    correctId.value = correctAnswer.id;
+    if (correctAnswer.is_started === false) {
+        startGameRequest(props.childId, 2)
+    }
 })
 </script>
 <style lang="scss" scoped>
