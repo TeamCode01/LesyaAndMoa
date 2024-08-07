@@ -16,3 +16,14 @@ export const useAnswerStore = defineStore('answers', {
     },
   },
 });
+
+export type Answer = {
+  id: number;
+  task: {
+     id: number;
+     name: string;
+  }
+  is_correct: boolean;
+  is_started: boolean;
+
+}

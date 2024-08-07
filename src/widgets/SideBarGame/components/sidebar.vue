@@ -87,9 +87,9 @@ const answerStore = useAnswerStore();
 const tasks = ref([
 
     { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 22, end: false, img: '/assets/backgrounds/animals.jpg', audio: '/assets/audio/Task1/12.1.mp3', startAudio: '/assets/audio/Task1/11.1_.mp3' },
-    { id: 2, name: 'Задание 2', disabled: true, done: false, open: false, time: 17, end: false, img: '/assets/backgrounds/task2.jpg', audio: '/assets/audio/Task2/25.2.mp3', startAudio: '/assets/audio/Task2/24.2_.mp3' },
-    { id: 3, name: 'Задание 3', disabled: true, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg', audio: '/assets/audio/Task3/31.3.mp3', startAudio: '/assets/audio/Task3/30.3_.mp3' },
-    { id: 4, name: 'Задание 4', disabled: true, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task4.jpg' },
+    { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 17, end: false, img: '/assets/backgrounds/task2.jpg', audio: '/assets/audio/Task2/25.2.mp3', startAudio: '/assets/audio/Task2/24.2_.mp3' },
+    { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg', audio: '/assets/audio/Task3/31.3.mp3', startAudio: '/assets/audio/Task3/30.3_.mp3' },
+    { id: 4, name: 'Задание 4', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task4.jpg' },
     { id: 5, name: 'Задание 5', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task5.jpg' },
     { id: 6, name: 'Задание 6', disabled: false, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task6.jpg' },
     { id: 7, name: 'Задание 7', disabled: false, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task7.jpg' },
@@ -118,9 +118,6 @@ const startAudio = ref('/assets/audio/Task1/11.1_.mp3');
 const endTime = ref(false);
 const tasks_server = ref([]);
 const answers = ref([]);
-
-// answers.value = answerStore.answers.find((item) => item.id === 4);
-// console.log(answerStore.answers);
 const show = ref(props.show);
 
 const close = () => {

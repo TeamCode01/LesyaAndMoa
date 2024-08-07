@@ -81,6 +81,9 @@ const playAudio = (audioPath) => {
 let correctId = ref(0);
 
 
+const corrValue = ref(0);
+
+
 const stopAudio = (audioPath) => {
     audio.value.src = '';
 }
@@ -173,14 +176,10 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(async () => {
-    await answerStore.getAnswers(props.childId);
-    const correctAnswer = answerStore.answers.find((item) => item.task.id === 1);
-    correctId.value = correctAnswer.id;
-    is_correct.value = correctAnswer.is_correct;
-    if (correctAnswer.is_started === false) {
-        startGameRequest(props.childId, 1)
-    }
+onMounted(async() => {
+    const correct = await getCorrectAnswer(1, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(1, props.childId, correctId.value);
 })
 </script>
 <style lang="scss" scoped>

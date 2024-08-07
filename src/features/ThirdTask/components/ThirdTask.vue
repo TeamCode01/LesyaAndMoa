@@ -109,6 +109,7 @@ const array_two = ref([]);
 const array_three = ref([]);
 
 let correctId = ref(0);
+const corrValue = ref(0);
 
 const array_result = ref([{ name: 'к', type: 'глухой' }, { name: 'ч', type: 'глухой' }, { name: 'с', type: 'глухой' }, { name: 'ф', type: 'глухой' }]);
 const array_two_result = ref([{ name: 'г', type: 'средний' }, { name: 'д', type: 'средний' }, { name: 'з', type: 'средний' }]);
@@ -176,13 +177,10 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(async () => {
-    await answerStore.getAnswers(props.childId);
-    const correctAnswer = answerStore.answers.find((item) => item.task.id === 3);
-    correctId.value = correctAnswer.id;
-    if (correctAnswer.is_started === false) {
-        startGameRequest(props.childId, 3)
-    }
+onMounted(async() => {
+    const correct = await getCorrectAnswer(3, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(3, props.childId, correctId.value);
 })
 </script>
 <style lang="scss" scoped>

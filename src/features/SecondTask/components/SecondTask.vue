@@ -33,7 +33,7 @@ import { useAnswerStore } from '@layouts/stores/answers';
 import gameActions from '@mixins/gameAction';
 
 const { methods } = gameActions;
-const { endGameRequest, startGameRequest } = methods;
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal']);
 const answerStore = useAnswerStore();
 const props = defineProps({
@@ -54,6 +54,8 @@ const hide = () => {
     emit('close');
     endGame.value = true;
 };
+
+const corrValue = ref(0);
 
 const next = () => {
     emit('next-modal');
@@ -89,7 +91,7 @@ const chooseTask = (event, status) => {
         event.target.classList.add('green');
         playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
-            endGameRequest(props.childId, correctId.value);
+            endGameRequest(props.childId, corrValue.value);
             endGame.value = true;
             event.target.classList.remove('green');
         }, 2000);
@@ -105,12 +107,9 @@ const chooseTask = (event, status) => {
 }
 
 onMounted(async () => {
-    await answerStore.getAnswers(props.childId);
-    const correctAnswer = answerStore.answers.find((item) => item.task.id === 2);
-    correctId.value = correctAnswer.id;
-    if (correctAnswer.is_started === false) {
-        startGameRequest(props.childId, 2)
-    }
+    const correct = await getCorrectAnswer(2, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(2, props.childId, correctId.value);
 })
 </script>
 <style lang="scss" scoped>
