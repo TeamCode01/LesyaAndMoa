@@ -28,6 +28,9 @@ import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+import gameActions from '@mixins/gameAction';
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
 const emit = defineEmits(['close']);
 const endGame = ref(false);
 
@@ -41,11 +44,16 @@ const props = defineProps({
         type: Boolean,
         required: false,
     },
+    childId: {
+        type: Number,
+        required: false,
+    },
 });
 
 const audio = ref(new Audio());
 
-
+let correctId = ref(0);
+const corrValue = ref(0);
 const playAudio = (audioPath) => {
     audio.value.src = audioPath;
     audio.value.play();
@@ -60,6 +68,7 @@ const sendAnswer = () => {
         answer_input.classList.add('green');
         playAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
+            endGameRequest(props.childId, corrValue.value);
             answer_input.classList.remove('green');
             endGame.value = true;
         }, 2000)
@@ -74,6 +83,12 @@ const sendAnswer = () => {
         }, 2000)
     }
 }
+
+onMounted(async() => {
+    const correct = await getCorrectAnswer(18, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(18, props.childId, correctId.value);
+})
 </script>
 <style lang="scss" scoped>
 .end-modal {
