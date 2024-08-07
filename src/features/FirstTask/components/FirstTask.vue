@@ -37,13 +37,10 @@ import { HTTP } from '@app/http';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-import { useAnswerStore } from '@layouts/stores/answers';
 import gameActions from '@mixins/gameAction';
-
 const { methods } = gameActions;
-const { endGameRequest, startGameRequest } = methods;
+const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal']);
-const answerStore = useAnswerStore();
 const props = defineProps({
     end: {
         type: Boolean,
@@ -79,11 +76,7 @@ const playAudio = (audioPath) => {
 
 }
 let correctId = ref(0);
-
-
 const corrValue = ref(0);
-
-
 const stopAudio = (audioPath) => {
     audio.value.src = '';
 }
@@ -116,13 +109,6 @@ const drag = (event, word, id, index) => {
     dropIndex.value = index;
 };
 
-const correctTask = async (child_id, id) => {
-    try {
-        const resp = await HTTP.patch(`answers/${child_id}/${id}`);
-    } catch (e) {
-        console.error('Error starting task', e);
-    }
-}
 
 const drop = (event) => {
     event.preventDefault();
@@ -166,7 +152,7 @@ const drop = (event) => {
     }
     if (answer_arr.value.length === 5) {
         setTimeout(() => {
-            endGameRequest(props.childId, correctId.value);
+            endGameRequest(props.childId, corrValue.value);
             endGame.value = true;
         }, 3000)
     }

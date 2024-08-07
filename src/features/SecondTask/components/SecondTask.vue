@@ -29,13 +29,11 @@ import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-import { useAnswerStore } from '@layouts/stores/answers';
 import gameActions from '@mixins/gameAction';
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal']);
-const answerStore = useAnswerStore();
 const props = defineProps({
     end: {
         type: Boolean,

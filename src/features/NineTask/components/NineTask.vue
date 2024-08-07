@@ -87,6 +87,10 @@ const props = defineProps({
         type: Boolean,
         required: false,
     },
+    childId: {
+        type: Number,
+        required: false,
+    }
 });
 
 

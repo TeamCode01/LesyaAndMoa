@@ -54,11 +54,10 @@ import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-import { useAnswerStore } from '@layouts/stores/answers';
 import gameActions from '@mixins/gameAction';
 
 const { methods } = gameActions;
-const { endGameRequest, startGameRequest } = methods;
+const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal']);
 const endGame = ref(false);
 const audio = ref(new Audio());
@@ -85,8 +84,6 @@ const props = defineProps({
         required: false,
     }
 });
-
-const answerStore = useAnswerStore();
 
 const playAudio = (audioPath) => {
     audio.value.src = audioPath;
@@ -164,7 +161,7 @@ const drop = (event, index) => {
     }
     if (array.value.length === array_result.value.length && array_two.value.length === array_two_result.value.length && array_three.value.length === array_three_result.value.length) {
         setTimeout(() => {
-            endGameRequest(props.childId, correctId.value);
+            endGameRequest(props.childId, corrValue.value);
             endGame.value = true;
         }, 1500)
     }
