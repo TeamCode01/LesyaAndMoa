@@ -90,7 +90,6 @@ const answerStore = useAnswerStore();
 
 const playAudio = (audioPath) => {
     audio.value.src = audioPath;
-    console.log(props.finish)
     if(props.finish === true) {
         audio.value.play();
     }

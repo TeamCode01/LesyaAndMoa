@@ -21,9 +21,7 @@ const gameActions = {
          getCorrectAnswer(id: number, childId: number, correctId: number) {
              answerStore.getAnswers(childId);
             const correctAnswer: Answer = answerStore.answers.filter((item: Answer) => item.task.id === id)[0];
-            console.log('info', correctId, correctAnswer, correctAnswer.id);
             correctId = correctAnswer.id;
-            console.log('info2', correctId, correctAnswer, correctAnswer.id);
             if (correctAnswer.is_started === false) {
                 gameActions.methods.startGameRequest(childId, id)
             }
