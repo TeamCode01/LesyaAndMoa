@@ -141,6 +141,7 @@ const answers = ref([
 const drop = (event, part, row) => {
     event.preventDefault();
     if (syllables.value[dropIndex.value].part != part) {
+        playAudio('/assets/audio/Common/2.1.mp3');
         return false;
     }
     let text = event.dataTransfer.getData('text');
@@ -164,11 +165,11 @@ const drop = (event, part, row) => {
             event.target.value = text;
             finish_answers.value.push(word.toLowerCase());
             syllables.value.splice(dropIndex.value, 1);
-            elem.classList.add('check');
+            playAudio('/assets/audio/Common/1.2.mp3');
+            event.target.classList.add('check');
             setTimeout(() => {
-                elem.classList.add('item');
-                elem.classList.remove('check');
-
+                event.target.classList.add('item');
+                event.target.classList.remove('check');
             }, 2000);
             if (syllables.value.length == 0) {
                 firstBlock.classList.add('hide');
@@ -184,7 +185,7 @@ const chooseFairyTail = (event, status) => {
     if (status === true) {
         event.target.value = status;
         event.target.classList.add('green');
-        playAudio('assets/audio/Common/1.2.mp3');
+        playAudio('/assets/audio/Common/1.2.mp3');
         fairytails.value = fairytails.value.filter(
             (item) => item.correct == true,
         );
@@ -195,7 +196,7 @@ const chooseFairyTail = (event, status) => {
         }, 2000);
     } else {
         event.target.value = status;
-        playAudio('assets/audio/Common/2.1.mp3');
+        playAudio('/assets/audio/Common/2.1.mp3');
         event.target.classList.add('red');
         setTimeout(() => {
             event.target.classList.remove('red');
