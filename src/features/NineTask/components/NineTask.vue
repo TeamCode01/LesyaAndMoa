@@ -70,6 +70,9 @@
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+import gameActions from '@mixins/gameAction';
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal']);
 const endGame = ref(false);
 const hide = () => {
@@ -100,6 +103,8 @@ const playAudio = (audioPath) => {
     audio.value.play();
 }
 
+let correctId = ref(0);
+const corrValue = ref(0);
 
 const letterss = ref([
     { id: 'L', name: 'Л' },
@@ -179,6 +184,7 @@ const drop = (event, word, letter) => {
         playAudio('/assets/audio/Common/1.2.mp3');
         if (letterss.value.length === 0) {
             setTimeout(() => {
+                endGameRequest(props.childId, corrValue.value);
                 endGame.value = true;
             }, 1500)
         }
@@ -195,6 +201,12 @@ const drop = (event, word, letter) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+onMounted(async() => {
+    const correct = await getCorrectAnswer(9, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(9, props.childId, correctId.value);
+})
 </script>
 <style lang="scss" scoped>
 

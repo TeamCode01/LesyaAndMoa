@@ -65,6 +65,9 @@
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+import gameActions from '@mixins/gameAction';
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal']);
 const audio = ref(new Audio());
 const endGame = ref(false);
@@ -86,7 +89,15 @@ const props = defineProps({
         type: Boolean,
         required: false,
     },
+
+    childId: {
+        type: Number,
+        required: false,
+    }
 });
+
+let correctId = ref(0);
+const corrValue = ref(0);
 
 
 const syllables = ref([
@@ -178,6 +189,7 @@ const chooseFairyTail = (event, status) => {
             (item) => item.correct == true,
         );
         setTimeout(() => {
+            endGameRequest(props.childId, corrValue.value);
             endGame.value = true;
             event.target.classList.remove('green');
         }, 2000);
@@ -194,6 +206,12 @@ const chooseFairyTail = (event, status) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+onMounted(async() => {
+    const correct = await getCorrectAnswer(11, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(11, props.childId, correctId.value);
+})
 </script>
 <style lang="scss" scoped>
 .end-modal {
