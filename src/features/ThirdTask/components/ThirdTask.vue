@@ -54,6 +54,10 @@ import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+import gameActions from '@mixins/gameAction';
+
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal']);
 const endGame = ref(false);
 const audio = ref(new Audio());
@@ -74,6 +78,10 @@ const props = defineProps({
     },
     finish: {
         type: Boolean,
+    },
+    childId: {
+        type: Number,
+        required: false,
     }
 });
 
@@ -106,6 +114,9 @@ const answer = ref('');
 const array = ref([]);
 const array_two = ref([]);
 const array_three = ref([]);
+
+let correctId = ref(0);
+const corrValue = ref(0);
 
 const array_result = ref([{ name: 'к', type: 'глухой' }, { name: 'ч', type: 'глухой' }, { name: 'с', type: 'глухой' }, { name: 'ф', type: 'глухой' }]);
 const array_two_result = ref([{ name: 'г', type: 'средний' }, { name: 'д', type: 'средний' }, { name: 'з', type: 'средний' }]);
@@ -161,6 +172,7 @@ const drop = (event, index) => {
     }
     if (array.value.length === array_result.value.length && array_two.value.length === array_two_result.value.length && array_three.value.length === array_three_result.value.length) {
         setTimeout(() => {
+            endGameRequest(props.childId, corrValue.value);
             endGame.value = true;
         }, 1500)
     }
@@ -171,6 +183,12 @@ const drop = (event, index) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+onMounted(async() => {
+    const correct = await getCorrectAnswer(3, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(3, props.childId, correctId.value);
+})
 </script>
 <style lang="scss" scoped>
 .end-modal {

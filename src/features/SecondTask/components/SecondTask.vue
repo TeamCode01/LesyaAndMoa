@@ -19,13 +19,17 @@
     </template>
 
     <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!" v-else
-    @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
+        @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+import gameActions from '@mixins/gameAction';
+
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
@@ -34,6 +38,10 @@ const props = defineProps({
     },
     finish: {
         type: Boolean,
+    },
+    childId: {
+        type: Number,
+        required: false,
     }
 });
 const audio = ref(new Audio());
@@ -42,19 +50,14 @@ const hide = () => {
     endGame.value = true;
 };
 
+const corrValue = ref(0);
+
 const next = () => {
     emit('next-modal');
     endGame.value = true;
 
 }
 
-const correctTask = async (child_id, id) => {
-    try {
-        const resp = await HTTP.patch(`answers/${child_id}/${id}`);
-    } catch (e) {
-        console.error('Error starting task', e);
-    }
-}
 const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false, audio: '/assets/audio/Task2/27.2.mp3' }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true, audio: '/assets/audio/Task2/26.2.mp3' }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false, audio: '/assets/audio/Task2/28.2.mp3' }])
 const endGame = ref(false);
 
@@ -79,6 +82,8 @@ const stopAudio = (audioPath) => {
     }
 }
 
+let correctId = ref(0);
+
 const chooseTask = (event, status) => {
     if (status === true) {
         event.target.value = status;
@@ -88,6 +93,7 @@ const chooseTask = (event, status) => {
         event.target.classList.add('green');
         playEndAudio('/assets/audio/Common/1.2.mp3');
         setTimeout(() => {
+            endGameRequest(props.childId, corrValue.value);
             endGame.value = true;
             event.target.classList.remove('green');
         }, 2000);
@@ -101,6 +107,12 @@ const chooseTask = (event, status) => {
         }, 2000);
     }
 }
+
+onMounted(async () => {
+    const correct = await getCorrectAnswer(2, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(2, props.childId, correctId.value);
+})
 </script>
 <style lang="scss" scoped>
 .end-modal {

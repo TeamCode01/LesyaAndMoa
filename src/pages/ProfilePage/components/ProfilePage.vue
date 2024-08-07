@@ -331,6 +331,10 @@ onMounted(async () => {
     padding: 12px 104px;
     margin: 40px auto;
     margin-bottom: 0px;
+
+    @media (max-width: 460px) {
+        padding: 12px 60px;
+    }
 }
 
 .profile__img,
@@ -396,7 +400,7 @@ onMounted(async () => {
 }
 
 .child__form {
-    width: 1050px;
+    max-width: 100%;
     text-align: center;
 }
 

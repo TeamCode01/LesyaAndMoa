@@ -38,6 +38,9 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import SmallDisplayBanner from '@features/SmallDisplayBanner/components/SmallDisplayBanner.vue';
+import gameActions from '@mixins/gameAction';
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
@@ -46,15 +49,22 @@ const props = defineProps({
     },
     finish: {
         type: Boolean
+    },
+
+    childId: {
+        type: Number,
+        required: false,
     }
 });
 const endGame = ref(false);
+let is_correct = ref(null);
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
 const next = () => {
     emit('next-modal');
+    is_correct.value;
     endGame.value = true;
 }
 
@@ -68,11 +78,17 @@ const playAudio = async (audioPath) => {
     }
 }
 
+let correctId = ref(0);
+const corrValue = ref(0);
+
+
 const playEndAudio = (audioPath) => {
     const end_audio = new Audio();
     end_audio.src = audioPath;
     end_audio.play();
 }
+
+
 const stopAudio = (audioPath) => {
     if (audio.value.paused) {
         playAudio(audioPath);
@@ -110,13 +126,6 @@ const drag = (event, word, id, index) => {
     dropIndex.value = index;
 };
 
-const correctTask = async (child_id, id) => {
-    try {
-        const resp = await HTTP.patch(`answers/${child_id}/${id}`);
-    } catch (e) {
-        console.error('Error starting task', e);
-    }
-}
 
 const drop = (event) => {
     event.preventDefault();
@@ -160,7 +169,7 @@ const drop = (event) => {
     }
     if (answer_arr.value.length === 5) {
         setTimeout(() => {
-            correctTask(child_id, id);
+            endGameRequest(props.childId, corrValue.value);
             endGame.value = true;
         }, 3000)
     }
@@ -169,6 +178,12 @@ const drop = (event) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+onMounted(async() => {
+    const correct = await getCorrectAnswer(1, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(1, props.childId, correctId.value);
+})
 </script>
 <style lang="scss" scoped>
 .end-modal {
