@@ -115,7 +115,7 @@
                                 name="login"
                                 class="form-input"
                                 v-model:value="form.last_name"
-                                @blur="v$.value.last_name.$touch()"
+                                @blur="v$.last_name.$touch()"
                             ></Input>
                             <span
                                 v-if="isError.last_name"
