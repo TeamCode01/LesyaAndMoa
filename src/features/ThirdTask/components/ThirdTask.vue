@@ -86,6 +86,9 @@ const props = defineProps({
 });
 
 
+const is_correct = ref(null);
+const is_started = ref(null);
+
 
 const playAudio = async (audioPath) => {
     audio.value.src = audioPath;

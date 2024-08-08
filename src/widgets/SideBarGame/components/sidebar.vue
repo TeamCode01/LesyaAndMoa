@@ -4,12 +4,12 @@
         <div class="sidebar__wrapper">
             <div class="sidebar__bg">
                 <div @click="switchTask(item.id, item.open, item.time, item.img, item.audio, item.startAudio)"
-                    :class="{ disabled: item.disabled === true }" class="task" v-for="item in tasks" :key="item.id">{{
+                    :class="{ disabled: started == false }" class="task" v-for="item in tasks" :key="item.id">{{
                         item.name
-                    }} <img class="icon" v-if="item.disabled === false && correct === false"
+                    }} <img class="icon" v-if="started === false && correct === false"
                         src="@app/assets/icons/play.svg" /><img class="icon"
-                        v-else-if="item.disabled === true && correct === false" src="@app/assets/icons/block.svg" />
-                    <img class="icon" v-else-if="item.disabled === false && correct === true"
+                        v-else-if="started === true && correct === false" src="@app/assets/icons/block.svg" />
+                    <img class="icon" v-else-if="started === false && correct === true"
                         src="@app/assets/icons/done.svg" />
                 </div>
             </div>
@@ -18,11 +18,11 @@
                     @correct="checkCorrect($event, 1)" @next-modal="next($event, 2, '/assets/audio/Task2/25.2.mp3')"
                     v-if="taskId === 1">
                 </FirstTask>
-                <SecondTask @correct="checkCorrect($event, 2)" :childId="props.childId" :finish="finish" :end="endTime" @close="close()"
-                    @next-modal="next($event, 3, '/assets/audio/Task3/31.3.mp3')" v-if="taskId === 2">
+                <SecondTask @correct="checkCorrect($event, 2)" :childId="props.childId" :finish="finish" :end="endTime"
+                    @close="close()" @next-modal="next($event, 3, '/assets/audio/Task3/31.3.mp3')" v-if="taskId === 2">
                 </SecondTask>
-                <ThirdTask @correct="checkCorrect($event, 3)" :childId="props.childId" :finish="finish" :end="endTime" @close="close()"
-                    @next-modal="next(4)" v-if="taskId === 3">
+                <ThirdTask @correct="checkCorrect($event, 3)" :childId="props.childId" :finish="finish" :end="endTime"
+                    @close="close()" @next-modal="next(4)" v-if="taskId === 3">
                 </ThirdTask>
                 <FourthTask :end="endTime" @close="close()" @next-modal="next(5)" v-if="taskId === 4"></FourthTask>
                 <FifthTask :end="endTime" @close="close()" @next-modal="next(6)" v-if="taskId === 5"></FifthTask>
@@ -121,8 +121,8 @@ const endTime = ref(false);
 const tasks_server = ref([]);
 const answers = ref([]);
 const show = ref(props.show);
-const correct = ref(false);
-const started = ref(false);
+const correct = ref(null);
+const started = ref(null);
 
 const close = () => {
     SeeTask.value = false;
@@ -154,11 +154,12 @@ const switchTask = (id, openId, time, img, audio, startAudioV) => {
     emit('show', show.value);
 };
 
-const correctAnswers = (id, correct) => {
+const checkCorrect = (id, correct) => {
     answerStore.answers.forEach((answer) => {
         taskId.value = id;
         if (answer.task?.id === taskId.value) {
             correct = answer.is_correct;
+            correct.value = correct;
         }
     })
 }
@@ -186,7 +187,8 @@ const next = (started, id, audio) => {
     answerStore.answers.forEach((answer) => {
         taskId.value = id;
         if (answer.task?.id === taskId.value) {
-            started.value = answer.is_started;
+            started = answer.is_started;
+            started.value = started;
         }
     })
     taskAudio.value = audio;
@@ -219,22 +221,21 @@ onMounted(async () => {
     const currentTaskId = answerStore.answers.find((item) => item.task?.id !== null)?.task?.id;
     const nextTaskId = answerStore.answers.find((item) => item.task?.id !== null)?.task?.id + 1;
     taskId.value = currentTaskId;
+    console.log('id', taskId.value);
+    console.log('start',started.value)
+
     answerStore.answers.forEach((answer) => {
         if (answer.task?.id === taskId.value) {
             correct.value = answer.is_correct;
-            // started.value = answer.is_started;
-            // console.log()
+            console.log(correct.value);
+            // if (correct.value === true && answer.is_started === true) {
+            //     const nextTask = answerStore.answers.find((item) => item.task?.id === nextTaskId);
+            //     if (nextTask) {
+            //         nextTask.is_started = true;
+            //     }
+            // }
         }
     })
-
-    // const correctAnswers = answerStore.answers.find((item) => item.is_correct === true);
-    // const startedAnswers = answerStore.answers.find((item) => item.is_started === true);
-    // const disabledAnswer = tasks.value.find((item) => item.disabled === true)
-    // const taskI = tasks.value.find((item) => item.id == correctAnswers.task?.id);
-    // if(taskI) {
-
-    // }
-    // console.log('logs', correctAnswers, taskI, startedAnswers);
 });
 </script>
 <style lang="scss" scoped>
