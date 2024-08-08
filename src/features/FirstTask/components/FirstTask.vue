@@ -40,8 +40,8 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import SmallDisplayBanner from '@features/SmallDisplayBanner/components/SmallDisplayBanner.vue';
 import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
-const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
-const emit = defineEmits(['close', 'next-modal']);
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
+const emit = defineEmits(['close', 'next-modal', 'correct']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -57,14 +57,14 @@ const props = defineProps({
     }
 });
 const endGame = ref(false);
-let is_correct = ref(null);
+const is_correct = ref(null);
+const is_started = ref(null);
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
 const next = () => {
-    emit('next-modal');
-    is_correct.value;
+    emit('next-modal', is_started.value);
     endGame.value = true;
 }
 
@@ -78,7 +78,7 @@ const playAudio = async (audioPath) => {
     }
 }
 
-let correctId = ref(0);
+const correctId = ref(0);
 const corrValue = ref(0);
 
 
@@ -168,8 +168,11 @@ const drop = (event) => {
         }
     }
     if (answer_arr.value.length === 5) {
+        emit('correct',  is_correct.value);
         setTimeout(() => {
-            endGameRequest(props.childId, corrValue.value);
+            if (is_correct.value === false) {
+                endGameRequest(props.childId, corrValue.value);
+            }
             endGame.value = true;
         }, 3000)
     }
@@ -179,9 +182,11 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(async() => {
+onMounted(async () => {
     const correct = await getCorrectAnswer(1, props.childId);
-    corrValue.value = correct;
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+    is_started.value = correct.is_started;
     await getCorrectAnswer(1, props.childId, correctId.value);
 })
 </script>

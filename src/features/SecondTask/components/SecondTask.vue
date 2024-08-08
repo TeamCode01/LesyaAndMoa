@@ -30,7 +30,7 @@ import gameActions from '@mixins/gameAction';
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
-const emit = defineEmits(['close', 'next-modal']);
+const emit = defineEmits(['close', 'next-modal', 'correct']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -53,7 +53,7 @@ const hide = () => {
 const corrValue = ref(0);
 
 const next = () => {
-    emit('next-modal');
+    emit('next-modal', is_started.value);
     endGame.value = true;
 
 }
@@ -92,6 +92,7 @@ const chooseTask = (event, status) => {
         );
         event.target.classList.add('green');
         playEndAudio('/assets/audio/Common/1.2.mp3');
+        emit('correct',  is_correct.value);
         setTimeout(() => {
             endGameRequest(props.childId, corrValue.value);
             endGame.value = true;
@@ -110,7 +111,9 @@ const chooseTask = (event, status) => {
 
 onMounted(async () => {
     const correct = await getCorrectAnswer(2, props.childId);
-    corrValue.value = correct;
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+    is_started.value = correct.is_started;
     await getCorrectAnswer(2, props.childId, correctId.value);
 })
 </script>

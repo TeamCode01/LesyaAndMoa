@@ -6,19 +6,23 @@
                 <div @click="switchTask(item.id, item.open, item.time, item.img, item.audio, item.startAudio)"
                     :class="{ disabled: item.disabled === true }" class="task" v-for="item in tasks" :key="item.id">{{
                         item.name
-                    }} <img class="icon" v-if="item.disabled === false && item.done === false"
+                    }} <img class="icon" v-if="item.disabled === false && correct === false"
                         src="@app/assets/icons/play.svg" /><img class="icon"
-                        v-else-if="item.disabled === true && item.done === false" src="@app/assets/icons/block.svg" />
+                        v-else-if="item.disabled === true && correct === false" src="@app/assets/icons/block.svg" />
+                    <img class="icon" v-else-if="item.disabled === false && correct === true"
+                        src="@app/assets/icons/done.svg" />
                 </div>
             </div>
             <div class="modal_background" v-if="SeeTask">
                 <FirstTask :childId="props.childId" :finish="finish" :end="endTime" @close="close()"
-                    @next-modal="next(2, '/assets/audio/Task2/25.2.mp3')" v-if="taskId === 1">
+                    @correct="checkCorrect($event, 1)" @next-modal="next($event, 2, '/assets/audio/Task2/25.2.mp3')"
+                    v-if="taskId === 1">
                 </FirstTask>
-                <SecondTask :childId="props.childId" :finish="finish" :end="endTime" @close="close()"
-                    @next-modal="next(3, '/assets/audio/Task3/31.3.mp3')" v-if="taskId === 2">
+                <SecondTask @correct="checkCorrect($event, 2)" :childId="props.childId" :finish="finish" :end="endTime" @close="close()"
+                    @next-modal="next($event, 3, '/assets/audio/Task3/31.3.mp3')" v-if="taskId === 2">
                 </SecondTask>
-                <ThirdTask :childId="props.childId" :finish="finish" :end="endTime" @close="close()" @next-modal="next(4)" v-if="taskId === 3">
+                <ThirdTask @correct="checkCorrect($event, 3)" :childId="props.childId" :finish="finish" :end="endTime" @close="close()"
+                    @next-modal="next(4)" v-if="taskId === 3">
                 </ThirdTask>
                 <FourthTask :end="endTime" @close="close()" @next-modal="next(5)" v-if="taskId === 4"></FourthTask>
                 <FifthTask :end="endTime" @close="close()" @next-modal="next(6)" v-if="taskId === 5"></FifthTask>
@@ -87,26 +91,24 @@ const answerStore = useAnswerStore();
 const tasks = ref([
 
     { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 22, end: false, img: '/assets/backgrounds/animals.jpg', audio: '/assets/audio/Task1/12.1.mp3', startAudio: '/assets/audio/Task1/11.1_.mp3' },
-    { id: 2, name: 'Задание 2', disabled: false, done: false, open: false, time: 17, end: false, img: '/assets/backgrounds/task2.jpg', audio: '/assets/audio/Task2/25.2.mp3', startAudio: '/assets/audio/Task2/24.2_.mp3' },
-    { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg', audio: '/assets/audio/Task3/31.3.mp3', startAudio: '/assets/audio/Task3/30.3_.mp3' },
-    { id: 4, name: 'Задание 4', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task4.jpg' },
-    { id: 5, name: 'Задание 5', disabled: false, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task5.jpg' },
-    { id: 6, name: 'Задание 6', disabled: false, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task6.jpg' },
-    { id: 7, name: 'Задание 7', disabled: false, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task7.jpg' },
-    { id: 8, name: 'Задание 8', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 9, name: 'Задание 9', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task9.jpg' },
-    { id: 10, name: 'Задание 10', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task10.jpg' },
-    { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task11.jpg', },
-    { id: 12, name: 'Задание 12', disabled: false, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task12.jpg' },
-    { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task13.jpg' },
-    { id: 14, name: 'Задание 14', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 15, name: 'Задание 15', disabled: false, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/task15.jpg' },
-    { id: 16, name: 'Задание 16', disabled: false, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 17, name: 'Задание 17', disabled: false, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
-    { id: 18, name: 'Задание 18', disabled: false, done: false, open: false, time: 120, end: false, img: '/assets/backgrounds/task18.jpg', startAudio: '/assets/audio/Task18/470.18_.mp3' },
+    { id: 2, name: 'Задание 2', disabled: true, done: false, open: false, time: 17, end: false, img: '/assets/backgrounds/task2.jpg', audio: '/assets/audio/Task2/25.2.mp3', startAudio: '/assets/audio/Task2/24.2_.mp3' },
+    { id: 3, name: 'Задание 3', disabled: true, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task3.jpg', audio: '/assets/audio/Task3/31.3.mp3', startAudio: '/assets/audio/Task3/30.3_.mp3' },
+    { id: 4, name: 'Задание 4', disabled: true, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task4.jpg' },
+    { id: 5, name: 'Задание 5', disabled: true, done: false, open: false, time: 15, end: false, img: '/assets/backgrounds/task5.jpg' },
+    { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task6.jpg' },
+    { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false, img: '/assets/backgrounds/task7.jpg' },
+    { id: 8, name: 'Задание 8', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
+    { id: 9, name: 'Задание 9', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task9.jpg' },
+    { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task10.jpg' },
+    { id: 11, name: 'Задание 11', disabled: true, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task11.jpg', },
+    { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 35, end: false, img: '/assets/backgrounds/task12.jpg' },
+    { id: 13, name: 'Задание 13', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/task13.jpg' },
+    { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
+    { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/task15.jpg' },
+    { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 60, end: false, img: '/assets/backgrounds/animals.jpg' },
+    { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: '/assets/backgrounds/animals.jpg' },
+    { id: 18, name: 'Задание 18', disabled: true, done: false, open: false, time: 120, end: false, img: '/assets/backgrounds/task18.jpg', startAudio: '/assets/audio/Task18/470.18_.mp3' },
 ])
-
-
 
 const SeeTask = ref(false);
 const taskId = ref(null);
@@ -119,6 +121,8 @@ const endTime = ref(false);
 const tasks_server = ref([]);
 const answers = ref([]);
 const show = ref(props.show);
+const correct = ref(false);
+const started = ref(false);
 
 const close = () => {
     SeeTask.value = false;
@@ -150,37 +154,55 @@ const switchTask = (id, openId, time, img, audio, startAudioV) => {
     emit('show', show.value);
 };
 
+const correctAnswers = (id, correct) => {
+    answerStore.answers.forEach((answer) => {
+        taskId.value = id;
+        if (answer.task?.id === taskId.value) {
+            correct = answer.is_correct;
+        }
+    })
+}
 
 const openTask = (taskId) => {
     SeeTask.value = true;
     finish.value = false;
     playAudio(taskAudio.value);
-    // emit('startTask', taskId);
     setTimeout(() => {
         endTime.value = true;
     }, timeVal.value * 1000);
 };
 
-const next = (id, audio, correct) => {
+const next = (started, id, audio) => {
+    console.log('start', started);
     SeeTask.value = false;
     endTime.value = false;
     show.value = false;
+    // tasks.value.forEach((task) => {
+    //     if (task.id === id) {
+    //         task.open = started;
+    //         task.disabled = false;
+    //     }
+    // });
+    answerStore.answers.forEach((answer) => {
+        taskId.value = id;
+        if (answer.task?.id === taskId.value) {
+            started.value = answer.is_started;
+        }
+    })
     taskAudio.value = audio;
-    console.log(correct);
-
     taskId.value = id;
     openTask(taskId);
 }
 
-const getTasks = async () => {
-    await HTTP.get('tasks')
-        .then((response) => {
-            tasks_server.value = response.data;
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-};
+// const getTasks = async () => {
+//     await HTTP.get('tasks')
+//         .then((response) => {
+//             tasks_server.value = response.data;
+//         })
+//         .catch((error) => {
+//             console.error(error);
+//         });
+// };
 
 watch(
     () => taskId.value,
@@ -192,9 +214,27 @@ watch(
     }
 );
 
-onMounted(async() => {
+onMounted(async () => {
     await answerStore.getAnswers(props.childId);
-    getTasks();
+    const currentTaskId = answerStore.answers.find((item) => item.task?.id !== null)?.task?.id;
+    const nextTaskId = answerStore.answers.find((item) => item.task?.id !== null)?.task?.id + 1;
+    taskId.value = currentTaskId;
+    answerStore.answers.forEach((answer) => {
+        if (answer.task?.id === taskId.value) {
+            correct.value = answer.is_correct;
+            // started.value = answer.is_started;
+            // console.log()
+        }
+    })
+
+    // const correctAnswers = answerStore.answers.find((item) => item.is_correct === true);
+    // const startedAnswers = answerStore.answers.find((item) => item.is_started === true);
+    // const disabledAnswer = tasks.value.find((item) => item.disabled === true)
+    // const taskI = tasks.value.find((item) => item.id == correctAnswers.task?.id);
+    // if(taskI) {
+
+    // }
+    // console.log('logs', correctAnswers, taskI, startedAnswers);
 });
 </script>
 <style lang="scss" scoped>

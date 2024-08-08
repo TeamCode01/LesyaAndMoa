@@ -58,7 +58,7 @@ import gameActions from '@mixins/gameAction';
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
-const emit = defineEmits(['close', 'next-modal']);
+const emit = defineEmits(['close', 'next-modal', 'correct']);
 const endGame = ref(false);
 const audio = ref(new Audio());
 const hide = () => {
@@ -67,7 +67,7 @@ const hide = () => {
 };
 
 const next = () => {
-    emit('next-modal');
+    emit('next-modal', is_started.value);
     endGame.value = true;
 }
 
@@ -171,6 +171,7 @@ const drop = (event, index) => {
         return false;
     }
     if (array.value.length === array_result.value.length && array_two.value.length === array_two_result.value.length && array_three.value.length === array_three_result.value.length) {
+        emit('correct',  is_correct.value);
         setTimeout(() => {
             endGameRequest(props.childId, corrValue.value);
             endGame.value = true;
@@ -186,7 +187,9 @@ const allowDrop = (event) => {
 
 onMounted(async() => {
     const correct = await getCorrectAnswer(3, props.childId);
-    corrValue.value = correct;
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+    is_started.value = correct.is_started;
     await getCorrectAnswer(3, props.childId, correctId.value);
 })
 </script>
