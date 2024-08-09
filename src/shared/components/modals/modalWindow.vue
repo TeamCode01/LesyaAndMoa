@@ -18,7 +18,7 @@
                     alt="крест"
                 />
             </div>
-            <slot></slot>
+            <slot :close="closeDialog"></slot>
         </v-dialog>
     </div>
 </template>
@@ -35,6 +35,7 @@ const props = defineProps({
 });
 
 const closeDialog = () => {
+    console.log(123);
     dialog.value = false;
 };
 </script>

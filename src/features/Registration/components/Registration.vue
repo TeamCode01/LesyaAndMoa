@@ -6,33 +6,46 @@
                 <div class="login-input-pass">
                     <label>Логин</label>
                     <Input
+                        @blur="v$.email.$touch()"
                         placeholder="Введите логин"
                         name="login"
                         class="form-input"
                         v-model:value="form.email"
                     ></Input>
+                    <span v-if="isError.email" class="error-message">{{
+                        isError.email[0]
+                    }}</span>
                 </div>
                 <div class="login-input-pass">
                     <label>Введите пароль</label>
                     <Input
+                        @blur="v$.password.$touch()"
                         placeholder="Введите пароль"
                         name="password"
                         class="form-input"
                         v-model:value="form.password"
                         type="password"
                     ></Input>
+                    <span v-if="isError.password" class="error-message">{{
+                        isError.password[0]
+                    }}</span>
                 </div>
                 <div class="login-input-pass">
                     <label>Повторите пароль</label>
                     <Input
+                        @blur="v$.re_password.$touch()"
                         placeholder="Введите пароль"
                         name="password"
                         class="form-input"
                         v-model:value="form.re_password"
                         type="password"
                     ></Input>
+                    <span v-if="isError.re_password" class="error-message">{{
+                        isError.re_password[0]
+                    }}</span>
                 </div>
                 <SelectSort
+                    @blur="v$.tasks_type.$touch()"
                     v-model="form.tasks_type"
                     :items="tasksChoose"
                     name="select_position"
@@ -46,6 +59,9 @@
                     @update:value="changeOption"
                     v-bind="props"
                 />
+                <span v-if="isError.tasks_type" class="error-message">{{
+                    isError.tasks_type[0]
+                }}</span>
 
                 <div class="regCheck">
                     <input
@@ -81,6 +97,9 @@ import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { SelectSort } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import { watchEffect } from 'vue';
 
 const tasksChoose = ref([
     { value: 'групповой', name: 'Групповые занятия' },
@@ -89,13 +108,40 @@ const tasksChoose = ref([
 
 const router = useRouter();
 const swal = inject('$swal');
-const isError = ref([]);
 const form = ref({
     email: '',
     password: '',
     re_password: '',
     tasks_type: null,
     data_processing_agreement: false,
+});
+
+const rules = {
+    email: { required },
+    password: { required },
+    re_password: { required },
+    tasks_type: { required },
+};
+
+const v$ = useVuelidate(rules, form);
+const isError = ref({});
+
+watchEffect(() => {
+    isError.value = {};
+    if (v$.value.$invalid) {
+        if (v$.value.email.$error) {
+            isError.value.email = ['Поле должно быть заполнено'];
+        }
+        if (v$.value.password.$error) {
+            isError.value.password = ['Поле должно быть заполнено'];
+        }
+        if (v$.value.re_password.$error) {
+            isError.value.re_password = ['Поле должно быть заполнено'];
+        }
+        if (v$.value.tasks_type.$error) {
+            isError.value.tasks_type = ['Поле должно быть заполнено'];
+        }
+    }
 });
 
 const RegisterUser = async () => {
@@ -268,5 +314,12 @@ const RegisterUser = async () => {
     color: #35383f;
     font-family: 'Nunito', sans-serif !important;
     font-size: 16px;
+}
+.error-message {
+    font-family: 'Nunito', sans-serif;
+    color: #ff535c;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21.82px;
 }
 </style>
