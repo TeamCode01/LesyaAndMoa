@@ -101,6 +101,7 @@
                                 name="login"
                                 class="form-input"
                                 v-model:value="form.first_name"
+                                @blur="v$.first_name.$touch()"
                             ></Input>
                             <span
                                 v-if="isError.first_name"
@@ -126,6 +127,7 @@
                         <div class="form-input">
                             <label>Пол</label>
                             <SelectSort
+                                @blur="v$.sex.$touch()"
                                 v-model="form.sex"
                                 :items="tasksChoose"
                                 name="select_position"
@@ -146,6 +148,7 @@
                         <div class="form-input">
                             <label>Возраст</label>
                             <Input
+                                @blur="v$.age.$touch()"
                                 name="login"
                                 class="form-input"
                                 v-model:value="form.age"
@@ -157,6 +160,7 @@
                         <div class="form-input">
                             <label>Регион</label>
                             <SelectSort
+                                @blur="v$.region.$touch()"
                                 @click="GetRegion"
                                 :items="reg"
                                 v-model="form.region"
@@ -177,6 +181,7 @@
                         <div class="form-input">
                             <label>Школа</label>
                             <Input
+                                @blur="v$.school.$touch()"
                                 name="login"
                                 class="form-input"
                                 v-model:value="form.school"
@@ -188,6 +193,7 @@
                         <div class="form-input">
                             <label>Класс</label>
                             <Input
+                                @blur="v$.grade.$touch()"
                                 name="login"
                                 class="form-input"
                                 v-model:value="form.grade"
@@ -299,9 +305,31 @@ const isError = ref({});
 watchEffect(() => {
     isError.value = {};
     if (v$.value.$invalid) {
+        if (v$.value.first_name.$error) {
+            isError.value.first_name = ['Поле должно быть заполнено'];
+        }
         if (v$.value.last_name.$error) {
             isError.value.last_name = ['Имя обязательно для заполнения'];
         }
+        if (v$.value.sex.$error) {
+            isError.value.sex = ['Поле должно быть заполнено'];
+        }
+        if (v$.value.age.$error) {
+            isError.value.age = ['Поле должно быть заполнено'];
+        }
+        if (form.value.age < 0 || form.value.age > 17) {
+            isError.value.age = ['Возраст должен быть между 0 и 17'];
+        }
+        if (v$.value.grade.$error) {
+            isError.value.grade = ['Поле должно быть заполнено'];
+        }
+        if (v$.value.school.$error) {
+            isError.value.school = ['Поле должно быть заполнено'];
+        }
+        if (v$.value.region.$error) {
+            isError.value.region = ['Поле должно быть заполнено'];
+        }
+        // + условие для чекбокса
     }
 });
 
