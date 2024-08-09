@@ -64,7 +64,7 @@ const hide = () => {
     endGame.value = true;
 };
 const next = () => {
-    emit('next-modal', is_started.value);
+    emit('next-modal');
     endGame.value = true;
 }
 
@@ -78,7 +78,6 @@ const playAudio = async (audioPath) => {
     }
 }
 
-const correctId = ref(0);
 const corrValue = ref(0);
 
 
@@ -174,7 +173,7 @@ const drop = (event) => {
                 endGameRequest(props.childId, corrValue.value);
             }
             endGame.value = true;
-        }, 3000)
+        }, 2000)
     }
 };
 
@@ -186,8 +185,6 @@ onMounted(async () => {
     const correct = await getCorrectAnswer(1, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
-    is_started.value = correct.is_started;
-    await getCorrectAnswer(1, props.childId, correctId.value);
 })
 </script>
 <style lang="scss" scoped>

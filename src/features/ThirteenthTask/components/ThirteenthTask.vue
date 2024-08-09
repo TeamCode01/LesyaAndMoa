@@ -13,8 +13,10 @@
                 </div>
 
                 <div class="draggable-list">
-                    <div v-for="(item, index) in words" :id="item.id + '_elem'" :key="index.id" class="list-group-item item" draggable="true"
-                        @dragstart="drag($event, item.name, item.id, index)" @dragover.prevent :value="item.name">
+                    <div v-for="(item, index) in words" :id="item.id + '_elem'" :key="index.id"
+                        class="list-group-item item" draggable="true" @mouseover="playAudio(item.audio)"
+                        @mouseout="stopAudio(item.audio)" @dragstart="drag($event, item.name, item.id, index)"
+                        @dragover.prevent :value="item.name">
                         {{ item.name }}
                     </div>
                 </div>
@@ -40,16 +42,19 @@
         </div>
     </template>
 
-    <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.gif" text="Чудесно!"
-        v-else class="end-modal" @next="next" @hide="hide"></TaskResultBanner>
+    <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.gif" text="Чудесно!" v-else
+        class="end-modal" @next="next" @hide="hide"></TaskResultBanner>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-const emit = defineEmits(['close', 'next-modal']);
+import gameActions from '@mixins/gameAction';
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
+const emit = defineEmits(['close', 'next-modal', 'correct']);
 const endGame = ref(false);
 const hide = () => {
     emit('close');
@@ -67,20 +72,48 @@ const props = defineProps({
         type: Boolean,
         required: false,
     },
+    finish: {
+        type: Boolean
+    },
+
+    childId: {
+        type: Number,
+        required: false,
+    }
 });
 
-const playAudio = (audioPath) => {
+const playAudio = async (audioPath) => {
     audio.value.src = audioPath;
-    audio.value.play();
+    if (props.finish === true) {
+        await audio.value.play();
+    }
 }
 
+const playEndAudio = (audioPath) => {
+    const end_audio = new Audio();
+    end_audio.src = audioPath;
+    end_audio.play();
+}
+
+const stopAudio = (audioPath) => {
+    if (audio.value.paused) {
+        playAudio(audioPath);
+    } else {
+        audio.value.pause();
+    }
+}
+
+const is_correct = ref(null);
+const correctId = ref(0);
+const corrValue = ref(0);
+
 const words = ref([
-    { id: 1, name: 'РАДЫ' },
-    { id: 2, name: 'РАССТРОЕНЫ' },
-    { id: 3, name: 'ДЕТСКУЮ' },
-    { id: 4, name: 'ВЗРОСЛУЮ' },
-    { id: 5, name: 'ОБЩАТЬСЯ' },
-    { id: 6, name: 'РУГАТЬСЯ' }
+    { id: 1, name: 'РАДЫ', audio: '/assets/audio/Task13/371.13.mp3' },
+    { id: 2, name: 'РАССТРОЕНЫ', audio: '/assets/audio/Task13/372.13.mp3' },
+    { id: 3, name: 'ДЕТСКУЮ', audio: '/assets/audio/Task13/373.13.mp3' },
+    { id: 4, name: 'ВЗРОСЛУЮ', audio: '/assets/audio/Task13/374.13.mp3' },
+    { id: 5, name: 'ОБЩАТЬСЯ', audio: '/assets/audio/Task13/375.13.mp3' },
+    { id: 6, name: 'РУГАТЬСЯ', audio: '/assets/audio/Task13/376.13.mp3' }
 ]);
 const answer_drop = ref('?');
 const answer = ref('');
@@ -103,26 +136,37 @@ const drop = (event) => {
         (answer.value === 'РАДЫ' && text === 'ОБЩАТЬСЯ') ||
         (answer.value === 'ОБЩАТЬСЯ' && text === 'ДЕТСКУЮ')
     ) {
-        words.value.splice(dropIndex.value, 1);
-        elem.classList.add('green');
         playAudio('/assets/audio/Common/1.2.mp3');
+        elem.classList.add('green');
         answer_drop.value = text;
         setTimeout(() => {
+            words.value.splice(dropIndex.value, 1);
             elem.classList.remove('green');
             answer.value = text;
             answer_drop.value = '?';
         }, 2000);
 
         if (text === 'ДЕТСКУЮ') {
-            endGame.value = true;
+            event.target.classList.add('green');
+            // emit('correct', is_correct.value);
+            playAudio('/assets/audio/Common/1.2.mp3');
+            setTimeout(() => {
+                endGame.value = true;
+                event.target.classList.remove('green');
+                // if (is_correct.value === false) {
+                //     endGameRequest(props.childId, corrValue.value);
+                // }
+            }, 2000)
+
         }
     }
     else {
+        playAudio('/assets/audio/Common/2.1.mp3');
         elem.classList.add('red');
         setTimeout(() => {
-         elem.classList.remove('red');
-        })
-        playAudio('/assets/audio/Common/2.1.mp3');
+            elem.classList.remove('red');
+        }, 2000)
+
         return false;
     }
 };
@@ -130,9 +174,14 @@ const drop = (event) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+onMounted(async () => {
+    const correct = await getCorrectAnswer(13, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(13, props.childId, correctId.value);
+})
 </script>
 <style lang="scss" scoped>
-
 .end-modal {
     width: 1200px;
     height: 600px;
@@ -145,7 +194,7 @@ const allowDrop = (event) => {
     justify-content: center;
     row-gap: 48px;
     width: 100%;
-    max-width: 555px;
+    max-width: 570px;
     margin: 60px auto;
 }
 
