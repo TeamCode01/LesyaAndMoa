@@ -21,7 +21,7 @@
                     <!-- ВАРИАНТЫ ОТВЕТОВ -->
                     <div class="draggable-list__words">
                         <div class="draggable-list__set-words" v-for="row in Task" :key="row">
-                            <button class="draggable-list__word" v-for="word in row" :key="word" :class="{void : !word.isActive, item_wrong : word.error == -1 }" 
+                            <button class="draggable-list__word" v-for="word in row" :key="word" :class="{void : !word.isActive, item_wrong : word.error == -1 }"
                             :draggable="word.isActive" @dragstart="dragLetter($event, word.id)">
                                 {{ word.text }}
                             </button>
@@ -55,7 +55,7 @@
                                 <div class="draggable-list__question-block" v-for="letter in word" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
                                     <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" >
                                     <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }">
-                                        {{ letter.text }} 
+                                        {{ letter.text }}
                                     </div>
                                     <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
                                 </div>
@@ -70,7 +70,7 @@
                 </div>
             </template>
             <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Превосходно!"
-                v-if="answersCounter == 11" @hide="hide()"></TaskResultBanner>
+                v-if="answersCounter == 11" @next="next" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -86,12 +86,17 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
 import { dataTask, dataAnswer } from './task.js'
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'next-modal']);
 
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
+
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+}
 
 const props = defineProps({
     end: {
@@ -118,7 +123,7 @@ watch(answersCounter, (NewValue)=>{
     if (NewValue == 11){
         endGame.value == true
         show.value == true
-        
+
         console.log(endGame.value, show.value)
     }
     console.log(NewValue)
@@ -152,11 +157,11 @@ const dropLetter = (event, id, isActive) => {
 
                     if (word.id == id) {
                         word.isActive = !word.isActive;
-                        console.log(word)   
+                        console.log(word)
                     }
                 })
             );
-            
+
             answersCounter.value += 1;
             let reactionAudio = new Audio(
                 `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
@@ -200,7 +205,7 @@ const dropLetter = (event, id, isActive) => {
 .TwelfthTask__title {
     width: 640px;
     font-weight: 500;
-    font-size: 24px; 
+    font-size: 24px;
 
     @media (max-width: 1024px) {
         width: 550px;
@@ -240,7 +245,7 @@ const dropLetter = (event, id, isActive) => {
     justify-content: center;
     width: 100%;
     height: 40px;
-    margin-bottom: 40px; 
+    margin-bottom: 40px;
 
     @media (max-width: 1024px) {
         height: 38px;
@@ -279,8 +284,8 @@ const dropLetter = (event, id, isActive) => {
     align-items: stretch;
     justify-content: space-evenly;
     height: 49px;
-    margin-top: 30px; 
-    
+    margin-top: 30px;
+
 
     @media (max-width: 1024px) {
         margin-top: 5px;

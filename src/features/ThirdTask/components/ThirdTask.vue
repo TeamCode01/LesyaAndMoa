@@ -43,23 +43,33 @@
                         </div>
                     </div>
                 </div>
-                </template>
-                <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Великолепно!"
-                v-else @hide="hideModal" class="end-modal"></TaskResultBanner>
-            </div>
+            </template>
+            <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Великолепно!"
+                v-else @next="next()" @hide="hide" class="end-modal"></TaskResultBanner>
         </div>
+    </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-const emit = defineEmits(['close']);
+import gameActions from '@mixins/gameAction';
 
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
+const emit = defineEmits(['close', 'next-modal']);
+const endGame = ref(false);
+const audio = ref(new Audio());
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
+
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+}
 
 const props = defineProps({
     end: {
@@ -68,29 +78,45 @@ const props = defineProps({
     },
     finish: {
         type: Boolean,
+    },
+    childId: {
+        type: Number,
+        required: false,
     }
 });
 
-const audio = ref(new Audio());
 
-const playAudio = (audioPath) => {
+
+const playAudio = async (audioPath) => {
     audio.value.src = audioPath;
     if (props.finish === true) {
-        audio.value.play();
+        await audio.value.play();
+    }
+}
+const stopAudio = (audioPath) => {
+    if (audio.value.paused) {
+        playAudio(audioPath);
+    } else {
+        audio.value.pause();
     }
 }
 
-const stopAudio = (audioPath) => {
-    audio.value.src = '';
+const playEndAudio = (audioPath) => {
+    const end_audio = new Audio();
+    end_audio.src = audioPath;
+    end_audio.play();
 }
 
-const endGame = ref(false);
+
 
 const letters = ref([{ id: 1, name: 'к', type: 'глухой', audio: '/assets/audio/Task3/34.3.mp3' }, { id: 2, name: 'ч', type: 'глухой', audio: '/assets/audio/Task3/35.3.mp3' }, { id: 3, name: 'с', type: 'глухой', audio: '/assets/audio/Task3/36.3.mp3' }, { id: 4, name: 'о', type: 'звонкий', audio: '/assets/audio/Task3/37.3.mp3' }, { id: 5, name: 'ф', type: 'глухой', audio: '/assets/audio/Task3/38.3.mp3' }, { id: 6, name: 'з', type: 'средний', audio: '/assets/audio/Task3/39.3.mp3' }, { id: 7, name: 'и', type: 'звонкий', audio: '/assets/audio/Task3/40.3.mp3' }, { id: 8, name: 'г', type: 'средний', audio: '/assets/audio/Task3/41.3.mp3' }, { id: 9, name: 'д', type: 'средний', audio: '/assets/audio/Task3/42.3.mp3' }])
 const answer = ref('');
 const array = ref([]);
 const array_two = ref([]);
 const array_three = ref([]);
+
+let correctId = ref(0);
+const corrValue = ref(0);
 
 const array_result = ref([{ name: 'к', type: 'глухой' }, { name: 'ч', type: 'глухой' }, { name: 'с', type: 'глухой' }, { name: 'ф', type: 'глухой' }]);
 const array_two_result = ref([{ name: 'г', type: 'средний' }, { name: 'д', type: 'средний' }, { name: 'з', type: 'средний' }]);
@@ -114,7 +140,7 @@ const drop = (event, index) => {
         // setTimeout(() => {
         //     elem.classList.remove('green');
         // }, 2000);
-        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
 
     } else if (array_two_result.value.find((item) => item.name === letter) && index === 1) {
         // elem.classList.add('green');
@@ -123,7 +149,7 @@ const drop = (event, index) => {
         // }, 2000);
         array_two.value.push(letter);
         letters.value.splice(dropIndex.value, 1)
-        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
     }
     else if (array_three_result.value.find((item) => item.name === letter) && index === 2) {
         // elem.classList.add('green');
@@ -133,19 +159,20 @@ const drop = (event, index) => {
         array_three.value.push(letter);
         letters.value.splice(dropIndex.value, 1)
 
-        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
 
     } else {
         elem.classList.add('red');
         setTimeout(() => {
             elem.classList.remove('red');
         }, 2000);
-        playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+        playEndAudio('/assets/audio/Other/2. общее для разных заданий.mp3');
 
         return false;
     }
     if (array.value.length === array_result.value.length && array_two.value.length === array_two_result.value.length && array_three.value.length === array_three_result.value.length) {
         setTimeout(() => {
+            endGameRequest(props.childId, corrValue.value);
             endGame.value = true;
         }, 1500)
     }
@@ -156,6 +183,12 @@ const drop = (event, index) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+onMounted(async() => {
+    const correct = await getCorrectAnswer(3, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(3, props.childId, correctId.value);
+})
 </script>
 <style lang="scss" scoped>
 .end-modal {
@@ -209,14 +242,6 @@ const allowDrop = (event) => {
         width: 250px;
         height: 186px;
     }
-}
-
-.red {
-    border: 2px solid red !important;
-}
-
-.green {
-    border: 2px solid green !important;
 }
 
 .ThirdTask {

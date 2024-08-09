@@ -15,15 +15,15 @@
                 </div>
                 <div class="ElevenTask__content">
                     <div class="fairy_tales__wrapper hide">
-                        <div class="fairy_tales__item" @click="chooseFairyTail()" v-for="item in fairytails"
-                            :key="item">
-                            <span>«{{ item.name }}»</span>
+                        <div class="fairy_tales__item" @click="chooseFairyTail($event, item.correct)"
+                            v-for="item in fairytails" :key="item.id">
+                           «{{ item.name }}»
                         </div>
                     </div>
 
                     <div class="draggable-list">
                         <q-btn class="list-group-item item" v-for="(item, index) in syllables" :key="item.id"
-                            draggable="true" @dragstart="drag($event, item.name, index)" @dragover.prevent
+                            draggable="true" @dragstart="drag($event, item.name, item.id, index)" @dragover.prevent
                             :value="item">
                             {{ item.name }}
                         </q-btn>
@@ -35,7 +35,7 @@
                     </div>
                     <div class="inputs">
                         <div class="input-group">
-                            <input @drop="drop($event, 1, 1)" type="text" class="input-item row1 part1" /><input
+                            <input  @drop="drop($event, 1, 1)" type="text" class="input-item row1 part1" /><input
                                 @drop="drop($event, 2, 1)" type="text" class="input-item row1 part2" />
 
                             <input @drop="drop($event, 1, 2)" type="text" class="input-item row2 part1" /><input
@@ -58,20 +58,28 @@
         </div>
     </template>
 
-    <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Молодец!"
-        v-if="show === true" @hide="hideModal"></TaskResultBanner>
+    <TaskResultBanner img="/assets/backgrounds/king.png" class="end-modal" bg="/assets/backgrounds/Lesya.png"
+        text="Молодец!" v-else @next="next" @hide="hide"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-const emit = defineEmits(['close']);
-
+const emit = defineEmits(['close', 'next-modal']);
+const audio = ref(new Audio());
 const endGame = ref(false);
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
+const playAudio = (audioPath) => {
+    audio.value.src = audioPath;
+    audio.value.play();
+}
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+}
 
 const props = defineProps({
     end: {
@@ -80,10 +88,6 @@ const props = defineProps({
     },
 });
 
-const show = ref(false);
-const hideModal = () => {
-    show.value = false;
-}
 
 const syllables = ref([
     { id: 1, name: 'МЫШ', part: 1 },
@@ -100,8 +104,9 @@ const syllables = ref([
     { id: 12, name: 'ЧОК', part: 2 },
 ]);
 const dropIndex = ref(syllables.value.length - 1);
-const drag = (event, syllable, index) => {
+const drag = (event, syllable, id, index) => {
     event.dataTransfer.setData('text', syllable);
+    event.dataTransfer.setData('id', id);
     dropIndex.value = index;
 };
 const finish_answers = ref([]);
@@ -128,6 +133,8 @@ const drop = (event, part, row) => {
         return false;
     }
     let text = event.dataTransfer.getData('text');
+    let id = event.dataTransfer.getData('id');
+    let elem = document.getElementById(id);
     let secondPart = part == 1 ? 2 : 1;
     let element = document.querySelector('.row' + row + '.part' + secondPart);
     let firstBlock = document.querySelector('.draggable-list');
@@ -140,16 +147,18 @@ const drop = (event, part, row) => {
         event.target.classList.add('item');
     } else {
         let word = part == 1 ? text + element.value : element.value + text;
+        console.log(word);
 
         if (answers.value.includes(word.toLowerCase())) {
             event.target.value = text;
             finish_answers.value.push(word.toLowerCase());
             syllables.value.splice(dropIndex.value, 1);
-            event.target.classList.add('check');
+            elem.classList.add('check');
             setTimeout(() => {
-                event.target.classList.remove('check');
-                event.target.classList.add('item');
-            }, 1000);
+                elem.classList.add('item');
+                elem.classList.remove('check');
+
+            }, 2000);
             if (syllables.value.length == 0) {
                 firstBlock.classList.add('hide');
                 starterInputs.classList.add('hide');
@@ -160,16 +169,25 @@ const drop = (event, part, row) => {
     }
 };
 
-const chooseFairyTail = () => {
-    const correct = fairytails.value.find((item) => item.correct == true);
-    if (correct) {
+const chooseFairyTail = (event, status) => {
+    if (status === true) {
+        event.target.value = status;
+        event.target.classList.add('green');
+        playAudio('assets/audio/Common/1.2.mp3');
+        fairytails.value = fairytails.value.filter(
+            (item) => item.correct == true,
+        );
         setTimeout(() => {
-            fairytails.value = fairytails.value.filter(
-                (item) => item.correct == true,
-            );
             endGame.value = true;
-        }, 5000);
+            event.target.classList.remove('green');
+        }, 2000);
     } else {
+        event.target.value = status;
+        playAudio('assets/audio/Common/2.1.mp3');
+        event.target.classList.add('red');
+        setTimeout(() => {
+            event.target.classList.remove('red');
+        }, 2000);
         return false;
     }
 };
@@ -178,6 +196,11 @@ const allowDrop = (event) => {
 };
 </script>
 <style lang="scss" scoped>
+.end-modal {
+    width: 1200px;
+    height: 600px;
+}
+
 .fairy_tales__wrapper {
     display: flex;
     flex-direction: column;
@@ -292,6 +315,14 @@ const allowDrop = (event) => {
     cursor: pointer;
 }
 
+.green {
+    border: 2px solid #5ccf54;
+}
+
+.red {
+    border: 2px solid #DB0000
+}
+
 .check {
     width: 108px;
     height: 52px;
@@ -315,6 +346,6 @@ const allowDrop = (event) => {
     font-family: 'Nunito';
     font-weight: 700;
     text-align: center;
-    border: 2px solid red;
+    border: 2px solid #DB0000
 }
 </style>

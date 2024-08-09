@@ -20,7 +20,7 @@
             </div>
         </div>
     </template>
-    <TaskResultBanner :is_end="true" bg="/assets/backgrounds/bg_end.jpg" v-else @hide="hide()"></TaskResultBanner>
+    <TaskResultBanner :is_end="true" bg="/assets/backgrounds/bg_end.jpg" class="end-modal" v-else @hide="hide()"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -28,6 +28,9 @@ import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+import gameActions from '@mixins/gameAction';
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
 const emit = defineEmits(['close']);
 const endGame = ref(false);
 
@@ -41,11 +44,16 @@ const props = defineProps({
         type: Boolean,
         required: false,
     },
+    childId: {
+        type: Number,
+        required: false,
+    },
 });
 
 const audio = ref(new Audio());
 
-
+let correctId = ref(0);
+const corrValue = ref(0);
 const playAudio = (audioPath) => {
     audio.value.src = audioPath;
     audio.value.play();
@@ -58,8 +66,9 @@ const sendAnswer = () => {
     const answer_input = document.getElementById('input');
     if (answer.value === correct_answer.value) {
         answer_input.classList.add('green');
-        playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+        playAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
+            endGameRequest(props.childId, corrValue.value);
             answer_input.classList.remove('green');
             endGame.value = true;
         }, 2000)
@@ -68,14 +77,24 @@ const sendAnswer = () => {
 
     } else {
         answer_input.classList.add('red');
-        playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+        playAudio('/assets/audio/Other/2. общее для разных заданий.mp3');
         setTimeout(() => {
             answer_input.classList.remove('red');
         }, 2000)
     }
 }
+
+onMounted(async() => {
+    const correct = await getCorrectAnswer(18, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(18, props.childId, correctId.value);
+})
 </script>
 <style lang="scss" scoped>
+.end-modal {
+    width: 1200px;
+    height: 600px;
+}
 .send {
     max-width: 280px;
     width: 100%;
@@ -145,11 +164,4 @@ const sendAnswer = () => {
     }
 }
 
-.red {
-    border: 2px solid red !important;
-}
-
-.green {
-    border: 2px solid green !important;
-}
 </style>

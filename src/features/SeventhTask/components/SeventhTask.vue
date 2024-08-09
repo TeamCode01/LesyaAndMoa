@@ -20,40 +20,40 @@
                     <div class="draggable-list__words">
                         <div class="draggable-list__word-container" v-for="(word, word_index) in words[option]" :key="word_index">
                             <div :ref="el => refBlockSound[1][word_index - 1] = el" :class="{ 'draggable-list__word': true, correct_select: word.correct, not_correct_select: word.correct === false}">{{ word.word }}</div>
-                            <img :ref="el => refColumns[1][word_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[1][word_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
                     <div class="draggable-list__sentences" v-if="!showCorrectRow">
                         <div class="draggable-list__sentence-container" v-for="(sentence, sentence_index) in sentences[option]" :key="sentence_index">
-                            <img :ref="el => refColumns[2][sentence_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[2][sentence_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <div :ref="el => refBlockSound[2][sentence_index - 1] = el" :class="{'draggable-list__sentence': true, correct_select: sentence.correct, not_correct_select: sentence.correct === false}">{{ sentence.sentence }}</div>
-                            <img :ref="el => refColumns[3][sentence_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[3][sentence_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
                     <div class="draggable-list__sentences" v-else>
                         <div class="draggable-list__sentence-container" v-for="(rowId, rowId_index) in correctRowId[option][2]" :key="rowId_index">
-                            <img :ref="el => refColumns[2][rowId_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[2][rowId_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <div :ref="el => refBlockSound[2][rowId_index - 1] = el" class="draggable-list__sentence">{{ sentences[option][rowId].sentence }}</div>
-                            <img :ref="el => refColumns[3][rowId_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[3][rowId_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                         </div>
                     </div>
-                    
+
                     <div class="draggable-list__pictures" v-if="!showCorrectRow">
                         <div class="draggable-list__picture-container" v-for="(img, img_index) in images[option]" :key="img_index">
-                            <img :ref="el => refColumns[4][img_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[4][img_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <img :src="img.url" class="draggable-list__image">
                         </div>
                     </div>
                     <div class="draggable-list__pictures" v-else>
                         <div class="draggable-list__picture-container" v-for="(rowId, rowId_index) in correctRowId[option][3]" :key="rowId_index">
-                            <img :ref="el => refColumns[4][rowId_index - 1] = el" alt="green-circle" src="assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
+                            <img :ref="el => refColumns[4][rowId_index - 1] = el" alt="green-circle" src="/assets/creatures/SeventeenthTask/green-circle.svg"  class="draggable-list__circle" draggable="false"/>
                             <img :src="images[option][rowId].url" class="draggable-list__image">
                         </div>
                     </div>
                 </div>
             </template>
             <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/lesya.gif" text="Далее!"
-            v-else @hide="hide()"></TaskResultBanner>
+            v-else @hide="hide()" @next="next()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -256,30 +256,30 @@ const sentences = ref({
             correctLeftRow: 3,
         },
     },
-}) 
+})
 
 const images = ref({
     1:{
         1: {
-            url: "assets/creatures/SeventhTask/girl's-top.png",
+            url: "/assets/creatures/SeventhTask/girl's-top.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 2,
         },
         2: {
-            url: "assets/creatures/SeventhTask/chess.png",
+            url: "/assets/creatures/SeventhTask/chess.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 1,
         },
         3: {
-            url: "assets/creatures/SeventhTask/horse.png",
+            url: "/assets/creatures/SeventhTask/horse.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 4,
         },
         4: {
-            url: "assets/creatures/SeventhTask/swamp.png",
+            url: "/assets/creatures/SeventhTask/swamp.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 3,
@@ -287,25 +287,25 @@ const images = ref({
     },
     2:{
         1: {
-            url: "assets/creatures/SeventhTask/chalk.png",
+            url: "/assets/creatures/SeventhTask/chalk.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 4
         },
         2: {
-            url: "assets/creatures/SeventhTask/shallow.png",
+            url: "/assets/creatures/SeventhTask/shallow.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 3
         },
         3: {
-            url: "assets/creatures/SeventhTask/food.png",
+            url: "/assets/creatures/SeventhTask/food.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 1
         },
         4: {
-            url: "assets/creatures/SeventhTask/sit.png",
+            url: "/assets/creatures/SeventhTask/sit.png",
             correct: null,
             correctLeft: false,
             correctLeftRow: 2
@@ -313,7 +313,7 @@ const images = ref({
     },
 })
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close','next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -324,6 +324,10 @@ const hide = () => {
     emit('close');
 };
 
+const next = () => {
+    emit('next-modal');
+}
+
 const voiceActing = () => {
     let onBlock = false;
     let clickOnColumn = 0;
@@ -332,9 +336,9 @@ const voiceActing = () => {
     for (const columnId in blockSoundCords.value) {
         for(const rowId in blockSoundCords.value[columnId]) {
             if (
-                pos.x >= blockSoundCords.value[columnId][rowId].leftUpperCornerCords.x && 
+                pos.x >= blockSoundCords.value[columnId][rowId].leftUpperCornerCords.x &&
                 pos.y >= blockSoundCords.value[columnId][rowId].leftUpperCornerCords.y &&
-                pos.x <= blockSoundCords.value[columnId][rowId].rightLowerCornerCords.x && 
+                pos.x <= blockSoundCords.value[columnId][rowId].rightLowerCornerCords.x &&
                 pos.y <= blockSoundCords.value[columnId][rowId].rightLowerCornerCords.y
             ){
                 clickOnColumn = columnId;
@@ -373,8 +377,8 @@ const draw = (event) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             redraw();
             ctx.strokeStyle = "green";
-            ctx.lineWidth = 2; 
-            ctx.setLineDash([5, 5]); 
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
             ctx.beginPath();
             ctx.moveTo(startCords.value.x, startCords.value.y);
             ctx.lineTo(pos.x, pos.y);
@@ -414,7 +418,7 @@ const checkRowsAndColumnsIds = (pos) => {
 const isDone = (column, row) => {
     if(column == 1){
         return words.value[option.value][row].correctRight;
-    } else if (column == 2){ 
+    } else if (column == 2){
         return sentences.value[option.value][row].correctLeft;
     } else if (column == 3){
         return sentences.value[option.value][row].correctRight
@@ -450,7 +454,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             sentences.value[option.value][endRow].correct = true;
             setTimeout(() => {
                 words.value[option.value][startRow].correct = null;
-                sentences.value[option.value][endRow].correct = null;  
+                sentences.value[option.value][endRow].correct = null;
             }, 1000);
             return true;
         } else {
@@ -458,7 +462,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             sentences.value[option.value][endRow].correct = false;
             setTimeout(() => {
                 words.value[option.value][startRow].correct = null;
-                sentences.value[option.value][endRow].correct = null;  
+                sentences.value[option.value][endRow].correct = null;
             }, 1000);
             return false;
         }
@@ -470,14 +474,14 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             sentences.value[option.value][startRow].correct = true;
             setTimeout(() => {
                 words.value[option.value][endRow].correct = null;
-                sentences.value[option.value][startRow].correct = null;  
+                sentences.value[option.value][startRow].correct = null;
             }, 1000);
         } else {
             words.value[option.value][endRow].correct = false;
             sentences.value[option.value][startRow].correct = false;
             setTimeout(() => {
                 words.value[option.value][endRow].correct = null;
-                sentences.value[option.value][startRow].correct = null;  
+                sentences.value[option.value][startRow].correct = null;
             }, 1000);
             return false;
         }
@@ -489,7 +493,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             images.value[option.value][endRow].correct = true;
             setTimeout(() => {
                 sentences.value[option.value][startRow].correct = null;
-                images.value[option.value][endRow].correct = null;  
+                images.value[option.value][endRow].correct = null;
             }, 1000);
             return true;
         } else {
@@ -497,7 +501,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             images.value[option.value][endRow].correct = false;
             setTimeout(() => {
                 sentences.value[option.value][startRow].correct = null;
-                images.value[option.value][endRow].correct = null;  
+                images.value[option.value][endRow].correct = null;
             }, 1000);
             return false;
         }
@@ -509,7 +513,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             sentences.value[option.value][endRow].correct = true;
             setTimeout(() => {
                 images.value[option.value][startRow].correct = null;
-                sentences.value[option.value][endRow].correct = null;  
+                sentences.value[option.value][endRow].correct = null;
             }, 1000);
             return true;
         } else {
@@ -517,7 +521,7 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             sentences.value[option.value][endRow].correct = false;
             setTimeout(() => {
                 images.value[option.value][startRow].correct = null;
-                sentences.value[option.value][endRow].correct = null;  
+                sentences.value[option.value][endRow].correct = null;
             }, 1000);
             return false;
         }
@@ -536,7 +540,7 @@ const redrawCorrectRows = () => {
             ctx.fill();
             ctx.stroke();
             ctx.closePath();
-            
+
             ctx.strokeStyle = "green";
             ctx.lineWidth = 2;
             ctx.setLineDash([]);
@@ -637,7 +641,7 @@ const redraw = () => {
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
-        
+
         ctx.strokeStyle = "green";
         ctx.lineWidth = 2;
         ctx.setLineDash([]);
@@ -659,7 +663,7 @@ const redraw = () => {
 const resizeCanvas = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    redraw(); 
+    redraw();
 }
 
 const getCenterCords = () => {

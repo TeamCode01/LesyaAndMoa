@@ -78,7 +78,13 @@
                         </template>
                     </v-progress-linear>
                 </div>
-                <RouterLink to="/Game" class="router-link">
+                <RouterLink
+                    :to="{
+                        name: 'Game',
+                        params: { idChildOrGroup: block.id },
+                    }"
+                    class="router-link"
+                >
                     <Button
                         label="Перейти к обучению"
                         class="profile__btn"
@@ -238,14 +244,25 @@
         </modalWindow>
         <img
             v-if="userStore.children.length"
-            class="profile-child__img"
-            src="@app/assets/img/Profile/LesyaMoa.png"
-            alt=""
+            class="profile__img"
+            src="@app/assets/img/Profile/lesyaandmoa.svg"
         />
         <img
             v-if="!userStore.children.length"
-            class="profile__img"
+            class="profile-child__img"
             src="@app/assets/img/Profile/Moa.png"
+            alt=""
+        />
+        <img
+            v-if="false"
+            class="profile-child__img"
+            src="@app/assets/img/Profile/lesyaMoaParentAndChild.svg"
+            alt=""
+        />
+        <img
+            v-if="false"
+            class="profile-child__img"
+            src="@app/assets/img/Profile/lesyaProfileGroup.svg"
             alt=""
         />
     </div>
@@ -451,6 +468,7 @@ onMounted(async () => {
     }
 
     &__text {
+        text-align: center;
         font-size: 28px;
         font-family: 'Nunito', sans-serif;
         font-weight: normal;
@@ -461,12 +479,33 @@ onMounted(async () => {
     padding: 12px 104px;
     margin: 40px auto;
     margin-bottom: 0px;
+
+    @media (max-width: 460px) {
+        padding: 12px 60px;
+    }
 }
 
-.profile__img {
+.profile__img,
+.profile-child__img {
+    max-width: 100%;
     position: absolute;
     top: -50px;
     z-index: -1;
+
+    @media (max-width: 1200px) {
+        object-fit: cover;
+        height: 100%;
+        left: 50%;
+        margin-left: -490px;
+    }
+    @media (max-width: 975px) {
+        margin-left: 0;
+        left: 0;
+    }
+    @media (max-width: 568px) {
+        top: 50px;
+        height: 80%;
+    }
 }
 
 .text__profile {
@@ -485,11 +524,12 @@ onMounted(async () => {
 }
 
 .profile-child {
+    display: flex;
+    flex-direction: column;
     position: relative;
     min-height: 640px;
     margin: 40px auto 0 auto;
     max-width: 1200px;
-
     &__wrapper {
         display: flex;
         flex-direction: column;
@@ -508,7 +548,7 @@ onMounted(async () => {
 }
 
 .child__form {
-    width: 1050px;
+    max-width: 100%;
     text-align: center;
 }
 
@@ -540,23 +580,47 @@ onMounted(async () => {
 }
 
 .profile-child__img {
-    margin: 0 45px -120px 45px;
+    max-width: 100%;
+    position: absolute;
+    top: -30px;
+    z-index: -1;
+
+    @media (max-width: 1200px) {
+        top: 60px;
+        object-fit: cover;
+        height: 100%;
+        left: 50%;
+        margin-left: -490px;
+    }
+    @media (max-width: 975px) {
+        margin-left: 0;
+        left: 0;
+    }
+    @media (max-width: 568px) {
+        top: 50px;
+        height: 80%;
+    }
 }
+
 .router-link {
     text-decoration-line: none;
 }
+
 .btn_primary {
     height: 58px;
 }
+
 .regCheck {
     margin-top: 8px;
     display: flex;
     margin-bottom: 20px;
+
     input {
         width: 20px;
         height: 20px;
         border: 1px solid black;
     }
+
     &_text {
         max-width: 320px;
         font-family: 'Nunito', sans-serif;
@@ -566,6 +630,7 @@ onMounted(async () => {
         margin-left: 8px;
     }
 }
+
 .add-child-btn {
     margin: 0 0 32px 0;
 }
@@ -578,6 +643,7 @@ onMounted(async () => {
     max-width: 464px;
     min-height: 326px;
 }
+
 .delete-profile__title {
     font-size: 28px;
     font-family: 'Nunito', sans-serif;
@@ -586,20 +652,24 @@ onMounted(async () => {
     margin-bottom: 20px;
     color: #313131;
 }
+
 .delete-profile_content {
     padding-left: 5px;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
 }
+
 .delete-check {
     margin-top: 15px;
 }
+
 .delete-check input {
     margin-top: 5px;
     font-size: 20px;
     color: #313131;
 }
+
 .delete-check div {
     color: #313131;
     font-size: 20px;
@@ -611,10 +681,12 @@ onMounted(async () => {
     font-size: 20px;
     font-family: 'Nunito', sans-serif;
 }
+
 .delete-profile_btn {
     display: flex;
     justify-content: space-between;
 }
+
 .delete-btn {
     width: 182px;
 }

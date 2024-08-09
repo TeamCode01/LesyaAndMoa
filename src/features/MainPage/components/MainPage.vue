@@ -19,7 +19,7 @@
     </div>
     <div class="Test">
         <p class="title-h2 Test__title">Тестовое задание</p>
-        <div class="wrap" id="test">
+        <div class="wrap" id="test" v-if="isOpen == false">
             <div class="Test__wrapper">
                 <div class="Test__wrapper-text">
                     <p class="Test__wrapper_title">Дорогие друзья!</p>
@@ -30,9 +30,9 @@
                 </div>
                 <Button @click="openTest()" class="Test__wrapper_btn" :isImage="true" :image="arrow"
                     label="Начать"></Button>
-                <img v-if="true" src="@app/assets/backgrounds/lesyaandmoaforest.png" alt="game" class="Test__img">
+                <img src="@app/assets/backgrounds/lesyaandmoaforest.png" alt="game" class="Test__img">
             </div>
-            <div v-if="true" class="Test_icons_wrap">
+            <div class="Test_icons_wrap">
                 <div class="Test_icons_item" @click="mute()"><img v-show="isMuted === false"
                         src="@app/assets/icons/sound.svg" alt="sound"><img v-show="isMuted === true"
                         src="@app/assets/icons/muted.svg" alt="mute"></div>
@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <TestTask @close="close()" v-if="isOpen == true"></TestTask>
+        <TestTask v-else @close="close()"></TestTask>
     </div>
 
     <div class="about">
@@ -113,7 +113,7 @@
     </div>
     <div class="author" id="author">
         <h2 class="title-h2 author__title">Создатели проекта</h2>
-        <div class="author__wrapper" v-if="false">
+        <div class="author__wrapper" v-if="windowWidth >= 768">
             <div class="author__wrapper-item">
                 <img src="@app/assets/backgrounds/nastya.png" alt="фото" />
                 <p class="text author__name-text">Анастасия Полежаева</p>
@@ -144,8 +144,22 @@
                 </div>
             </div>
         </div>
-        <div class="author__wrapper-second" v-if="true">
+        <div class="author__wrapper-second" v-else>
             <!-- <Carousel :data="slideAuthors"></Carousel> -->
+            <Carousel :items-to-show="authorsToShow" :itemsToScroll="authorsToShow" :wrap-around="false"
+                snapAlign='start' v-model="currentSlideAuthor" ref="carousel_authors">
+                <Slide v-for="slide in slideAuthors" :key="slide.id">
+                    <CarouselItem :item_data="slide"></CarouselItem>
+                </Slide>
+            </Carousel>
+
+            <div class="arrows">
+                <img v-if="currentSlideAuthor > 0 && windowWidth < 768" @click="prev('carousel_authors')"
+                    src="@app/assets/icons/arrow-left.svg" alt="left">
+                <img v-if="currentSlideAuthor < slideAuthors.length - authorsToShow && windowWidth < 768"
+                    @click="next('carousel_authors')" src="@app/assets/icons/icon-pink.svg" alt="right">
+            </div>
+
         </div>
     </div>
     <div class="advantages">
@@ -186,26 +200,27 @@
 
     <div class="news">
         <h2 class="title-h2 news__title">Новости</h2>
-        <!-- <Carousel :data="slideItems"></Carousel> -->
-        <Carousel :items-to-show="2" :items-to-scroll="2" v-model="currentSlide" ref="carousel">
+
+        <Carousel :items-to-show="itemsToShow" :itemsToScroll="itemsToShow" :wrap-around="false" snapAlign='start'
+            v-model="currentSlide" ref="carousel">
             <Slide v-for="slide in slideItems" :key="slide.id">
-                <!-- <div class="carousel-item">
-                    <img :src="slide.img" alt="img" />
-                    <div class="carousel-item__info">
-                        <p class="carousel-item__date">{{ slide.date }}</p>
-                        <p class="text-small carousel-item__text">
-                            {{ slide.name }}
-                        </p>
-                    </div>
-                </div> -->
                 <CarouselItem :item_data="slide"></CarouselItem>
             </Slide>
         </Carousel>
 
-        <img v-if="currentSlide > 0" class="left" @click="prev" src="@app/assets/icons/arrow-left.svg"
-            alt="left">
-        <img v-if="currentSlide < slideItems.length - 1" class="right" @click="next"
+        <img v-if="currentSlide > 0 && windowWidth >= 768" class="left" @click="prev()"
+            src="@app/assets/icons/arrow-left.svg" alt="left">
+        <img v-if="currentSlide < slideItems.length - itemsToShow && windowWidth >= 768" class="right" @click="next()"
             src="@app/assets/icons/icon-pink.svg" alt="right">
+
+        <div class="arrows">
+            <img v-if="currentSlide > 0 && windowWidth < 768" @click="prev()" src="@app/assets/icons/arrow-left.svg"
+                alt="left">
+            <img v-if="currentSlide < slideItems.length - itemsToShow && windowWidth < 768" @click="next()"
+                src="@app/assets/icons/icon-pink.svg" alt="right">
+        </div>
+
+
 
     </div>
 
@@ -224,52 +239,65 @@ import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide } from 'vue3-carousel'
 import { TestTask } from '@features/TestTask';
 
+const windowWidth = ref(window.innerWidth);
+const carousel_authors = ref(null);
 const carousel = ref(null);
-
+const itemsToShow = ref(2);
+const authorsToShow = ref(2);
 const currentSlide = ref(0);
+const currentSlideAuthor = ref(0);
 
-const next = () => {
-    carousel.value.next();
+const next = (carousel_name) => {
+    if (carousel_name == 'carousel_authors') {
+        carousel_authors.value.next();
+    }
+    else {
+        carousel.value.next();
+    };
 }
 
-const prev = () => {
-    carousel.value.prev();
+const prev = (carousel_name) => {
+    if (carousel_name == 'carousel_authors') {
+        carousel_authors.value.prev();
+    }
+    else {
+        carousel.value.prev()
+    };
 
 }
 
 const slideItems = ref([
     {
-        id: 1,
         img: news,
         name: ' Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2023'
     },
     {
-        id: 2,
         img: news,
         name: ' Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2024'
     },
     {
-        id: 3,
         img: news,
         name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2025'
     },
     {
-        id: 4,
         img: news,
         name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2026'
     },
     {
-        id: 5,
         img: news,
         name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2027'
     },
     {
-        id: 6,
+        img: news,
+        name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
+        date: '22.12.2028'
+    },
+    {
         img: news,
         name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
         date: '22.12.2028'
@@ -278,21 +306,18 @@ const slideItems = ref([
 
 const slideAuthors = ref([
     {
-        id: 1,
         img: nastya,
         author_name: 'Анастасия Полежаева',
         author_about_top: 'Учитель русского языка',
         author_about_bottom: 'Кандидат филологических наук',
     },
     {
-        id: 2,
         img: anna,
         author_name: ' Анна Филатова',
         author_about_top: 'Учитель начальных классов',
         author_about_bottom: 'Логопед',
     },
     {
-        id: 3,
         img: maria,
         author_name: 'Мария Криворотова',
         author_about_top: 'Педагог дополнительного образования',
@@ -304,8 +329,17 @@ const isOpen = ref(false);
 const audio = ref(new Audio());
 const showBtn = ref(false);
 const isMuted = ref(false);
+const openTest = () => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty('--scroll-position', `${scrollY}px`);
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+    isOpen.value = true;
+    playTestAudio('/assets/audio/TestTask/4.тестовое задание.mp3');
+}
+
 const close = () => {
     isOpen.value = false;
+    document.body.classList.remove('no-scroll');
 }
 
 
@@ -338,10 +372,7 @@ const skip = () => {
     showBtn.value = true;
 }
 
-const openTest = () => {
-    isOpen.value = true;
-    playTestAudio('/assets/audio/TestTask/4.тестовое задание.mp3');
-}
+
 
 onMounted(() => {
     const test = document.getElementById('test');
@@ -362,6 +393,18 @@ onMounted(() => {
         }
     }
 
+
+    windowWidth.value = window.innerWidth;
+    itemsToShow.value = windowWidth.value >= 660 ? 2 : 1
+    authorsToShow.value = windowWidth.value >= 569 ? 2 : 1
+
+    window.addEventListener('resize', () => {
+        windowWidth.value = window.innerWidth;
+        itemsToShow.value = windowWidth.value >= 660 ? 2 : 1
+        authorsToShow.value = windowWidth.value >= 569 ? 2 : 1
+    });
+
+
 })
 </script>
 <style lang="scss" scoped>
@@ -381,12 +424,53 @@ onMounted(() => {
 }
 
 
+.no-scroll {
+    overflow-y: scroll;
+    /* Разрешает видимость полосы прокрутки */
+    position: fixed;
+    /* Запрещает прокрутку страницы */
+    width: 100%;
+    /* Фиксирует ширину страницы */
+    top: calc(-1 * var(--scroll-position));
+    /* Запоминает место прокрутки */
+}
+
+
+.carousel {
+    max-width: 800px;
+    width: 100%;
+    margin: 0px auto;
+
+    @media (max-width: 1024px) {
+        max-width: 622px;
+    }
+}
+
+.carousel__viewport {
+    max-width: 794px !important;
+    margin: 0px auto !important;
+    width: 100%;
+}
+
+// .carousel__slide {
+//     max-width: 387px;
+// }
+
+// .carousel__track {
+//     max-width: 794px;
+//     margin: 0px auto;
+//     width: 100%;
+// }
+
+
+
 
 .carousel-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    max-width: 387px;
 
     img {
         max-width: 387px;
@@ -1216,6 +1300,13 @@ onMounted(() => {
             font-size: 20px;
         }
     }
+}
+
+.arrows {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
 }
 
 .speciality {

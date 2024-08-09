@@ -41,7 +41,7 @@ import {ref, inject} from 'vue'
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
-
+import { computed } from 'vue';
 
 const swal = inject('$swal');
 const isError = ref([]);
@@ -100,7 +100,7 @@ const recoveryPass = async () => {
 }
 .container {
     margin: 0 auto;
-    padding: 0 120px;
+    padding: 0 90px;
     max-width: 1440px;
 }
 .d-flex {
@@ -108,6 +108,7 @@ const recoveryPass = async () => {
     row-gap: 50px;
     justify-content: center;
     position: relative;
+    margin: 0 auto;
 }
 .Login {
     margin: 50px 0 260px 0;
@@ -117,11 +118,20 @@ const recoveryPass = async () => {
     padding: 32px 60px 32px 60px;
     background-color: #fae6f2;
     border-radius: 20px;
+    @media (max-width: 1024px) {
+        margin-bottom: 500px;
+    }
+    @media (max-width: 768px) {
+        min-width: 90vw;
+    }
 }
 .Login h2 {
     font-size: 32px;
     font-family: 'Nunito', sans-serif;
     font-weight: normal;
+    @media (max-width: 768px) {
+        font-size: 24px;
+    }
 }
 .Form {
     padding: 28px 0 0 0;
@@ -182,5 +192,18 @@ const recoveryPass = async () => {
     position: absolute;
     left: -15px;
     top: 100px;
+
+    @media (max-width: 1200px) {
+        width: 213px;
+        height: 403px;
+    }
+    @media (max-width: 1024px) {
+        top: 500px;
+        left: 50%;
+        margin-left: -106px;
+    }
+    @media (max-width: 440px) {
+        top: 570px;
+    }
 }
 </style>

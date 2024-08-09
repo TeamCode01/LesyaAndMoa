@@ -123,6 +123,7 @@
                 bg="/assets/backgrounds/lesya.gif"
                 text="Блестяще!"
                 v-if="answersCounter == 26"
+                @next="next()"
                 @hide="hide()"
             ></TaskResultBanner>
         </div>
@@ -137,7 +138,7 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
 import { tasksData } from './tasks.js';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -146,6 +147,9 @@ const props = defineProps({
 });
 const hide = () => {
     emit('close');
+};
+const next = () => {
+    emit('next-modal');
 };
 
 onMounted(() => {

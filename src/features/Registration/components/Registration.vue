@@ -189,17 +189,32 @@ const RegisterUser = async () => {
     background-color: #fae6f2;
     border-radius: 20px;
     align-items: center;
+
+    @media (max-width: 1140px) {
+        margin-bottom: 550px;
+        padding-left: 30px;
+        padding-right: 30px;
+        min-width: 415px;
+    }
+    @media (max-width: 568px) {
+        min-width: 90vw;
+    }
 }
 .Reg h2 {
     font-size: 32px;
     font-family: 'Nunito', sans-serif;
     font-weight: normal;
+    @media (max-width: 768px) {
+        font-size: 24px;
+    }
+    @media (max-width: 768px) {
+        font-size: 22px;
+    }
 }
 .Form {
     padding: 28px 0 0 0;
     display: flex;
     flex-direction: column;
-    width: 380px;
 }
 .Form p {
     font-family: 'Nunito', sans-serif;
@@ -258,7 +273,16 @@ const RegisterUser = async () => {
 .img-auth {
     position: absolute;
     left: -15px;
-    top: 100px;
+    top: 170px;
+    @media (max-width: 1300px) {
+        width: 219px;
+        height: 403px;
+    }
+    @media (max-width: 1140px) {
+        top: 870px;
+        left: 50%;
+        margin-left: -106px;
+    }
 }
 
 .regCheck {

@@ -1,41 +1,43 @@
 <template>
   <template v-if="endGame === false">
-    <div class="TestTask">
-      <div class="TestTask__wrapper">
-        <div class="close" @click="hide">
-          <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+    <div class="modal-background">
+      <div class="TestTask task_block">
+        <div class="TestTask__wrapper">
+          <div class="task_block__close" @click="hide">
+            <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+          </div>
+          <p class="title-h4 TestTask__title"> Вставь пропущенные слова.</p>
+          <div class="TestTask__task">
+            Необыкновенные пришельцы Леся и Моа, не знающие нашего<br> <input class="answer_input" v-model="answer"
+              maxlength="5" type="text" placeholder="_ _ _ _ _">, оказались на нашей планете. Они, словно немые <input
+              class="answer_input" v-model="answer_two" type="text" maxlength="4" placeholder="_ _ _ _ _">,<br> не могут
+            объяснить нам на своём языке, который для
+            нас звучит,<br> как <input class="answer_input" v-model="answer_three" type="text" maxlength="6"
+              placeholder="_ _ _ _ _ _">,
+            чего же они хотят. Мы постараемся <input class="answer_input" v-model="answer_four" maxlength="7" type="text"
+              placeholder="_ _ _ _ _ _ _"> стекло<br> недопонимания между нами и <input class="answer_input"
+              v-model="answer_five" type="text" maxlength="6" placeholder="_ _ _ _ _ _ "> им.
+          </div>
+          <Button class="TestTask__btn" :isImage="true" :image="arrow" @click="checkAnswer()" label="Ответить" />
         </div>
-        <p class="title-h4 TestTask__title"> Вставь пропущенные слова.</p>
-        <div class="TestTask__task">
-          Необыкновенные пришельцы Леся и Моа, не знающие нашего<br> <input class="answer_input" v-model="answer"
-            maxlength="5" type="text" placeholder="_ _ _ _ _">, оказались на нашей планете. Они, словно немые <input
-            class="answer_input" v-model="answer_two" type="text" maxlength="5" placeholder="_ _ _ _ _">,<br> не могут
-          объяснить нам на своём языке, который для
-          нас звучит,<br> как <input class="answer_input" v-model="answer_three" type="text" maxlength="6"
-            placeholder="_ _ _ _ _ _">,
-          чего же они хотят. Мы постараемся <input class="answer_input" v-model="answer_four" maxlength="7" type="text"
-            placeholder="_ _ _ _ _ _ _"> стекло<br> недопонимания между нами и <input class="answer_input"
-            v-model="answer_five" type="text" maxlength="6" placeholder="_ _ _ _ _ _ "> им.
-        </div>
-        <Button class="TestTask__btn" :isImage="true" :image="arrow" @click="checkAnswer()" label="Ответить" />
+  
       </div>
-      <!-- <p v-if="finished === true">{{ correct }}</p> -->
     </div>
   </template>
-  <TaskResultBanner :is_test="true"  bg="/assets/backgrounds/Moa.png"
+  <TaskResultBanner class="end-modal" :is-end="false" :is_test="true"  bg="/assets/backgrounds/Moa.png"
     text="Молодец! Ты полностью справился с заданием. Теперь ты можешь помочь и Лесе с Моа тоже научиться понимать нас."
-    v-if="show === true && correct === 5" @hide="hideModal"></TaskResultBanner>
-  <TaskResultBanner :is_test="true" bg="/assets/backgrounds/Moa.png"
+    v-else-if="endGame === true && correct === 5" @hide="hide"></TaskResultBanner>
+  <TaskResultBanner class="end-modal" :is_test="true" bg="/assets/backgrounds/Moa.png"
     text="Здорово! Ты почти всё верно выполнил. Помоги теперь Лесе и Моа научиться понимать нас."
-    v-if="show === true && correct === 4" @hide="hideModal"></TaskResultBanner>
-  <TaskResultBanner :is_test="true"  bg="/assets/backgrounds/Moa.png"
+    v-else-if="endGame === true && correct === 4" @hide="hide"></TaskResultBanner>
+  <TaskResultBanner class="end-modal" :is_test="true"  bg="/assets/backgrounds/Moa.png"
     text="Неплохо, ты верно выполнил задание больше, чем наполовину. Ты можешь помочь Лесе и Моа научиться понимать нас."
-    v-if="show === true && correct === 3" @hide="hideModal"></TaskResultBanner>
-  <TaskResultBanner :is_test="true"  bg="/assets/backgrounds/Moa.png"
+    v-else-if="endGame === true && correct === 3" @hide="hide"></TaskResultBanner>
+  <TaskResultBanner class="end-modal" :is_test="true"  bg="/assets/backgrounds/Moa.png"
     text=" Неплохо, ты попробовал понять текст. А Леся и Моа не понимают нас совсем. Только ты можешь помочь им."
-    v-if="show === true && (correct === 2 || correct === 1)" @hide="hideModal"></TaskResultBanner>
-  <TaskResultBanner :is_test="true"  bg="/assets/backgrounds/Moa.png" text="Попробуй помочь нашим героям! У тебя все получится!"
-    v-if="show === true && correct === 0" @hide="hideModal"></TaskResultBanner>
+    v-else-if="endGame === true && (correct === 2 || correct === 1)" @hide="hide"></TaskResultBanner>
+  <TaskResultBanner class="end-modal" :is-end="false" :is_test="true"  bg="/assets/backgrounds/Moa.png" text="Попробуй помочь нашим героям! У тебя все получится!"
+    v-else-if="endGame === true && correct === 0" @hide="hide"></TaskResultBanner>
 </template>
 <script setup>
 import { ref } from 'vue';
@@ -49,10 +51,10 @@ const hide = () => {
   endGame.value = true;
 };
 
-const show = ref(false);
-const hideModal = () => {
-  show.value = false;
-}
+// const show = ref(false);
+// const hideModal = () => {
+//   show.value = false;
+// }
 
 const answer = ref('');
 const answer_two = ref('');
@@ -91,23 +93,23 @@ const checkAnswer = () => {
 
 </script>
 <style lang="scss" scoped>
-.TestTask {
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  z-index: 999;
-  border-radius: 20px;
-  height: 600px;
-  width: 100%;
-  max-width: 1200px;
+.modal-background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  right: 0;
+  background-color: #F1FAFE;
+  z-index: 1;
+}
 
-  @media (max-width: 1024px) {
-    height: 470px;
-    max-width: 944px;
-    width: 100%;
-  }
+.end-modal {
+    width: 1200px;
+    height: 600px;
+    z-index: 99;
+}
+
+.TestTask {
 
   &__title {
     text-align: center;

@@ -1,7 +1,7 @@
 <template>
   <div class="container-game">
     <div class="game">
-      <Sidebar :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" />
+      <Sidebar :childId="childId" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" />
       <div class="game_icons_wrap">
         <div class="game_icons_item" @click="mute()"><img v-show="isMuted === false" src="@app/assets/icons/sound.svg"
             alt="sound"><img v-show="isMuted === true" src="@app/assets/icons/muted.svg" alt=""></div>
@@ -19,13 +19,22 @@
 </template>
 <script setup>
 import { Sidebar } from "@widgets/SideBarGame";
-import { event } from "quasar";
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { HTTP } from '@app/http';
+import gameActions from '@mixins/gameAction';
+import { useAnswerStore } from "@layouts/stores/answers";
 
+
+const { methods } = gameActions;
+const { startGameRequest } = methods;
+const answerStore = useAnswerStore();
 let img = ref('/assets/backgrounds/animals.jpg');
 let audio = ref('/assets/audio/Task1/11.1_.mp3');
 const showBtn = ref(false);
-
+const route = useRoute();
+let answerId = ref(0);
+let childId = route.params.idChildOrGroup;
 const startAudio = ref(new Audio());
 const isPlaying = ref(false)
 const isMuted = ref(false);
@@ -34,6 +43,8 @@ const sendImg = (image) => {
   document.getElementById('background-banner').src = image
 }
 
+
+
 const sendAudio = (music) => {
   audio.value = music;
 }
@@ -41,6 +52,12 @@ const sendAudio = (music) => {
 const showButton = (show) => {
   showBtn.value = show;
 }
+
+// const startTask = (id) => {
+//   let answer = answerStore.answers.find((item) => item.id === id);
+//   console.log('answer', answer);
+//   startGameRequest(childId, id)
+// }
 
 const mute = () => {
   isMuted.value = !isMuted.value
@@ -67,7 +84,34 @@ const playSound = () => {
   })
 }
 
+
+
+
+watch(
+  () => route.params.id,
+  (newId) => {
+    if (!newId) {
+      return;
+    }
+    childId = newId;
+    console.log(childId);
+  }
+);
+
+// watch(
+//   () => answerStore.answers,
+//   (newAnswers) => {
+//     if(!newAnswers) {
+//       return
+//     }
+//     answerStore.answers = newAnswers;
+//     console.log(answerStore.answers);
+//   }
+// );
+
+
 onMounted(() => {
+
   document.getElementById('background-banner').src = img.value
 })
 

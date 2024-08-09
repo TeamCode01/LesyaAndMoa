@@ -13,12 +13,12 @@ router.beforeEach((to, _from, next) => {
       to.name !== 'Registration' &&
       to.name !== 'ChangePassword' &&
       to.name !== 'CreatePassword' &&
-      to.name !== 'main-page' &&
+      to.name !== 'about-project' &&
       localStorage.getItem('Token') === null
     )
       next({ name: 'Login' });
-    else if (to.name == 'main-page' && localStorage.getItem('Token') !== null)
-      next({ name: 'profile-page' });
+    // else if (to.name == 'main-page' && localStorage.getItem('Token') !== null)
+    //   next({ name: 'profile-page' });
     else next();
   });
 

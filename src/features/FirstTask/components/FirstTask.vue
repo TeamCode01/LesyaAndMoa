@@ -28,15 +28,20 @@
         </div>
     </template>
     <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!" v-else
-        @hide="hide()" class="end-modal"></TaskResultBanner>
+        @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { HTTP } from '@app/http';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-const emit = defineEmits(['close']);
+import SmallDisplayBanner from '@features/SmallDisplayBanner/components/SmallDisplayBanner.vue';
+import gameActions from '@mixins/gameAction';
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
+const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -44,31 +49,54 @@ const props = defineProps({
     },
     finish: {
         type: Boolean
+    },
+
+    childId: {
+        type: Number,
+        required: false,
     }
 });
 const endGame = ref(false);
+let is_correct = ref(null);
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
+const next = () => {
+    emit('next-modal');
+    is_correct.value;
+    endGame.value = true;
+}
 
 
-const show = ref(false);
-// const hideModal = () => {
-//     show.value = false;
-// }
 const audio = ref(new Audio());
-const playAudio = (audioPath) => {
+
+const playAudio = async (audioPath) => {
     audio.value.src = audioPath;
     if (props.finish === true) {
-        audio.value.play();
+        await audio.value.play();
     }
-
 }
+
+let correctId = ref(0);
+const corrValue = ref(0);
+
+
+const playEndAudio = (audioPath) => {
+    const end_audio = new Audio();
+    end_audio.src = audioPath;
+    end_audio.play();
+}
+
 
 const stopAudio = (audioPath) => {
-    audio.value.src = '';
+    if (audio.value.paused) {
+        playAudio(audioPath);
+    } else {
+        audio.value.pause();
+    }
 }
+
 const words = ref([
     { id: 1, name: 'медведи и зайцы', index: 11, audio: '/assets/audio/Task1/13.1.mp3' },
     { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2, audio: '/assets/audio/Task1/14.1.mp3' },
@@ -98,6 +126,7 @@ const drag = (event, word, id, index) => {
     dropIndex.value = index;
 };
 
+
 const drop = (event) => {
     event.preventDefault();
     let text = event.dataTransfer.getData('text');
@@ -110,13 +139,13 @@ const drop = (event) => {
             words.value.splice(dropIndex.value, 1);
             answer.value += text + ' ';
             answer_arr.value.push(0);
-            playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+            playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
         } else {
             elem.classList.add('red');
             setTimeout(() => {
                 elem.classList.remove('red');
             }, 2000);
-            playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+            playEndAudio('/assets/audio/Other/2. общее для разных заданий.mp3');
             return false;
         }
     } else {
@@ -127,19 +156,20 @@ const drop = (event) => {
             words.value.splice(dropIndex.value, 1);
             answer.value += text + ' ';
             answer_arr.value.push(index);
-            playAudio('assets/audio/Other/1. общее для разных заданий.mp3');
+            playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
         } else {
             elem.classList.add('red');
             setTimeout(() => {
                 elem.classList.remove('red');
             }, 2000);
-            playAudio('assets/audio/Other/2. общее для разных заданий.mp3');
+            playEndAudio('/assets/audio/Other/2. общее для разных заданий.mp3');
 
             return false;
         }
     }
     if (answer_arr.value.length === 5) {
         setTimeout(() => {
+            endGameRequest(props.childId, corrValue.value);
             endGame.value = true;
         }, 3000)
     }
@@ -148,19 +178,17 @@ const drop = (event) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+onMounted(async() => {
+    const correct = await getCorrectAnswer(1, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(1, props.childId, correctId.value);
+})
 </script>
 <style lang="scss" scoped>
 .end-modal {
     width: 1200px;
     height: 600px;
-}
-
-.red {
-    border: 2px solid red !important;
-}
-
-.green {
-    border: 2px solid green !important;
 }
 
 .draggable-list {
