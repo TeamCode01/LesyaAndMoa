@@ -57,8 +57,8 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import gameActions from '@mixins/gameAction';
 
 const { methods } = gameActions;
-const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
-const emit = defineEmits(['close', 'next-modal']);
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
+const emit = defineEmits(['close', 'next-modal', 'correct']);
 const endGame = ref(false);
 const audio = ref(new Audio());
 const hide = () => {
@@ -85,6 +85,9 @@ const props = defineProps({
     }
 });
 
+
+const is_correct = ref(null);
+const is_started = ref(null);
 
 
 const playAudio = async (audioPath) => {
@@ -171,8 +174,12 @@ const drop = (event, index) => {
         return false;
     }
     if (array.value.length === array_result.value.length && array_two.value.length === array_two_result.value.length && array_three.value.length === array_three_result.value.length) {
-        setTimeout(() => {
+        emit('correct', is_correct.value);
+        console.log('yeah')
+        if (is_correct.value === false) {
             endGameRequest(props.childId, corrValue.value);
+        }
+        setTimeout(() => {
             endGame.value = true;
         }, 1500)
     }
@@ -184,10 +191,12 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(async() => {
+onMounted(async () => {
     const correct = await getCorrectAnswer(3, props.childId);
-    corrValue.value = correct;
-    await getCorrectAnswer(3, props.childId, correctId.value);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+    is_started.value = correct.is_started;
+    // await getCorrectAnswer(3, props.childId);
 })
 </script>
 <style lang="scss" scoped>

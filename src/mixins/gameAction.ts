@@ -18,14 +18,15 @@ const gameActions = {
                 is_correct: true
             })
         },
-         getCorrectAnswer(id: number, childId: number, correctId: number) {
-             answerStore.getAnswers(childId);
-            const correctAnswer: Answer = answerStore.answers.filter((item: Answer) => item.task.id === id)[0];
-            correctId = correctAnswer.id;
-            if (correctAnswer.is_started === false) {
-                gameActions.methods.startGameRequest(childId, id)
-            }
-            return correctId;
+        getCorrectAnswer(id: number, childId: number) {
+            answerStore.getAnswers(childId);
+            let correctAnswer: Answer = answerStore.answers.filter((item: Answer) => item.task.id === id)[0];
+                gameActions.methods.startGameRequest(childId, id);
+            let correctId = correctAnswer.id;
+            let is_correct = correctAnswer.is_correct;
+            let is_started = correctAnswer.is_started;
+
+            return { correctId, is_correct, is_started };
         }
     }
 };
