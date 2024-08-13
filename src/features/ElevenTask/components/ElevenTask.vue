@@ -16,15 +16,22 @@
                 <div class="ElevenTask__content">
                     <div class="fairy_tales__wrapper hide">
                         <div class="fairy_tales__item" @click="chooseFairyTail($event, item.correct)"
+                            @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
                             v-for="item in fairytails" :key="item.id">
-                           «{{ item.name }}»
+                            «{{ item.name }}»
                         </div>
                     </div>
 
                     <div class="draggable-list">
+<<<<<<< HEAD
                         <div class="list-group-item item" v-for="(item, index) in syllables" :key="item.id"
                             draggable="true" @dragstart="drag($event, item.name, item.id, index)" @dragover.prevent
                             :value="item">
+=======
+                        <q-btn class="list-group-item item" v-for="(item, index) in syllables" :key="item.id"
+                            draggable="true" @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
+                            @dragstart="drag($event, item.name, item.id, index)" @dragover.prevent :value="item">
+>>>>>>> 9df1343790c43fdc1c337adf06fa05503f9c1949
                             {{ item.name }}
                         </div>
                     </div>
@@ -35,8 +42,13 @@
                     </div>
                     <div class="inputs">
                         <div class="input-group">
+<<<<<<< HEAD
                             <input @drop="drop($event, 1, 1)" type="text" class="input-item row1 part1" />
                             <input @drop="drop($event, 2, 1)" type="text" class="input-item row1 part2" />
+=======
+                            <input @drop="drop($event, 1, 1)" type="text" class="input-item row1 part1" /><input
+                                @drop="drop($event, 2, 1)" type="text" class="input-item row1 part2" />
+>>>>>>> 9df1343790c43fdc1c337adf06fa05503f9c1949
 
                             <input @drop="drop($event, 1, 2)" type="text" class="input-item row2 part1" />
                             <input @drop="drop($event, 2, 2)" type="text" class="input-item row2 part2" />
@@ -66,43 +78,78 @@
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-const emit = defineEmits(['close', 'next-modal']);
+import gameActions from '@mixins/gameAction';
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
+const emit = defineEmits(['close', 'next-modal', 'correct']);
 const audio = ref(new Audio());
 const endGame = ref(false);
 const hide = () => {
     emit('close');
     endGame.value = true;
 };
-const playAudio = (audioPath) => {
-    audio.value.src = audioPath;
-    audio.value.play();
-}
-const next = () => {
-    emit('next-modal');
-    endGame.value = true;
-}
-
 const props = defineProps({
     end: {
         type: Boolean,
         required: false,
     },
+    finish: {
+        type: Boolean
+    },
+
+    childId: {
+        type: Number,
+        required: false,
+    }
 });
 
 
+
+const playAudio = async (audioPath) => {
+    audio.value.src = audioPath;
+    if (props.finish === true) {
+        await audio.value.play();
+    }
+}
+
+const playEndAudio = (audioPath) => {
+    const end_audio = new Audio();
+    end_audio.src = audioPath;
+    end_audio.play();
+}
+
+
+const stopAudio = (audioPath) => {
+    if (audio.value.paused) {
+        playAudio(audioPath);
+    } else {
+        audio.value.pause();
+    }
+}
+
+const next = () => {
+    emit('next-modal');
+    endGame.value = true;
+}
+
+const is_correct = ref(null);
+const correctId = ref(0);
+const corrValue = ref(0);
+
+
 const syllables = ref([
-    { id: 1, name: 'МЫШ', part: 1 },
-    { id: 2, name: 'ГУШКА', part: 2 },
-    { id: 3, name: 'ЛЯ', part: 1 },
-    { id: 4, name: 'ЧИК', part: 2 },
-    { id: 5, name: 'ЗАЙ', part: 1 },
-    { id: 6, name: 'СИЧКА', part: 2 },
-    { id: 7, name: 'ЛИ', part: 1 },
-    { id: 8, name: 'КА', part: 2 },
-    { id: 9, name: 'ВОЛ', part: 1 },
-    { id: 10, name: 'ВЕДЬ', part: 2 },
-    { id: 11, name: 'МЕД', part: 1 },
-    { id: 12, name: 'ЧОК', part: 2 },
+    { id: 1, name: 'МЫШ', part: 1, audio: '/assets/audio/Task11/331.11.mp3' },
+    { id: 2, name: 'ГУШКА', part: 2, audio: '/assets/audio/Task11/337.11.mp3' },
+    { id: 3, name: 'ЛЯ', part: 1, audio: '/assets/audio/Task11/332.11.mp3' },
+    { id: 4, name: 'ЧИК', part: 2, audio: '/assets/audio/Task11/338.11.mp3' },
+    { id: 5, name: 'ЗАЙ', part: 1, audio: '/assets/audio/Task11/333.11.mp3' },
+    { id: 6, name: 'СИЧКА', part: 2, audio: '/assets/audio/Task11/339.11.mp3' },
+    { id: 7, name: 'ЛИ', part: 1, audio: '/assets/audio/Task11/334.11.mp3' },
+    { id: 8, name: 'КА', part: 2, audio: '/assets/audio/Task11/340.11.mp3' },
+    { id: 9, name: 'ВОЛ', part: 1, audio: '/assets/audio/Task11/335.11.mp3' },
+    { id: 10, name: 'ВЕДЬ', part: 2, audio: '/assets/audio/Task11/341.11.mp3' },
+    { id: 11, name: 'МЕД', part: 1, audio: '/assets/audio/Task11/336.11.mp3' },
+    { id: 12, name: 'ЧОК', part: 2, audio: '/assets/audio/Task11/342.11.mp3' },
 ]);
 const dropIndex = ref(syllables.value.length - 1);
 const drag = (event, syllable, id, index) => {
@@ -112,11 +159,11 @@ const drag = (event, syllable, id, index) => {
 };
 const finish_answers = ref([]);
 const fairytails = ref([
-    { id: 1, name: 'ТРИ МЕДВЕДЯ', correct: false },
-    { id: 2, name: 'ТЕРЕМОК', correct: true },
-    { id: 3, name: 'РЕПКА', correct: false },
-    { id: 4, name: 'КОЛОБОК', correct: false },
-    { id: 5, name: 'ГУСИ-ЛЕБЕДИ', correct: false },
+    { id: 1, name: 'ТРИ МЕДВЕДЯ', correct: false, audio: '/assets/audio/Task11/343.11.mp3' },
+    { id: 2, name: 'ТЕРЕМОК', correct: true, audio: '/assets/audio/Task11/344.11.mp3' },
+    { id: 3, name: 'РЕПКА', correct: false, audio: '/assets/audio/Task11/345.11.mp3' },
+    { id: 4, name: 'КОЛОБОК', correct: false, audio: '/assets/audio/Task11/346.11.mp3' },
+    { id: 5, name: 'ГУСИ-ЛЕБЕДИ', correct: false, audio: '/assets/audio/Task11/347.11.mp3' },
 ]);
 
 const answers = ref([
@@ -131,6 +178,7 @@ const answers = ref([
 const drop = (event, part, row) => {
     event.preventDefault();
     if (syllables.value[dropIndex.value].part != part) {
+        playEndAudio('/assets/audio/Common/2.1.mp3');
         return false;
     }
     let text = event.dataTransfer.getData('text');
@@ -154,11 +202,11 @@ const drop = (event, part, row) => {
             event.target.value = text;
             finish_answers.value.push(word.toLowerCase());
             syllables.value.splice(dropIndex.value, 1);
-            elem.classList.add('check');
+            playEndAudio('/assets/audio/Common/1.2.mp3');
+            event.target.classList.add('check');
             setTimeout(() => {
-                elem.classList.add('item');
-                elem.classList.remove('check');
-
+                event.target.classList.add('item');
+                event.target.classList.remove('check');
             }, 2000);
             if (syllables.value.length == 0) {
                 firstBlock.classList.add('hide');
@@ -174,17 +222,21 @@ const chooseFairyTail = (event, status) => {
     if (status === true) {
         event.target.value = status;
         event.target.classList.add('green');
-        playAudio('assets/audio/Common/1.2.mp3');
+        playEndAudio('/assets/audio/Common/1.2.mp3');
         fairytails.value = fairytails.value.filter(
             (item) => item.correct == true,
         );
+        emit('correct', is_correct.value);
         setTimeout(() => {
+            if (is_correct.value === false) {
+                endGameRequest(props.childId, corrValue.value);
+            }
             endGame.value = true;
             event.target.classList.remove('green');
         }, 2000);
     } else {
         event.target.value = status;
-        playAudio('assets/audio/Common/2.1.mp3');
+        playEndAudio('/assets/audio/Common/2.1.mp3');
         event.target.classList.add('red');
         setTimeout(() => {
             event.target.classList.remove('red');
@@ -195,6 +247,12 @@ const chooseFairyTail = (event, status) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+onMounted(async () => {
+    const correct = await getCorrectAnswer(11, props.childId);
+    corrValue.value = correct;
+    await getCorrectAnswer(11, props.childId, correctId.value);
+})
 </script>
 <style lang="scss" scoped>
 *{
