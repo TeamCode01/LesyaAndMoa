@@ -1,7 +1,8 @@
 <template>
   <div class="container-game">
     <div class="game">
-      <Sidebar :childId="childId" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" />
+  emit('skip-task')
+  <Sidebar :childId="childId" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" @skip-task="skipTask" />
       <div class="game_icons_wrap">
         <div class="game_icons_item" @click="mute()"><img v-show="isMuted === false" src="@app/assets/icons/sound.svg"
             alt="sound"><img v-show="isMuted === true" src="@app/assets/icons/muted.svg" alt=""></div>
@@ -37,6 +38,7 @@ let answerId = ref(0);
 let childId = route.params.idChildOrGroup;
 const startAudio = ref(new Audio());
 const isPlaying = ref(false)
+const emit = defineEmits(['skip-task'])
 const isMuted = ref(false);
 const sendImg = (image) => {
   img.value = image;
@@ -69,6 +71,7 @@ const mute = () => {
 }
 const skip = () => {
   startAudio.value.src = ''
+  emit('skip-task')
   showBtn.value = true;
 }
 
@@ -111,7 +114,6 @@ watch(
 
 
 onMounted(() => {
-
   document.getElementById('background-banner').src = img.value
 })
 
