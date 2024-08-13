@@ -18,7 +18,7 @@
                 <div class="draggable-list">
                     <div class="draggable-list__words">
                         <div class="draggable-list__set-words" v-for="(line, index_line) in prepositions" :key="index_line">
-                            <q-btn
+                            <div
                                 v-for="(item, index) in line" 
                                 :key="item.id" 
                                 :id="item.id + '_elem'"
@@ -29,20 +29,20 @@
                                 :value="item.text"
                             >
                                 {{ item.text }}
-                            </q-btn>
+                            </div>
                         </div>
                     </div>
                     <div class="draggable-list__answer">
                         <div class="draggable-list__answer-wrapper">
                             <p>{{ questions[currStage].first_part }}</p>
                             <div class="draggable-list__quastion-block" v-if="!givenAnswer[1]">
-                                <input @drop="drop($event, 1)" @dragover="allowDrop($event)" class="answer" readonly />
+                                <input @drop="drop($event, 1)" @dragover="allowDrop($event)" class="answer" readonly  @focus="($event)=>{$event.target.blur()}"/>
                             </div>
                             <p v-else>&nbsp;{{ questions[currStage].first_answer }}&nbsp;</p>
                             <p>{{ questions[currStage].second_part }}</p>
                             <template v-if="currStage>2">
                                 <div class="draggable-list__quastion-block" v-if="!givenAnswer[2]">
-                                    <input @drop="drop($event, 2)" @dragover="allowDrop($event)" class="answer" readonly />
+                                    <input @drop="drop($event, 2)" @dragover="allowDrop($event)" class="answer" readonly  @focus="($event)=>{$event.target.blur()}"/>
                                 </div>
                                 <p v-else>&nbsp;{{ questions[currStage].second_answer }}&nbsp;</p>
                                 <p>{{ questions[currStage].third_part }}</p>
@@ -53,7 +53,7 @@
                 </div>
             </template>
             <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/moa.gif" text="Замечательно!"
-            v-else @hide="hide()"></TaskResultBanner>
+            v-else @hide="hide()" @next="next"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -217,6 +217,10 @@ const next = () => {
 </script>
 
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
+
 .answer{
     width: 90px;
     height: 44px;
@@ -280,6 +284,8 @@ const next = () => {
 }
 
 .draggable-list__word {
+    cursor: pointer;
+
     display: flex;
     align-items: center;
     justify-content: center;

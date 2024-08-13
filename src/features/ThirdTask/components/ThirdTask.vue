@@ -15,12 +15,12 @@
                 </div>
                 <div class="draggable-list">
                     <div class="list-group ThirdTask__wrapper_block">
-                        <q-btn v-for="(item, index) in letters" :key="index" :id="item.id + '_elem'"
+                        <div v-for="(item, index) in letters" :key="index" :id="item.id + '_elem'"
                             class="list-group-item item" draggable="true" @mouseover="playAudio(item.audio)"
                             @mouseout="stopAudio(item.audio)" @dragstart="drag($event, item.name, item.id, index)"
                             @dragover.prevent :value="item.name">
                             {{ item.name }}
-                        </q-btn>
+                        </div>
                     </div>
                 </div>
                 <div class="ThirdTask__answer">
@@ -191,6 +191,10 @@ onMounted(async() => {
 })
 </script>
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
+
 .end-modal {
     width: 1200px;
     height: 600px;

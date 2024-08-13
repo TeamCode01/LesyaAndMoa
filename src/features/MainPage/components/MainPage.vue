@@ -198,7 +198,7 @@
         </router-link>
     </div>
 
-    <div class="news">
+    <div class="news" id="news">
         <h2 class="title-h2 news__title">Новости</h2>
 
         <Carousel :items-to-show="itemsToShow" :itemsToScroll="itemsToShow" :wrap-around="false" snapAlign='start'

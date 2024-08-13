@@ -210,6 +210,10 @@ const clickItem = (word) => {
 };
 </script>
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
+
 .draggable-list {
     display: flex;
     gap: 88px;

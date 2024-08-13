@@ -25,12 +25,12 @@
                             <div class="draggable-list__steps">
                                 <div class="draggable-list__step" v-for="(syllable, syllable_index) in syllables[1]"
                                     :key="syllable.id">
-                                    <q-btn
-                                        :class="{ 'draggable-list__step-button': !syllable.hidden, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false }"
+                                    <div
+                                        :class="{ 'draggable-list__step-button': true, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false }"
                                         :draggable="draggable" @dragstart="drag($event, syllable, 1)" @dragover.prevent
                                         @click="clickText(syllable)" :value="syllable.text">
                                         {{ syllable.text }}
-                                    </q-btn>
+                                    </div>
                                     <div class="draggable-list__substep" :id="syllable.id_class"></div>
                                 </div>
                             </div>
@@ -44,12 +44,12 @@
                                     v-for="(syllables_row, syllables_row_index) in syllables[2]"
                                     :key="syllables_row_index">
                                     <div v-for="syllable in syllables_row" :key="syllable.id">
-                                        <q-btn
-                                            :class="{ 'draggable-list__syllable': !syllable.hidden, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false }"
+                                        <div
+                                            :class="{ 'draggable-list__syllable': true, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false }"
                                             :draggable="draggable" @dragstart="drag($event, syllable, 2)"
                                             @dragover.prevent @click="clickText(syllable)" :value="syllable.text">
                                             {{ syllable.text }}
-                                        </q-btn>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -57,12 +57,12 @@
                         <div class="draggable-list__right-wrapper-answer">
                             <div class="draggable-list__right-answer">
                                 <div class="draggable-list__right-answer-square">
-                                    <input @drop="drop($event, 1)" @dragover="allowDrop($event)"
+                                    <input @drop="drop($event, 1)" @dragover="allowDrop($event)" @focus="($event)=>{$event.target.blur()}"
                                         class="answer draggable-list__step-button" readonly
                                         v-model="squareAnswer.text" />
                                 </div>
                                 <div class="draggable-list__right-answer-circle">
-                                    <input @drop="drop($event, 2)" @dragover="allowDrop($event)"
+                                    <input @drop="drop($event, 2)" @dragover="allowDrop($event)" @focus="($event)=>{$event.target.blur()}"
                                         class="answer draggable-list__syllable" readonly v-model="circleAnswer.text" />
                                 </div>
                             </div>
@@ -389,8 +389,9 @@ const next = () => {
 </script>
 
 <style lang="scss" scoped>
-.hidden {
-    display: none;
+
+*{
+    user-select: none;
 }
 
 .answer {
@@ -527,6 +528,8 @@ const next = () => {
 }
 
 .draggable-list__step-button {
+    cursor: pointer;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -704,6 +707,8 @@ const next = () => {
 }
 
 .draggable-list__syllable {
+    cursor: pointer;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -780,4 +785,10 @@ const next = () => {
         height: 63px;
     }
 }
+
+
+.hidden {
+    opacity: 0%;
+}
+
 </style>

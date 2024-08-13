@@ -15,11 +15,11 @@
                 </div>
                 <div class="NineTask__content">
                     <div class="draggable-list">
-                        <q-btn class="list-group-item item" v-for="(item, index) in letterss" :id="item.id"
+                        <div class="list-group-item item" v-for="(item, index) in letterss" :id="item.id"
                             :key="item.id" draggable="true" @dragstart="drag($event, item.name, item.id,  index)"
                             @dragover.prevent :value="item">
                             {{ item.name }}
-                        </q-btn>
+                        </div>
                     </div>
 
                     <div class="input-group">
@@ -64,7 +64,7 @@
         </div>
     </template>
     <TaskResultBanner class="end-modal" img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png" text="Восхитительно!" v-else
-        @hide="hide"></TaskResultBanner>
+        @hide="hide" @next="next"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -197,6 +197,9 @@ const allowDrop = (event) => {
 };
 </script>
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
 
 .end-modal {
     width: 1200px;
@@ -270,6 +273,9 @@ const allowDrop = (event) => {
 }
 
 .item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 40px;
     height: 40px;
     background-color: #b5f9ad;

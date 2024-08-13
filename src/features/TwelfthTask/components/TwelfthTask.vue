@@ -21,10 +21,10 @@
                     <!-- ВАРИАНТЫ ОТВЕТОВ -->
                     <div class="draggable-list__words">
                         <div class="draggable-list__set-words" v-for="row in Task" :key="row">
-                            <button class="draggable-list__word" v-for="word in row" :key="word" :class="{void : !word.isActive, item_wrong : word.error == -1 }"
+                            <div class="draggable-list__word" v-for="word in row" :key="word" :class="{void : !word.isActive, item_wrong : word.error == -1 }"
                             :draggable="word.isActive" @dragstart="dragLetter($event, word.id)">
                                 {{ word.text }}
-                            </button>
+                            </div>
                         </div>
                     </div>
 
@@ -37,34 +37,34 @@
                         <div class="draggable-list__answer-wrapper">
                             <div class="draggable-list__question-word" v-for="word in Answer[0]" :key="word">
                                 <div class="draggable-list__question-block" v-for="letter in word" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
+                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" draggable="false">
                                     <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }"> {{ letter.text }} </div>
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
+                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside" draggable="false">
                                 </div>
                             </div>
                         </div>
 
                         <!-- ВОДА -->
                         <div>
-                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png" alt="" />
+                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png" alt="" draggable="false"/>
                         </div>
 
                         <!-- НИЖНИЕ ЛОДОЧКИ -->
                         <div class="draggable-list__answer-wrapper" >
                             <div class="draggable-list__question-word" v-for="word in Answer[1]" :key="word">
                                 <div class="draggable-list__question-block" v-for="letter in word" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" >
+                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" draggable="false">
                                     <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }">
                                         {{ letter.text }}
                                     </div>
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
+                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside" draggable="false">
                                 </div>
                             </div>
                         </div>
 
                         <!-- ВОДА -->
                         <div>
-                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png" alt="" />
+                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png" alt="" draggable="false"/>
                         </div>
                     </div>
                 </div>
@@ -162,13 +162,14 @@ const dropLetter = (event, id, isActive) => {
                 })
             );
 
-            answersCounter.value += 1;
+            
             let reactionAudio = new Audio(
                 `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
             );
             reactionAudio.play();
 
             setTimeout(() => {
+                answersCounter.value += 1;
             }, 2000);
         }
         else {
@@ -198,6 +199,10 @@ const dropLetter = (event, id, isActive) => {
 
 
 <style scoped lang='scss'>
+*{
+    user-select: none;
+}
+
 .TwelfthTask {
     width: 1200px;
 }
@@ -254,6 +259,8 @@ const dropLetter = (event, id, isActive) => {
 }
 
 .draggable-list__word {
+    cursor: pointer;
+
     display: flex;
     align-items: center;
     justify-content: center;

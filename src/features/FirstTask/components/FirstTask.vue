@@ -14,12 +14,12 @@
 
                 <div class="draggable-list__wrapper">
                     <div class="draggable-list">
-                        <q-btn v-for="(item, index) in words" :key="item.id" :id="item.id + '_elem'"
+                        <div v-for="(item, index) in words" :key="item.id" :id="item.id + '_elem'"
                             class="list-group-item item" draggable="true" @mouseover="playAudio(item.audio)"
                             @mouseout="stopAudio(item.audio)" @dragstart="drag($event, item.name, item.id, index)"
                             @dragover.prevent :value="item.name">
                             {{ item.name }}
-                        </q-btn>
+                        </div>
                     </div>
                     <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
                         class="FirstTask__wrapper_answer" />
@@ -186,6 +186,10 @@ onMounted(async() => {
 })
 </script>
 <style lang="scss" scoped>
+
+*{
+    user-select: none;
+}
 .end-modal {
     width: 1200px;
     height: 600px;

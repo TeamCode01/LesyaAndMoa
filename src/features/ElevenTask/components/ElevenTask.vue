@@ -22,11 +22,11 @@
                     </div>
 
                     <div class="draggable-list">
-                        <q-btn class="list-group-item item" v-for="(item, index) in syllables" :key="item.id"
+                        <div class="list-group-item item" v-for="(item, index) in syllables" :key="item.id"
                             draggable="true" @dragstart="drag($event, item.name, item.id, index)" @dragover.prevent
                             :value="item">
                             {{ item.name }}
-                        </q-btn>
+                        </div>
                     </div>
                     <div class="finish_words__wrapper hide">
                         <div class="finish_words__item" v-for="item in finish_answers" :key="item">
@@ -35,22 +35,23 @@
                     </div>
                     <div class="inputs">
                         <div class="input-group">
-                            <input  @drop="drop($event, 1, 1)" type="text" class="input-item row1 part1" /><input
-                                @drop="drop($event, 2, 1)" type="text" class="input-item row1 part2" />
+                            <input @drop="drop($event, 1, 1)" type="text" class="input-item row1 part1" />
+                            <input @drop="drop($event, 2, 1)" type="text" class="input-item row1 part2" />
 
-                            <input @drop="drop($event, 1, 2)" type="text" class="input-item row2 part1" /><input
-                                @drop="drop($event, 2, 2)" type="text" class="input-item row2 part2" />
+                            <input @drop="drop($event, 1, 2)" type="text" class="input-item row2 part1" />
+                            <input @drop="drop($event, 2, 2)" type="text" class="input-item row2 part2" />
 
-                            <input @drop="drop($event, 1, 3)" type="text" class="input-item row3 part1" /><input
-                                @drop="drop($event, 2, 3)" type="text" class="input-item row3 part2" />
+                            <input @drop="drop($event, 1, 3)" type="text" class="input-item row3 part1" />
+                            <input @drop="drop($event, 2, 3)" type="text" class="input-item row3 part2" />
 
-                            <input @drop="drop($event, 1, 4)" type="text" class="input-item row4 part1" /><input
-                                @drop="drop($event, 2, 4)" type="text" class="input-item row4 part2" /><input
-                                @drop="drop($event, 1, 5)" type="text" class="input-item row5 part1" /><input
-                                @drop="drop($event, 2, 5)" type="text" class="input-item row5 part2" />
+                            <input @drop="drop($event, 1, 4)" type="text" class="input-item row4 part1" />
+                            <input @drop="drop($event, 2, 4)" type="text" class="input-item row4 part2" />
+                            
+                            <input @drop="drop($event, 1, 5)" type="text" class="input-item row5 part1" />
+                            <input @drop="drop($event, 2, 5)" type="text" class="input-item row5 part2" />
 
-                            <input @drop="drop($event, 1, 6)" type="text" class="input-item row6 part1" /><input
-                                @drop="drop($event, 2, 6)" type="text" class="input-item row6 part2" />
+                            <input @drop="drop($event, 1, 6)" type="text" class="input-item row6 part1" />
+                            <input @drop="drop($event, 2, 6)" type="text" class="input-item row6 part2" />
                         </div>
                     </div>
                 </div>
@@ -196,6 +197,9 @@ const allowDrop = (event) => {
 };
 </script>
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
 .end-modal {
     width: 1200px;
     height: 600px;
@@ -301,6 +305,10 @@ const allowDrop = (event) => {
 }
 
 .item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     width: 108px;
     height: 52px;
     background-color: #ffcce4;

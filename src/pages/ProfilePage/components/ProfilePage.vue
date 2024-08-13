@@ -265,6 +265,11 @@
             src="@app/assets/img/Profile/lesyaProfileGroup.svg"
             alt=""
         />
+        <img
+            v-if="false"
+            class="profile__img"
+            src="@app/assets/img/Profile/Frame 277138543.png"
+        />
     </div>
 </template>
 <script setup>
@@ -401,7 +406,7 @@ const AddChild = async () => {
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
-        console.error('There was an error!', error);
+        console.error('<T></T>here was an error!', error);
         swal.fire({
             position: 'center',
             icon: 'error',
@@ -548,7 +553,8 @@ onMounted(async () => {
 }
 
 .child__form {
-    max-width: 100%;
+    min-width: 100%;
+    padding: 0 80px;
     text-align: center;
 }
 

@@ -13,9 +13,9 @@
                 </div>
                 <ul class="header__wrapper_links">
                     <li>
-                        <a href="/" class="link-small">О проекте</a>
+                        <a href="/about-project" class="link-small">О проекте</a>
                     </li>
-                    <li><a href="#" class="link-small">Новости</a></li>
+                    <li><a href="#" class="link-small" @click="()=>{window.scrollTo(0,document.getElementById('news').getBoundingClientRect().y) }">Новости</a></li>
                     <li><a href="#" class="link-small">Контакты</a></li>
 
                     <li>
@@ -115,7 +115,7 @@
                 </a>
             </div>
             <ul class="header__wrapper_links modal__menu">
-                <li><a href="#" class="link-small">О проекте</a></li>
+                <li><a href="/about-project" class="link-small">О проекте</a></li>
                 <li><a href="#" class="link-small">Новости</a></li>
                 <li><a href="#" class="link-small">Контакты</a></li>
                 <li><a href="#" class="link-small">Поддержать проект</a></li>

@@ -1,9 +1,10 @@
 <template>
-    <img src="@app/assets/icons/gifTimer.gif" v-show="end == false" />
+    <img src="@app/assets/icons/gifTimer.gif" v-show="end == false" draggable="false"/>
     <img
         src="@app/assets/icons/endTimer.png"
         v-show="end == true"
         alt="timer"
+        draggable="false"
     />
 </template>
 <script setup>

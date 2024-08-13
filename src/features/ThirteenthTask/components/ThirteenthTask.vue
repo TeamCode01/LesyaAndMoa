@@ -104,11 +104,11 @@ const drop = (event) => {
         (answer.value === 'ОБЩАТЬСЯ' && text === 'ДЕТСКУЮ')
     ) {
         words.value.splice(dropIndex.value, 1);
-        elem.classList.add('green');
+        //elem.classList.add('green');
         playAudio('/assets/audio/Common/1.2.mp3');
         answer_drop.value = text;
         setTimeout(() => {
-            elem.classList.remove('green');
+            //elem.classList.remove('green');
             answer.value = text;
             answer_drop.value = '?';
         }, 2000);
@@ -121,7 +121,7 @@ const drop = (event) => {
         elem.classList.add('red');
         setTimeout(() => {
          elem.classList.remove('red');
-        })
+        }, 2000)
         playAudio('/assets/audio/Common/2.1.mp3');
         return false;
     }
@@ -132,6 +132,10 @@ const allowDrop = (event) => {
 };
 </script>
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
+
 
 .end-modal {
     width: 1200px;

@@ -22,7 +22,7 @@
                             v-for="row in taskData"
                             :key="row"
                         >
-                            <button
+                            <div
                                 class="draggable-list__button"
                                 :class="{
                                     'draggable-list__button_main':
@@ -45,7 +45,7 @@
                                 "
                             >
                                 {{ word.text }}
-                            </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -221,6 +221,10 @@ const dropLetter = (event, x, y, id, isActive) => {
 };
 </script>
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
+
 .draggable-list {
     display: flex;
     gap: 88px;
@@ -255,6 +259,10 @@ const dropLetter = (event, x, y, id, isActive) => {
 }
 
 .draggable-list__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     text-align: center;
     width: 68px;
     height: 40px;

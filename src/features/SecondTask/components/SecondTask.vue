@@ -115,6 +115,10 @@ onMounted(async () => {
 })
 </script>
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
+
 .end-modal {
     width: 1200px;
     height: 600px;

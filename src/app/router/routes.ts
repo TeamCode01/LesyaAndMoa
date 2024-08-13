@@ -79,6 +79,7 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/ProfilePage/components/ProfilePage.vue'),
             },
         ],
+
     },
 ];
 

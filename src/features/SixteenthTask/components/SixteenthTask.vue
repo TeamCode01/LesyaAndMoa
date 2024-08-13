@@ -232,6 +232,10 @@ const resetTask = () => {
 </script>
 
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
+
 .SixteenthTask {
     position: block;
 }
