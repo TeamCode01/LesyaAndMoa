@@ -15,14 +15,9 @@
                 </div>
                 <div class="NineTask__content">
                     <div class="draggable-list">
-<<<<<<< HEAD
                         <div class="list-group-item item" v-for="(item, index) in letterss" :id="item.id"
-                            :key="item.id" draggable="true" @dragstart="drag($event, item.name, item.id,  index)"
-=======
-                        <q-btn class="list-group-item item" v-for="(item, index) in letterss" :id="item.id"
                             :key="item.id" draggable="true" @mouseover="playAudio(item.audio)"
                             @mouseout="stopAudio(item.audio)" @dragstart="drag($event, item.name, item.id, index)"
->>>>>>> 9df1343790c43fdc1c337adf06fa05503f9c1949
                             @dragover.prevent :value="item">
                             {{ item.name }}
                         </div>
@@ -69,13 +64,8 @@
             </div>
         </div>
     </template>
-<<<<<<< HEAD
-    <TaskResultBanner class="end-modal" img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png" text="Восхитительно!" v-else
-        @hide="hide" @next="next"></TaskResultBanner>
-=======
     <TaskResultBanner class="end-modal" img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png"
-        text="Восхитительно!" v-else @hide="hide"></TaskResultBanner>
->>>>>>> 9df1343790c43fdc1c337adf06fa05503f9c1949
+        text="Восхитительно!" v-else @hide="hide" @next="next"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -240,13 +230,10 @@ onMounted(async () => {
 })
 </script>
 <style lang="scss" scoped>
-<<<<<<< HEAD
-*{
+* {
     user-select: none;
 }
 
-=======
->>>>>>> 9df1343790c43fdc1c337adf06fa05503f9c1949
 .end-modal {
     width: 1200px;
     height: 600px;

@@ -23,15 +23,9 @@
                     </div>
 
                     <div class="draggable-list">
-<<<<<<< HEAD
                         <div class="list-group-item item" v-for="(item, index) in syllables" :key="item.id"
-                            draggable="true" @dragstart="drag($event, item.name, item.id, index)" @dragover.prevent
-                            :value="item">
-=======
-                        <q-btn class="list-group-item item" v-for="(item, index) in syllables" :key="item.id"
                             draggable="true" @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
                             @dragstart="drag($event, item.name, item.id, index)" @dragover.prevent :value="item">
->>>>>>> 9df1343790c43fdc1c337adf06fa05503f9c1949
                             {{ item.name }}
                         </div>
                     </div>

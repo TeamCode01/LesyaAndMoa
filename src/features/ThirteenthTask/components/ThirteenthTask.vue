@@ -50,6 +50,7 @@
 import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
+
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
@@ -136,21 +137,12 @@ const drop = (event) => {
         (answer.value === 'РАДЫ' && text === 'ОБЩАТЬСЯ') ||
         (answer.value === 'ОБЩАТЬСЯ' && text === 'ДЕТСКУЮ')
     ) {
-<<<<<<< HEAD
-        words.value.splice(dropIndex.value, 1);
-        //elem.classList.add('green');
-=======
->>>>>>> 9df1343790c43fdc1c337adf06fa05503f9c1949
         playAudio('/assets/audio/Common/1.2.mp3');
         elem.classList.add('green');
         answer_drop.value = text;
         setTimeout(() => {
-<<<<<<< HEAD
-            //elem.classList.remove('green');
-=======
             words.value.splice(dropIndex.value, 1);
             elem.classList.remove('green');
->>>>>>> 9df1343790c43fdc1c337adf06fa05503f9c1949
             answer.value = text;
             answer_drop.value = '?';
         }, 2000);
@@ -173,15 +165,9 @@ const drop = (event) => {
         playAudio('/assets/audio/Common/2.1.mp3');
         elem.classList.add('red');
         setTimeout(() => {
-<<<<<<< HEAD
-         elem.classList.remove('red');
-        }, 2000)
-        playAudio('/assets/audio/Common/2.1.mp3');
-=======
             elem.classList.remove('red');
         }, 2000)
 
->>>>>>> 9df1343790c43fdc1c337adf06fa05503f9c1949
         return false;
     }
 };
@@ -197,14 +183,11 @@ onMounted(async () => {
 })
 </script>
 <style lang="scss" scoped>
-<<<<<<< HEAD
-*{
+* {
     user-select: none;
 }
 
 
-=======
->>>>>>> 9df1343790c43fdc1c337adf06fa05503f9c1949
 .end-modal {
     width: 1200px;
     height: 600px;

@@ -125,6 +125,7 @@ const show = ref(props.show);
 const correct = ref(false);
 const started = ref(null);
 
+
 const close = () => {
     SeeTask.value = false;
     endTime.value = false;
@@ -214,8 +215,6 @@ onMounted(async () => {
         console.log('arrId', nextElId, tasks.value[nextElId]);
         tasks.value[nextElId].disabled = false;
     }
-
-
 
 });
 </script>

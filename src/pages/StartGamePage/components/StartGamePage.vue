@@ -1,5 +1,5 @@
 <template>
-  <div class="container-game">
+  <div class="container-game" v-show="windowWidth >= 1024">
     <div class="game">
       <Sidebar :childId="childId" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" />
       <div class="game_icons_wrap">
@@ -15,6 +15,18 @@
         <img class="game_img_bg" id="background-banner" alt="game">
       </div>
     </div>
+  </div>
+  <div class="container-game_mobile" v-show="windowWidth < 1024">
+    <div>
+      <div v-for="taskNumber in 18" :key="taskNumber">
+        {{`Задание ${taskNumber}`}}
+      </div>
+    </div>
+    <p class="mobile-text">
+      Чтобы полноценно использовать игры, необходимо разрешение экрана от 1024 px. Пожалуйста воспользуйтесь планшетом или компьютером. Мы ждем вас на нашем сайте
+    </p>
+
+    <img src="@app/assets/img/StartGamePage/MoaStartGamePage.png" alt="" class="mobile-img">
   </div>
 </template>
 <script setup>
@@ -38,6 +50,7 @@ let childId = route.params.idChildOrGroup;
 const startAudio = ref(new Audio());
 const isPlaying = ref(false)
 const isMuted = ref(false);
+const windowWidth = ref(window.innerWidth);
 const sendImg = (image) => {
   img.value = image;
   document.getElementById('background-banner').src = image
@@ -113,6 +126,12 @@ watch(
 onMounted(() => {
 
   document.getElementById('background-banner').src = img.value
+
+  window.addEventListener('resize', () => {
+        windowWidth.value = window.innerWidth
+        
+    })
+
 })
 
 </script>
@@ -181,5 +200,27 @@ onMounted(() => {
     height: 470px;
     max-width: 100%;
   }
+
+  &_mobile {
+    min-width: 360px;
+    width: 100%;
+    padding: 0 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .mobile-text{
+      font-size: 16px;
+      font-weight: 400;
+      margin-top: 60px;
+      text-align: center;
+    }
+
+    .mobile-img{
+      width: 303px;
+    }
+  }
+
+
 }
 </style>
