@@ -208,6 +208,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-family: "Nunito", sans-serif;
 
     .mobile-text{
       font-size: 16px;
