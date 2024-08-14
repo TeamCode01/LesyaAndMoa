@@ -1,8 +1,7 @@
 <template>
   <div class="container-game">
     <div class="game">
-  emit('skip-task')
-  <Sidebar :childId="childId" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" @skip-task="skipTask" />
+      <Sidebar :childId="childId" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" />
       <div class="game_icons_wrap">
         <div class="game_icons_item" @click="mute()"><img v-show="isMuted === false" src="@app/assets/icons/sound.svg"
             alt="sound"><img v-show="isMuted === true" src="@app/assets/icons/muted.svg" alt=""></div>
@@ -37,15 +36,12 @@ const route = useRoute();
 let answerId = ref(0);
 let childId = route.params.idChildOrGroup;
 const startAudio = ref(new Audio());
-const isPlaying = ref(false)
-const emit = defineEmits(['skip-task'])
+const isPlaying = ref(false);
 const isMuted = ref(false);
 const sendImg = (image) => {
   img.value = image;
   document.getElementById('background-banner').src = image
 }
-
-
 
 const sendAudio = (music) => {
   audio.value = music;
@@ -71,7 +67,6 @@ const mute = () => {
 }
 const skip = () => {
   startAudio.value.src = ''
-  emit('skip-task')
   showBtn.value = true;
 }
 
@@ -86,9 +81,6 @@ const playSound = () => {
     showBtn.value = true;
   })
 }
-
-
-
 
 watch(
   () => route.params.id,

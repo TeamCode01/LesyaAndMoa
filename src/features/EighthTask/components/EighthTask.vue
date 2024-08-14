@@ -81,7 +81,9 @@ import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-
+import gameActions from '@mixins/gameAction';
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const startGame = ref(true);
 const draggable = ref(true);
 let soundPlayed = false;
@@ -214,7 +216,8 @@ const syllables = ref({
 })
 
 const countAnswers = ref(0);
-
+const corrValue = ref(0);
+const is_correct = ref(null);
 const correctAnswers = ref([{}, {}, {}, {}, {}, {}, {}, {}])
 
 const answers = ref([
@@ -277,12 +280,16 @@ const clickText = (syllable) => {
     }, 500);
 }
 
-const emit = defineEmits(['close', 'next-modal']);
+const emit = defineEmits(['close', 'next-modal', 'correct']);
 const props = defineProps({
     end: {
         type: Boolean,
         required: false,
     },
+    childId: {
+        type: Number,
+        required: false,
+    }
 });
 
 const playAudio = (audioPath) => {
@@ -367,6 +374,10 @@ const drop = (event, place) => {
         }
         if (countAnswers.value == 8) {
             setTimeout(() => {
+                if (is_correct.value === false) {
+                    endGameRequest(props.childId, corrValue.value);
+                    emit('correct');
+                }
                 startGame.value = false;
                 playAudio('/assets/audio/Task8/297.8_.mp3')
             }, 2000);
@@ -386,6 +397,11 @@ const hide = () => {
 const next = () => {
     emit('next-modal');
 }
+onMounted(async () => {
+    const correct = await getCorrectAnswer(8, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+})
 </script>
 
 <style lang="scss" scoped>

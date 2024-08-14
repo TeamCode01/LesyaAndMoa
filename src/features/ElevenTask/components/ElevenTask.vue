@@ -91,8 +91,6 @@ const props = defineProps({
     }
 });
 
-
-
 const playAudio = async (audioPath) => {
     audio.value.src = audioPath;
     if (props.finish === true) {
@@ -121,7 +119,6 @@ const next = () => {
 }
 
 const is_correct = ref(null);
-const correctId = ref(0);
 const corrValue = ref(0);
 
 
@@ -184,7 +181,6 @@ const drop = (event, part, row) => {
         event.target.classList.add('item');
     } else {
         let word = part == 1 ? text + element.value : element.value + text;
-        console.log(word);
 
         if (answers.value.includes(word.toLowerCase())) {
             event.target.value = text;
@@ -214,10 +210,11 @@ const chooseFairyTail = (event, status) => {
         fairytails.value = fairytails.value.filter(
             (item) => item.correct == true,
         );
-        emit('correct', is_correct.value);
+
         setTimeout(() => {
             if (is_correct.value === false) {
-                endGameRequest(props.childId, corrValue.value);
+                endGameRequest(props.childId, corrValue.value);;
+                emit('correct');
             }
             endGame.value = true;
             event.target.classList.remove('green');

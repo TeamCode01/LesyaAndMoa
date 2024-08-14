@@ -13,7 +13,7 @@
                         <router-link class="link-small" to="/about-project">О проекте</router-link>
                     </li>
                     <li>
-                        <router-link class="link-small" :to="{ hash: '#news' }">Новости</router-link>
+                        <router-link class="link-small" :to="{ name: 'main-page',  hash: '#news' }">Новости</router-link>
                     </li>
                     <li>
                         <router-link class="link-small" to="/">Контакты</router-link>
