@@ -65,7 +65,7 @@
         </div>
     </template>
     <TaskResultBanner class="end-modal" img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png"
-        text="Восхитительно!" v-else @hide="hide"></TaskResultBanner>
+        text="Восхитительно!" @next="next()" v-else @hide="hide"></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -192,7 +192,6 @@ const drop = (event, word, letter) => {
     event.preventDefault();
     let text = event.dataTransfer.getData('text');
     let id = event.dataTransfer.getData('id');
-    console.log('id', id);
     let elem = document.getElementById(id);
     if (arr.value[word][letter].answer === text.toLowerCase()) {
         event.target.value = text;
@@ -205,7 +204,10 @@ const drop = (event, word, letter) => {
         playEndAudio('/assets/audio/Common/1.2.mp3');
         if (letterss.value.length === 0) {
             setTimeout(() => {
-                endGameRequest(props.childId, corrValue.value);
+                if (is_correct.value === false) {
+                    endGameRequest(props.childId, corrValue.value);
+                    emit('correct');
+                }
                 endGame.value = true;
             }, 1500)
         }
@@ -225,7 +227,7 @@ const allowDrop = (event) => {
 
 onMounted(async () => {
     const correct = await getCorrectAnswer(9, props.childId);
-    corrValue.value = correct;
+    corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
 </script>

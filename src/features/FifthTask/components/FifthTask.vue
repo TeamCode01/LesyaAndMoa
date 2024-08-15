@@ -3,11 +3,7 @@
         <div class="task_block__wrapper">
             <template v-if="startGame">
                 <div class="task_block__close" @click="hide">
-                    <img
-                        class="close-icon"
-                        src="@app/assets/icons/close-icon.svg"
-                        alt="крест"
-                    />
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
@@ -18,48 +14,33 @@
                 <div class="draggable-list">
                     <div class="draggable-list__items">
                         <div v-for="(line, line_index) in syllables" :key="line_index">
-                            <div :class="{'draggable-list__item1': 1 == line_index, 'draggable-list__item2': 2 == line_index, 'draggable-list__item3': 3 == line_index }">
-                                <button
-                                    v-for="(item, item_index) in line"
-                                    :key="item_index"
+                            <div
+                                :class="{ 'draggable-list__item1': 1 == line_index, 'draggable-list__item2': 2 == line_index, 'draggable-list__item3': 3 == line_index }">
+                                <button v-for="(item, item_index) in line" :key="item_index"
                                     @click="onSelection(line_index, item_index)"
-                                    :class="{'draggable-list__button': true, correct_select: item.correct, not_correct_select: item.correct === false}"
-                                > {{ item.name }}</button>
+                                    :class="{ 'draggable-list__button': true, correct_select: item.correct, not_correct_select: item.correct === false }">
+                                    {{ item.name }}</button>
                             </div>
                         </div>
                     </div>
                     <div v-if="firstListen">
                         <button @click="listenTo()" class="draggable-list__button_final">
-                            <span class="draggable-list__button-speaker"
-                                >Прослушать</span
-                            >
-                            <img
-                                src="@app\assets\icons\speaker.svg"
-                                alt="speaker"
-                            />
+                            <span class="draggable-list__button-speaker">Прослушать</span>
+                            <img src="@app\assets\icons\speaker.svg" alt="speaker" />
                         </button>
                     </div>
                     <div v-else>
                         <button @click="listenTo()" class="draggable-list__button_final">
-                            <span class="draggable-list__button-repeat"
-                                >Повторить</span
-                            >
-                            <img
-                                src="@app\assets\icons\repeat.svg"
-                                alt="repeat"
-                            />
+                            <span class="draggable-list__button-repeat">Повторить</span>
+                            <img src="@app\assets\icons\repeat.svg" alt="repeat" />
                         </button>
                     </div>
                 </div>
-                <input
-                    @drop="drop($event)"
-                    @dragover="allowDrop($event)"
-                    v-model="answer"
-                    class="task_block__wrapper_answer"
-                />
+                <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
+                    class="task_block__wrapper_answer" />
             </template>
             <TaskResultBanner img="/assets/backgrounds/cup.png" bg="/assets/backgrounds/lesya.gif" text="Прекрасно!"
-            v-else @next="next()" @hide="hide()"></TaskResultBanner>
+                v-else @next="next()" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -69,7 +50,9 @@ import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-
+import gameActions from '@mixins/gameAction';
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const startGame = ref(true);
 const firstListen = ref(true);
 
@@ -100,20 +83,24 @@ const syllables = ref({
     }
 })
 
-const emit = defineEmits(['close','next-modal']);
-
+const emit = defineEmits(['close', 'next-modal', 'correct']);
+const is_correct = ref(null);
 const props = defineProps({
     end: {
         type: Boolean,
         required: false,
     },
+    childId: {
+        type: Number,
+        required: false,
+    }
 });
-
+const corrValue = ref(0);
 const onSelection = (firstIndex, id) => {
-    if(currSyllable.value == id && !firstListen.value) {
+    if (currSyllable.value == id && !firstListen.value) {
         firstListen.value = true;
         syllables.value[firstIndex][id].correct = true;
-        setTimeout(()=> syllables.value[firstIndex][temp].correct = null, 2000)
+        setTimeout(() => syllables.value[firstIndex][temp].correct = null, 2000)
         // for(let i = 1; i<= 3; i++){
         //     for(const temp in syllables.value[i]){
         //         if(!syllables.value[i][temp].correct){
@@ -123,13 +110,17 @@ const onSelection = (firstIndex, id) => {
         // }
         countAnswers.value++;
         playAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
-    } else if(!firstListen.value){
+    } else if (!firstListen.value) {
         syllables.value[firstIndex][id].correct = false;
-        setTimeout(()=> syllables.value[firstIndex][temp].correct = null, 2000)
+        setTimeout(() => syllables.value[firstIndex][temp].correct = null, 2000)
         playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     }
-    if(countAnswers.value == 14){
+    if (countAnswers.value == 14) {
         setTimeout(() => {
+            if (is_correct.value === false) {
+                endGameRequest(props.childId, corrValue.value);
+                emit('correct');
+            }
             startGame.value = false;
             playAudio('/assets/audio/Task5/77.5_.mp3');
         }, 1000);
@@ -142,14 +133,14 @@ const listenTo = () => {
         let exist = true;
         while (exist) {
             currSyllable.value = Math.floor(Math.random() * 14 + 1);
-            if(!played.value.includes(currSyllable.value)) exist = false;
+            if (!played.value.includes(currSyllable.value)) exist = false;
         }
         played.value.push(currSyllable.value)
     }
 
-    if([1,2,3,4,5].includes(currSyllable.value)){
+    if ([1, 2, 3, 4, 5].includes(currSyllable.value)) {
         playAudio(syllables.value[1][currSyllable.value].audio);
-    } else if ([6,7,8,9].includes(currSyllable.value)){
+    } else if ([6, 7, 8, 9].includes(currSyllable.value)) {
         playAudio(syllables.value[2][currSyllable.value].audio);
     } else {
         playAudio(syllables.value[3][currSyllable.value].audio);
@@ -168,6 +159,12 @@ const hide = () => {
 const next = () => {
     emit('next-modal');
 }
+
+onMounted(async () => {
+    const correct = await getCorrectAnswer(5, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+})
 </script>
 
 <style lang="scss" scoped>
@@ -175,10 +172,12 @@ const next = () => {
     border: 2px solid;
     border-color: #5CCF54;
 }
+
 .not_correct_select {
     border: 2px solid;
     border-color: #DB0000;
 }
+
 .draggable-list {
     display: flex;
     gap: 88px;
@@ -186,6 +185,7 @@ const next = () => {
     align-items: center;
     justify-content: center;
     margin-top: 60px;
+
     @media (max-width: 1024px) {
         gap: 60px;
     }
@@ -198,6 +198,7 @@ const next = () => {
     width: 632px;
     height: 200px;
     gap: 40px;
+
     @media (max-width: 1024px) {
         height: 184px;
         gap: 32px;

@@ -13,8 +13,9 @@
                     Увлекательное приключение с интерактивными заданиями для профилактики и коррекции дислексии
                 </p>
             </div>
-            <router-link to="Registration" class="link">
-                <Button label="Зарегистрироваться" class="btn_primary main__btn"></Button></router-link>
+            <router-link v-if="!Object.keys(userStore.currentUser).length" to="Registration" class="link">
+                <Button label="Зарегистрироваться" class="btn_primary main__btn"></Button>
+            </router-link>
         </div>
     </div>
     <div class="Test">
@@ -193,12 +194,10 @@
                 </p>
             </div>
         </div>
-        <router-link to="Registration" class="link">
-            <Button label="Зарегистрироваться" class="btn_primary main__btn"></Button>
-        </router-link>
+
     </div>
 
-    <div class="news">
+    <div class="news" id="news">
         <h2 class="title-h2 news__title">Новости</h2>
 
         <Carousel :items-to-show="itemsToShow" :itemsToScroll="itemsToShow" :wrap-around="false" snapAlign='start'
@@ -238,8 +237,10 @@ import { CarouselItem } from '@shared/components/carousel';
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide } from 'vue3-carousel'
 import { TestTask } from '@features/TestTask';
+import { useUserStore } from '@layouts/stores/user';
 
 const windowWidth = ref(window.innerWidth);
+const userStore = useUserStore();
 const carousel_authors = ref(null);
 const carousel = ref(null);
 const itemsToShow = ref(2);

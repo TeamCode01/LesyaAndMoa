@@ -3,17 +3,30 @@
         <div class="container">
             <div class="header__wrapper">
                 <div class="header__logo">
-                    <a href="/">
+                    <router-link to="/">
                         <img
                             class="header__logo_main"
                             src="@app/assets/icons/LogoLesya.png"
                             alt="Логотип сайта Леся и Моа"
-                        />
-                    </a>
+                    /></router-link>
                 </div>
                 <ul class="header__wrapper_links">
                     <li>
-                        <a href="/" class="link-small">О проекте</a>
+                        <router-link class="link-small" to="/about-project"
+                            >О проекте</router-link
+                        >
+                    </li>
+                    <li>
+                        <router-link
+                            class="link-small"
+                            :to="{ name: 'main-page', hash: '#news' }"
+                            >Новости</router-link
+                        >
+                    </li>
+                    <li>
+                        <router-link class="link-small" to="/"
+                            >Контакты</router-link
+                        >
                     </li>
                     <li>
                         <router-link href="#" class="link-small" to="/news-page"
@@ -25,12 +38,11 @@
                     </li>
 
                     <li>
-                        <a href="#" class="link-small">Поддержать проект</a>
+                        <router-link class="link-small" to="/about"
+                            >Поддержать проект</router-link
+                        >
                     </li>
                 </ul>
-                <!-- <router-link class="link" :to="{ name: 'Login' }">
-                        <Button class="btn_info" label="Войти"></Button>
-                </router-link> -->
                 <div class="header__wrapper_adaptive">
                     <div
                         v-if="Object.keys(userStore.currentUser).length"
@@ -255,6 +267,7 @@ const Login = () => {
                 height: 30px;
                 width: 80px;
             }
+
             @media (max-width: 580px) {
                 height: 23px;
                 width: 62px;

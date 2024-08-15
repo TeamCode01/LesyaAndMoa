@@ -20,7 +20,8 @@
             </div>
         </div>
     </template>
-    <TaskResultBanner :is_end="true" bg="/assets/backgrounds/bg_end.jpg" class="end-modal" v-else @hide="hide()"></TaskResultBanner>
+    <TaskResultBanner :is_end="true" bg="/assets/backgrounds/bg_end.jpg" class="end-modal" v-else @hide="hide()">
+    </TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -30,8 +31,8 @@ import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
-const { endGameRequest, startGameRequest,  getCorrectAnswer } = methods;
-const emit = defineEmits(['close']);
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
+const emit = defineEmits(['close', 'correct']);
 const endGame = ref(false);
 
 const hide = () => {
@@ -51,8 +52,7 @@ const props = defineProps({
 });
 
 const audio = ref(new Audio());
-
-let correctId = ref(0);
+const is_correct = ref(null);
 const corrValue = ref(0);
 const playAudio = (audioPath) => {
     audio.value.src = audioPath;
@@ -68,9 +68,13 @@ const sendAnswer = () => {
         answer_input.classList.add('green');
         playAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
-            endGameRequest(props.childId, corrValue.value);
             answer_input.classList.remove('green');
             endGame.value = true;
+            if (is_correct.value === false) {
+                endGameRequest(props.childId, corrValue.value);
+                emit('correct');
+            }
+
         }, 2000)
 
 
@@ -84,10 +88,10 @@ const sendAnswer = () => {
     }
 }
 
-onMounted(async() => {
+onMounted(async () => {
     const correct = await getCorrectAnswer(18, props.childId);
-    corrValue.value = correct;
-    await getCorrectAnswer(18, props.childId, correctId.value);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
 })
 </script>
 <style lang="scss" scoped>
@@ -95,6 +99,7 @@ onMounted(async() => {
     width: 1200px;
     height: 600px;
 }
+
 .send {
     max-width: 280px;
     width: 100%;
@@ -163,5 +168,4 @@ onMounted(async() => {
         }
     }
 }
-
 </style>

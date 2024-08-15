@@ -36,14 +36,12 @@ const route = useRoute();
 let answerId = ref(0);
 let childId = route.params.idChildOrGroup;
 const startAudio = ref(new Audio());
-const isPlaying = ref(false)
+const isPlaying = ref(false);
 const isMuted = ref(false);
 const sendImg = (image) => {
   img.value = image;
   document.getElementById('background-banner').src = image
 }
-
-
 
 const sendAudio = (music) => {
   audio.value = music;
@@ -84,9 +82,6 @@ const playSound = () => {
   })
 }
 
-
-
-
 watch(
   () => route.params.id,
   (newId) => {
@@ -111,7 +106,6 @@ watch(
 
 
 onMounted(() => {
-
   document.getElementById('background-banner').src = img.value
 })
 
