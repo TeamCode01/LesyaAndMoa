@@ -7,7 +7,7 @@
             <div class="left-result">
                 <div class="left-result__greetings">
                     <h4 class="left-result__title-h4">{{ props.text }}</h4>
-                    <img v-if="props.is_test === false" class="left-result__flowers" id="result-banner" />
+                    <img v-if="props.is_test === false && props.img" :src="props.img" class="left-result__flowers" id="result-banner" />
                 </div>
                 <div v-if="props.is_test === false">
                     <button @click="next" class="left-result__button left-result__text">
@@ -16,7 +16,7 @@
                     </button>
                 </div>
                 <div v-else>
-                    <button @click="goToGames" class="left-result__button left-result__text">
+                    <button @click="hide" class="left-result__button left-result__text">
                         <span class="left-result__text">К обучению</span>
                         <img src="@app\assets\icons\vector.svg" alt="vector" />
                     </button>
@@ -78,7 +78,7 @@ const next = () => {
 }
 
 onMounted(() => {
-    if (props.is_test === false & props.is_end === false) {
+    if (props.is_test === false & props.is_end === false & props.img) {
         document.getElementById('result-banner').src = props.img;
     }
     document.getElementById('result-bg').src = props.bg;
