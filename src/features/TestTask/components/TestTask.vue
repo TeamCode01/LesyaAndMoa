@@ -51,7 +51,6 @@ const hide = () => {
   endGame.value = true;
 };
 
-// const show = ref(false);
 // const hideModal = () => {
 //   show.value = false;
 // }
@@ -88,7 +87,6 @@ const checkAnswer = () => {
   }
 
   endGame.value = true;
-  show.value = true;
 }
 
 </script>

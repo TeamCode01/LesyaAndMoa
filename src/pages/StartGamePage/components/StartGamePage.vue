@@ -1,7 +1,8 @@
 <template>
   <div class="container-game" v-show="windowWidth >= 1024">
     <div class="game">
-      <Sidebar :childId="childId" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" />
+  <!--emit('skip-task')-->
+  <Sidebar :childId="childId" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" @skip-task="skipTask" />
       <div class="game_icons_wrap">
         <div class="game_icons_item" @click="mute()"><img v-show="isMuted === false" src="@app/assets/icons/sound.svg"
             alt="sound"><img v-show="isMuted === true" src="@app/assets/icons/muted.svg" alt=""></div>
@@ -17,16 +18,24 @@
     </div>
   </div>
   <div class="container-game_mobile" v-show="windowWidth < 1024">
-    <div>
-      <div v-for="taskNumber in 18" :key="taskNumber">
+    <div class="mobile-task-wrap">
+      <div v-for="taskNumber in 18" :key="taskNumber" class="mobile-task" @click="()=>{modalIsOpen = true}">
         {{`Задание ${taskNumber}`}}
       </div>
     </div>
-    <p class="mobile-text">
-      Чтобы полноценно использовать игры, необходимо разрешение экрана от 1024 px. Пожалуйста воспользуйтесь планшетом или компьютером. Мы ждем вас на нашем сайте
-    </p>
 
-    <img src="@app/assets/img/StartGamePage/MoaStartGamePage.png" alt="" class="mobile-img">
+    <div v-if="modalIsOpen == true" class="mobile-modal">
+      <div>
+        <div class="close" @click="()=>{modalIsOpen = false}">
+          <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+        </div>
+        <p class="mobile-text">
+          Чтобы полноценно использовать игры, необходимо разрешение экрана от 1024 px. Пожалуйста воспользуйтесь планшетом или компьютером. Мы ждем вас на нашем сайте
+        </p>
+      </div>
+
+      <img src="@app/assets/img/StartGamePage/MoaStartGamePage.png" alt="" class="mobile-img">
+    </div>
   </div>
 </template>
 <script setup>
@@ -49,8 +58,11 @@ let answerId = ref(0);
 let childId = route.params.idChildOrGroup;
 const startAudio = ref(new Audio());
 const isPlaying = ref(false)
+const emit = defineEmits(['skip-task'])
 const isMuted = ref(false);
+
 const windowWidth = ref(window.innerWidth);
+const modalIsOpen = ref(false)
 const sendImg = (image) => {
   img.value = image;
   document.getElementById('background-banner').src = image
@@ -82,6 +94,7 @@ const mute = () => {
 }
 const skip = () => {
   startAudio.value.src = ''
+  emit('skip-task')
   showBtn.value = true;
 }
 
@@ -124,13 +137,13 @@ watch(
 
 
 onMounted(() => {
-
   document.getElementById('background-banner').src = img.value
 
   window.addEventListener('resize', () => {
         windowWidth.value = window.innerWidth
         
     })
+
 
 })
 
@@ -204,7 +217,8 @@ onMounted(() => {
   &_mobile {
     min-width: 360px;
     width: 100%;
-    padding: 0 26px;
+    height: 100%;
+    padding: 60px 26px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -213,12 +227,60 @@ onMounted(() => {
     .mobile-text{
       font-size: 16px;
       font-weight: 400;
-      margin-top: 60px;
       text-align: center;
+      max-width: 480px;
     }
 
     .mobile-img{
       width: 303px;
+    }
+
+    .mobile-modal{
+      position: fixed;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      background: #E6F2FA;
+      height: 100vh;
+      width: 100vw;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .mobile-task{
+      border-radius: 30px;
+      background-color: #dfdfdf;
+      color: #313131;
+      max-width: 180px;
+      width: 100%;
+      padding: 5.5px 24px;
+      height: 38px;
+      color: #313131;
+      font-family: "Nunito", sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+      align-items: center;
+    }
+
+    .mobile-task-wrap{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 16px;
+      column-gap: 8px;
+    }
+
+
+    .close-icon{
+      position: relative;
+      padding: 5px;
+      margin-bottom: 10px;
     }
   }
 

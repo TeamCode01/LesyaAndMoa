@@ -29,7 +29,8 @@
                 <SixTask :end="endTime" @close="close()" @next-modal="next(7)" v-if="taskId === 6"></SixTask>
                 <SeventhTask :end="endTime" @close="close()" @next-modal="next(8)" v-if="taskId === 7"></SeventhTask>
                 <EighthTask :end="endTime" @close="close()" @next-modal="next(9)" v-if="taskId === 8"></EighthTask>
-                <NineTask  @correct="checkCorrect($event, 9)" :childId="props.childId" :finish="finish" :end="endTime" @close="close()" @next-modal="next(10)" v-if="taskId === 9"></NineTask>
+                <NineTask @correct="checkCorrect($event, 9)" :childId="props.childId" :finish="finish" :end="endTime"
+                    @close="close()" @next-modal="next(10)" v-if="taskId === 9"></NineTask>
                 <TenthTask :end="endTime" @close="close()" @next-modal="next(11)" v-if="taskId === 10"></TenthTask>
                 <ElevenTask @correct="checkCorrect($event, 11)" :childId="props.childId" :finish="finish" :end="endTime"
                     @close="close()" @next-modal="next(12)" v-if="taskId === 11"></ElevenTask>
@@ -124,6 +125,7 @@ const answers = ref([]);
 const show = ref(props.show);
 const correct = ref(false);
 const started = ref(null);
+const ids = ref([1, 2, 3, 4, 5, 6, 7, 8, 16, 18]);
 
 
 const close = () => {
@@ -151,6 +153,12 @@ const switchTask = (id, openId, time, img, audio, startAudioV) => {
     taskAudio.value = audio;
     endTime.value = false;
     taskImage.value = img;
+    if (ids.value.includes(taskId.value)) {
+        playAudio('/assets/audio/Music/звук 1_.mp3');
+        
+    } else {
+        playAudio(startAudioV)
+    }
     emit('sendAudio', startAudioV);
     emit('sendImg', img);
     emit('show', show.value);
@@ -210,7 +218,7 @@ onMounted(async () => {
 
     const taskFindArr = tasks.value.filter((task) => task.done === true);
     console.log('arr', taskFindArr)
-    if(taskFindArr.length > 0) {
+    if (taskFindArr.length > 0) {
         let nextElId = taskFindArr.at(-1).id;
         console.log('arrId', nextElId, tasks.value[nextElId]);
         tasks.value[nextElId].disabled = false;

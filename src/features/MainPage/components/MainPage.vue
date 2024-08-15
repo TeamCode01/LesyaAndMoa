@@ -13,8 +13,9 @@
                     Увлекательное приключение с интерактивными заданиями для профилактики и коррекции дислексии
                 </p>
             </div>
-            <router-link to="Registration" class="link">
-                <Button label="Зарегистрироваться" class="btn_primary main__btn"></Button></router-link>
+            <router-link v-if="!Object.keys(userStore.currentUser).length" to="Registration" class="link">
+                <Button label="Зарегистрироваться" class="btn_primary main__btn"></Button>
+            </router-link>
         </div>
     </div>
     <div class="Test">
@@ -52,10 +53,7 @@
         <div class="about__wrapper">
             <div class="about__wrapper-item">
                 <div class="about__wrapper-item-container">
-                    <p class="text about__wrapper-item1-top-text">
-                        Как сложно нам читать и понимать прочитанное, когда
-                        некоторые буквы или слова всего лишь отражены зеркально.
-                    </p>
+
                     <div class="about__wrapper-item-reverse-words">
                         <div class="text about__wrapper-item1-top-text about__wrapper-item1-top-text-option1"
                             id="about__wrapper-item1-top-text-option1-size1">
@@ -83,32 +81,44 @@
                                     class="about__wrapper-item1-top-text-option1_leveling-letter">!</span></span>
                         </div>
                     </div>
-                    <p class="text" id="item1-bottom-text">
-                        Вперед с новыми друзьями к новым вершинам знания!
+                    <p class="text about__wrapper-item1-top-text">
+                        Как сложно нам читать и понимать прочитанное, когда
+                        некоторые буквы или слова всего лишь отражены зеркально!
                     </p>
+                    <!--
+                        <p class="text" id="item1-bottom-text">
+                            Вперед с новыми друзьями к новым вершинам знания!
+                        </p> 
+                    -->
+
                 </div>
             </div>
             <div class="about__wrapper-item_second">
                 <div class="about__wrapper-item_second-container">
                     <p class="text-small about__wrapper-item_second-text">
                         Иногда ребятам сложно «продираться» сквозь форму к смыслу
-                        слов и на это уходит много сил. Примерно такая абракадабра
-                        чудится в текстовом облике слов ребятам с дислексией. Это
-                        особенность восприятия ими визуального облика слов.
+                        слов и на это уходит много сил. Ребятам с дислексией в текстовом
+                        облике слов часто чудится какая-то абракадабра. Это особенность восприятия ими визуального облика слов.
                         В большинстве случаев интеллект ребят в порядке, они хорошо
                         решают примеры или изъясняются устно.
                     </p>
                     <p class="text-small about__wrapper-item_second-text">
-                        Чтобы помочь тем, таким ребятам, наша команда создала этот
+                        Чтобы помочь, таким ребятам, наша команда создала этот
                         обучающий курс. Дети смогут ощутить себя настоящими
                         помощниками друзей-инопланетян, не знающих нашего языка,
-                        натренируют их в чтении слогов и различении звуков, объяснят
-                        различия в значении слов, отличающихся лишь одной буквой,
+                        натренируют их в чтении слогов и различении звуков,
                         помогут понимать слова, предложения и тексты.
                     </p>
+                    
+                    <p class="text-small about__wrapper-item_second-text">
+                        Вперед с новыми друзьями к новым вершинам знания!
+                    </p> 
+
                 </div>
             </div>
-            <img src="@app/assets/icons/icon-pink.svg" class="about__wrapper-icon" alt="icon" />
+            <!--
+                <img src="@app/assets/icons/icon-pink.svg" class="about__wrapper-icon" alt="icon" />
+            -->
         </div>
     </div>
     <div class="author" id="author">
@@ -187,15 +197,13 @@
                 <img src="@app/assets/backgrounds/cat.png" alt="фото" />
                 <p class="text-small">
                     Наши игры способствуют развитию интеллектуальных
-                    способностей, с учетом особенностей каждого. Дислексия —
+                    способностей, с учетом особенностей каждого. Дислексия
                     не преграда, а вызов, который мы вместе преодолеем, играя
                     и учась!
                 </p>
             </div>
         </div>
-        <router-link to="Registration" class="link">
-            <Button label="Зарегистрироваться" class="btn_primary main__btn"></Button>
-        </router-link>
+
     </div>
 
     <div class="news" id="news">
@@ -238,8 +246,10 @@ import { CarouselItem } from '@shared/components/carousel';
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide } from 'vue3-carousel'
 import { TestTask } from '@features/TestTask';
+import { useUserStore } from '@layouts/stores/user';
 
 const windowWidth = ref(window.innerWidth);
+const userStore = useUserStore();
 const carousel_authors = ref(null);
 const carousel = ref(null);
 const itemsToShow = ref(2);
@@ -690,7 +700,7 @@ onMounted(() => {
             top: 10px;
             right: 50px;
 
-            @media (max-width: 1440px) {
+            @media (max-width: 1200px) {
                 left: 800px;
             }
 
@@ -927,16 +937,16 @@ onMounted(() => {
         &-item {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             background-color: $light-green;
             padding: 40px;
             border-radius: 20px;
             width: 590px;
-            height: 360px;
+            height: 400px;
 
             @media (max-width: 1200px) {
-                height: 448px;
+                height: 520px;
                 width: 462px;
             }
 
@@ -958,10 +968,10 @@ onMounted(() => {
                 background-color: $light-green;
                 border-radius: 20px;
                 width: 590px;
-                height: 360px;
+                height: 400px;
 
                 @media (max-width: 1200px) {
-                    height: 448px;
+                    height: 520px;
                     width: 462px;
                 }
 
@@ -984,13 +994,14 @@ onMounted(() => {
                 }
 
                 &-container {
+                    gap: 16px;
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
-                    height: 296px;
+                    height: 320px;
 
                     @media (max-width: 1200px) {
-                        height: 390px;
+                        height: 440px;
                     }
 
                     @media (max-width: 568px) {
@@ -1008,7 +1019,7 @@ onMounted(() => {
                 display: flex;
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
+                justify-content: space-around;
                 height: 296px;
 
                 @media (max-width: 1200px) {

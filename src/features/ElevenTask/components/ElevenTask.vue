@@ -36,13 +36,8 @@
                     </div>
                     <div class="inputs">
                         <div class="input-group">
-<<<<<<< HEAD
                             <input @drop="drop($event, 1, 1)" type="text" class="input-item row1 part1" />
                             <input @drop="drop($event, 2, 1)" type="text" class="input-item row1 part2" />
-=======
-                            <input @drop="drop($event, 1, 1)" type="text" class="input-item row1 part1" /><input
-                                @drop="drop($event, 2, 1)" type="text" class="input-item row1 part2" />
->>>>>>> 9df1343790c43fdc1c337adf06fa05503f9c1949
 
                             <input @drop="drop($event, 1, 2)" type="text" class="input-item row2 part1" />
                             <input @drop="drop($event, 2, 2)" type="text" class="input-item row2 part2" />
