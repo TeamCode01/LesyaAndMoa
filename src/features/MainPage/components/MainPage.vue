@@ -1,7 +1,11 @@
 <template>
-    <div class="link-share">
+    <div @click="share" class="link-share">
         <img src="assets/backgrounds/share-img.svg" alt="share">
+        <div class="copy-message" hidden>
+            Ссылка скопирована
+        </div>
     </div>
+    <cookieModal v-if="showCookie" @close="closeCookie" @accept="acceptCookie('cookie', cur_date, 1)" />
     <div class="main">
         <img src="@app/assets/backgrounds/main-bg.jpg" alt="main-bg" class="main__bg">
         <div class="main__wrapper">
@@ -218,16 +222,12 @@
             <img v-if="currentSlide < slideItems.length - itemsToShow && windowWidth < 768" @click="next()"
                 src="@app/assets/icons/icon-pink.svg" alt="right">
         </div>
-
-
-
     </div>
 
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
-// import { Carousel } from '@shared/components/carousel';
 import news from "@app/assets/backgrounds/news.png";
 import nastya from "@app/assets/backgrounds/nastya.png";
 import anna from "@app/assets/backgrounds/anna.png";
@@ -238,6 +238,7 @@ import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide } from 'vue3-carousel'
 import { TestTask } from '@features/TestTask';
 import { useUserStore } from '@layouts/stores/user';
+import { cookieModal } from '@shared/components/modals';
 
 const windowWidth = ref(window.innerWidth);
 const userStore = useUserStore();
@@ -246,7 +247,21 @@ const carousel = ref(null);
 const itemsToShow = ref(2);
 const authorsToShow = ref(2);
 const currentSlide = ref(0);
+const showCookie = ref(false);
 const currentSlideAuthor = ref(0);
+
+const setCookieOnce = () => {
+    localStorage.setItem('stopCookie', true);
+}
+
+const share = () => {
+    navigator.clipboard.writeText(window.location.href);
+    const copyMessage = document.querySelector('.copy-message');
+    copyMessage.hidden = false;
+    setTimeout(() => {
+        copyMessage.hidden = true;
+    }, 2000);
+}
 
 const next = (carousel_name) => {
     if (carousel_name == 'carousel_authors') {
@@ -265,6 +280,26 @@ const prev = (carousel_name) => {
         carousel.value.prev()
     };
 
+}
+const cur_date = new Date();
+cur_date.toLocaleString();
+
+const closeCookie = () => {
+    showCookie.value = false;
+    setCookieOnce();
+
+}
+
+const acceptCookie = (name, value, days) => {
+    showCookie.value = false;
+    let expires = "";
+    if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    setCookieOnce();
 }
 
 const slideItems = ref([
@@ -373,10 +408,13 @@ const skip = () => {
     showBtn.value = true;
 }
 
-
-
 onMounted(() => {
     const test = document.getElementById('test');
+    if (localStorage.getItem('stopCookie') === 'true') {
+        showCookie.value = false;
+    } else {
+        showCookie.value = true;
+    }
     document.addEventListener('scroll', handleScroll);
     function handleScroll() {
         const posTop = test.getBoundingClientRect().top;
@@ -422,6 +460,21 @@ onMounted(() => {
     justify-content: center;
     align-items: center;
     z-index: 1;
+}
+
+.copy-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #35383f;
+    border-radius: 10px;
+    color: #35383f;
+    font-size: 16px;
+    font-family: 'Bert Sans';
+    text-align: center;
 }
 
 

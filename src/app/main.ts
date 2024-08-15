@@ -1,9 +1,4 @@
 import { createApp } from 'vue';
-import { Quasar } from 'quasar';
-import quasarLang from 'quasar/lang/ru';
-import quasarIconSet from 'quasar/icon-set/fontawesome-v6';
-import '@quasar/extras/material-icons/material-icons.css';
-import '@quasar/extras/fontawesome-v6/fontawesome-v6.css';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import App from './App.vue';
@@ -29,9 +24,9 @@ createApp(App)
     .use(vuetify)
     .use(router)
     .use(store)
-    .use(Quasar, {
-        plugins: {}, // import Quasar plugins and add here
-        lang: quasarLang,
-        iconSet: quasarIconSet,
-    })
+    // .use(Quasar, {
+    //     plugins: {}, // import Quasar plugins and add here
+    //     lang: quasarLang,
+    //     iconSet: quasarIconSet,
+    // })
     .mount('#app');
