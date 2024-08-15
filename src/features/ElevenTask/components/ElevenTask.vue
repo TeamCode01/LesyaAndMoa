@@ -213,6 +213,7 @@ const chooseFairyTail = (event, status) => {
         );
 
         setTimeout(() => {
+    
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);;
                 emit('correct');
@@ -236,8 +237,8 @@ const allowDrop = (event) => {
 
 onMounted(async () => {
     const correct = await getCorrectAnswer(11, props.childId);
-    corrValue.value = correct;
-    await getCorrectAnswer(11, props.childId, correctId.value);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
 })
 </script>
 <style lang="scss" scoped>
