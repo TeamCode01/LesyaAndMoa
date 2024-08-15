@@ -20,7 +20,10 @@
             v-for="(block, index) in userStore.children"
             :key="index"
         >
-            <div class="delete-profile">
+            <div
+                class="delete-profile"
+                v-if="userStore.currentUser.tasks_type === 'индивидуальный'"
+            >
                 <modalConfirm label="Удалить профиль">
                     <template #default="{ close }">
                         <div class="delete-profile__wrapper">
@@ -92,7 +95,90 @@
                 ></RouterLink>
             </div>
         </div>
-        <modalWindow label="Добавить ребёнка">
+        <div
+            class="profile-child__wrapper"
+            v-for="(block, index) in userStore.children"
+            :key="index"
+        >
+            <div
+                class="delete-profile"
+                v-if="userStore.currentUser.tasks_type === 'групповой'"
+            >
+                <modalConfirm label="Удалить профиль">
+                    <template #default="{ close }">
+                        <div class="delete-profile__wrapper">
+                            <h3 class="delete-profile__title">
+                                Удаление профиля ребенка
+                            </h3>
+                            <div>
+                                <div class="delete-profile_content">
+                                    <p>
+                                        Все данные {{ block.last_name }}&nbsp;{{
+                                            block.first_name
+                                        }}
+                                        будут удалены.
+                                    </p>
+                                    <div class="regCheck delete-check">
+                                        <input type="checkbox" />
+                                        <div>
+                                            &nbsp;Да, я хочу удалить профиль
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="delete-profile_btn">
+                                    <Button
+                                        class="delete-btn"
+                                        label="Удалить"
+                                        @click="
+                                            deleteChild(block.id, index);
+                                            close();
+                                        "
+                                    ></Button>
+                                    <Button
+                                        label="Отмена"
+                                        class="delete-btn"
+                                        @click="close"
+                                    ></Button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </modalConfirm>
+            </div>
+            <div class="child__form">
+                <p class="child__name">
+                    {{ block.first_name }}&nbsp;{{ block.last_name }}
+                </p>
+                <p class="child__school">{{ block.school }}</p>
+                <div class="child__scale">
+                    <v-progress-linear
+                        v-model:value="block.progress"
+                        height="30"
+                        class="scale"
+                    >
+                        <template v-slot:default="{ value }">
+                            <strong>{{ Math.ceil(value) }}%</strong>
+                        </template>
+                    </v-progress-linear>
+                </div>
+                <RouterLink
+                    :to="{
+                        name: 'Game',
+                        params: { idChildOrGroup: block.id },
+                    }"
+                    class="router-link"
+                >
+                    <Button
+                        label="Перейти к обучению"
+                        class="profile__btn"
+                    ></Button
+                ></RouterLink>
+            </div>
+        </div>
+        <modalWindow
+            v-if="userStore.currentUser.tasks_type === 'индивидуальный'"
+            label="Добавить ребёнка"
+        >
             <template #default="{ close }">
                 <v-card
                     prepend-icon="mdi-account"
@@ -242,6 +328,105 @@
                 </v-card>
             </template>
         </modalWindow>
+        <modalWindow
+            v-if="userStore.currentUser.tasks_type === 'групповой'"
+            label="Добавить группу"
+        >
+            <template #default="{ close }">
+                <v-card
+                    prepend-icon="mdi-account"
+                    title="Введите данные группы"
+                    class="window"
+                >
+                    <v-card-text>
+                        <div class="form-input">
+                            <label>Название группы</label>
+                            <Input
+                                name="login"
+                                class="form-input"
+                                v-model:value="formGroup.name"
+                                @blur="v$.name.$touch()"
+                            ></Input>
+                            <span v-if="isError.name" class="error-message">{{
+                                isError.name[0]
+                            }}</span>
+                        </div>
+                        <div class="form-input">
+                            <label>Количество учеников в группе</label>
+                            <Input
+                                @blur="v$.number_of_students.$touch()"
+                                name="login"
+                                class="form-input"
+                                v-model:value="formGroup.number_of_students"
+                            ></Input>
+                            <span
+                                v-if="isError.number_of_students"
+                                class="error-message"
+                                >{{ isError.number_of_students[0] }}</span
+                            >
+                        </div>
+                        <div class="form-input">
+                            <label>Средний возраст учеников группы</label>
+                            <Input
+                                @blur="v$.average_age.$touch()"
+                                name="login"
+                                class="form-input"
+                                v-model:value="formGroup.average_age"
+                            ></Input>
+                            <span
+                                v-if="isError.average_age"
+                                class="error-message"
+                                >{{ isError.average_age[0] }}</span
+                            >
+                        </div>
+                        <div class="form-input">
+                            <label>Регион</label>
+                            <SelectSort
+                                @blur="v$.region.$touch()"
+                                @click="GetRegion"
+                                :items="reg"
+                                v-model="formGroup.region"
+                                :options="reg"
+                                name="select_position"
+                                id="select-position"
+                                class="invents-select"
+                                clearable
+                                placeholder="Выберите регион из списка"
+                                variant="outlined"
+                                :sorts-boolean="false"
+                                @update:value="changeOption"
+                            />
+                            <span v-if="isError.region" class="error-message">{{
+                                isError.region[0]
+                            }}</span>
+                        </div>
+                        <div class="form-input">
+                            <label>Школа</label>
+                            <Input
+                                @blur="v$.school.$touch()"
+                                name="login"
+                                class="form-input"
+                                v-model:value="formGroup.school"
+                            ></Input>
+                            <span v-if="isError.school" class="error-message">{{
+                                isError.school[0]
+                            }}</span>
+                        </div>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <Button
+                            label="Добавить группу"
+                            class="profile__btn add-child-btn"
+                            @click="
+                                AddGroup();
+                                close();
+                            "
+                        ></Button>
+                    </v-card-actions>
+                </v-card>
+            </template>
+        </modalWindow>
         <img
             v-if="userStore.children.length"
             class="profile__img"
@@ -250,13 +435,13 @@
         <img
             v-if="!userStore.children.length"
             class="profile-child__img"
-            src="@app/assets/img/Profile/Moa.png"
+            src="@app/assets/img/Profile/lesyaMoaParentAndChild.svg"
             alt=""
         />
         <img
             v-if="false"
             class="profile-child__img"
-            src="@app/assets/img/Profile/lesyaMoaParentAndChild.svg"
+            src="@app/assets/img/Profile/Moa.svg"
             alt=""
         />
         <img
@@ -304,6 +489,13 @@ const form = ref({
     sex: null,
     data_processing_agreement: false,
 });
+const formGroup = ref({
+    name: '',
+    number_of_students: '',
+    average_age: '',
+    region: null,
+    school: '',
+});
 
 const skill = ref({});
 const rules = {
@@ -314,9 +506,12 @@ const rules = {
     school: { required },
     grade: { required },
     sex: { required },
+    name: { required },
+    number_of_students: { required },
+    average_age: { required },
 };
 
-const v$ = useVuelidate(rules, form);
+const v$ = useVuelidate(rules, form, formGroup);
 const isError = ref({});
 
 watchEffect(() => {
@@ -346,7 +541,18 @@ watchEffect(() => {
         if (v$.value.region.$error) {
             isError.value.region = ['Поле должно быть заполнено'];
         }
-        // + условие для чекбокса
+        if (v$.value.name.$error) {
+            isError.value.name = ['Поле должно быть заполнено'];
+        }
+        if (v$.value.number_of_students.$error) {
+            isError.value.number_of_students = ['Поле должно быть заполнено'];
+        }
+        if (
+            formGroup.value.average_age < 0 ||
+            formGroup.value.average_age > 17
+        ) {
+            isError.value.average_age = ['Возраст должен быть между 0 и 17'];
+        }
     }
 });
 
@@ -411,6 +617,39 @@ const AddChild = async () => {
         });
     }
 };
+const AddGroup = async () => {
+    try {
+        const response = await HTTP.post('/groups/', formGroup.value, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        });
+        formGroup.value = response.data;
+        console.log(response.data);
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        await userStore.getChildren();
+        await fetchSkills();
+    } catch (error) {
+        console.log('errr', error);
+        isError.value = error.response.data;
+        console.error('There was an error!', error);
+        swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: `ошибка`,
+            showConfirmButton: false,
+            timer: 2500,
+        });
+    }
+};
+
 const GetRegion = async () => {
     try {
         const response = await HTTP.get('/regions/', reg.value, {
@@ -487,10 +726,8 @@ onMounted(async () => {
 
 .profile__img,
 .profile-child__img {
-    max-width: 100%;
-    position: absolute;
-    top: -50px;
-    z-index: -1;
+    max-width: 850.55px;
+    align-self: center;
 
     @media (max-width: 1200px) {
         object-fit: cover;
@@ -581,9 +818,6 @@ onMounted(async () => {
 
 .profile-child__img {
     max-width: 100%;
-    position: absolute;
-    top: -30px;
-    z-index: -1;
 
     @media (max-width: 1200px) {
         top: 60px;

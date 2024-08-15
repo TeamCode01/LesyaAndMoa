@@ -68,15 +68,31 @@ const routes: RouteRecordRaw[] = [
                         path: ':idChildOrGroup',
                         name: 'Game',
                         component: () =>
-                            import('@pages/StartGamePage/components/StartGamePage.vue'),
-                    }
-                ]
+                            import(
+                                '@pages/StartGamePage/components/StartGamePage.vue'
+                            ),
+                    },
+                ],
             },
             {
                 path: '/profile-page',
                 name: 'profile-page',
                 component: () =>
                     import('@pages/ProfilePage/components/ProfilePage.vue'),
+            },
+            {
+                path: '/news-page',
+                component: () =>
+                    import('@pages/NewsPage/components/NewsListPage.vue'),
+
+                children: [
+                    {
+                        path: ':id',
+                        name: 'news-page',
+                        component: () =>
+                            import('@pages/NewsPage/components/NewsPage.vue'),
+                    },
+                ],
             },
         ],
     },

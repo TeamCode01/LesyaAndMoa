@@ -15,8 +15,14 @@
                     <li>
                         <a href="/" class="link-small">О проекте</a>
                     </li>
-                    <li><a href="#" class="link-small">Новости</a></li>
-                    <li><a href="#" class="link-small">Контакты</a></li>
+                    <li>
+                        <router-link href="#" class="link-small" to="/news-page"
+                            >Новости</router-link
+                        >
+                    </li>
+                    <li>
+                        <a href="/news-page" class="link-small">Контакты</a>
+                    </li>
 
                     <li>
                         <a href="#" class="link-small">Поддержать проект</a>
