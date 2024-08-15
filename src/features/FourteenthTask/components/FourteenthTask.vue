@@ -69,9 +69,10 @@
                                 :id="`draggable-list__word${word.id}`"
                                 v-for="word in Task[0]"
                                 :key="word.id"
-                                @mousedown.left="
+                                @mousedown="
                                     startPosition($event, word, 'word')
                                 "
+                                @mouseenter="playAudio(word.isActive ? word.audio : '/')"
                                 :ref="
                                     (el) => (refBlocks[0][0][word.id - 1] = el)
                                 "
@@ -92,6 +93,7 @@
                                 @mousedown.left="
                                     startPosition($event, sound, 'sound')
                                 "
+                                @mouseenter="playAudio(sound.isActive ? sound.audio : '/')"
                                 :ref="
                                     (el) => (refBlocks[0][1][sound.id - 1] = el)
                                 "
@@ -197,6 +199,7 @@ const next = () => {
     emit('next-modal');
 };
 
+const audio = ref(new Audio())
 const answersCounter = ref(0)
 
 const Task = ref();
@@ -337,7 +340,6 @@ const rightAnswer = (indexes) => {
 
 const endPosition = (event) => {
     let { type_index, blocks_index, block_index } = getBlockUnderMouse(event);
-    console.log(type_index, blocks_index, block_index);
     isDrag.value = false;
 
     Task.value.map((type) => {
@@ -381,6 +383,11 @@ const endPosition = (event) => {
                     block.sound.error = 0
                     block.word.error = 0
                     answersCounter.value += 1
+
+                    if (answersCounter.value == 4) {
+                        let finalaudio = new Audio('/assets/audio/Task14/388.14.mp3');
+                        finalaudio.play();
+                    }
                 }, 1000)
 
             }
@@ -436,6 +443,14 @@ const endPosition = (event) => {
     draggableBlock.value.answer = '';
 
 };
+
+const playAudio = (audioPath) =>{
+    if (audioPath != '/') {
+        if (audio.value.src) audio.value.pause();
+        audio.value.src = audioPath;
+        audio.value.play();
+    }
+}
 </script>
 
 <style lang="scss" scoped>

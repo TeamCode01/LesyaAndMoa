@@ -117,8 +117,6 @@ const answer = ref('');
 const array = ref([]);
 const array_two = ref([]);
 const array_three = ref([]);
-
-let correctId = ref(0);
 const corrValue = ref(0);
 
 const array_result = ref([{ name: 'к', type: 'глухой' }, { name: 'ч', type: 'глухой' }, { name: 'с', type: 'глухой' }, { name: 'ф', type: 'глухой' }]);
@@ -174,10 +172,10 @@ const drop = (event, index) => {
         return false;
     }
     if (array.value.length === array_result.value.length && array_two.value.length === array_two_result.value.length && array_three.value.length === array_three_result.value.length) {
-        emit('correct', is_correct.value);
-        console.log('yeah')
+
         if (is_correct.value === false) {
             endGameRequest(props.childId, corrValue.value);
+            emit('correct');
         }
         setTimeout(() => {
             endGame.value = true;
@@ -195,8 +193,6 @@ onMounted(async () => {
     const correct = await getCorrectAnswer(3, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
-    is_started.value = correct.is_started;
-    // await getCorrectAnswer(3, props.childId);
 })
 </script>
 <style lang="scss" scoped>

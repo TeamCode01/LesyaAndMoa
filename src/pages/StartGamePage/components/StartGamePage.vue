@@ -1,8 +1,7 @@
 <template>
   <div class="container-game" v-show="windowWidth >= 1024">
     <div class="game">
-  <!--emit('skip-task')-->
-  <Sidebar :childId="childId" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" @skip-task="skipTask" />
+      <Sidebar :childId="childId" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio" @show="showButton" />
       <div class="game_icons_wrap">
         <div class="game_icons_item" @click="mute()"><img v-show="isMuted === false" src="@app/assets/icons/sound.svg"
             alt="sound"><img v-show="isMuted === true" src="@app/assets/icons/muted.svg" alt=""></div>
@@ -26,8 +25,8 @@
 
     <div v-if="modalIsOpen == true" class="mobile-modal">
       <div>
-        <div class="close" @click="()=>{modalIsOpen = false}">
-          <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+        <div class="close" >
+          <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест"  @click="()=>{modalIsOpen = false}"/>
         </div>
         <p class="mobile-text">
           Чтобы полноценно использовать игры, необходимо разрешение экрана от 1024 px. Пожалуйста воспользуйтесь планшетом или компьютером. Мы ждем вас на нашем сайте
@@ -57,8 +56,7 @@ const route = useRoute();
 let answerId = ref(0);
 let childId = route.params.idChildOrGroup;
 const startAudio = ref(new Audio());
-const isPlaying = ref(false)
-const emit = defineEmits(['skip-task'])
+const isPlaying = ref(false);
 const isMuted = ref(false);
 
 const windowWidth = ref(window.innerWidth);
@@ -67,8 +65,6 @@ const sendImg = (image) => {
   img.value = image;
   document.getElementById('background-banner').src = image
 }
-
-
 
 const sendAudio = (music) => {
   audio.value = music;
@@ -94,7 +90,6 @@ const mute = () => {
 }
 const skip = () => {
   startAudio.value.src = ''
-  emit('skip-task')
   showBtn.value = true;
 }
 
@@ -109,9 +104,6 @@ const playSound = () => {
     showBtn.value = true;
   })
 }
-
-
-
 
 watch(
   () => route.params.id,
@@ -207,7 +199,11 @@ onMounted(() => {
 .container-game {
   margin: 0px auto;
   padding: 0 120px;
-  max-width: 100%;
+  max-width: 1440px;
+
+  @media (max-width: 1440px) {
+    max-width: 1200px;
+  }
 
   @media (max-width: 1024px) {
     height: 470px;
@@ -276,6 +272,11 @@ onMounted(() => {
       column-gap: 8px;
     }
 
+    .close{
+      cursor: pointer;
+      display: flex;
+      justify-content: end;
+    }
 
     .close-icon{
       position: relative;

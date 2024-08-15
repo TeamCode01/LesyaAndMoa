@@ -58,7 +58,6 @@ const props = defineProps({
 });
 const endGame = ref(false);
 const is_correct = ref(null);
-const is_started = ref(null);
 const hide = () => {
     emit('close');
     endGame.value = true;
@@ -167,10 +166,11 @@ const drop = (event) => {
         }
     }
     if (answer_arr.value.length === 5) {
-        emit('correct',  is_correct.value);
+
         setTimeout(() => {
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);
+                emit('correct');
             }
             endGame.value = true;
         }, 2000)

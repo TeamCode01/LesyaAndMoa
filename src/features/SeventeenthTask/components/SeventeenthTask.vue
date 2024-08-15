@@ -97,6 +97,11 @@
                                 @mousedown.left="
                                     ($event) => startPosition($event, word)
                                 "
+                                @mouseenter="()=>{
+                                    if (word.isActive) {
+                                        playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)
+                                    }
+                                }"
                                 :ref="
                                     (el) => {
                                         refPuzzles[word.id - 1] = el;
@@ -206,6 +211,7 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import DragndropComponent from './DragndropComponent.vue';
 
 import { dataFirstTask, dataSecondTask } from './task.js';
+import audioMap from './audioMap'
 
 const emit = defineEmits(['close', 'next-modal']);
 
@@ -226,6 +232,13 @@ const next = () => {
 //
 // ПЕРВЫЙ ЭТАП ЗАДАНИЯ
 //
+
+const audio = ref(new Audio());
+
+const playAudio = (audioPath) => {
+    audio.value.src = audioPath;
+    audio.value.play();
+}
 
 const startGame = ref(true);
 
@@ -353,11 +366,17 @@ const endPosition = (event) => {
             firstTask.value[1].push(word);
             firstTask.value[1].sort((a, b) => a.id - b.id);
 
+            
             setTimeout(() => {
                 firstTaskAnswerCounter.value += 1;
-                if (firstTaskAnswerCounter.value == 5) {
+                let audio_word = new Audio(`/assets/audio/Task17/${audioMap.get('слово-' + word.id)}`);
+                audio_word.play();
+                
+                setTimeout(() => {
+                    if (firstTaskAnswerCounter.value == 5) {
                     endFirstTask.value = true;
                 }
+                }, 1000)
             }, 1000);
         } else {
             let flag = false;
@@ -559,17 +578,7 @@ const checkRowsAndColumnsIds = (pos) => {
         pos.y > centralCords.value[2][0].minY &&
         pos.y < centralCords.value[2][0].maxY;
 
-    const columnId = inFirstLineX
-        ? 1
-        : inSecondLineX
-        ? 2
-        : inThirdLineX
-        ? 3
-        : inFourthLineX
-        ? 4
-        : inFifthLineX
-        ? 5
-        : false;
+    const columnId = inFirstLineX ? 1 : inSecondLineX ? 2 : inThirdLineX ? 3 : inFourthLineX ? 4 : inFifthLineX ? 5 : false;
     const rowId = inFirstLineY ? 1 : inSecondLineY ? 2 : false;
 
     return { row: rowId, column: columnId };
@@ -761,10 +770,6 @@ const disengage = (event) => {
     }
 };
 
-const playAudio = (file) => {
-    let audio = new Audio(file);
-    audio.play();
-};
 
 const voiceActing = () => {};
 

@@ -12,7 +12,8 @@
                 </div>
                 <div class="SecondTask__wrapper_block">
                     <img @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
-                    @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"  :src="item.src" alt="alphabet"   class="SecondTask__wrapper_block_item">
+                        @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"
+                        :src="item.src" alt="alphabet" class="SecondTask__wrapper_block_item">
                 </div>
             </div>
         </div>
@@ -59,7 +60,6 @@ const next = () => {
 }
 
 const is_correct = ref(null);
-const is_started = ref(null);
 
 const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false, audio: '/assets/audio/Task2/27.2.mp3' }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true, audio: '/assets/audio/Task2/26.2.mp3' }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false, audio: '/assets/audio/Task2/28.2.mp3' }])
 const endGame = ref(false);
@@ -85,8 +85,6 @@ const stopAudio = (audioPath) => {
     }
 }
 
-let correctId = ref(0);
-
 const chooseTask = (event, status) => {
     if (status === true) {
         event.target.value = status;
@@ -95,9 +93,12 @@ const chooseTask = (event, status) => {
         );
         event.target.classList.add('green');
         playEndAudio('/assets/audio/Common/1.2.mp3');
-        emit('correct',  is_correct.value);
+
         setTimeout(() => {
-            endGameRequest(props.childId, corrValue.value);
+            if (is_correct.value === false) {
+                endGameRequest(props.childId, corrValue.value);
+                emit('correct');
+            }
             endGame.value = true;
             event.target.classList.remove('green');
         }, 2000);
@@ -116,8 +117,6 @@ onMounted(async () => {
     const correct = await getCorrectAnswer(2, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
-    is_started.value = correct.is_started;
-    await getCorrectAnswer(2, props.childId, correctId.value);
 })
 </script>
 <style lang="scss" scoped>

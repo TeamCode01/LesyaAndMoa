@@ -105,7 +105,6 @@ const stopAudio = (audioPath) => {
 }
 
 const is_correct = ref(null);
-const correctId = ref(0);
 const corrValue = ref(0);
 
 const words = ref([
@@ -149,14 +148,15 @@ const drop = (event) => {
 
         if (text === 'ДЕТСКУЮ') {
             event.target.classList.add('green');
-            // emit('correct', is_correct.value);
+
             playAudio('/assets/audio/Common/1.2.mp3');
             setTimeout(() => {
-                endGame.value = true;
                 event.target.classList.remove('green');
-                // if (is_correct.value === false) {
-                //     endGameRequest(props.childId, corrValue.value);
-                // }
+                if (is_correct.value === false) {
+                    endGameRequest(props.childId, corrValue.value);
+                    emit('correct');
+                }
+                endGame.value = true;
             }, 2000)
 
         }
@@ -178,8 +178,8 @@ const allowDrop = (event) => {
 
 onMounted(async () => {
     const correct = await getCorrectAnswer(13, props.childId);
-    corrValue.value = correct;
-    await getCorrectAnswer(13, props.childId, correctId.value);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
 })
 </script>
 <style lang="scss" scoped>

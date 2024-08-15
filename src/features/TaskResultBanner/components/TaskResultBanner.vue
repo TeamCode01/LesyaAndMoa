@@ -90,6 +90,10 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     right: 20px;
     top: 20px;
     position: absolute;

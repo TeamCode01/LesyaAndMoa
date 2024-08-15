@@ -100,7 +100,7 @@
                 img="/assets/backgrounds/Diamond.png"
                 bg="/assets/backgrounds/moa.gif"
                 text="Изумительно!"
-                v-if="answersCounter == 55"
+                v-if="answersCounter >= 55"
                 @hide="hide()"
                 @next="next()"
             ></TaskResultBanner>
@@ -115,6 +115,7 @@ import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
 import { dataTask, dataAnswer } from './task';
+import audioMap from './audioMap';
 
 const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
@@ -157,7 +158,16 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                 string.string.map((word) => {
                     if (word.wordid == wordID)
                         word.word.map((letter) => {
-                            if (letter.id == letterID) letter.isActive = true;
+                            if (letter.id == letterID) {
+                                letter.isActive = true;
+                                if (word.word.every((item)=>{return item.isActive})) {
+                                    console.log(`${audioMap.get('слово-' + word.wordid)}`)
+                                    let audio = new Audio(`/assets/audio/Task16/${audioMap.get('слово-' + word.wordid)}`);
+                                    setTimeout(() => {
+                                        audio.play();
+                                    }, 1000)
+                                }
+                            }
                         });
                 });
             });
@@ -178,12 +188,31 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
             event.target.classList.add(
                 'draggable-list__subcontainer-square_right'
             );
-            setTimeout(() => {
+
+            console.log(answersCounter.value);
+
+            if (answersCounter.value == 54){
+                setTimeout(() => {
+                    event.target.classList.remove(
+                        'draggable-list__subcontainer-square_right'
+                    );
+                    let audio = new Audio(`/assets/audio/Task16/${audioMap.get('final')}`);
+                    audio.play();
+                }, 2000);
+
+                setTimeout(() => {
+                    answersCounter.value += 1;
+                }, 8000)
+            }
+            else {
                 answersCounter.value += 1;
-                event.target.classList.remove(
-                    'draggable-list__subcontainer-square_right'
-                );
-            }, 2000);
+                setTimeout(() => {
+                    event.target.classList.remove(
+                        'draggable-list__subcontainer-square_right'
+                    );
+                }, 2000);    
+            }
+            
         } else {
             if (!letterIsActive){
                 event.target.classList.add(

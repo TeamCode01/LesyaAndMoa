@@ -33,7 +33,6 @@
                                 v-for="word in row"
                                 :key="word.text"
                                 :disabled="word.x == 0 || word.y == 0"
-                                @click="console.log(word.text)"
                                 :draggable="word.x != 0 && word.y != 0"
                                 @dragstart="
                                     dragLetter(
@@ -43,6 +42,7 @@
                                         word.text
                                     )
                                 "
+                                @mousedown="playAudio(word.text)"
                             >
                                 {{ word.text }}
                             </div>
@@ -55,17 +55,16 @@
                         <div
                             class="task_block__row"
                             v-for="row in rowsData"
-                            :key="row"
+                            :key="row.id"
                         >
                             <div
                                 class="task_block__word"
-                                v-for="word in row"
-                                :key="word"
-                                @click="console.log(tasksData)"
+                                v-for="word in row.data"
+                                :key="word.id"
                             >
                                 <div
                                     class="task_block__letter"
-                                    v-for="letter in word"
+                                    v-for="letter in word.data"
                                     :key="letter"
                                     @drop="
                                         dropLetter(
@@ -81,13 +80,6 @@
                                         task_block__letter_active:
                                             letter.isActive,
                                     }"
-                                    @click="
-                                        console.log(
-                                            letter.x,
-                                            letter.y,
-                                            letter.text
-                                        )
-                                    "
                                 >
                                     {{ letter.text }}
                                 </div>
@@ -96,16 +88,16 @@
                                     src="/assets/icons/comma-blue.svg"
                                     alt="comma-blue"
                                     v-if="
-                                        [18].includes(word.slice(-1)[0].id) &&
-                                        word.slice(-1)[0].isActive
+                                        [18].includes(word.data.slice(-1)[0].id) &&
+                                        word.data.slice(-1)[0].isActive
                                     "
                                 />
                                 <div
                                     class="draggable-list__full-stop"
                                     v-if="
                                         [6, 26].includes(
-                                            word.slice(-1)[0].id
-                                        ) && word.slice(-1)[0].isActive
+                                            word.data.slice(-1)[0].id
+                                        ) && word.data.slice(-1)[0].isActive
                                     "
                                 >
                                     <img
@@ -137,6 +129,7 @@ import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
 import { tasksData } from './tasks.js';
+import audioMap from './dict.js'
 
 const emit = defineEmits(['close', 'next-modal']);
 const props = defineProps({
@@ -163,12 +156,21 @@ const taskData = ref([]);
 const rowsData = ref([]);
 
 const answersCounter = ref(0);
+const audio = ref(new Audio());
 
 [taskData.value, rowsData.value] = structuredClone(tasksData);
 
 for (let row = 1; row in taskData; row++) {
     for (let column = 1; column in taskData[row]; column++) {
         legalWords.push(taskData[row][column]);
+    }
+}
+
+const playAudio = (text) => {
+    if (!audio.value.paused) audio.value.pause()
+    if (text){
+        audio.value.src = `/assets/audio/Task15/${audioMap.get(text)}`;
+        audio.value.play()
     }
 }
 
@@ -183,15 +185,38 @@ const dropLetter = (event, x, y, id, isActive) => {
 
     if (!isActive) {
         if (dragx == x && dragy == y) {
-            console.log(dragtext, id);
             rowsData.value.map((row) =>
-                row.map((word) => {
-                    word.map((letter) => {
+                row.data.map((word) => {
+                    word.data.map((letter) => {
                         if (letter.id == id) {
                             letter.text = dragtext;
                             letter.isActive = true;
+
+                            word.answerCounter += 1
+
+                            playAudio(word.data.slice(-1)[0].text)
+
+                            if ( 
+                                ((word.id == 1 || word.id == 3 || word.id == 8 || word.id == 10 || word.id == 13) && word.answerCounter == 1) ||
+                                ( (word.id == 2 ||word.id == 4 ||word.id == 5 ||word.id == 6 || word.id == 11 || word.id == 12 || word.id == 14) && word.answerCounter == 2) ||
+                                (  word.id == 9 && word.answerCounter == 3) ||
+                                ( word.id == 7 && word.answerCounter == 4)
+                            ) {
+                                setTimeout(() => {
+                                    let audioPath = `/assets/audio/Task15/${audioMap.get('слово-'+word.id)}`
+                                    let word_audio = new Audio(audioPath);
+                                    word_audio.play()
+                                }, 1000)
+                            }
+
                         }
+
+
+                        
                     });
+
+                    
+                    
                 })
             );
 

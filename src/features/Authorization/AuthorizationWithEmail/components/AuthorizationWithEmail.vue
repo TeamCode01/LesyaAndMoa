@@ -197,6 +197,3 @@ const LoginUser = async () => {
     }
 }
 </style>
-<<<<<<< HEAD <<<<<<< HEAD ======= >>>>>>>
-da9f36cd33f26530dae58710d3562086746c7658 ======= >>>>>>>
-f4b7a95a0661c29901fa561f9cee2b8e5eb4eee3
