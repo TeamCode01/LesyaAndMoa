@@ -87,7 +87,21 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import { dataTask, dataAnswer } from './task.js'
 import audioMap from './audioMap.js'
 
-const emit = defineEmits(['close', 'next-modal']);
+import gameActions from '@mixins/gameAction';
+
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
+
+onMounted(async () => {
+    const correct = await getCorrectAnswer(12, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+});
+
+const corrValue = ref(0)
+const is_correct = ref(null)
+
+const emit = defineEmits(['close', 'next-modal', 'correct']);
 
 const hide = () => {
     emit('close');
@@ -104,6 +118,10 @@ const props = defineProps({
         type: Boolean,
         required: false,
     },
+    childId: {
+        type: Number,
+        required: false,
+    }
 });
 
 const endGame = ref(false);
@@ -111,6 +129,8 @@ const show = ref(false);
 const hideModal = () => {
     show.value = false;
 }
+
+
 
 const Task = ref()
 const Answer = ref()
@@ -199,6 +219,19 @@ const dropLetter = (event, id, isActive) => {
 
             setTimeout(() => {
                 answersCounter.value += 1;
+                
+                if (answersCounter.value == 11) {
+                    setTimeout(() => {
+                        if (is_correct.value === false) {
+                            endGameRequest(props.childId, corrValue.value);
+                            emit('correct');
+                        }
+                    },1000)
+
+                    let audio = new Audio('/assets/audio/Task12/368.12_.mp3');
+                    audio.play();
+                }
+
             }, 7000);
         }
         else {
@@ -222,10 +255,8 @@ const dropLetter = (event, id, isActive) => {
     }
 }
 
-onMounted(() => {
-    let audio = new Audio('/assets/audio/Task12/349.12.mp3');
-    audio.play();
-})
+
+
 </script>
 
 

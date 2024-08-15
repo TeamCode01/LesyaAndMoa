@@ -84,9 +84,9 @@
                 </div>
             </template>
             <TaskResultBanner
-                img="/assets/backgrounds/flowers.png"
+                img="/assets/backgrounds/Diamond.png"
                 bg="/assets/backgrounds/moa.gif"
-                text="Здорово!"
+                text="Блистательно!"
                 v-if="usedWord.length >= 15"
                 @hide="hide()"
                 @next="next()"
@@ -104,12 +104,21 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import { tasksData } from './tasks.js';
 import dict from './dict.js';
 
-const emit = defineEmits(['close', 'next-modal']);
+import gameActions from '@mixins/gameAction';
+
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
+
+const emit = defineEmits(['close', 'next-modal', 'correct']);
 const props = defineProps({
     end: {
         type: Boolean,
         required: false,
     },
+    childId: {
+        type: Number,
+        required: false,
+    }
 });
 const hide = () => {
     emit('close');
@@ -119,10 +128,15 @@ const next = () => {
     emit('next-modal');
 };
 
-onMounted(() => {
-    let audio = new Audio('/assets/audio/Task6/79.6.mp3');
-    audio.play();
+onMounted(async () => {
+    const correct = await getCorrectAnswer(6, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
 });
+
+
+const corrValue = ref(0)
+const is_correct = ref(null)
 
 const dictKeys = Array.from(dict.keys()); // Массив разрешенных значений
 
@@ -151,6 +165,8 @@ const taskWord = ref(''); // Заданное слово в текущей ит�
 const repeated = ref(false); // Повторяется ли слово в текущий момент
 
 const usedWord = ref([]); // Использованные слова
+
+const answersCounter = ref(0)
 
 const blockButtons = ref(true);
 
@@ -194,6 +210,21 @@ const clickItem = (word) => {
         );
         reactionAudio.play();
         blockButtons.value = true;
+        answersCounter.value += 1
+
+        setTimeout(() => {
+            if (answersCounter.value == 15) {
+                setTimeout(() => {
+                    if (is_correct.value === false) {
+                        endGameRequest(props.childId, corrValue.value);
+                        emit('correct');
+                    }
+                },1000)
+
+                let audio = new Audio('/assets/audio/Task6/259.6_.mp3');
+                audio.play();
+            }
+        }, 2000)
     } else {
         let reactionAudio = new Audio(
             `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
@@ -208,6 +239,9 @@ const clickItem = (word) => {
         if (word.text == taskWord.value) randomMusic();
     }, 2000);
 };
+
+
+
 </script>
 <style lang="scss" scoped>
 *{

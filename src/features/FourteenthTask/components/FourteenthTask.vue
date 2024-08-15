@@ -184,12 +184,30 @@ import DragndropComponent from './DragndropComponent.vue';
 import { dataTask, dataAnswer } from './task';
 import draggable from 'vuedraggable';
 
-const emit = defineEmits(['close', 'next-modal']);
+import gameActions from '@mixins/gameAction';
+
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
+
+onMounted(async () => {
+    const correct = await getCorrectAnswer(14, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+});
+
+const corrValue = ref(0)
+const is_correct = ref(null)
+
+const emit = defineEmits(['close', 'next-modal', 'correct']);
 const props = defineProps({
     end: {
         type: Boolean,
         required: false,
     },
+    childId: {
+        type: Number,
+        required: false,
+    }
 });
 const hide = () => {
     emit('close');
@@ -382,8 +400,17 @@ const endPosition = (event) => {
                     block.sound.error = 0
                     block.word.error = 0
                     answersCounter.value += 1
-
+                    
+                    
                     if (answersCounter.value == 4) {
+
+                        setTimeout(() => {
+                            if (is_correct.value === false) {
+                                endGameRequest(props.childId, corrValue.value);
+                                emit('correct');
+                            }
+                        },1000)
+
                         let finalaudio = new Audio('/assets/audio/Task14/388.14.mp3');
                         finalaudio.play();
                     }

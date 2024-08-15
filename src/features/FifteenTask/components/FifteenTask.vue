@@ -131,12 +131,30 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import { tasksData } from './tasks.js';
 import audioMap from './dict.js'
 
-const emit = defineEmits(['close', 'next-modal']);
+import gameActions from '@mixins/gameAction';
+
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
+
+onMounted(async () => {
+    const correct = await getCorrectAnswer(15, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+});
+
+const corrValue = ref(0)
+const is_correct = ref(null)
+
+const emit = defineEmits(['close', 'next-modal', 'correct']);
 const props = defineProps({
     end: {
         type: Boolean,
         required: false,
     },
+    childId: {
+        type: Number,
+        required: false,
+    }
 });
 const hide = () => {
     emit('close');
@@ -194,11 +212,9 @@ const dropLetter = (event, x, y, id, isActive) => {
 
                             word.answerCounter += 1
 
-                            playAudio(word.data.slice(-1)[0].text)
-
                             if ( 
                                 ((word.id == 1 || word.id == 3 || word.id == 8 || word.id == 10 || word.id == 13) && word.answerCounter == 1) ||
-                                ( (word.id == 2 ||word.id == 4 ||word.id == 5 ||word.id == 6 || word.id == 11 || word.id == 12 || word.id == 14) && word.answerCounter == 2) ||
+                                ( (word.id == 2 ||word.id == 4 || word.id == 5 || word.id == 6 || word.id == 11 || word.id == 12 || word.id == 14) && word.answerCounter == 2) ||
                                 (  word.id == 9 && word.answerCounter == 3) ||
                                 ( word.id == 7 && word.answerCounter == 4)
                             ) {
@@ -229,6 +245,19 @@ const dropLetter = (event, x, y, id, isActive) => {
 
             setTimeout(() => {
                 event.target.classList.remove('task_block__letter_right');
+
+                if (answersCounter.value == 26) {
+                    setTimeout(() => {
+                        if (is_correct.value === false) {
+                            endGameRequest(props.childId, corrValue.value);
+                            emit('correct');
+                        }
+                    },1000)
+
+                    let finalaudio = new Audio('/assets/audio/Task15/426.15_.mp3');
+                    finalaudio.play();
+                }
+
             }, 2000);
         } else {
             event.target.classList.add('task_block__letter_wrong');
