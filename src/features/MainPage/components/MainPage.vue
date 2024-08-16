@@ -1,9 +1,15 @@
 <template>
-    <div @click="share" class="link-share">
+
+    <div @click="show_socials = !show_socials" class="link-share">
+        <Transition name="bounce">
+            <div v-show="show_socials" class="networks__wrapper">
+                <ShareNetwork class="networks" v-for="network in networks" :network="network.network"
+                    :key="network.network" :url="sharing.url" :title="sharing.title" :description="sharing.description">
+                    <img class="networks__icon" :src="network.icon" />
+                </ShareNetwork>
+            </div>
+        </Transition>
         <img src="assets/backgrounds/share-img.svg" alt="share">
-        <div class="copy-message" hidden>
-            Ссылка скопирована
-        </div>
     </div>
     <cookieModal v-if="showCookie" @close="closeCookie" @accept="acceptCookie('cookie', cur_date, 1)" />
     <div class="main">
@@ -244,24 +250,31 @@ const windowWidth = ref(window.innerWidth);
 const userStore = useUserStore();
 const carousel_authors = ref(null);
 const carousel = ref(null);
+const show_socials = ref(false);
 const itemsToShow = ref(2);
 const authorsToShow = ref(2);
 const currentSlide = ref(0);
 const showCookie = ref(false);
 const currentSlideAuthor = ref(0);
 
+const sharing = ref({
+    url: `${window.location.href}`,
+    title: 'Леся и Моа.',
+    description: 'Увлекательное приключение с интерактивными заданиями для профилактики и коррекции дислексии .',
+})
+
+const networks = ref([
+    { network: 'odnoklassniki', icon: '/assets/icons/brandico--odnoklassniki-rect.svg', width: '30px' },
+    { network: 'telegram', icon: '/assets/icons/logos--telegram.svg', width: '30px' },
+    { network: 'viber', icon: '/assets/icons/basil--viber-solid.svg', width: '30px' },
+    { network: 'vk', icon: '/assets/icons/ri--vk-fill.svg', width: '30px' },
+    { network: 'whatsapp', icon: '/assets/icons/logos--whatsapp-icon.svg', width: '30px' },
+])
+
 const setCookieOnce = () => {
     localStorage.setItem('stopCookie', true);
 }
 
-const share = () => {
-    navigator.clipboard.writeText(window.location.href);
-    const copyMessage = document.querySelector('.copy-message');
-    copyMessage.hidden = false;
-    setTimeout(() => {
-        copyMessage.hidden = true;
-    }, 2000);
-}
 
 const next = (carousel_name) => {
     if (carousel_name == 'carousel_authors') {
@@ -447,7 +460,27 @@ onMounted(() => {
 })
 </script>
 <style lang="scss" scoped>
+.networks {
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+        background-color: #FAE6F2;
+        padding: 10px 15px;
+        border-radius: 10px;
+    }
+
+    &__icon {
+        width: 30px;
+        height: 30px;
+        display: block;
+    }
+}
+
 .link-share {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
     cursor: pointer;
     position: fixed;
     width: 60px;
@@ -455,12 +488,42 @@ onMounted(() => {
     background-color: #fff;
     border-radius: 10px;
     right: 5vh;
-    top: 80vh;
+    top: 70vh;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1;
 }
+
+// .v-enter-active,
+// .v-leave-active {
+//     transition: opacity 0.5s ease;
+// }
+
+// .v-enter-from,
+// .v-leave-to {
+//     opacity: 0;
+// }
+
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
 
 .copy-message {
     position: fixed;
