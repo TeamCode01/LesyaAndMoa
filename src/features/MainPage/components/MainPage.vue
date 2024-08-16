@@ -1,9 +1,21 @@
 <template>
-    <div @click="share" class="link-share">
-        <img src="assets/backgrounds/share-img.svg" alt="share">
-        <div class="copy-message" hidden>
-            Ссылка скопирована
-        </div>
+
+    <div @click="show_socials = !show_socials" class="link-share">
+        <Transition name="slide-fade">
+            <div v-if="show_socials" class="networks__wrapper">
+                <ShareNetwork class="networks" v-for="network in networks" :network="network.network"
+                    :key="network.network" :url="sharing.url" :title="sharing.title" :description="sharing.description">
+                    <img class="networks__icon" :src="network.icon" />
+                </ShareNetwork>
+                <!-- <button class="close-btn" @click="show_socials = true">
+                    <img src="assets/icons/close.svg" alt="close">
+                </button> -->
+                <div @click="show_socials = true" class="networks__close">
+                    <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+                </div>
+            </div>
+        </Transition>
+        <img v-if="!show_socials" src="assets/backgrounds/share-img.svg" alt="share">
     </div>
     <cookieModal v-if="showCookie" @close="closeCookie" @accept="acceptCookie('cookie', cur_date, 1)" />
     <div class="main">
@@ -253,24 +265,31 @@ const windowWidth = ref(window.innerWidth);
 const userStore = useUserStore();
 const carousel_authors = ref(null);
 const carousel = ref(null);
+const show_socials = ref(false);
 const itemsToShow = ref(2);
 const authorsToShow = ref(2);
 const currentSlide = ref(0);
 const showCookie = ref(false);
 const currentSlideAuthor = ref(0);
 
+const sharing = ref({
+    url: `${window.location.href}`,
+    title: 'Леся и Моа.',
+    description: 'Увлекательное приключение с интерактивными заданиями для профилактики и коррекции дислексии .',
+})
+
+const networks = ref([
+    { network: 'odnoklassniki', icon: '/assets/icons/brandico--odnoklassniki-rect.svg', width: '30px' },
+    { network: 'telegram', icon: '/assets/icons/logos--telegram.svg', width: '30px' },
+    { network: 'viber', icon: '/assets/icons/basil--viber-solid.svg', width: '30px' },
+    { network: 'vk', icon: '/assets/icons/ri--vk-fill.svg', width: '30px' },
+    { network: 'whatsapp', icon: '/assets/icons/logos--whatsapp-icon.svg', width: '30px' },
+])
+
 const setCookieOnce = () => {
     localStorage.setItem('stopCookie', true);
 }
 
-const share = () => {
-    navigator.clipboard.writeText(window.location.href);
-    const copyMessage = document.querySelector('.copy-message');
-    copyMessage.hidden = false;
-    setTimeout(() => {
-        copyMessage.hidden = true;
-    }, 2000);
-}
 
 const next = (carousel_name) => {
     if (carousel_name == 'carousel_authors') {
@@ -456,36 +475,54 @@ onMounted(() => {
 })
 </script>
 <style lang="scss" scoped>
+.networks {
+    &__wrapper {
+        display: flex;
+        column-gap: 10px;
+        background-color: #fff;
+         padding: 10px;
+        border-radius: 30px;
+        box-shadow: #313131;
+    }
+
+    &__icon {
+        width: 30px;
+        height: 30px;
+        display: block;
+    }
+    &__icon:hover {
+        transform: scale(1.2);
+        transition: all ease 0.25s;
+    }
+}
+
+
 .link-share {
+    display: flex;
+    column-gap: 8px;
     cursor: pointer;
     position: fixed;
-    width: 60px;
-    height: 60px;
     background-color: #fff;
     border-radius: 10px;
+    padding: 10px;
     right: 5vh;
     top: 80vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     z-index: 1;
 }
 
-.copy-message {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #35383f;
-    border-radius: 10px;
-    color: #35383f;
-    font-size: 16px;
-    font-family: 'Bert Sans';
-    text-align: center;
+.slide-fade-enter-active {
+    transition: all 0.3s ease-out;
 }
 
+.slide-fade-leave-active {
+    transition: all 0.6s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+    transform: translateX(1px);
+    opacity: 0;
+}
 
 .no-scroll {
     overflow-y: scroll;
@@ -514,18 +551,6 @@ onMounted(() => {
     margin: 0px auto !important;
     width: 100%;
 }
-
-// .carousel__slide {
-//     max-width: 387px;
-// }
-
-// .carousel__track {
-//     max-width: 794px;
-//     margin: 0px auto;
-//     width: 100%;
-// }
-
-
 
 
 .carousel-item {

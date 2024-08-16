@@ -99,7 +99,7 @@ const props = defineProps({
     }
 })
 
-const audio = ref(new Audio());
+const audio = ref(props.audioObj);
 const answerStore = useAnswerStore();
 const tasks = ref([
     { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 22, end: false, img: '/assets/backgrounds/animals.jpg', audio: '/assets/audio/Task1/12.1.mp3', startAudio: '/assets/audio/Task1/11.1_.mp3' },
