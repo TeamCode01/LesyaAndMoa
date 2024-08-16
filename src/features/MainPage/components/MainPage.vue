@@ -1,15 +1,21 @@
 <template>
 
     <div @click="show_socials = !show_socials" class="link-share">
-        <Transition name="bounce">
-            <div v-show="show_socials" class="networks__wrapper">
+        <Transition name="slide-fade">
+            <div v-if="show_socials" class="networks__wrapper">
                 <ShareNetwork class="networks" v-for="network in networks" :network="network.network"
                     :key="network.network" :url="sharing.url" :title="sharing.title" :description="sharing.description">
                     <img class="networks__icon" :src="network.icon" />
                 </ShareNetwork>
+                <!-- <button class="close-btn" @click="show_socials = true">
+                    <img src="assets/icons/close.svg" alt="close">
+                </button> -->
+                <div @click="show_socials = true" class="networks__close">
+                    <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+                </div>
             </div>
         </Transition>
-        <img src="assets/backgrounds/share-img.svg" alt="share">
+        <img v-if="!show_socials" src="assets/backgrounds/share-img.svg" alt="share">
     </div>
     <cookieModal v-if="showCookie" @close="closeCookie" @accept="acceptCookie('cookie', cur_date, 1)" />
     <div class="main">
@@ -463,11 +469,11 @@ onMounted(() => {
 .networks {
     &__wrapper {
         display: flex;
-        flex-direction: column;
-        row-gap: 10px;
-        background-color: #FAE6F2;
-        padding: 10px 15px;
-        border-radius: 10px;
+        column-gap: 10px;
+        background-color: #fff;
+         padding: 10px;
+        border-radius: 30px;
+        box-shadow: #313131;
     }
 
     &__icon {
@@ -475,71 +481,39 @@ onMounted(() => {
         height: 30px;
         display: block;
     }
+    &__icon:hover {
+        transform: scale(1.2);
+        transition: all ease 0.25s;
+    }
 }
+
 
 .link-share {
     display: flex;
-    flex-direction: column;
-    row-gap: 8px;
+    column-gap: 8px;
     cursor: pointer;
     position: fixed;
-    width: 60px;
-    height: 60px;
     background-color: #fff;
     border-radius: 10px;
+    padding: 10px;
     right: 5vh;
-    top: 70vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    top: 80vh;
     z-index: 1;
 }
 
-// .v-enter-active,
-// .v-leave-active {
-//     transition: opacity 0.5s ease;
-// }
-
-// .v-enter-from,
-// .v-leave-to {
-//     opacity: 0;
-// }
-
-.bounce-enter-active {
-  animation: bounce-in 0.5s;
-}
-.bounce-leave-active {
-  animation: bounce-in 0.5s reverse;
-}
-@keyframes bounce-in {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.25);
-  }
-  100% {
-    transform: scale(1);
-  }
+.slide-fade-enter-active {
+    transition: all 0.3s ease-out;
 }
 
-
-
-.copy-message {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #35383f;
-    border-radius: 10px;
-    color: #35383f;
-    font-size: 16px;
-    font-family: 'Bert Sans';
-    text-align: center;
+.slide-fade-leave-active {
+    transition: all 0.6s cubic-bezier(1, 0.5, 0.8, 1);
 }
 
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+    transform: translateX(1px);
+    opacity: 0;
+}
 
 .no-scroll {
     overflow-y: scroll;
@@ -568,18 +542,6 @@ onMounted(() => {
     margin: 0px auto !important;
     width: 100%;
 }
-
-// .carousel__slide {
-//     max-width: 387px;
-// }
-
-// .carousel__track {
-//     max-width: 794px;
-//     margin: 0px auto;
-//     width: 100%;
-// }
-
-
 
 
 .carousel-item {
