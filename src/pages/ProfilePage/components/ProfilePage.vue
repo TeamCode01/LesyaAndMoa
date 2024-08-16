@@ -441,7 +441,7 @@
         <img
             v-if="false"
             class="profile-child__img"
-            src="@app/assets/img/Profile/Moa.svg"
+            src="@app/assets/img/Profile/Moa.png"
             alt=""
         />
         <img

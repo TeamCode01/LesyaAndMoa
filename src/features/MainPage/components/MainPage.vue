@@ -1,6 +1,6 @@
 <template>
     <div @click="share" class="link-share">
-        <img src="assets/backgrounds/share-img.svg" alt="share">
+        <img src="@app/assets/backgrounds/share-img.svg" alt="share">
         <div class="copy-message" hidden>
             Ссылка скопирована
         </div>
