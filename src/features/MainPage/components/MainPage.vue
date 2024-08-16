@@ -7,12 +7,13 @@
                     :key="network.network" :url="sharing.url" :title="sharing.title" :description="sharing.description">
                     <img class="networks__icon" :src="network.icon" />
                 </ShareNetwork>
-                <!-- <button class="close-btn" @click="show_socials = true">
-                    <img src="assets/icons/close.svg" alt="close">
-                </button> -->
+                <div @click="copyLink" class="network__copy">
+                    <img class="copy-icon" src="@app/assets/icons/icon-close.svg" alt="copy" />
+                </div>
                 <div @click="show_socials = true" class="networks__close">
                     <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
                 </div>
+
             </div>
         </Transition>
         <img v-if="!show_socials" src="assets/backgrounds/share-img.svg" alt="share">
@@ -281,7 +282,6 @@ const sharing = ref({
 const networks = ref([
     { network: 'odnoklassniki', icon: '/assets/icons/brandico--odnoklassniki-rect.svg', width: '30px' },
     { network: 'telegram', icon: '/assets/icons/logos--telegram.svg', width: '30px' },
-    { network: 'viber', icon: '/assets/icons/basil--viber-solid.svg', width: '30px' },
     { network: 'vk', icon: '/assets/icons/ri--vk-fill.svg', width: '30px' },
     { network: 'whatsapp', icon: '/assets/icons/logos--whatsapp-icon.svg', width: '30px' },
 ])
