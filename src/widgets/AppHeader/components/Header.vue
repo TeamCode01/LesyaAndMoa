@@ -226,6 +226,7 @@ const logOut = async () => {
     try {
         const response = await HTTP.post('token/logout/', {});
         localStorage.removeItem('Token');
+        localStorage.removeItem('type');
         showModalMini.value = false;
         userStore.logOut();
         router.push({ name: 'Login' });

@@ -14,12 +14,21 @@ import { onMounted, watch } from "vue";
 
 const userStore = useUserStore();
 
+watch(
+  () => userStore.currentUser,
+  (newId) => {
+    if (localStorage.getItem("type") === "групповой") {
+      return false;
+    }
+    userStore.getChildren();
+  }
+);
 onMounted(async () => {
   if (localStorage.getItem("Token") !== null) {
     await userStore.getUser();
   }
-  if (userStore.currentUser.tasks_type === "индивидуальный") {
-    await userStore.getChildren();
-  }
+  //   if (userStore.currentUser.tasks_type === "индивидуальный") {
+  //     await userStore.getChildren();
+  //   }
 });
 </script>
