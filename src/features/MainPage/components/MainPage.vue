@@ -13,15 +13,15 @@
         >
           <img class="networks__icon" :src="network.icon" />
         </ShareNetwork>
-        <div @click="copyLink" class="network__copy">
+        <!-- <div @click="copyLink" class="network__copy">
           <img class="copy-icon" src="@app/assets/icons/icon-close.svg" alt="copy" />
-        </div>
+        </div> -->
         <div @click="show_socials = true" class="networks__close">
           <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
         </div>
       </div>
     </Transition>
-    <img v-if="!show_socials" src="assets/backgrounds/share-img.svg" alt="share" />
+    <img v-if="!show_socials" src="@app/assets/backgrounds/share-img.svg" alt="share" />
   </div>
   <cookieModal
     v-if="showCookie"
