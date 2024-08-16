@@ -15,12 +15,12 @@
                 </div>
                 <div class="NineTask__content">
                     <div class="draggable-list">
-                        <q-btn class="list-group-item item" v-for="(item, index) in letterss" :id="item.id"
+                        <div class="list-group-item item" v-for="(item, index) in letterss" :id="item.id"
                             :key="item.id" draggable="true" @mouseover="playAudio(item.audio)"
                             @mouseout="stopAudio(item.audio)" @dragstart="drag($event, item.name, item.id, index)"
                             @dragover.prevent :value="item">
                             {{ item.name }}
-                        </q-btn>
+                        </div>
                     </div>
 
                     <div class="input-group">
@@ -232,6 +232,10 @@ onMounted(async () => {
 })
 </script>
 <style lang="scss" scoped>
+* {
+    user-select: none;
+}
+
 .end-modal {
     width: 1200px;
     height: 600px;
@@ -304,6 +308,9 @@ onMounted(async () => {
 }
 
 .item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 40px;
     height: 40px;
     background-color: #b5f9ad;

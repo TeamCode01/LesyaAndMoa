@@ -761,6 +761,9 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
 .canvas_draw {
     // border: 1px solid black;
     position: absolute;

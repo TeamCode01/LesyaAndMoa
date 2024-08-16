@@ -133,20 +133,20 @@
                 </a>
             </div>
             <ul class="header__wrapper_links modal__menu">
-                <li><a href="#" class="link-small">О проекте</a></li>
+                <li><a href="/about-project" class="link-small">О проекте</a></li>
                 <li><a href="#" class="link-small">Новости</a></li>
                 <li><a href="#" class="link-small">Контакты</a></li>
                 <li><a href="#" class="link-small">Поддержать проект</a></li>
                 <li v-if="Object.keys(userStore.currentUser).length">
                     <a href="/profile-page" class="link-small">Мой профиль</a>
                 </li>
-                <div
+                <li
                     v-if="Object.keys(userStore.currentUser).length"
                     class="link-small"
                     @click="logOut"
                 >
                     Выйти
-                </div>
+                </li>
                 <li v-if="Object.keys(userStore.currentUser).length">
                     <a href="#" class="link-small">Удалить профиль</a>
                 </li>
@@ -238,7 +238,7 @@ const Login = () => {
     router.push({ name: 'Login' });
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .link-small {
     cursor: pointer;
 }
@@ -285,15 +285,22 @@ const Login = () => {
         }
     }
 
+    .container{
+        padding: 0px;
+    }
+
     &__wrapper {
         position: relative;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 40px;
+        padding: 0 120px;
+
+        @media (max-width: 1440px) {
+            padding: 0 40px;
+        }
 
         @media (max-width: 568px) {
-            padding: 0;
 
             &_adaptive {
                 display: flex;
@@ -343,6 +350,10 @@ const Login = () => {
             list-style: none;
             display: flex;
             column-gap: 48px;
+
+            @media (max-width: 1070px){
+                column-gap: 32px;
+            }
 
             @media (max-width: 1024px) {
                 display: none;

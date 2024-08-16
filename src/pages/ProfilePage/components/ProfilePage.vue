@@ -65,87 +65,7 @@
                     </template>
                 </modalConfirm>
             </div>
-            <div class="child__form">
-                <p class="child__name">
-                    {{ block.first_name }}&nbsp;{{ block.last_name }}
-                </p>
-                <p class="child__school">{{ block.school }}</p>
-                <div class="child__scale">
-                    <v-progress-linear
-                        v-model:value="block.progress"
-                        height="30"
-                        class="scale"
-                    >
-                        <template v-slot:default="{ value }">
-                            <strong>{{ Math.ceil(value) }}%</strong>
-                        </template>
-                    </v-progress-linear>
-                </div>
-                <RouterLink
-                    :to="{
-                        name: 'Game',
-                        params: { idChildOrGroup: block.id },
-                    }"
-                    class="router-link"
-                >
-                    <Button
-                        label="Перейти к обучению"
-                        class="profile__btn"
-                    ></Button
-                ></RouterLink>
-            </div>
-        </div>
-        <div
-            class="profile-child__wrapper"
-            v-for="(block, index) in userStore.children"
-            :key="index"
-        >
-            <div
-                class="delete-profile"
-                v-if="userStore.currentUser.tasks_type === 'групповой'"
-            >
-                <modalConfirm label="Удалить профиль">
-                    <template #default="{ close }">
-                        <div class="delete-profile__wrapper">
-                            <h3 class="delete-profile__title">
-                                Удаление профиля ребенка
-                            </h3>
-                            <div>
-                                <div class="delete-profile_content">
-                                    <p>
-                                        Все данные {{ block.last_name }}&nbsp;{{
-                                            block.first_name
-                                        }}
-                                        будут удалены.
-                                    </p>
-                                    <div class="regCheck delete-check">
-                                        <input type="checkbox" />
-                                        <div>
-                                            &nbsp;Да, я хочу удалить профиль
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="delete-profile_btn">
-                                    <Button
-                                        class="delete-btn"
-                                        label="Удалить"
-                                        @click="
-                                            deleteChild(block.id, index);
-                                            close();
-                                        "
-                                    ></Button>
-                                    <Button
-                                        label="Отмена"
-                                        class="delete-btn"
-                                        @click="close"
-                                    ></Button>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                </modalConfirm>
-            </div>
-            <div class="child__form">
+             <div class="child__form">
                 <p class="child__name">
                     {{ block.first_name }}&nbsp;{{ block.last_name }}
                 </p>
@@ -450,6 +370,11 @@
             src="@app/assets/img/Profile/lesyaProfileGroup.svg"
             alt=""
         />
+        <img
+            v-if="false"
+            class="profile__img"
+            src="@app/assets/img/Profile/Frame 277138543.png"
+        />
     </div>
 </template>
 <script setup>
@@ -607,7 +532,7 @@ const AddChild = async () => {
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
-        console.error('There was an error!', error);
+        console.error('<T></T>here was an error!', error);
         swal.fire({
             position: 'center',
             icon: 'error',
@@ -719,8 +644,10 @@ onMounted(async () => {
     margin: 40px auto;
     margin-bottom: 0px;
 
+
     @media (max-width: 460px) {
         padding: 12px 60px;
+        font-size: 16px;
     }
 }
 
@@ -732,10 +659,9 @@ onMounted(async () => {
     @media (max-width: 1200px) {
         object-fit: cover;
         height: 100%;
-        left: 50%;
-        margin-left: -490px;
     }
     @media (max-width: 975px) {
+        max-width: 100%;
         margin-left: 0;
         left: 0;
     }
@@ -785,8 +711,13 @@ onMounted(async () => {
 }
 
 .child__form {
-    max-width: 100%;
+    min-width: 100%;
+    padding: 0 80px;
     text-align: center;
+
+    @media(max-width: 768px) {
+        padding: 0 20px;
+    }
 }
 
 .delete-profile {

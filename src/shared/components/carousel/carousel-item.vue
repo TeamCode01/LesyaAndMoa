@@ -1,14 +1,15 @@
 <template>
   <div class="carousel-item">
-    <img :src="item_data.img" alt="img" class="carousel-item__author-img"/>
+    <img :src="item_data.img" alt="img" class="carousel-item__news-img" v-if="corousel_type === 'news'"/>
+    <img :src="item_data.img" alt="img" class="carousel-item__author-img" v-if="props.corousel_type == 'authors'"/>
     <div class="carousel-item__info">
-      <p class="carousel-item__date">{{ item_data.date }}</p>
-      <p class="text-small carousel-item__text">
+      <p class="carousel-item__date" v-if="corousel_type === 'news'">{{ item_data.date }}</p>
+      <p class="text-small carousel-item__text" v-if="corousel_type === 'news'">
         {{ item_data.name }}
       </p>
-      <p class="text-small carousel-item__author-name">{{ item_data.author_name }}</p>
-      <p class="text-small carousel-item__author-about">{{ item_data.author_about_top }}</p>
-      <p class="text-small carousel-item__author-about">{{ item_data.author_about_bottom }}</p>
+      <p class="text-small carousel-item__author-name" v-if="props.corousel_type == 'authors'">{{ item_data.author_name }}</p>
+      <p class="text-small carousel-item__author-about" v-if="corousel_type === 'authors'">{{ item_data.author_about_top }}</p>
+      <p class="text-small carousel-item__author-about" v-if="corousel_type === 'authors'">{{ item_data.author_about_bottom }}</p>
       <p>{{ item_data.id }}</p>
     </div>
   </div>
@@ -19,6 +20,10 @@ const props = defineProps({
     type: Object,
     default: () => { },
   },
+  corousel_type:{
+    type: String,
+    default: () => '',
+  }
 });
 
 const emit = defineEmits(['click']);
@@ -30,7 +35,17 @@ const emit = defineEmits(['click']);
   align-items: center;
   width: 100%;
   height: 100%;
-  img {
+
+  &__info {
+    width: 100%;
+
+    @media (max-width: 650px) {
+      max-width: 300px;
+    }
+  }
+
+
+  &__news-img {
     max-width: 387px;
     height: 220px;
 
@@ -44,7 +59,9 @@ const emit = defineEmits(['click']);
     }
   }
 
+
   &__author-img{
+    max-width: 325px;
     @media (max-width: 568px) {
       object-fit: cover;
       min-width: 320px;
@@ -69,10 +86,10 @@ const emit = defineEmits(['click']);
   &__author-name {
     font-size: 20px;
     text-align: left;
+    margin-top: 16px;
   }
 
   &__author-about {
-    width: 320px;
     text-align: left;
   }
 
