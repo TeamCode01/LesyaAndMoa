@@ -410,7 +410,7 @@ const openTest = () => {
   document.documentElement.style.setProperty('--scroll-position', `${scrollY}px`);
   document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
   isOpen.value = true;
-  playTestAudio('../assets/audio/TestTask/4.тестовое задание.mp3');
+  playTestAudio('@app/assets/audio/TestTask/4.тестовое задание.mp3');
 }
 
 const close = () => {
@@ -458,9 +458,9 @@ onMounted(() => {
   function handleScroll() {
     const posTop = test.getBoundingClientRect().top;
     if (posTop + test.clientHeight <= window.innerHeight && posTop >= 0) {
-      playAudio('../assets/audio/Music/звук 1_.mp3');
+      playAudio('"@app/assets/audio/Music/звук 1_.mp3');
       setTimeout(() => {
-        playAudio('../assets/audio/TestTask/3.тестовое задание.mp3');
+        playAudio('@app/assets/audio/TestTask/3.тестовое задание.mp3');
         audio.value.addEventListener('ended', () => {
           audio.value.src = '';
           showBtn.value = true;

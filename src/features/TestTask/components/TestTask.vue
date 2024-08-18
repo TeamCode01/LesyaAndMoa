@@ -37,7 +37,7 @@
     <TaskResultBanner class="end-modal" :is_test="true"  bg="../assets/backgrounds/Moa.png"
       text=" Неплохо, ты попробовал понять текст. А Леся и Моа не понимают нас совсем. Только ты можешь помочь им."
       v-else-if="endGame === true && (correct === 2 || correct === 1)" @hide="hide"></TaskResultBanner>
-    <TaskResultBanner class="end-modal" :is-end="false" :is_test="true"  bg="../assets/backgrounds/Moa.png" text="Попробуй помочь нашим героям! У тебя все получится!"
+    <TaskResultBanner class="end-modal" :is-end="false" :is_test="true"  bg="@app/assets/backgrounds/Moa.png" text="Попробуй помочь нашим героям! У тебя все получится!"
       v-else-if="endGame === true && correct === 0" @hide="hide"></TaskResultBanner>
   </div>
 </template>
