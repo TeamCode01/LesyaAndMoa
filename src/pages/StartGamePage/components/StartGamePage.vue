@@ -52,8 +52,8 @@ import { useAnswerStore } from "@layouts/stores/answers";
 const { methods } = gameActions;
 const { startGameRequest } = methods;
 const answerStore = useAnswerStore();
-let img = ref('/assets/backgrounds/animals.jpg');
-let audio = ref('/assets/audio/Task1/11.1_.mp3');
+let img = ref('../assets/backgrounds/animals.jpg');
+let audio = ref('../assets/audio/Task1/11.1_.mp3');
 const ids = ref([1, 2, 3, 4, 5, 6, 7, 8, 16, 18]);
 const showBtn = ref(false);
 const route = useRoute();
@@ -61,7 +61,6 @@ const show_hand = ref(false);
 const task_id = ref(0);
 let childId = route.params.idChildOrGroup;
 const startAudio = ref(new Audio());
-// const startAudio_Two = ref(null);
 const isPlaying = ref(false);
 const isMuted = ref(false);
 
@@ -76,11 +75,6 @@ const sendAudio = (music) => {
   audio.value = music;
 }
 
-// const sendAudioV = (music) => {
-//   startAudio_Two.value = new Audio();
-//   startAudio_Two.value.src = music;
-//   console.log('log', music, startAudio_Two.value.src, startAudio_Two.value);
-// }
 
 const showButton = (show) => {
   showBtn.value = show;
@@ -98,10 +92,8 @@ const showHand = (show) => {
 const mute = () => {
   isMuted.value = !isMuted.value
   if (isMuted.value === true) {
-    console.log('1 mute')
     startAudio.value.volume = 0
   } else {
-    console.log('2 mute')
     startAudio.value.volume = 1;
   }
 }
@@ -132,7 +124,6 @@ watch(
       return;
     }
     childId = newId;
-    console.log(childId);
   }
 );
 
@@ -142,10 +133,8 @@ onMounted(() => {
 
   window.addEventListener('resize', () => {
         windowWidth.value = window.innerWidth
-        
+
     })
-
-
 })
 
 </script>

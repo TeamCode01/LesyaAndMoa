@@ -22,11 +22,11 @@
             v-model:value="data.password"
           ></InputPass>
         </div>
-        <a class="form-question-link" href="/change-password">Забыли пароль?</a>
+        <router-link class="form-question-link" to="/change-password">Забыли пароль?</router-link>
         <Button class="form-btn" @click="LoginUser" label="Войти"></Button>
       </div>
-      <a class="form-question-link form-link-reg" href="/Registration"
-        >Зарегистрироваться</a
+      <router-link class="form-question-link form-link-reg" to="/Registration"
+        >Зарегистрироваться</router-link
       >
     </div>
     <img class="img-auth" src="@app/assets/img/auth/Moa.png" alt="" />
