@@ -4,171 +4,98 @@
             <div class="header__wrapper">
                 <div class="header__logo">
                     <router-link to="/">
-                        <img
-                            class="header__logo_main"
-                            src="@app/assets/icons/LogoLesya.png"
-                            alt="Логотип сайта Леся и Моа"
-                    /></router-link>
+                        <img class="header__logo_main" src="@app/assets/icons/LogoLesya.png"
+                            alt="Логотип сайта Леся и Моа" /></router-link>
                 </div>
                 <ul class="header__wrapper_links">
                     <li>
-                        <router-link class="link-small" to="/about-project"
-                            >О проекте</router-link
-                        >
+                        <router-link class="link-small" to="/about-project">О проекте</router-link>
                     </li>
                     <li>
-                        <router-link
-                            class="link-small"
-                            :to="{ name: 'main-page', hash: '#news' }"
-                            >Новости</router-link
-                        >
+                        <router-link class="link-small" to="/news-page">Новости</router-link>
                     </li>
                     <li>
-                        <router-link class="link-small" to="/"
-                            >Контакты</router-link
-                        >
-                    </li>
-                    <li>
-                        <router-link href="#" class="link-small" to="/news-page"
-                            >Новости</router-link
-                        >
-                    </li>
-                    <li>
-                        <a href="/news-page" class="link-small">Контакты</a>
+                        <router-link class="link-small"
+                            :to="{ name: 'main-page', hash: '#news' }">Контакты</router-link>
                     </li>
 
                     <li>
-                        <router-link class="link-small" to="/about"
-                            >Поддержать проект</router-link
-                        >
+                        <router-link class="link-small" :to="{ name: 'about-project', hash: '#support' }">Поддержать
+                            проект</router-link>
                     </li>
                 </ul>
                 <div class="header__wrapper_adaptive">
-                    <div
-                        v-if="Object.keys(userStore.currentUser).length"
-                        class="header__wrapper_avatar"
-                    >
-                        <img
-                            src="@app/assets/icons/avatar.png"
-                            alt="Аватарка"
-                        />
+                    <div v-if="Object.keys(userStore.currentUser).length" class="header__wrapper_avatar">
+                        <img src="@app/assets/icons/avatar.png" alt="Аватарка" />
                         <div @click="showModalMini = true">
-                            <img
-                                class="header__wrapper_avatar_arrow"
-                                src="@app/assets/icons/icons-chevron.svg"
-                                alt="arrow"
-                            />
+                            <img class="header__wrapper_avatar_arrow" src="@app/assets/icons/icons-chevron.svg"
+                                alt="arrow" />
                         </div>
                     </div>
-                    <Button
-                        class="btn_info"
-                        id="btn-mini"
-                        v-else
-                        label="Войти"
-                        @click="Login"
-                    ></Button>
+                    <Button class="btn_info" id="btn-mini" v-else label="Войти" @click="Login"></Button>
 
                     <div class="header__wrapper_burger" @click="showBurger()">
-                        <img
-                            src="@app/assets/icons/burger.png"
-                            alt="Бургер меню"
-                        />
+                        <img src="@app/assets/icons/burger.png" alt="Бургер меню" />
                     </div>
                 </div>
                 <div class="header__wrapper_other">
                     <div class="header__logo">
                         <a href="/">
-                            <img
-                                class="header__logo_yt"
-                                src="@app/assets/icons/YouTube.svg"
-                                alt="Ютуб"
-                            />
+                            <img class="header__logo_yt" src="@app/assets/icons/YouTube.svg" alt="Ютуб" />
                         </a>
                     </div>
 
                     <!-- <Button class="btn_info" v-if="user !== null" label="Выйти" @click="logOut"></Button> -->
-                    <div
-                        v-if="Object.keys(userStore.currentUser).length"
-                        class="header__wrapper_avatar"
-                    >
-                        <img
-                            src="@app/assets/icons/avatar.png"
-                            alt="Аватарка"
-                        />
+                    <div v-if="Object.keys(userStore.currentUser).length" class="header__wrapper_avatar">
+                        <img src="@app/assets/icons/avatar.png" alt="Аватарка" />
                         <div @click="showModalMini = true">
-                            <img
-                                class="header__wrapper_avatar_arrow"
-                                src="@app/assets/icons/icons-chevron.svg"
-                                alt="arrow"
-                            />
+                            <img class="header__wrapper_avatar_arrow" src="@app/assets/icons/icons-chevron.svg"
+                                alt="arrow" />
                         </div>
                     </div>
 
-                    <Button
-                        class="btn_info"
-                        v-else
-                        label="Войти"
-                        @click="Login"
-                    ></Button>
+                    <Button class="btn_info" v-else label="Войти" @click="Login"></Button>
                 </div>
             </div>
         </div>
     </header>
     <div class="modal" v-if="showModal">
         <div class="close" @click="closeMenu()">
-            <img
-                class="close-icon"
-                src="@app/assets/icons/icon-close.svg"
-                alt="крест"
-            />
+            <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
         </div>
         <div class="modal__wrapper">
             <div class="header__logo">
                 <a href="#" target="_blank">
-                    <img
-                        class="header__logo_modal"
-                        src="@app/assets/icons/LogoLesya.png"
-                        alt="Логотип сайта Леся и Моа"
-                    />
+                    <img class="header__logo_modal" src="@app/assets/icons/LogoLesya.png"
+                        alt="Логотип сайта Леся и Моа" />
                 </a>
             </div>
             <ul class="header__wrapper_links modal__menu">
-                <li><a href="/about-project" class="link-small">О проекте</a></li>
-                <li><a href="#" class="link-small">Новости</a></li>
-                <li><a href="#" class="link-small">Контакты</a></li>
-                <li><a href="#" class="link-small">Поддержать проект</a></li>
-                <li v-if="Object.keys(userStore.currentUser).length">
-                    <a href="/profile-page" class="link-small">Мой профиль</a>
+                <li>
+                    <router-link class="link-small" to="/about-project">О проекте</router-link>
                 </li>
-                <li
-                    v-if="Object.keys(userStore.currentUser).length"
-                    class="link-small"
-                    @click="logOut"
-                >
-                    Выйти
+                <li>
+                    <router-link class="link-small" to="/news-page">Новости</router-link>
                 </li>
-                <li v-if="Object.keys(userStore.currentUser).length">
-                    <a href="#" class="link-small">Удалить профиль</a>
+                <li>
+                    <router-link class="link-small" :to="{ name: 'main-page', hash: '#news' }">Контакты</router-link>
+                </li>
+
+                <li>
+                    <router-link class="link-small" :to="{ name: 'about-project', hash: '#support' }">Поддержать
+                        проект</router-link>
                 </li>
             </ul>
             <div class="header__logo">
                 <a href="#" target="_blank">
-                    <img
-                        class="header__logo_yt"
-                        src="@app/assets/icons/YouTube.svg"
-                        alt="Ютуб"
-                    />
+                    <img class="header__logo_yt" src="@app/assets/icons/YouTube.svg" alt="Ютуб" />
                 </a>
             </div>
         </div>
     </div>
     <div class="modal-mini" v-if="showModalMini">
         <div class="close" @click="showModalMini = false">
-            <img
-                class="close-icon"
-                src="@app/assets/icons/icon-close.svg"
-                alt="крест"
-            />
+            <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
         </div>
         <div class="modal__wrapper_mini">
             <div class="modal__wrapper_mini_info">
@@ -179,7 +106,7 @@
             <ul class="header__wrapper_links modal__menu_mini">
                 <div class="link-small" @click="logOut">Выйти</div>
                 <li v-if="Object.keys(userStore.currentUser).length">
-                    <a href="/profile-page" class="link-small">Мой профиль</a>
+                    <router-link to="/profile-page" class="link-small">Мой профиль</router-link>
                 </li>
                 <li><a href="#" class="link-small">Удалить профиль</a></li>
             </ul>
@@ -286,7 +213,7 @@ const Login = () => {
         }
     }
 
-    .container{
+    .container {
         padding: 0px;
     }
 
@@ -352,7 +279,7 @@ const Login = () => {
             display: flex;
             column-gap: 48px;
 
-            @media (max-width: 1070px){
+            @media (max-width: 1070px) {
                 column-gap: 32px;
             }
 

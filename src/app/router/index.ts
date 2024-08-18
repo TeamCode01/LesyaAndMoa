@@ -21,6 +21,8 @@ router.beforeEach((to, _from, next) => {
     to.name !== 'ChangePassword' &&
     to.name !== 'CreatePassword' &&
     to.name !== 'about-project' &&
+    to.name !== 'policy-page' &&
+
     localStorage.getItem('Token') === null
   )
     next({ name: 'Login' });

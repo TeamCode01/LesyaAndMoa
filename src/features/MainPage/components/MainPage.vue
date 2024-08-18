@@ -19,7 +19,7 @@
 
       </div>
     </Transition>
-    <img v-if="!show_socials" src="assets/backgrounds/share-img.svg" alt="share">
+    <img v-if="!show_socials" src="@app/assets/backgrounds/share-img.svg" alt="share">
   </div>
 
   <Transition>
@@ -293,10 +293,10 @@ const sharing = ref({
 })
 
 const networks = ref([
-  { network: 'odnoklassniki', icon: '/assets/icons/brandico--odnoklassniki-rect.svg', width: '30px' },
-  { network: 'telegram', icon: '/assets/icons/logos--telegram.svg', width: '30px' },
-  { network: 'vk', icon: '/assets/icons/ri--vk-fill.svg', width: '30px' },
-  { network: 'whatsapp', icon: '/assets/icons/logos--whatsapp-icon.svg', width: '30px' },
+  { network: 'odnoklassniki', icon: '../assets/icons/brandico--odnoklassniki-rect.svg', width: '30px' },
+  { network: 'telegram', icon: '../assets/icons/logos--telegram.svg', width: '30px' },
+  { network: 'vk', icon: '../assets/icons/ri--vk-fill.svg', width: '30px' },
+  { network: 'whatsapp', icon: '../assets/icons/logos--whatsapp-icon.svg', width: '30px' },
 ])
 
 const setCookieOnce = () => {
@@ -410,7 +410,7 @@ const openTest = () => {
   document.documentElement.style.setProperty('--scroll-position', `${scrollY}px`);
   document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
   isOpen.value = true;
-  playTestAudio('/assets/audio/TestTask/4.тестовое задание.mp3');
+  playTestAudio('../assets/audio/TestTask/4.тестовое задание.mp3');
 }
 
 const close = () => {
@@ -460,9 +460,9 @@ onMounted(() => {
   function handleScroll() {
     const posTop = test.getBoundingClientRect().top;
     if (posTop + test.clientHeight <= window.innerHeight && posTop >= 0) {
-      playAudio('/assets/audio/Music/звук 1_.mp3');
+      playAudio('../assets/audio/Music/звук 1_.mp3');
       setTimeout(() => {
-        playAudio('/assets/audio/TestTask/3.тестовое задание.mp3');
+        playAudio('../assets/audio/TestTask/3.тестовое задание.mp3');
         audio.value.addEventListener('ended', () => {
           audio.value.src = '';
           showBtn.value = true;

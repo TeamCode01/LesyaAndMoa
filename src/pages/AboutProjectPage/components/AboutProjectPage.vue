@@ -7,7 +7,7 @@
                     <h4>Дорогие взрослые!</h4>
 
                     <p>
-                        Наша методика ориентирована на ребят, которые тратят большие 
+                        Наша методика ориентирована на ребят, которые тратят большие
                         силы на процесс чтения, произнесения слов, ребят, которым понимание прочитанного даётся особенно нелегко.
                         Но увы, есть ребята, которые тратят большие силы именно
                         на сам процесс прочтения, произнесения слов, ребята,
@@ -51,7 +51,7 @@
                         дисграфию как нарушение письма. 
                     </p>
 
-                    
+
 
                 </div>
                 <div class="description_block-img">
@@ -65,7 +65,7 @@
                     <img src="@app/assets/img/AboutProject/lesya-background.svg" alt="lesya-background" class="lesya-background"/>
                 </div>
                 <div class="description_block-text">
-                    
+
                     <p>
                         Умение читать — это не просто умение складывать буквы
                         в слоги, а слоги — в слова. И хотя без этого не обойтись
@@ -100,7 +100,7 @@
                 </div>
             </div>
         </div>
-        <div class="support">
+        <div class="support" id="support">
             <h3>Поддержать</h3>
             <div class="support_block">
                 <div class="support_block-text">
@@ -134,7 +134,7 @@ h1 {
     display: block;
     margin: 60px auto;
     line-height: 50px;
-    
+
     @media (max-width: 1024px) {
         font-size: 40px;
         line-height: 40px;
