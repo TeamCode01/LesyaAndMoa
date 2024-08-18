@@ -295,12 +295,12 @@ const sharing = ref({
 const networks = ref([
   {
     network: "odnoklassniki",
-    icon: "/assets/icons/brandico--odnoklassniki-rect.svg",
+    icon: "@app/assets/icons/brandico--odnoklassniki-rect.svg",
     width: "30px",
   },
-  { network: "telegram", icon: "/assets/icons/logos--telegram.svg", width: "30px" },
-  { network: "vk", icon: "/assets/icons/ri--vk-fill.svg", width: "30px" },
-  { network: "whatsapp", icon: "/assets/icons/logos--whatsapp-icon.svg", width: "30px" },
+  { network: "telegram", icon: "@app/assets/icons/logos--telegram.svg", width: "30px" },
+  { network: "vk", icon: "@app/assets/icons/ri--vk-fill.svg", width: "30px" },
+  { network: "whatsapp", icon: "@app/assets/icons/logos--whatsapp-icon.svg", width: "30px" },
 ]);
 
 const setCookieOnce = () => {
