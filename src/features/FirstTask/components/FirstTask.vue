@@ -14,12 +14,12 @@
 
                 <div class="draggable-list__wrapper">
                     <div class="draggable-list">
-                        <q-btn v-for="(item, index) in words" :key="item.id" :id="item.id + '_elem'"
+                        <div v-for="(item, index) in words" :key="item.id" :id="item.id + '_elem'"
                             class="list-group-item item" draggable="true" @mouseover="playAudio(item.audio)"
                             @mouseout="stopAudio(item.audio)" @dragstart="drag($event, item.name, item.id, index)"
                             @dragover.prevent :value="item.name">
                             {{ item.name }}
-                        </q-btn>
+                        </div>
                     </div>
                     <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
                         class="FirstTask__wrapper_answer" />
@@ -27,7 +27,7 @@
             </div>
         </div>
     </template>
-    <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!" v-else
+    <TaskResultBanner img="../assets/backgrounds/flowers.png" bg="../assets/backgrounds/moa.gif" text="Супер!" v-else
         @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 
@@ -96,16 +96,16 @@ const stopAudio = (audioPath) => {
 }
 
 const words = ref([
-    { id: 1, name: 'медведи и зайцы', index: 11, audio: '/assets/audio/Task1/13.1.mp3' },
-    { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2, audio: '/assets/audio/Task1/14.1.mp3' },
-    { id: 3, name: 'в слоги и в слова.', index: 5, audio: '/assets/audio/Task1/15.1.mp3' },
-    { id: 4, name: 'В нашем языке', index: 0, audio: '/assets/audio/Task1/16.1.mp3' },
-    { id: 5, name: 'в леса и поля', index: 22, audio: '/assets/audio/Task1/17.1.mp3' },
-    { id: 6, name: 'есть иероглифы', index: 81, audio: '/assets/audio/Task1/18.1.mp3' },
-    { id: 7, name: 'и складываются', index: 3, audio: '/assets/audio/Task1/19.1.mp3' },
-    { id: 8, name: 'явления и предметы', index: 7, audio: '/assets/audio/Task1/20.1.mp3' },
-    { id: 9, name: 'есть буквы.', index: 1, audio: '/assets/audio/Task1/21.1.mp3' },
-    { id: 10, name: 'Все вместе они образуют МОЗАИКУ', index: 9, audio: '/assets/audio/Task1/22.1.mp3' },
+    { id: 1, name: 'медведи и зайцы', index: 11, audio: '../assets/audio/Task1/13.1.mp3' },
+    { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2, audio: '../assets/audio/Task1/14.1.mp3' },
+    { id: 3, name: 'в слоги и в слова.', index: 5, audio: '../assets/audio/Task1/15.1.mp3' },
+    { id: 4, name: 'В нашем языке', index: 0, audio: '../assets/audio/Task1/16.1.mp3' },
+    { id: 5, name: 'в леса и поля', index: 22, audio: '../assets/audio/Task1/17.1.mp3' },
+    { id: 6, name: 'есть иероглифы', index: 81, audio: '../assets/audio/Task1/18.1.mp3' },
+    { id: 7, name: 'и складываются', index: 3, audio: '../assets/audio/Task1/19.1.mp3' },
+    { id: 8, name: 'явления и предметы', index: 7, audio: '../assets/audio/Task1/20.1.mp3' },
+    { id: 9, name: 'есть буквы.', index: 1, audio: '../assets/audio/Task1/21.1.mp3' },
+    { id: 10, name: 'Все вместе они образуют МОЗАИКУ', index: 9, audio: '../assets/audio/Task1/22.1.mp3' },
 ]);
 const wordsAnswer = ref({
     0: { id: 4, name: 'В нашем языке' },
@@ -137,13 +137,13 @@ const drop = (event) => {
             words.value.splice(dropIndex.value, 1);
             answer.value += text + ' ';
             answer_arr.value.push(0);
-            playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
+            playEndAudio('../assets/audio/Other/1. общее для разных заданий.mp3');
         } else {
             elem.classList.add('red');
             setTimeout(() => {
                 elem.classList.remove('red');
             }, 2000);
-            playEndAudio('/assets/audio/Other/2. общее для разных заданий.mp3');
+            playEndAudio('../assets/audio/Other/2. общее для разных заданий.mp3');
             return false;
         }
     } else {
@@ -154,13 +154,13 @@ const drop = (event) => {
             words.value.splice(dropIndex.value, 1);
             answer.value += text + ' ';
             answer_arr.value.push(index);
-            playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
+            playEndAudio('../assets/audio/Other/1. общее для разных заданий.mp3');
         } else {
             elem.classList.add('red');
             setTimeout(() => {
                 elem.classList.remove('red');
             }, 2000);
-            playEndAudio('/assets/audio/Other/2. общее для разных заданий.mp3');
+            playEndAudio('../assets/audio/Other/2. общее для разных заданий.mp3');
 
             return false;
         }
@@ -188,6 +188,10 @@ onMounted(async () => {
 })
 </script>
 <style lang="scss" scoped>
+
+*{
+    user-select: none;
+}
 .end-modal {
     width: 1200px;
     height: 600px;

@@ -447,6 +447,11 @@
             src="@app/assets/img/Profile/lesyaProfileGroup.svg"
             alt=""
         />
+        <img
+            v-if="false"
+            class="profile__img"
+            src="@app/assets/img/Profile/Frame 277138543.png"
+        />
     </div>
 </template>
 <script setup>
@@ -604,7 +609,7 @@ const AddChild = async () => {
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
-        console.error('There was an error!', error);
+        console.error('<T></T>here was an error!', error);
         swal.fire({
             position: 'center',
             icon: 'error',
@@ -718,6 +723,7 @@ onMounted(async () => {
 
     @media (max-width: 460px) {
         padding: 12px 60px;
+        font-size: 16px;
     }
 }
 
@@ -729,10 +735,9 @@ onMounted(async () => {
     @media (max-width: 1200px) {
         object-fit: cover;
         height: 100%;
-        left: 50%;
-        margin-left: -490px;
     }
     @media (max-width: 975px) {
+        max-width: 100%;
         margin-left: 0;
         left: 0;
     }
@@ -782,8 +787,13 @@ onMounted(async () => {
 }
 
 .child__form {
-    max-width: 100%;
+    min-width: 100%;
+    padding: 0 80px;
     text-align: center;
+
+    @media (max-width: 768px) {
+        padding: 0 20px;
+    }
 }
 
 .delete-profile {

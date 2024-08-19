@@ -15,19 +15,19 @@
                     <div class="draggable-list__words">
                         <div class="draggable-list__set-words" v-for="(line, index_line) in prepositions"
                             :key="index_line">
-                            <q-btn v-for="(item, index) in line" :key="item.id" :id="item.id + '_elem'"
+                            <div v-for="(item, index) in line" :key="item.id" :id="item.id + '_elem'"
                                 :class="{ 'draggable-list__word': true, correct_select: item.correct, not_correct_select: item.correct === false }"
                                 @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)" draggable="true"
                                 @dragstart="drag($event, item, index)" @dragover.prevent :value="item.text">
                                 {{ item.text }}
-                            </q-btn>
+                            </div>
                         </div>
                     </div>
                     <div class="draggable-list__answer">
                         <div class="draggable-list__answer-wrapper">
                             <p>{{ questions[currStage].first_part }}</p>
                             <div class="draggable-list__quastion-block" v-if="!givenAnswer[1]">
-                                <input @drop="drop($event, 1)" @dragover="allowDrop($event)" class="answer" readonly />
+                                <input @drop="drop($event, 1)" @dragover="allowDrop($event)" class="answer" readonly  @focus="($event)=>{$event.target.blur()}"/>
                             </div>
                             <p v-else>&nbsp;{{ questions[currStage].first_answer }}&nbsp;</p>
                             <p>{{ questions[currStage].second_part }}</p>
@@ -246,7 +246,11 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-.answer {
+*{
+    user-select: none;
+}
+
+.answer{
     width: 90px;
     height: 44px;
     background: url(/assets/icons/quastion.svg) no-repeat center center;
@@ -315,6 +319,8 @@ onMounted(async () => {
 }
 
 .draggable-list__word {
+    cursor: pointer;
+
     display: flex;
     align-items: center;
     justify-content: center;

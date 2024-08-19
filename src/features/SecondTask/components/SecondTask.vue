@@ -19,7 +19,7 @@
         </div>
     </template>
 
-    <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!" v-else
+    <TaskResultBanner img="../assets/backgrounds/flowers.png" bg="../assets/backgrounds/moa.gif" text="Супер!" v-else
         @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 <script setup>
@@ -61,7 +61,7 @@ const next = () => {
 
 const is_correct = ref(null);
 
-const alphabets = ref([{ id: 1, src: '/assets/backgrounds/english.png', isCorrect: false, audio: '/assets/audio/Task2/27.2.mp3' }, { id: 2, src: '/assets/backgrounds/russian.png', isCorrect: true, audio: '/assets/audio/Task2/26.2.mp3' }, { id: 3, src: '/assets/backgrounds/arabic.png', isCorrect: false, audio: '/assets/audio/Task2/28.2.mp3' }])
+const alphabets = ref([{ id: 1, src: '@app/assets/backgrounds/english.png', isCorrect: false, audio: '../assets/audio/Task2/27.2.mp3' }, { id: 2, src: '@app/assets/backgrounds/russian.png', isCorrect: true, audio: '../assets/audio/Task2/26.2.mp3' }, { id: 3, src: '@app/assets/backgrounds/arabic.png', isCorrect: false, audio: '../assets/audio/Task2/28.2.mp3' }])
 const endGame = ref(false);
 
 const playAudio = async (audioPath) => {
@@ -92,7 +92,7 @@ const chooseTask = (event, status) => {
             (item) => item.isCorrect == true,
         );
         event.target.classList.add('green');
-        playEndAudio('/assets/audio/Common/1.2.mp3');
+        playEndAudio('../assets/audio/Common/1.2.mp3');
 
         setTimeout(() => {
             if (is_correct.value === false) {
@@ -105,7 +105,7 @@ const chooseTask = (event, status) => {
 
     } else {
         event.target.value = status;
-        playEndAudio('/assets/audio/Common/2.1.mp3');
+        playEndAudio('../assets/audio/Common/2.1.mp3');
         event.target.classList.add('red');
         setTimeout(() => {
             event.target.classList.remove('red');
@@ -120,6 +120,10 @@ onMounted(async () => {
 })
 </script>
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
+
 .end-modal {
     width: 1200px;
     height: 600px;

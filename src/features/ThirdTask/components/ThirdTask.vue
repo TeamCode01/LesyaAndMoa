@@ -15,28 +15,28 @@
                 </div>
                 <div class="draggable-list">
                     <div class="list-group ThirdTask__wrapper_block">
-                        <q-btn v-for="(item, index) in letters" :key="index" :id="item.id + '_elem'"
+                        <div v-for="(item, index) in letters" :key="index" :id="item.id + '_elem'"
                             class="list-group-item item" draggable="true" @mouseover="playAudio(item.audio)"
                             @mouseout="stopAudio(item.audio)" @dragstart="drag($event, item.name, item.id, index)"
                             @dragover.prevent :value="item.name">
                             {{ item.name }}
-                        </q-btn>
+                        </div>
                     </div>
                 </div>
                 <div class="ThirdTask__answer">
-                    <div class="box" id="box" @mouseover="playAudio('/assets/audio/Task3/32.3_слово.mp3')"
+                    <div class="box" id="box" @mouseover="playAudio('@app/assets/audio/Task3/32.3_слово.mp3')"
                         @drop="drop($event, 0)" @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array">
                             {{ item }}
                         </div>
                     </div>
-                    <div class="box2" id="box2" @mouseover="playAudio('/assets/audio/Task3/32.3_вариант.mp3')"
+                    <div class="box2" id="box2" @mouseover="playAudio('@app/assets/audio/Task3/32.3_вариант.mp3')"
                         @drop="drop($event, 1)" @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array_two">
                             {{ item }}
                         </div>
                     </div>
-                    <div class="box3" id="box3" @mouseover="playAudio('/assets/audio/Task3/33.3.mp3')"
+                    <div class="box3" id="box3" @mouseover="playAudio('@app/assets/audio/Task3/33.3.mp3')"
                         @drop="drop($event, 2)" @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array_three">
                             {{ item }}
@@ -44,7 +44,7 @@
                     </div>
                 </div>
             </template>
-            <TaskResultBanner img="/assets/backgrounds/king.png" bg="/assets/backgrounds/Lesya.png" text="Великолепно!"
+            <TaskResultBanner img="../assets/backgrounds/king.png" bg="../assets/backgrounds/Lesya.png" text="Великолепно!"
                 v-else @next="next()" @hide="hide" class="end-modal"></TaskResultBanner>
         </div>
     </div>
@@ -112,7 +112,7 @@ const playEndAudio = (audioPath) => {
 
 
 
-const letters = ref([{ id: 1, name: 'к', type: 'глухой', audio: '/assets/audio/Task3/34.3.mp3' }, { id: 2, name: 'ч', type: 'глухой', audio: '/assets/audio/Task3/35.3.mp3' }, { id: 3, name: 'с', type: 'глухой', audio: '/assets/audio/Task3/36.3.mp3' }, { id: 4, name: 'о', type: 'звонкий', audio: '/assets/audio/Task3/37.3.mp3' }, { id: 5, name: 'ф', type: 'глухой', audio: '/assets/audio/Task3/38.3.mp3' }, { id: 6, name: 'з', type: 'средний', audio: '/assets/audio/Task3/39.3.mp3' }, { id: 7, name: 'и', type: 'звонкий', audio: '/assets/audio/Task3/40.3.mp3' }, { id: 8, name: 'г', type: 'средний', audio: '/assets/audio/Task3/41.3.mp3' }, { id: 9, name: 'д', type: 'средний', audio: '/assets/audio/Task3/42.3.mp3' }])
+const letters = ref([{ id: 1, name: 'к', type: 'глухой', audio: '../assets/audio/Task3/34.3.mp3' }, { id: 2, name: 'ч', type: 'глухой', audio: '../assets/audio/Task3/35.3.mp3' }, { id: 3, name: 'с', type: 'глухой', audio: '../assets/audio/Task3/36.3.mp3' }, { id: 4, name: 'о', type: 'звонкий', audio: '../assets/audio/Task3/37.3.mp3' }, { id: 5, name: 'ф', type: 'глухой', audio: '../assets/audio/Task3/38.3.mp3' }, { id: 6, name: 'з', type: 'средний', audio: '../assets/audio/Task3/39.3.mp3' }, { id: 7, name: 'и', type: 'звонкий', audio: '../assets/audio/Task3/40.3.mp3' }, { id: 8, name: 'г', type: 'средний', audio: '../assets/audio/Task3/41.3.mp3' }, { id: 9, name: 'д', type: 'средний', audio: '../assets/audio/Task3/42.3.mp3' }])
 const answer = ref('');
 const array = ref([]);
 const array_two = ref([]);
@@ -141,7 +141,7 @@ const drop = (event, index) => {
         // setTimeout(() => {
         //     elem.classList.remove('green');
         // }, 2000);
-        playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('../assets/audio/Other/1. общее для разных заданий.mp3');
 
     } else if (array_two_result.value.find((item) => item.name === letter) && index === 1) {
         // elem.classList.add('green');
@@ -150,7 +150,7 @@ const drop = (event, index) => {
         // }, 2000);
         array_two.value.push(letter);
         letters.value.splice(dropIndex.value, 1)
-        playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('../assets/audio/Other/1. общее для разных заданий.mp3');
     }
     else if (array_three_result.value.find((item) => item.name === letter) && index === 2) {
         // elem.classList.add('green');
@@ -160,14 +160,14 @@ const drop = (event, index) => {
         array_three.value.push(letter);
         letters.value.splice(dropIndex.value, 1)
 
-        playEndAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('../assets/audio/Other/1. общее для разных заданий.mp3');
 
     } else {
         elem.classList.add('red');
         setTimeout(() => {
             elem.classList.remove('red');
         }, 2000);
-        playEndAudio('/assets/audio/Other/2. общее для разных заданий.mp3');
+        playEndAudio('../assets/audio/Other/2. общее для разных заданий.mp3');
 
         return false;
     }
@@ -196,6 +196,10 @@ onMounted(async () => {
 })
 </script>
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
+
 .end-modal {
     width: 1200px;
     height: 600px;

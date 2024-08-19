@@ -172,6 +172,9 @@ onMounted(async () => {
 })
 </script>
 <style lang="scss" scoped>
+*{
+    user-select: none;
+}
 .correct_select {
     border: 2px solid;
     border-color: #5CCF54;

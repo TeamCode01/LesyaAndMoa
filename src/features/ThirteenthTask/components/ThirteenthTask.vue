@@ -50,6 +50,7 @@
 import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
+
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
@@ -182,6 +183,11 @@ onMounted(async () => {
 })
 </script>
 <style lang="scss" scoped>
+* {
+    user-select: none;
+}
+
+
 .end-modal {
     width: 1200px;
     height: 600px;

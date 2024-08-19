@@ -50,8 +50,17 @@
 </template>
 <script setup></script>
 <style lang="scss" scoped>
+.container {
+    padding: 0px;
+
+    @media (max-width: 720px) {
+        display: flex;
+        justify-content: center;
+    }
+}
+
 #footer__wrapper_text {
-    @media (max-width: 568px) {
+    @media (max-width: 720px) {
         display: none;
     }
 }
@@ -59,14 +68,14 @@
 #footer__wrapper_text-568 {
     display: none;
 
-    @media (max-width: 568px) {
+    @media (max-width: 720px) {
         margin: 10px 0;
         display: block;
     }
 }
 
 #footer__wrapper_text-design {
-    @media (max-width: 568px) {
+    @media (max-width: 720px) {
         margin-top: 10px;
     }
 }
@@ -78,7 +87,7 @@
     margin-top: auto;
 
     &__logo {
-        @media (max-width: 568px) {
+        @media (max-width: 720px) {
             display: flex;
             justify-content: flex-start;
             width: 200px;
@@ -104,14 +113,14 @@
                 width: 60px;
             }
 
-            @media (max-width: 568px) {
+            @media (max-width: 720px) {
                 display: none;
             }
 
             &-small {
                 display: none;
 
-                @media (max-width: 568px) {
+                @media (max-width: 720px) {
                     display: inline-block;
                 }
             }
@@ -122,12 +131,17 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
+        padding: 0 120px;
 
-        @media (max-width: 568px) {
+        @media (max-width: 1440px) {
+            padding: 0 40px;
+        }
+
+        @media (max-width: 720px) {
             width: 320px;
-            padding-left: 50px;
             flex-direction: column;
             align-items: flex-start;
+            align-self: center;
             gap: 20px;
         }
 
@@ -142,7 +156,7 @@
                 margin-bottom: 4px;
             }
 
-            @media (max-width: 568px) {
+            @media (max-width: 720px) {
                 // display: none;
             }
         }
@@ -153,7 +167,7 @@
             flex-direction: column;
             row-gap: 4px;
 
-            @media (max-width: 568px) {
+            @media (max-width: 720px) {
                 margin-top: 5px;
             }
         }
@@ -165,7 +179,7 @@
             // padding-top: 7px;
             font-family: 'Nunito', sans-serif;
 
-            @media (max-width: 568px) {
+            @media (max-width: 720px) {
                 display: flex;
                 justify-content: flex-start;
             }

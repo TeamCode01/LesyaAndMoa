@@ -21,10 +21,10 @@
                     <!-- ВАРИАНТЫ ОТВЕТОВ -->
                     <div class="draggable-list__words">
                         <div class="draggable-list__set-words" v-for="row in Task" :key="row">
-                            <button class="draggable-list__word" v-for="word in row" :key="word" :class="{void : !word.isActive, item_wrong : word.error == -1 }"
-                            :draggable="word.isActive" @dragstart="dragLetter($event, word.id)">
+                            <div class="draggable-list__word" v-for="word in row" :key="word" :class="{void : !word.isActive, item_wrong : word.error == -1 }"
+                            :draggable="word.isActive" @dragstart="dragLetter($event, word.id, word.text)">
                                 {{ word.text }}
-                            </button>
+                            </div>
                         </div>
                     </div>
 
@@ -35,36 +35,36 @@
                     <div class="draggable-list__answer">
                         <!-- ВЕРХНИЕ ЛОДОЧКИ -->
                         <div class="draggable-list__answer-wrapper">
-                            <div class="draggable-list__question-word" v-for="word in Answer[0]" :key="word">
-                                <div class="draggable-list__question-block" v-for="letter in word" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat">
+                            <div class="draggable-list__question-word" v-for="word in Answer.data[0]" :key="word">
+                                <div class="draggable-list__question-block" v-for="letter in word.data" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
+                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" draggable="false">
                                     <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }"> {{ letter.text }} </div>
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
+                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside" draggable="false">
                                 </div>
                             </div>
                         </div>
 
                         <!-- ВОДА -->
                         <div>
-                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png" alt="" />
+                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png" alt="" draggable="false"/>
                         </div>
 
                         <!-- НИЖНИЕ ЛОДОЧКИ -->
                         <div class="draggable-list__answer-wrapper" >
-                            <div class="draggable-list__question-word" v-for="word in Answer[1]" :key="word">
-                                <div class="draggable-list__question-block" v-for="letter in word" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" >
+                            <div class="draggable-list__question-word" v-for="word in Answer.data[1]" :key="word">
+                                <div class="draggable-list__question-block" v-for="letter in word.data" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
+                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" draggable="false">
                                     <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }">
                                         {{ letter.text }}
                                     </div>
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside">
+                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside" draggable="false">
                                 </div>
                             </div>
                         </div>
 
                         <!-- ВОДА -->
                         <div>
-                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png" alt="" />
+                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png" alt="" draggable="false"/>
                         </div>
                     </div>
                 </div>
@@ -85,8 +85,23 @@ import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
 import { dataTask, dataAnswer } from './task.js'
+import audioMap from './audioMap.js'
 
-const emit = defineEmits(['close', 'next-modal']);
+import gameActions from '@mixins/gameAction';
+
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
+
+onMounted(async () => {
+    const correct = await getCorrectAnswer(12, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+});
+
+const corrValue = ref(0)
+const is_correct = ref(null)
+
+const emit = defineEmits(['close', 'next-modal', 'correct']);
 
 const hide = () => {
     emit('close');
@@ -103,6 +118,10 @@ const props = defineProps({
         type: Boolean,
         required: false,
     },
+    childId: {
+        type: Number,
+        required: false,
+    }
 });
 
 const endGame = ref(false);
@@ -110,6 +129,8 @@ const show = ref(false);
 const hideModal = () => {
     show.value = false;
 }
+
+
 
 const Task = ref()
 const Answer = ref()
@@ -119,31 +140,45 @@ Answer.value = structuredClone(dataAnswer)
 
 const answersCounter = ref(0)
 
-watch(answersCounter, (NewValue)=>{
-    if (NewValue == 11){
-        endGame.value == true
-        show.value == true
+const dragAudio = ref(new Audio());
 
-        console.log(endGame.value, show.value)
-    }
-    console.log(NewValue)
-})
-
-const dragLetter = (event, id) => {
+const dragLetter = (event, id, text) => {
     event.dataTransfer.setData('text', `${id}`);
+    if (dragAudio.value) dragAudio.value.pause();
+    dragAudio.value.src = `/assets/audio/Task12/${audioMap.get(text)}`;
+    dragAudio.value.play();
 };
 
 const dropLetter = (event, id, isActive) => {
     let dragid = event.dataTransfer.getData('text')
+    let audioPath = ''
 
     if (!isActive) {
         if (dragid == id){
-            Answer.value.map((row) =>
+            Answer.value.data.map((row) =>
                 row.map((word) => {
-                    word.map((letter) => {
+                    word.data.map((letter) => {
                         if (letter.id == id) {
                             letter.isActive = !letter.isActive;
                             letter.error = 1;
+                            word.answerCounter += 1;
+
+                            if (word.id == 1 && word.answerCounter == 4) {
+                                audioPath = '/assets/audio/Task12/з.12 полн.слово веселые.mp3'
+                                Answer.value.answerCounter += 1
+                            }
+                            else if (word.id == 2 && word.answerCounter == 3) {
+                                audioPath = '/assets/audio/Task12/з.12 полн.слово ребята.mp3'
+                                Answer.value.answerCounter += 1
+                            }
+                            else if (word.id == 3 && word.answerCounter == 2) {
+                                audioPath = '/assets/audio/Task12/з.12 полн.слово наши.mp3'
+                                Answer.value.answerCounter += 1
+                            }
+                            else if (word.id == 4 && word.answerCounter == 2) {
+                                audioPath = '/assets/audio/Task12/з.12 полн.слово друзья.mp3'
+                                Answer.value.answerCounter += 1
+                            }
                             setTimeout(()=>{
                                 letter.error = 0;
                             }, 1000)
@@ -154,22 +189,50 @@ const dropLetter = (event, id, isActive) => {
 
             Task.value.map((row) =>
                 row.map((word) => {
-
                     if (word.id == id) {
                         word.isActive = !word.isActive;
-                        console.log(word)
                     }
                 })
             );
 
-            answersCounter.value += 1;
+            
             let reactionAudio = new Audio(
                 `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
             );
             reactionAudio.play();
+            
+            if (audioPath != '') {
+                setTimeout(() => {
+                    let audio = new Audio(audioPath);
+                    audio.play();
+                }, 1000)
+            }
+
+
+            if (Answer.value.answerCounter == 4) {
+                setTimeout(() => {
+                    let audio = new Audio('/assets/audio/Task12/з.12 полн.текст Веселые ребята наши друзья.mp3');
+                    audio.play();
+                }, 2000)
+            }
+
 
             setTimeout(() => {
-            }, 2000);
+                answersCounter.value += 1;
+                
+                if (answersCounter.value == 11) {
+                    setTimeout(() => {
+                        if (is_correct.value === false) {
+                            endGameRequest(props.childId, corrValue.value);
+                            emit('correct');
+                        }
+                    },1000)
+
+                    let audio = new Audio('/assets/audio/Task12/368.12_.mp3');
+                    audio.play();
+                }
+
+            }, 7000);
         }
         else {
             Task.value.map((row) =>
@@ -191,6 +254,9 @@ const dropLetter = (event, id, isActive) => {
         }
     }
 }
+
+
+
 </script>
 
 
@@ -198,6 +264,10 @@ const dropLetter = (event, id, isActive) => {
 
 
 <style scoped lang='scss'>
+*{
+    user-select: none;
+}
+
 .TwelfthTask {
     width: 1200px;
 }
@@ -254,6 +324,8 @@ const dropLetter = (event, id, isActive) => {
 }
 
 .draggable-list__word {
+    cursor: pointer;
+
     display: flex;
     align-items: center;
     justify-content: center;

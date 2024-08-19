@@ -19,6 +19,7 @@ export const useUserStore = defineStore('user', {
                 const responseUser = await HTTP.get('users/me/');
                 if (!Number.isInteger(localStorage.getItem('user'))) {
                     localStorage.setItem('user', responseUser.data.id);
+                    localStorage.setItem('type', responseUser.data.tasks_type);
                 }
                 this.currentUser = responseUser.data;
                 this.isLoading = false;
