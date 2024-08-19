@@ -27,7 +27,7 @@
             </div>
         </div>
     </template>
-    <TaskResultBanner img="../assets/backgrounds/flowers.png" bg="../assets/backgrounds/moa.gif" text="Супер!" v-else
+    <TaskResultBanner :img="getImageUrl('king.png')" :bg="getImageUrl('lesya.gif')" text="Отлично!" v-else
         @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 
@@ -67,11 +67,16 @@ const next = () => {
     endGame.value = true;
 }
 
+const getImageUrl = (path) => {
+ return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
+
+
 
 const audio = ref(new Audio());
 
 const playAudio = async (audioPath) => {
-    audio.value.src = audioPath;
+    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     if (props.finish === true) {
         await audio.value.play();
     }
@@ -82,7 +87,7 @@ const corrValue = ref(0);
 
 const playEndAudio = (audioPath) => {
     const end_audio = new Audio();
-    end_audio.src = audioPath;
+    end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
 }
 
@@ -96,16 +101,16 @@ const stopAudio = (audioPath) => {
 }
 
 const words = ref([
-    { id: 1, name: 'медведи и зайцы', index: 11, audio: '../assets/audio/Task1/13.1.mp3' },
-    { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2, audio: '../assets/audio/Task1/14.1.mp3' },
-    { id: 3, name: 'в слоги и в слова.', index: 5, audio: '../assets/audio/Task1/15.1.mp3' },
-    { id: 4, name: 'В нашем языке', index: 0, audio: '../assets/audio/Task1/16.1.mp3' },
-    { id: 5, name: 'в леса и поля', index: 22, audio: '../assets/audio/Task1/17.1.mp3' },
-    { id: 6, name: 'есть иероглифы', index: 81, audio: '../assets/audio/Task1/18.1.mp3' },
-    { id: 7, name: 'и складываются', index: 3, audio: '../assets/audio/Task1/19.1.mp3' },
-    { id: 8, name: 'явления и предметы', index: 7, audio: '../assets/audio/Task1/20.1.mp3' },
-    { id: 9, name: 'есть буквы.', index: 1, audio: '../assets/audio/Task1/21.1.mp3' },
-    { id: 10, name: 'Все вместе они образуют МОЗАИКУ', index: 9, audio: '../assets/audio/Task1/22.1.mp3' },
+    { id: 1, name: 'медведи и зайцы', index: 11, audio: 'Task1/13.1.mp3' },
+    { id: 2, name: 'Вместе они составляют АЛФАВИТ', index: 2, audio: 'Task1/14.1.mp3' },
+    { id: 3, name: 'в слоги и в слова.', index: 5, audio: 'Task1/15.1.mp3' },
+    { id: 4, name: 'В нашем языке', index: 0, audio: 'Task1/16.1.mp3' },
+    { id: 5, name: 'в леса и поля', index: 22, audio: 'Task1/17.1.mp3' },
+    { id: 6, name: 'есть иероглифы', index: 81, audio: 'Task1/18.1.mp3' },
+    { id: 7, name: 'и складываются', index: 3, audio: 'Task1/19.1.mp3' },
+    { id: 8, name: 'явления и предметы', index: 7, audio: 'Task1/20.1.mp3' },
+    { id: 9, name: 'есть буквы.', index: 1, audio: 'Task1/21.1.mp3' },
+    { id: 10, name: 'Все вместе они образуют МОЗАИКУ', index: 9, audio: 'Task1/22.1.mp3' },
 ]);
 const wordsAnswer = ref({
     0: { id: 4, name: 'В нашем языке' },
@@ -137,13 +142,13 @@ const drop = (event) => {
             words.value.splice(dropIndex.value, 1);
             answer.value += text + ' ';
             answer_arr.value.push(0);
-            playEndAudio('../assets/audio/Other/1. общее для разных заданий.mp3');
+            playEndAudio('Other/1. общее для разных заданий.mp3');
         } else {
             elem.classList.add('red');
             setTimeout(() => {
                 elem.classList.remove('red');
             }, 2000);
-            playEndAudio('../assets/audio/Other/2. общее для разных заданий.mp3');
+            playEndAudio('Other/2. общее для разных заданий.mp3');
             return false;
         }
     } else {
@@ -154,13 +159,13 @@ const drop = (event) => {
             words.value.splice(dropIndex.value, 1);
             answer.value += text + ' ';
             answer_arr.value.push(index);
-            playEndAudio('../assets/audio/Other/1. общее для разных заданий.mp3');
+            playEndAudio('Other/1. общее для разных заданий.mp3');
         } else {
             elem.classList.add('red');
             setTimeout(() => {
                 elem.classList.remove('red');
             }, 2000);
-            playEndAudio('../assets/audio/Other/2. общее для разных заданий.mp3');
+            playEndAudio('Other/2. общее для разных заданий.mp3');
 
             return false;
         }

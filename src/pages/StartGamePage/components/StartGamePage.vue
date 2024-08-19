@@ -21,18 +21,20 @@
   </div>
   <div class="container-game_mobile" v-show="windowWidth < 1024">
     <div class="mobile-task-wrap">
-      <div v-for="taskNumber in 18" :key="taskNumber" class="mobile-task" @click="()=>{modalIsOpen = true}">
-        {{`Задание ${taskNumber}`}}
+      <div v-for="taskNumber in 18" :key="taskNumber" class="mobile-task" @click="() => { modalIsOpen = true }">
+        {{ `Задание ${taskNumber}` }}
       </div>
     </div>
 
     <div v-if="modalIsOpen == true" class="mobile-modal">
       <div>
-        <div class="close" >
-          <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест"  @click="()=>{modalIsOpen = false}"/>
+        <div class="close">
+          <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест"
+            @click="() => { modalIsOpen = false }" />
         </div>
         <p class="mobile-text">
-          Чтобы полноценно использовать игры, необходимо разрешение экрана от 1024 px. Пожалуйста воспользуйтесь планшетом или компьютером. Мы ждем вас на нашем сайте
+          Чтобы полноценно использовать игры, необходимо разрешение экрана от 1024 px. Пожалуйста воспользуйтесь
+          планшетом или компьютером. Мы ждем вас на нашем сайте
         </p>
       </div>
 
@@ -63,12 +65,15 @@ let childId = route.params.idChildOrGroup;
 const startAudio = ref(new Audio());
 const isPlaying = ref(false);
 const isMuted = ref(false);
+const getImageUrl = (path) => {
+  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
 
 const windowWidth = ref(window.innerWidth);
 const modalIsOpen = ref(false)
 const sendImg = (image) => {
   img.value = image;
-  document.getElementById('background-banner').src = image
+  document.getElementById('background-banner').src = getImageUrl(img.value);
 }
 
 const sendAudio = (music) => {
@@ -129,12 +134,12 @@ watch(
 
 onMounted(() => {
   showHand();
-  document.getElementById('background-banner').src = img.value
+  document.getElementById('background-banner').src = img.value;
 
   window.addEventListener('resize', () => {
-        windowWidth.value = window.innerWidth
+    windowWidth.value = window.innerWidth
 
-    })
+  })
 })
 
 </script>
@@ -218,18 +223,18 @@ onMounted(() => {
     align-items: center;
     font-family: "Nunito", sans-serif;
 
-    .mobile-text{
+    .mobile-text {
       font-size: 16px;
       font-weight: 400;
       text-align: center;
       max-width: 480px;
     }
 
-    .mobile-img{
+    .mobile-img {
       width: 303px;
     }
 
-    .mobile-modal{
+    .mobile-modal {
       position: fixed;
       display: flex;
       flex-direction: column;
@@ -244,7 +249,7 @@ onMounted(() => {
       transform: translate(-50%, -50%);
     }
 
-    .mobile-task{
+    .mobile-task {
       border-radius: 30px;
       background-color: #dfdfdf;
       color: #313131;
@@ -262,7 +267,7 @@ onMounted(() => {
       align-items: center;
     }
 
-    .mobile-task-wrap{
+    .mobile-task-wrap {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -270,13 +275,13 @@ onMounted(() => {
       column-gap: 8px;
     }
 
-    .close{
+    .close {
       cursor: pointer;
       display: flex;
       justify-content: end;
     }
 
-    .close-icon{
+    .close-icon {
       position: relative;
       padding: 5px;
       margin-bottom: 10px;

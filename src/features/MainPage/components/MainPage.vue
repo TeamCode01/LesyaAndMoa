@@ -1,6 +1,4 @@
 <template>
-
-
   <div @click="show_socials = !show_socials" class="link-share">
     <Transition name="slide-fade">
       <div v-if="show_socials" class="networks__wrapper">
@@ -11,12 +9,9 @@
         <div @click="copyLink" class="network__copy">
           <img class="networks__icon" src="@app/assets/icons/link_copy_icon.svg" alt="copy" />
         </div>
-
-
         <div @click="show_socials = true" class="networks__close">
           <img class="networks__icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
         </div>
-
       </div>
     </Transition>
     <img v-if="!show_socials" src="@app/assets/backgrounds/share-img.svg" alt="share">
@@ -110,11 +105,6 @@
             Как сложно нам читать и понимать прочитанное, когда
             некоторые буквы или слова всего лишь отражены зеркально!
           </p>
-          <!--
-                        <p class="text" id="item1-bottom-text">
-                            Вперед с новыми друзьями к новым вершинам знания!
-                        </p>
-                    -->
         </div>
       </div>
       <div class="about__wrapper-item_second">
