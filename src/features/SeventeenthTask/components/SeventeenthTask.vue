@@ -24,6 +24,11 @@
                     @mousedown="engage"
                     @mouseup="disengage"
                     @mousemove="draw"
+
+                    @touchstart="engage"
+                    @touchend="disengage"
+                    @touchmove="draw"
+
                     @click="voiceActing"
                     v-show="endFirstTask && true"
                 ></canvas>
@@ -48,6 +53,10 @@
                                     @mouseup="endPosition($event)"
                                     @mousemove="getPuzzleCords($event)"
                                     @mouseleave="mouseLeaveFromPuzzle()"
+
+                                    @touchend="endPosition($event)"
+                                    @touchmove.prevent="($event)=>{getPuzzleCords($event)}"
+                                    
                                 />
                             </div>
                         </template>
@@ -97,11 +106,20 @@
                                 @mousedown.left="
                                     ($event) => startPosition($event, word)
                                 "
+                                @touchstart="($event) => {
+                                    if (word.isActive) {
+                                        playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)
+                                    }
+                                    startPosition($event, word)
+
+                                    }"
                                 @mouseenter="()=>{
                                     if (word.isActive) {
                                         playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)
                                     }
                                 }"
+
+
                                 :ref="
                                     (el) => {
                                         refPuzzles[word.id - 1] = el;
@@ -265,6 +283,10 @@ firstTask.value[1] = [];
 secondTask.value = structuredClone(dataSecondTask);
 
 const getPuzzleCords = (event) => {
+    if (event.type == 'touchmove' || event.type == 'touchstart') {
+        event.clientX = event.touches[0].clientX;
+        event.clientY = event.touches[0].clientY;
+    }
     PuzzleCords.value.x =
         event.clientX -
         taskBlock.value.getBoundingClientRect().x -
@@ -277,8 +299,12 @@ const getPuzzleCords = (event) => {
 
 const startPosition = (event, word) => {
     if (!word.isActive) return;
+    if (event.type == 'touchstart') {
+        console.log('start', event)
+    }
     draggableBlock.value.src = word.src;
     draggableBlock.value.class = word.class;
+
     getPuzzleCords(event);
     isDrag.value = true;
     startId.value = word.id;
@@ -325,6 +351,8 @@ const getPuzzleUnderMouse = (event) => {
 
 const endPosition = (event) => {
     let index = getPuzzleUnderMouse(event);
+    console.log('endPosition', index);
+
     if (index != -1) {
         let answertId = index + 1;
 

@@ -113,12 +113,12 @@ const tasks = ref([
     { id: 9, name: 'Задание 9', disabled: true, done: false, open: false, time: 30, end: false, img: '../assets/backgrounds/task9.jpg', audio: '../assets/audio/Task9/299.9.mp3', startAudio: '../assets/audio/Task9/298.9.mp3' },
     { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 30, end: false, img: '../assets/backgrounds/task10.jpg', audio: '../assets/audio/Task10/317.10.mp3', startAudio: '../assets/audio/Task10/316.10.mp3' },
     { id: 11, name: 'Задание 11', disabled: true, done: false, open: false, time: 35, end: false, img: '../assets/backgrounds/task11.jpg', audio: '../assets/audio/Task11/330.11.mp3', startAudio: '../assets/audio/Task11/329.11.mp3' },
-    { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 35, end: false, img: '../assets/backgrounds/task12.jpg', startAudio: '../assets/audio/Task12/349.12.mp3' },
+    { id: 12, name: 'Задание 12', disabled: false, done: false, open: false, time: 35, end: false, img: '../assets/backgrounds/task12.jpg', startAudio: '../assets/audio/Task12/349.12.mp3' },
     { id: 13, name: 'Задание 13', disabled: true, done: false, open: false, time: 30, end: false, img: '../assets/backgrounds/task13.jpg', audio: '../assets/audio/Task13/370.13.mp3', startAudio: '../assets/audio/Task13/369.13.mp3' },
     { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false, img: '../assets/backgrounds/animals.jpg', audio: '../assets/audio/Task14/379.14.mp3', startAudio: '../assets/audio/Task14/378.14_.mp3' },
     { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: '../assets/backgrounds/task15.jpg', audio: '../assets/audio/Task15/390.15.mp3', startAudio: '../assets/audio/Task15/389.15.mp3'  },
     { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 60, end: false, img: '../assets/backgrounds/animals.jpg', startAudio: '../assets/audio/Task16/427.16_.mp3'   },
-    { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: '../assets/backgrounds/animals.jpg', audio: '../assets/audio/Task17/454.17.mp3', startAudio: '../assets/audio/Task17/453.17.mp3'   },
+    { id: 17, name: 'Задание 17', disabled: false, done: false, open: false, time: 30, end: false, img: '../assets/backgrounds/animals.jpg', audio: '../assets/audio/Task17/454.17.mp3', startAudio: '../assets/audio/Task17/453.17.mp3'   },
     { id: 18, name: 'Задание 18', disabled: true, done: false, open: false, time: 120, end: false, img: '../assets/backgrounds/task18.jpg', audio: '../assets/audio/Task18/471.18.mp3', startAudio: '../assets/audio/Task18/470.18_.mp3' },
 ])
 
