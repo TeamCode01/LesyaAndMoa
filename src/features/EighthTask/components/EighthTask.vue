@@ -70,7 +70,7 @@
                     </div>
                 </div>
             </template>
-            <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Супер!"
+            <TaskResultBanner :img="getImageUrl('flowers.png')" :bg="getImageUrl('moa.gif')" class="end-modal"  text="Супер!"
                 v-else @hide="hide()" @next="next()"></TaskResultBanner>
         </div>
     </div>
@@ -108,56 +108,56 @@ const syllables = ref({
         id: 1,
         id_class: 'step1',
         text: 'ПО',
-        audio: '/assets/audio/Task8/281.8.mp3',
+        audio: 'Task8/281.8.mp3',
         correct: null,
         hidden: false,
     }, {
         id: 2,
         id_class: 'step2',
         text: 'ЛЕ',
-        audio: '/assets/audio/Task8/282.8.mp3',
+        audio: 'Task8/282.8.mp3',
         correct: null,
         hidden: false,
     }, {
         id: 3,
         id_class: 'step3',
         text: 'ВЕ',
-        audio: '/assets/audio/Task8/283.8.mp3',
+        audio: 'Task8/283.8.mp3',
         correct: null,
         hidden: false,
     }, {
         id: 4,
         id_class: 'step4',
         text: 'ТРО',
-        audio: '/assets/audio/Task8/284.8.mp3',
+        audio: 'Task8/284.8.mp3',
         correct: null,
         hidden: false,
     }, {
         id: 5,
         id_class: 'step5',
         text: 'КО',
-        audio: '/assets/audio/Task8/285.8.mp3',
+        audio: 'Task8/285.8.mp3',
         correct: null,
         hidden: false,
     }, {
         id: 6,
         id_class: 'step6',
         text: 'СОЛ',
-        audio: '/assets/audio/Task8/286.8.mp3',
+        audio: 'Task8/286.8.mp3',
         correct: null,
         hidden: false,
     }, {
         id: 7,
         id_class: 'step7',
         text: 'ТРА',
-        audio: '/assets/audio/Task8/287.8.mp3',
+        audio: 'Task8/287.8.mp3',
         correct: null,
         hidden: false,
     }, {
         id: 8,
         id_class: 'step8',
         text: 'УТ',
-        audio: '/assets/audio/Task8/288.8.mp3',
+        audio: 'Task8/288.8.mp3',
         correct: null,
         hidden: false,
     }],
@@ -165,50 +165,50 @@ const syllables = ref({
         1: [{
             id: 1,
             text: 'ПА',
-            audio: '/assets/audio/Task8/289.8.mp3',
+            audio: 'Task8/289.8.mp3',
             correct: null,
             hidden: false,
         }, {
             id: 2,
             text: 'ТЕР',
-            audio: '/assets/audio/Task8/290.8.mp3',
+            audio: 'Task8/290.8.mp3',
             correct: null,
             hidden: false,
         }, {
             id: 3,
             text: 'РО',
-            audio: '/assets/audio/Task8/291.8.mp3',
+            audio: 'Task8/291.8.mp3',
             correct: null,
             hidden: false,
         }, {
             id: 4,
             text: 'ЛЕ',
-            audio: '/assets/audio/Task8/292.8.mp3',
+            audio: 'Task8/292.8.mp3',
             correct: null,
             hidden: false,
         }],
         2: [{
             id: 5,
             text: 'НЦЕ',
-            audio: '/assets/audio/Task8/293.8.mp3',
+            audio: 'Task8/293.8.mp3',
             correct: null,
             hidden: false,
         }, {
             id: 6,
             text: 'ТО',
-            audio: '/assets/audio/Task8/294.8.mp3',
+            audio: 'Task8/294.8.mp3',
             correct: null,
             hidden: false,
         }, {
             id: 7,
             text: 'РАБЛЬ',
-            audio: '/assets/audio/Task8/295.8.mp3',
+            audio: 'Task8/295.8.mp3',
             correct: null,
             hidden: false,
         }, {
             id: 8,
             text: 'ВА',
-            audio: '/assets/audio/Task8/296.8.mp3',
+            audio: 'Task8/296.8.mp3',
             correct: null,
             hidden: false,
         }]
@@ -219,54 +219,56 @@ const countAnswers = ref(0);
 const corrValue = ref(0);
 const is_correct = ref(null);
 const correctAnswers = ref([{}, {}, {}, {}, {}, {}, {}, {}])
-
+const getImageUrl = (path) => {
+ return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
 const answers = ref([
     {
         id: 1,
         text: 'Поле',
-        audio: '/assets/audio/Task8/поле.mp3',
+        audio: 'Task8/поле.mp3',
         answered: false
     },
     {
         id: 2,
         text: 'Лето',
-        audio: '/assets/audio/Task8/лето.mp3',
+        audio: 'Task8/лето.mp3',
         answered: false
     },
     {
         id: 3,
         text: 'Ветер',
-        audio: '/assets/audio/Task8/ветер.mp3',
+        audio: 'Task8/ветер.mp3',
         answered: false
     },
     {
         id: 4,
         text: 'Тропа',
-        audio: '/assets/audio/Task8/тропа.mp3',
+        audio: 'Task8/тропа.mp3',
         answered: false
     },
     {
         id: 5,
         text: 'Корабль',
-        audio: '/assets/audio/Task8/корабль.mp3',
+        audio: 'Task8/корабль.mp3',
         answered: false
     },
     {
         id: 6,
         text: 'Солнце',
-        audio: '/assets/audio/Task8/солнце.mp3',
+        audio: 'Task8/солнце.mp3',
         answered: false
     },
     {
         id: 7,
         text: 'Трава',
-        audio: '/assets/audio/Task8/трава.mp3',
+        audio: 'Task8/трава.mp3',
         answered: false
     },
     {
         id: 8,
         text: 'Утро',
-        audio: '/assets/audio/Task8/утро.mp3',
+        audio: 'Task8/утро.mp3',
         answered: false
     },
 ])
@@ -280,7 +282,7 @@ const clickText = (syllable) => {
     }, 500);
 }
 
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -293,7 +295,8 @@ const props = defineProps({
 });
 
 const playAudio = (audioPath) => {
-    const audio = new Audio(audioPath);
+    const audio = new Audio();
+    audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     audio.play();
     if (!soundPlayed) {
         soundPlayed = true;
@@ -343,7 +346,7 @@ const drop = (event, place) => {
                 correctAnswers.value[countAnswers.value] = obj;
                 countAnswers.value++;
                 playAudio(obj.audio);
-                setTimeout(() => playAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`), 1000)
+                setTimeout(() => playAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`), 1000)
                 break;
             }
         }
@@ -351,7 +354,7 @@ const drop = (event, place) => {
         if (!find) {
             syllables.value[squareAnswer.value.firstIndex][squareAnswer.value.secondIndex].correct = false;
             syllables.value[circleAnswer.value.firstIndex][circleAnswer.value.secondIndex][circleAnswer.value.thirdIndex].correct = false;
-            playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+            playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
             setTimeout(() => {
                 syllables.value[squareAnswer.value.firstIndex][squareAnswer.value.secondIndex].correct = null;
                 syllables.value[circleAnswer.value.firstIndex][circleAnswer.value.secondIndex][circleAnswer.value.thirdIndex].correct = null;
@@ -377,9 +380,10 @@ const drop = (event, place) => {
                 if (is_correct.value === false) {
                     endGameRequest(props.childId, corrValue.value);
                     emit('correct');
+                    emit('open');
                 }
                 startGame.value = false;
-                playAudio('/assets/audio/Task8/297.8_.mp3')
+                playAudio('Task8/297.8_.mp3')
             }, 2000);
         }
     }
@@ -408,6 +412,11 @@ onMounted(async () => {
 
 *{
     user-select: none;
+}
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
 }
 
 .answer {

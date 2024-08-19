@@ -25,19 +25,19 @@
     </div>
   </template>
   <div v-else class="modal-background">
-    <TaskResultBanner class="end-modal" :is-end="false" :is_test="true"  bg="../assets/backgrounds/Moa.png"
+    <TaskResultBanner class="end-modal" :is-end="false" :is_test="true"  :bg="getImageUrl('Moa.png')"
       text="Молодец! Ты полностью справился с заданием. Теперь ты можешь помочь и Лесе с Моа тоже научиться понимать нас."
       v-if="endGame === true && correct === 5" @hide="hide"></TaskResultBanner>
-    <TaskResultBanner class="end-modal" :is_test="true" bg="../assets/backgrounds/Moa.png"
+    <TaskResultBanner class="end-modal" :is_test="true" :bg="getImageUrl('Moa.png')"
       text="Здорово! Ты почти всё верно выполнил. Помоги теперь Лесе и Моа научиться понимать нас."
       v-else-if="endGame === true && correct === 4" @hide="hide"></TaskResultBanner>
-    <TaskResultBanner class="end-modal" :is_test="true"  bg="../assets/backgrounds/Moa.png"
+    <TaskResultBanner class="end-modal" :is_test="true"  :bg="getImageUrl('Moa.png')"
       text="Неплохо, ты верно выполнил задание больше, чем наполовину. Ты можешь помочь Лесе и Моа научиться понимать нас."
       v-else-if="endGame === true && correct === 3" @hide="hide"></TaskResultBanner>
-    <TaskResultBanner class="end-modal" :is_test="true"  bg="../assets/backgrounds/Moa.png"
+    <TaskResultBanner class="end-modal" :is_test="true" :bg="getImageUrl('Moa.png')"
       text=" Неплохо, ты попробовал понять текст. А Леся и Моа не понимают нас совсем. Только ты можешь помочь им."
       v-else-if="endGame === true && (correct === 2 || correct === 1)" @hide="hide"></TaskResultBanner>
-    <TaskResultBanner class="end-modal" :is-end="false" :is_test="true"  bg="../assets/backgrounds/Moa.png" text="Попробуй помочь нашим героям! У тебя все получится!"
+    <TaskResultBanner class="end-modal" :is-end="false" :is_test="true"  :bg="getImageUrl('Moa.png')" text="Попробуй помочь нашим героям! У тебя все получится!"
       v-else-if="endGame === true && correct === 0" @hide="hide"></TaskResultBanner>
   </div>
 </template>
@@ -60,12 +60,17 @@ const answer_four = ref('');
 const answer_five = ref('');
 const endGame = ref(false);
 const correct = ref(0);
+const getImageUrl = (path) => {
+ return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
 
 const answer_finish = ref('языка');
 const answer_two_finish = ref('рыбы');
 const answer_three_finish = ref('музыка');
 const answer_four_finish = ref('разбить');
 const answer_five_finish = ref('помочь');
+
+
 
 const checkAnswer = () => {
   if (answer.value === answer_finish.value) {

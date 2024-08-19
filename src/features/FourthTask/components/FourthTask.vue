@@ -39,8 +39,8 @@
                 <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
                     class="task_block__wrapper_answer" />
             </template>
-            <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Здорово!"
-                v-else @next="next()" @hide="hide()"></TaskResultBanner>
+            <TaskResultBanner :img="getImageUrl('flowers.png')" :bg="getImageUrl('moa.gif')" text="Здорово!" v-else
+                @next="next()" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -56,7 +56,7 @@ const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 
 const startGame = ref(true);
 const firstListen = ref(true);
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -73,8 +73,13 @@ const countAnswers = ref(0);
 const is_correct = ref(null);
 const audio = ref(new Audio());
 
+
+const getImageUrl = (path) => {
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
+
 const playAudio = (audioPath) => {
-    audio.value.src = audioPath;
+    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     audio.value.play();
 
 }
@@ -89,24 +94,24 @@ const currSyllable = ref();
 const played = ref([])
 const syllables = ref({
     1: {
-        1: { name: "ШО", audio: '/assets/audio/Task4/46.4.mp3', correct: null },
-        2: { name: "БА", audio: '/assets/audio/Task4/47.4.mp3', correct: null },
-        3: { name: "ГЮ", audio: '/assets/audio/Task4/48.4.mp3', correct: null },
-        4: { name: "ЛЫ", audio: '/assets/audio/Task4/49.4.mp3', correct: null },
-        5: { name: "ХА", audio: '/assets/audio/Task4/50.4.mp3', correct: null },
+        1: { name: "ШО", audio: 'Task4/46.4.mp3', correct: null },
+        2: { name: "БА", audio: 'Task4/47.4.mp3', correct: null },
+        3: { name: "ГЮ", audio: 'Task4/48.4.mp3', correct: null },
+        4: { name: "ЛЫ", audio: 'Task4/49.4.mp3', correct: null },
+        5: { name: "ХА", audio: 'Task4/50.4.mp3', correct: null },
     },
     2: {
-        6: { name: "ДЯ", audio: '/assets/audio/Task4/51.4.mp3', correct: null },
-        7: { name: "ЩИ", audio: '/assets/audio/Task4/52.4.mp3', correct: null },
-        8: { name: "ФО", audio: '/assets/audio/Task4/53.4.mp3', correct: null },
-        9: { name: "ЖУ", audio: '/assets/audio/Task4/54.4.mp3', correct: null },
+        6: { name: "ДЯ", audio: 'Task4/51.4.mp3', correct: null },
+        7: { name: "ЩИ", audio: 'Task4/52.4.mp3', correct: null },
+        8: { name: "ФО", audio: 'Task4/53.4.mp3', correct: null },
+        9: { name: "ЖУ", audio: 'Task4/54.4.mp3', correct: null },
     },
     3: {
-        10: { name: "ЗИ", audio: '/assets/audio/Task4/55.4.mp3', correct: null },
-        11: { name: "ТЫ", audio: '/assets/audio/Task4/56.4.mp3', correct: null },
-        12: { name: "ВЕ", audio: '/assets/audio/Task4/57.4.mp3', correct: null },
-        13: { name: "КЕ", audio: '/assets/audio/Task4/58.4.mp3', correct: null },
-        14: { name: "РЮ", audio: '/assets/audio/Task4/59.4.mp3', correct: null },
+        10: { name: "ЗИ", audio: 'Task4/55.4.mp3', correct: null },
+        11: { name: "ТЫ", audio: 'Task4/56.4.mp3', correct: null },
+        12: { name: "ВЕ", audio: 'Task4/57.4.mp3', correct: null },
+        13: { name: "КЕ", audio: 'Task4/58.4.mp3', correct: null },
+        14: { name: "РЮ", audio: 'Task4/59.4.mp3', correct: null },
     }
 });
 
@@ -123,20 +128,21 @@ const onSelection = (firstIndex, id) => {
         //     }
         // }
         countAnswers.value++;
-        playAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
+        playAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
     } else if (!firstListen.value) {
         syllables.value[firstIndex][id].correct = false;
         setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)
-        playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+        playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     }
     if (countAnswers.value == 14) {
         setTimeout(() => {
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);
                 emit('correct');
+                emit('open');
             }
             startGame.value = false;
-            playAudio('/assets/audio/Task4/60.4_.mp3');
+            playAudio('Task4/60.4_.mp3');
         }, 1000);
     }
 }
@@ -172,9 +178,10 @@ onMounted(async () => {
 })
 </script>
 <style lang="scss" scoped>
-*{
+* {
     user-select: none;
 }
+
 .correct_select {
     border: 2px solid;
     border-color: #5CCF54;

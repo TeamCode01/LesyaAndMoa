@@ -136,8 +136,8 @@ import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 
-onMounted(async () => {
-    const correct = await getCorrectAnswer(15, props.childId);
+onMounted(() => {
+    const correct = getCorrectAnswer(15, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 });
@@ -145,7 +145,7 @@ onMounted(async () => {
 const corrValue = ref(0)
 const is_correct = ref(null)
 
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -212,7 +212,7 @@ const dropLetter = (event, x, y, id, isActive) => {
 
                             word.answerCounter += 1
 
-                            if ( 
+                            if (
                                 ((word.id == 1 || word.id == 3 || word.id == 8 || word.id == 10 || word.id == 13) && word.answerCounter == 1) ||
                                 ( (word.id == 2 ||word.id == 4 || word.id == 5 || word.id == 6 || word.id == 11 || word.id == 12 || word.id == 14) && word.answerCounter == 2) ||
                                 (  word.id == 9 && word.answerCounter == 3) ||
@@ -228,11 +228,11 @@ const dropLetter = (event, x, y, id, isActive) => {
                         }
 
 
-                        
+
                     });
 
-                    
-                    
+
+
                 })
             );
 
@@ -251,6 +251,7 @@ const dropLetter = (event, x, y, id, isActive) => {
                         if (is_correct.value === false) {
                             endGameRequest(props.childId, corrValue.value);
                             emit('correct');
+                            emit('open');
                         }
                     },1000)
 

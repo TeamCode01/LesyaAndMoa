@@ -39,8 +39,8 @@
                 <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
                     class="task_block__wrapper_answer" />
             </template>
-            <TaskResultBanner img="/assets/backgrounds/cup.png" bg="/assets/backgrounds/lesya.gif" text="Прекрасно!"
-                v-else @next="next()" @hide="hide()"></TaskResultBanner>
+            <TaskResultBanner :img="getImageUrl('Cup.png')" :bg="getImageUrl('lesya.gif')" text="Прекрасно!"
+                class="end-modal" v-else @next="next()" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -62,28 +62,28 @@ const played = ref([])
 
 const syllables = ref({
     1: {
-        1: { name: "РЕГ", audio: '/assets/audio/Task5/63.5.mp3', correct: null },
-        2: { name: "МОД", audio: '/assets/audio/Task5/64.5.mp3', correct: null },
-        3: { name: "ЛЁК", audio: '/assets/audio/Task5/65.5.mp3', correct: null },
-        4: { name: "ЗИН", audio: '/assets/audio/Task5/66.5.mp3', correct: null },
-        5: { name: "УПР", audio: '/assets/audio/Task5/67.5.mp3', correct: null },
+        1: { name: "РЕГ", audio: 'Task5/63.5.mp3', correct: null },
+        2: { name: "МОД", audio: 'Task5/64.5.mp3', correct: null },
+        3: { name: "ЛЁК", audio: 'Task5/65.5.mp3', correct: null },
+        4: { name: "ЗИН", audio: 'Task5/66.5.mp3', correct: null },
+        5: { name: "УПР", audio: 'Task5/67.5.mp3', correct: null },
     },
     2: {
-        6: { name: "ИЗН", audio: '/assets/audio/Task5/68.5.mp3', correct: null },
-        7: { name: "НОК", audio: '/assets/audio/Task5/69.5.mp3', correct: null },
-        8: { name: "ВЕТ", audio: '/assets/audio/Task5/70.5.mp3', correct: null },
-        9: { name: "РИС", audio: '/assets/audio/Task5/71.5.mp3', correct: null },
+        6: { name: "ИЗН", audio: 'Task5/68.5.mp3', correct: null },
+        7: { name: "НОК", audio: 'Task5/69.5.mp3', correct: null },
+        8: { name: "ВЕТ", audio: 'Task5/70.5.mp3', correct: null },
+        9: { name: "РИС", audio: 'Task5/71.5.mp3', correct: null },
     },
     3: {
-        10: { name: "ЗАП", audio: '/assets/audio/Task5/72.5.mp3', correct: null },
-        11: { name: "МЫЙ", audio: '/assets/audio/Task5/73.5.mp3', correct: null },
-        12: { name: "БУК", audio: '/assets/audio/Task5/74.5.mp3', correct: null },
-        13: { name: "ОЛЬТ", audio: '/assets/audio/Task5/75.5.mp3', correct: null },
-        14: { name: "ВЕЦ", audio: '/assets/audio/Task5/76.5.mp3', correct: null },
+        10: { name: "ЗАП", audio: 'Task5/72.5.mp3', correct: null },
+        11: { name: "МЫЙ", audio: 'Task5/73.5.mp3', correct: null },
+        12: { name: "БУК", audio: 'Task5/74.5.mp3', correct: null },
+        13: { name: "ОЛЬТ", audio: 'Task5/75.5.mp3', correct: null },
+        14: { name: "ВЕЦ", audio: 'Task5/76.5.mp3', correct: null },
     }
 })
 
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const is_correct = ref(null);
 const props = defineProps({
     end: {
@@ -95,6 +95,12 @@ const props = defineProps({
         required: false,
     }
 });
+
+const getImageUrl = (path) => {
+ return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
+
+
 const corrValue = ref(0);
 const onSelection = (firstIndex, id) => {
     if (currSyllable.value == id && !firstListen.value) {
@@ -109,20 +115,21 @@ const onSelection = (firstIndex, id) => {
         //     }
         // }
         countAnswers.value++;
-        playAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
+        playAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
     } else if (!firstListen.value) {
         syllables.value[firstIndex][id].correct = false;
         setTimeout(() => syllables.value[firstIndex][temp].correct = null, 2000)
-        playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+        playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     }
     if (countAnswers.value == 14) {
         setTimeout(() => {
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);
                 emit('correct');
+                emit('open');
             }
             startGame.value = false;
-            playAudio('/assets/audio/Task5/77.5_.mp3');
+            playAudio('Task5/77.5_.mp3');
         }, 1000);
     }
 }
@@ -148,7 +155,8 @@ const listenTo = () => {
 }
 
 const playAudio = (audioPath) => {
-    const audio = new Audio(audioPath);
+    const audio = new Audio();
+    audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     audio.play();
 }
 
@@ -170,6 +178,11 @@ onMounted(async () => {
 <style lang="scss" scoped>
 *{
     user-select: none;
+}
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
 }
 
 .correct_select {

@@ -13,13 +13,13 @@
                 <div class="SecondTask__wrapper_block">
                     <img @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
                         @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"
-                        :src="item.src" alt="alphabet" class="SecondTask__wrapper_block_item">
+                        :src="getImageUrl(item.src)" alt="alphabet" class="SecondTask__wrapper_block_item">
                 </div>
             </div>
         </div>
     </template>
 
-    <TaskResultBanner img="../assets/backgrounds/flowers.png" bg="../assets/backgrounds/moa.gif" text="Супер!" v-else
+    <TaskResultBanner :img="getImageUrl('Diamond.png')" :bg="getImageUrl('moa.gif')" text="Так держать!" v-else
         @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 <script setup>
@@ -31,7 +31,7 @@ import gameActions from '@mixins/gameAction';
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -54,18 +54,21 @@ const hide = () => {
 const corrValue = ref(0);
 
 const next = () => {
-    emit('next-modal', is_started.value);
+    emit('next-modal');
     endGame.value = true;
 
 }
 
 const is_correct = ref(null);
-
-const alphabets = ref([{ id: 1, src: '@app/assets/backgrounds/english.png', isCorrect: false, audio: '../assets/audio/Task2/27.2.mp3' }, { id: 2, src: '@app/assets/backgrounds/russian.png', isCorrect: true, audio: '../assets/audio/Task2/26.2.mp3' }, { id: 3, src: '@app/assets/backgrounds/arabic.png', isCorrect: false, audio: '../assets/audio/Task2/28.2.mp3' }])
+const alphabets = ref([{ id: 1, src: 'english.png', isCorrect: false, audio: 'Task2/27.2.mp3' }, { id: 2, src: 'russian.png', isCorrect: true, audio: 'Task2/26.2.mp3' }, { id: 3, src: 'arabic.png', isCorrect: false, audio: 'Task2/28.2.mp3' }])
 const endGame = ref(false);
 
+const getImageUrl = (path) => {
+ return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
+
 const playAudio = async (audioPath) => {
-    audio.value.src = audioPath;
+    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     if (props.finish === true) {
         await audio.value.play();
     }
@@ -73,7 +76,7 @@ const playAudio = async (audioPath) => {
 
 const playEndAudio = (audioPath) => {
     const end_audio = new Audio();
-    end_audio.src = audioPath;
+    end_audio.src =  new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
 }
 
@@ -92,12 +95,13 @@ const chooseTask = (event, status) => {
             (item) => item.isCorrect == true,
         );
         event.target.classList.add('green');
-        playEndAudio('../assets/audio/Common/1.2.mp3');
+        playEndAudio('Common/1.2.mp3');
 
         setTimeout(() => {
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);
                 emit('correct');
+                emit('open');
             }
             endGame.value = true;
             event.target.classList.remove('green');
@@ -105,7 +109,7 @@ const chooseTask = (event, status) => {
 
     } else {
         event.target.value = status;
-        playEndAudio('../assets/audio/Common/2.1.mp3');
+        playEndAudio('Common/2.1.mp3');
         event.target.classList.add('red');
         setTimeout(() => {
             event.target.classList.remove('red');
@@ -113,14 +117,14 @@ const chooseTask = (event, status) => {
     }
 }
 
-onMounted(async () => {
-    const correct = await getCorrectAnswer(2, props.childId);
+onMounted( () => {
+    const correct = getCorrectAnswer(2, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
 </script>
 <style lang="scss" scoped>
-*{
+* {
     user-select: none;
 }
 

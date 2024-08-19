@@ -29,8 +29,8 @@ const accept = () => {
 <style lang="scss" scoped>
 .cookie {
   position: fixed;;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 20px;
+  right: 5vh;
   background-color: white;
   border-radius: 10px;
   z-index: 100;
