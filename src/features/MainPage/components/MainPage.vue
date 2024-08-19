@@ -295,16 +295,30 @@ const sharing = ref({
 const networks = ref([
   {
     network: "odnoklassniki",
-    icon: "@app/assets/icons/brandico--odnoklassniki-rect.svg",
+    icon: fetchImageUrl("odnoklassniki"),
     width: "30px",
   },
-  { network: "telegram", icon: require("@app/assets/icons/logos--telegram.svg"), width: "30px" },
-  { network: "vk", icon: "@app/assets/icons/ri--vk-fill.svg", width: "30px" },
-  { network: "whatsapp", icon: "@app/assets/icons/logos--whatsapp-icon.svg", width: "30px" },
+  { network: "telegram", icon: "logos--telegram.svg", width: "30px" },
+  { network: "vk", icon: fetchImageUrl("vk"), width: "30px" },
+  { network: "whatsapp", icon: "logos--whatsapp-icon.svg", width: "30px" },
 ]);
-
 const setCookieOnce = () => {
   localStorage.setItem("stopCookie", true);
+};
+
+const fetchImageUrl = (network) => {
+  switch (network) {
+    case "odnoklassniki":
+      return "@app/assets/icons/brandico--odnoklassniki-rect.svg";
+    case "telegram":
+      return "@app/assets/icons/logos--telegram.svg";
+    case "vk":
+      return "@app/assets/icons/ri--vk-fill.svg";
+    case "whatsapp":
+      return "@app/assets/icons/logos--whatsapp-icon.svg";
+    default:
+      return "";
+  }
 };
 
 const next = (carousel_name) => {
