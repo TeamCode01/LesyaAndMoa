@@ -295,13 +295,13 @@ const sharing = ref({
 const fetchImageUrl = (network) => {
   switch (network) {
     case "odnoklassniki":
-      return "./assets/icons/brandico--odnoklassniki-rect.svg";
+      return "/assets/icons/brandico--odnoklassniki-rect.svg";
     case "telegram":
-      return "./assets/icons/logos--telegram.svg";
+      return "/assets/icons/logos--telegram.svg";
     case "vk":
-      return "./assets/icons/ri--vk-fill.svg";
+      return "/assets/icons/ri--vk-fill.svg";
     case "whatsapp":
-      return "./assets/icons/logos--whatsapp-icon.svg";
+      return "/assets/icons/logos--whatsapp-icon.svg";
     default:
       return "";
   }
@@ -313,9 +313,9 @@ const networks = ref([
     icon: fetchImageUrl("odnoklassniki"),
     width: "30px",
   },
-  { network: "telegram", icon: "logos--telegram.svg", width: "30px" },
+  { network: "telegram", icon: fetchImageUrl("telegram"), width: "30px" },
   { network: "vk", icon: fetchImageUrl("vk"), width: "30px" },
-  { network: "whatsapp", icon: "logos--whatsapp-icon.svg", width: "30px" },
+  { network: "whatsapp", icon: fetchImageUrl("whatsapp"), width: "30px" },
 ]);
 const setCookieOnce = () => {
   localStorage.setItem("stopCookie", true);
