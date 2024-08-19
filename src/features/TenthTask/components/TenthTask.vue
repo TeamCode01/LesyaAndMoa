@@ -59,6 +59,21 @@ import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const startGame = ref(true);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
+const props = defineProps({
+    end: {
+        type: Boolean,
+        required: false,
+    },
+    finish: {
+        type: Boolean
+    },
+    childId: {
+        type: Number,
+        required: false,
+    }
+});
+
 const givenAnswer = ref({
     1: false,
     2: false,
@@ -163,6 +178,7 @@ const drop = (event, num) => {
                             if (is_correct.value === false) {
                                 endGameRequest(props.childId, corrValue.value);
                                 emit('correct');
+                                emit('open');
                             }
                             startGame.value = false;
                             playAudio(`/assets/audio/Task10/328.10_.mp3`)
@@ -190,21 +206,6 @@ const correctAnswer = (id, correct) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
-
-const emit = defineEmits(['close', 'next-modal', 'correct']);
-const props = defineProps({
-    end: {
-        type: Boolean,
-        required: false,
-    },
-    finish: {
-        type: Boolean
-    },
-    childId: {
-        type: Number,
-        required: false,
-    }
-});
 
 const audio = ref(new Audio());
 

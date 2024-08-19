@@ -47,7 +47,7 @@
 
                             <input @drop="drop($event, 1, 4)" type="text" class="input-item row4 part1" />
                             <input @drop="drop($event, 2, 4)" type="text" class="input-item row4 part2" />
-                            
+
                             <input @drop="drop($event, 1, 5)" type="text" class="input-item row5 part1" />
                             <input @drop="drop($event, 2, 5)" type="text" class="input-item row5 part2" />
 
@@ -70,7 +70,7 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const audio = ref(new Audio());
 const endGame = ref(false);
 const hide = () => {
@@ -213,10 +213,11 @@ const chooseFairyTail = (event, status) => {
         );
 
         setTimeout(() => {
-    
+
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);;
                 emit('correct');
+                emit('open');
             }
             endGame.value = true;
             event.target.classList.remove('green');
@@ -235,8 +236,8 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(async () => {
-    const correct = await getCorrectAnswer(11, props.childId);
+onMounted(() => {
+    const correct = getCorrectAnswer(11, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })

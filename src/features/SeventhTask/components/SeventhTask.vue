@@ -338,7 +338,7 @@ const images = ref({
     },
 })
 
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -651,6 +651,7 @@ const disengage = (event) => {
                                 if (is_correct.value === false) {
                                     endGameRequest(props.childId, corrValue.value);
                                     emit('correct');
+                                    emit('open');
                                 }
                                 startGame.value = false;
                             }, 11000);
@@ -746,7 +747,7 @@ const getCenterCords = () => {
     }
 }
 
-onMounted(async () => {
+onMounted(() => {
     option.value = Math.floor(Math.random() * 2) + 1;
     canvas = canvasRef.value;
     getCenterCords();
@@ -754,7 +755,7 @@ onMounted(async () => {
     resizeCanvas();
     // redrawCorrectRows();
     window.addEventListener('resize', resizeCanvas);
-    const correct = await getCorrectAnswer(7, props.childId);
+    const correct = getCorrectAnswer(7, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })

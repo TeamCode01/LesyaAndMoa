@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, inject } from "vue";
+import { ref} from "vue";
 import { Button } from "@shared/components/buttons";
 import { Input } from "@shared/components/inputs";
 import { InputPass } from "@shared/components/inputs";
@@ -49,7 +49,6 @@ const data = ref({
   email: "",
   password: "",
 });
-const isLoading = ref(false);
 const isError = ref([]);
 const router = useRouter();
 
@@ -59,32 +58,14 @@ const LoginUser = async () => {
     const response = await HTTP.post("/token/login/", data.value);
     data.value = response.data;
     localStorage.setItem("Token", response.data.auth_token);
-    isLoading.value = false;
     userStore.getUser();
     router.push({
       name: "profile-page",
       params: { id: response.data.id },
     });
-    swal.fire({
-      position: "top-center",
-      icon: "success",
-      title: "успешно",
-      showConfirmButton: false,
-      timer: 1500,
-    });
   } catch (error) {
     console.log("errr", error);
     isError.value = error.response.data;
-    isLoading.value = false;
-    if (isError.value) {
-      swal.fire({
-        position: "center",
-        icon: "error",
-        title: `ошибка`,
-        showConfirmButton: false,
-        timer: 2500,
-      });
-    }
   }
 };
 </script>
