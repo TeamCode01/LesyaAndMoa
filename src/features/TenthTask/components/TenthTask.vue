@@ -44,7 +44,7 @@
                     </div>
                 </div>
             </template>
-            <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/moa.gif"
+            <TaskResultBanner :img="getImageUrl('Diamond.png')" :bg="getImageUrl('moa.gif')"
                 text="Замечательно!" v-else @hide="hide()" @next="next()"></TaskResultBanner>
         </div>
     </div>
@@ -111,20 +111,25 @@ const questions = ref({
 
 const prepositions = ref({
     1: {
-        1: { text: "В", audio: "/assets/audio/Task10/318.10.mp3", correct: null },
-        2: { text: "НА", audio: "/assets/audio/Task10/319.10.mp3", correct: null },
-        3: { text: "ИЗ", audio: "/assets/audio/Task10/320.10.mp3", correct: null },
-        4: { text: "ОТ", audio: "/assets/audio/Task10/321.10.mp3", correct: null },
-        5: { text: "ЧЕРЕЗ", audio: "/assets/audio/Task10/322.10.mp3", correct: null },
+        1: { text: "В", audio: "Task10/318.10.mp3", correct: null },
+        2: { text: "НА", audio: "Task10/319.10.mp3", correct: null },
+        3: { text: "ИЗ", audio: "Task10/320.10.mp3", correct: null },
+        4: { text: "ОТ", audio: "Task10/321.10.mp3", correct: null },
+        5: { text: "ЧЕРЕЗ", audio: "Task10/322.10.mp3", correct: null },
     },
     2: {
-        6: { text: "С", audio: "/assets/audio/Task10/323.10.mp3", correct: null },
-        7: { text: "ДО", audio: "/assets/audio/Task10/324.10.mp3", correct: null },
-        8: { text: "ПРИ", audio: "/assets/audio/Task10/325.10.mp3", correct: null },
-        9: { text: "У", audio: "/assets/audio/Task10/326.10.mp3", correct: null },
-        10: { text: "ПОД", audio: "/assets/audio/Task10/327.10.mp3", correct: null },
+        6: { text: "С", audio: "Task10/323.10.mp3", correct: null },
+        7: { text: "ДО", audio: "Task10/324.10.mp3", correct: null },
+        8: { text: "ПРИ", audio: "Task10/325.10.mp3", correct: null },
+        9: { text: "У", audio: "Task10/326.10.mp3", correct: null },
+        10: { text: "ПОД", audio: "Task10/327.10.mp3", correct: null },
     }
 })
+
+const getImageUrl = (path) => {
+ return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
+
 
 const drag = (event, preposition, index) => {
     event.dataTransfer.setData('text', preposition.text);
@@ -158,7 +163,7 @@ const drop = (event, num) => {
                         currStage.value += 1;
                         if (currStage.value == 5) {
                             startGame.value = false;
-                            playAudio(`/assets/audio/Task10/328.10_.mp3`)
+                            playAudio(`Task10/328.10_.mp3`)
                         }
                     }, 2000)
                 }
@@ -181,7 +186,7 @@ const drop = (event, num) => {
                                 emit('open');
                             }
                             startGame.value = false;
-                            playAudio(`/assets/audio/Task10/328.10_.mp3`)
+                            playAudio(`Task10/328.10_.mp3`)
                         }
                     }, 2000)
                 }
@@ -193,7 +198,7 @@ const drop = (event, num) => {
 };
 
 const correctAnswer = (id, correct) => {
-    correct ? playEndAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`) : playEndAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+    correct ? playEndAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`) : playEndAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     if (id <= 5) {
         prepositions.value[1][id].correct = correct;
         setTimeout(() => prepositions.value[1][id].correct = null, 2000);
@@ -209,12 +214,8 @@ const allowDrop = (event) => {
 
 const audio = ref(new Audio());
 
-// const playAudio = (audioPath) => {
-//     const audio = new Audio(audioPath);
-//     audio.play();
-// }
 const playAudio = async (audioPath) => {
-    audio.value.src = audioPath;
+    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     if (props.finish === true) {
         await audio.value.play();
     }
@@ -222,7 +223,7 @@ const playAudio = async (audioPath) => {
 
 const playEndAudio = (audioPath) => {
     const end_audio = new Audio();
-    end_audio.src = audioPath;
+    end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
 }
 
