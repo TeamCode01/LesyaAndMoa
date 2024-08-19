@@ -43,8 +43,6 @@ import { useUserStore } from "@layouts/stores/user";
 import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
-
-const swal = inject("$swal");
 const data = ref({
   email: "",
   password: "",
@@ -54,7 +52,6 @@ const router = useRouter();
 
 const LoginUser = async () => {
   try {
-    isLoading.value = true;
     const response = await HTTP.post("/token/login/", data.value);
     data.value = response.data;
     localStorage.setItem("Token", response.data.auth_token);

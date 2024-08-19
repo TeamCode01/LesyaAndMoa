@@ -1,4 +1,5 @@
 <template>
+  <cookieModal v-if="showCookie" @close="closeCookie" @accept="acceptCookie('cookie', cur_date, 1)" />
   <div @click="show_socials = !show_socials" class="link-share">
     <Transition name="slide-fade">
       <div v-if="show_socials" class="networks__wrapper">
@@ -23,7 +24,7 @@
     </div>
   </Transition>
 
-  <cookieModal v-if="showCookie" @close="closeCookie" @accept="acceptCookie('cookie', cur_date, 1)" />
+
   <div class="main">
     <img src="@app/assets/backgrounds/main-bg.jpg" alt="main-bg" class="main__bg">
     <div class="main__wrapper">
@@ -283,7 +284,7 @@ const sharing = ref({
 });
 
 const getImageUrl = (path) => {
- return new URL(`/assets/icons/${path}`, import.meta.url).href;
+  return new URL(`/assets/icons/${path}`, import.meta.url).href;
 };
 
 const networks = ref([

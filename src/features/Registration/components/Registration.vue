@@ -39,7 +39,7 @@
                     <input type="checkbox" v-model="form.data_processing_agreement" />
                     <div class="regCheck_text">
                         даю согласие на обработку персональных данных
-                        и ознакомлен с <router-link class="form-question-link" to="/policy-page">политикой
+                        и ознакомлен с <router-link class="form-question-link" to="/policy-page" target="_blank">политикой
                             конфиденциальности</router-link>
                     </div>
                 </div>
