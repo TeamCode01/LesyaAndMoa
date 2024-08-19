@@ -296,20 +296,6 @@ const getImageUrl = (path) => {
  return new URL(`/assets/icons/${path}`, import.meta.url).href;
 };
 
-// const fetchImageUrl = (network) => {
-//   switch (network) {
-//     case "odnoklassniki":
-//       return "/assets/icons/brandico--odnoklassniki-rect.svg";
-//     case "telegram":
-//       return "/assets/icons/logos--telegram.svg";
-//     case "vk":
-//       return "/assets/icons/ri--vk-fill.svg";
-//     case "whatsapp":
-//       return "/assets/icons/logos--whatsapp-icon.svg";
-//     default:
-//       return "";
-//   }
-// };
 const networks = ref([
   {
     network: "odnoklassniki",
@@ -429,7 +415,7 @@ const openTest = () => {
   document.documentElement.style.setProperty('--scroll-position', `${scrollY}px`);
   document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
   isOpen.value = true;
-  playTestAudio('@app/assets/audio/TestTask/4.тестовое задание.mp3');
+  playTestAudio('4.тестовое задание.mp3');
 }
 
 const close = () => {
@@ -437,14 +423,13 @@ const close = () => {
   document.body.classList.remove('no-scroll');
 }
 
-
 const playAudio = (audioPath) => {
-  audio.value.src = audioPath;
+  audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
   audio.value.play();
 }
 
 const playTestAudio = (audioPath) => {
-  audio.value.src = audioPath;
+  audio.value.src = new URL(`/assets/audio/TestTask/${audioPath}`, import.meta.url).href;
   audio.value.play();
 }
 
@@ -477,9 +462,9 @@ onMounted(() => {
   function handleScroll() {
     const posTop = test.getBoundingClientRect().top;
     if (posTop + test.clientHeight <= window.innerHeight && posTop >= 0) {
-      playAudio('"@app/assets/audio/Music/звук 1_.mp3');
+      playAudio('Music/звук 1_.mp3');
       setTimeout(() => {
-        playAudio('@app/assets/audio/TestTask/3.тестовое задание.mp3');
+        playAudio('TestTask/3.тестовое задание.mp3');
         audio.value.addEventListener('ended', () => {
           audio.value.src = '';
           showBtn.value = true;
