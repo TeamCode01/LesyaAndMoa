@@ -292,6 +292,21 @@ const sharing = ref({
     "Увлекательное приключение с интерактивными заданиями для профилактики и коррекции дислексии .",
 });
 
+const fetchImageUrl = (network) => {
+  switch (network) {
+    case "odnoklassniki":
+      return "./assets/icons/brandico--odnoklassniki-rect.svg";
+    case "telegram":
+      return "./assets/icons/logos--telegram.svg";
+    case "vk":
+      return "./assets/icons/ri--vk-fill.svg";
+    case "whatsapp":
+      return "./assets/icons/logos--whatsapp-icon.svg";
+    default:
+      return "";
+  }
+};
+
 const networks = ref([
   {
     network: "odnoklassniki",
@@ -306,20 +321,7 @@ const setCookieOnce = () => {
   localStorage.setItem("stopCookie", true);
 };
 
-const fetchImageUrl = (network) => {
-  switch (network) {
-    case "odnoklassniki":
-      return "@app/assets/icons/brandico--odnoklassniki-rect.svg";
-    case "telegram":
-      return "@app/assets/icons/logos--telegram.svg";
-    case "vk":
-      return "@app/assets/icons/ri--vk-fill.svg";
-    case "whatsapp":
-      return "@app/assets/icons/logos--whatsapp-icon.svg";
-    default:
-      return "";
-  }
-};
+
 
 const next = (carousel_name) => {
   if (carousel_name == "carousel_authors") {
