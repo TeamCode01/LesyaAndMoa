@@ -252,7 +252,7 @@
 
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { Button } from "@shared/components/buttons";
 import news from "@app/assets/backgrounds/news.png";
 import nastya from "@app/assets/backgrounds/nastya.png";
@@ -292,21 +292,44 @@ const sharing = ref({
     "Увлекательное приключение с интерактивными заданиями для профилактики и коррекции дислексии .",
 });
 
-const fetchImageUrl = (network) => {
+// const fetchImageUrl = (network) => {
+//   switch (network) {
+//     case "odnoklassniki":
+//       return "/assets/icons/brandico--odnoklassniki-rect.svg";
+//     case "telegram":
+//       return "/assets/icons/logos--telegram.svg";
+//     case "vk":
+//       return "/assets/icons/ri--vk-fill.svg";
+//     case "whatsapp":
+//       return "/assets/icons/logos--whatsapp-icon.svg";
+//     default:
+//       return "";
+//   }
+// };
+const fetchImageUrl = computed((network) => {
   switch (network) {
     case "odnoklassniki":
-      return "/assets/icons/brandico--odnoklassniki-rect.svg";
+      const imgUrl = new URL('/assets/icons/brandico--odnoklassniki-rect.svg',
+        import.meta.url)
+      return imgUrl
+      break;
     case "telegram":
-      return "/assets/icons/logos--telegram.svg";
+      const imgUrl2 = new URL('./assets/icons/logos--telegram.svg"',
+        import.meta.url)
+      return imgUrl2
+      break;
     case "vk":
-      return "/assets/icons/ri--vk-fill.svg";
+      const imgUrl3 = new URL('@app/assets/icons/ri--vk-fill.svg',
+        import.meta.url)
+      return imgUrl3
+      break;
     case "whatsapp":
-      return "/assets/icons/logos--whatsapp-icon.svg";
-    default:
-      return "";
+      const imgUrl4 = new URL('/assets/icons/logos--whatsapp-icon.svg',
+        import.meta.url)
+      return imgUrl4
+      break;
   }
-};
-
+});
 const networks = ref([
   {
     network: "odnoklassniki",
