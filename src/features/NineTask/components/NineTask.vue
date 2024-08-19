@@ -64,7 +64,7 @@
             </div>
         </div>
     </template>
-    <TaskResultBanner class="end-modal" img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.png"
+    <TaskResultBanner class="end-modal" :img="getImageUrl('Cup.png')" :bg="getImageUrl('lesya.gif')"
         text="Восхитительно!" @next="next()" v-else @hide="hide"></TaskResultBanner>
 </template>
 <script setup>
@@ -101,11 +101,15 @@ const props = defineProps({
     }
 });
 
+const getImageUrl = (path) => {
+  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
+
 const audio = ref(new Audio());
 const is_correct = ref(null);
 
 const playAudio = async (audioPath) => {
-    audio.value.src = audioPath;
+    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     if (props.finish === true) {
         await audio.value.play();
     }
@@ -113,7 +117,7 @@ const playAudio = async (audioPath) => {
 
 const playEndAudio = (audioPath) => {
     const end_audio = new Audio();
-    end_audio.src = audioPath;
+    end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
 }
 
@@ -128,27 +132,27 @@ const stopAudio = (audioPath) => {
 const corrValue = ref(0);
 
 const letterss = ref([
-    { id: 'L', name: 'Л', audio: '/assets/audio/Task9/300.9.mp3' },
-    { id: 'B', name: 'Б', audio: '/assets/audio/Task9/301.9.mp3' },
-    { id: 'G', name: 'Г', audio: '/assets/audio/Task9/302.9.mp3' },
-    { id: 'm', name: 'М', audio: '/assets/audio/Task9/303.9.mp3' },
-    { id: 'E', name: 'Е', audio: '/assets/audio/Task9/304.9.mp3' },
-    { id: 'r', name: 'Р', audio: '/assets/audio/Task9/305.9.mp3' },
-    { id: 'O', name: 'О', audio: '/assets/audio/Task9/306.9.mp3' },
-    { id: 'C', name: 'С', audio: '/assets/audio/Task9/307.9.mp3' },
-    { id: 'y', name: 'У', audio: '/assets/audio/Task9/308.9.mp3' },
-    { id: 'R', name: 'Р', audio: '/assets/audio/Task9/305.9.mp3' },
-    { id: 'e', name: 'Е', audio: '/assets/audio/Task9/304.9.mp3' },
-    { id: 'c', name: 'С', audio: '/assets/audio/Task9/307.9.mp3' },
-    { id: 'i', name: 'Ь', audio: '/assets/audio/Task9/309.9.mp3' },
-    { id: 'ya', name: 'Я', audio: '/assets/audio/Task9/310.9.mp3' },
-    { id: 'N', name: 'Н', audio: '/assets/audio/Task9/311.9.mp3' },
-    { id: 'YA', name: 'Я', audio: '/assets/audio/Task9/310.9.mp3' },
-    { id: 'k', name: 'К', audio: '/assets/audio/Task9/312.9.mp3' },
-    { id: 'K', name: 'К', audio: '/assets/audio/Task9/312.9.mp3' },
-    { id: 'a', name: 'А', audio: '/assets/audio/Task9/314.9.mp3' },
-    { id: 'ch', name: 'Ч', audio: '/assets/audio/Task9/313.9.mp3' },
-    { id: 'A', name: 'А', audio: '/assets/audio/Task9/314.9.mp3' },
+    { id: 'L', name: 'Л', audio: 'Task9/300.9.mp3' },
+    { id: 'B', name: 'Б', audio: 'Task9/301.9.mp3' },
+    { id: 'G', name: 'Г', audio: 'Task9/302.9.mp3' },
+    { id: 'm', name: 'М', audio: 'Task9/303.9.mp3' },
+    { id: 'E', name: 'Е', audio: 'Task9/304.9.mp3' },
+    { id: 'r', name: 'Р', audio: 'Task9/305.9.mp3' },
+    { id: 'O', name: 'О', audio: 'Task9/306.9.mp3' },
+    { id: 'C', name: 'С', audio: 'Task9/307.9.mp3' },
+    { id: 'y', name: 'У', audio: 'Task9/308.9.mp3' },
+    { id: 'R', name: 'Р', audio: 'Task9/305.9.mp3' },
+    { id: 'e', name: 'Е', audio: 'Task9/304.9.mp3' },
+    { id: 'c', name: 'С', audio: 'Task9/307.9.mp3' },
+    { id: 'i', name: 'Ь', audio: 'Task9/309.9.mp3' },
+    { id: 'ya', name: 'Я', audio: 'Task9/310.9.mp3' },
+    { id: 'N', name: 'Н', audio: 'Task9/311.9.mp3' },
+    { id: 'YA', name: 'Я', audio: 'Task9/310.9.mp3' },
+    { id: 'k', name: 'К', audio: 'Task9/312.9.mp3' },
+    { id: 'K', name: 'К', audio: 'Task9/312.9.mp3' },
+    { id: 'a', name: 'А', audio: 'Task9/314.9.mp3' },
+    { id: 'ch', name: 'Ч', audio: 'Task9/313.9.mp3' },
+    { id: 'A', name: 'А', audio: 'Task9/314.9.mp3' },
 ]);
 const drag = (event, letter, id, index) => {
     event.dataTransfer.setData('text', letter);
@@ -201,7 +205,7 @@ const drop = (event, word, letter) => {
         setTimeout(() => {
             event.target.classList.remove('green');
         }, 2000)
-        playEndAudio('/assets/audio/Common/1.2.mp3');
+        playEndAudio('Common/1.2.mp3');
         if (letterss.value.length === 0) {
             setTimeout(() => {
                 if (is_correct.value === false) {
@@ -214,7 +218,7 @@ const drop = (event, word, letter) => {
         }
     } else {
         elem.classList.add('red');
-        playEndAudio('/assets/audio/Common/2.1.mp3');
+        playEndAudio('Common/2.1.mp3');
         setTimeout(() => {
             elem.classList.remove('red');
         }, 2000);

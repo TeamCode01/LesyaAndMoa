@@ -60,7 +60,7 @@
         </div>
     </template>
 
-    <TaskResultBanner img="/assets/backgrounds/king.png" class="end-modal" bg="/assets/backgrounds/Lesya.png"
+    <TaskResultBanner :img="getImageUrl('king.png')" :bg="getImageUrl('lesya.gif')" class="end-modal"
         text="Молодец!" v-else @next="next" @hide="hide"></TaskResultBanner>
 </template>
 <script setup>
@@ -92,8 +92,13 @@ const props = defineProps({
     }
 });
 
+const getImageUrl = (path) => {
+  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
+
+
 const playAudio = async (audioPath) => {
-    audio.value.src = audioPath;
+    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     if (props.finish === true) {
         await audio.value.play();
     }
@@ -101,7 +106,7 @@ const playAudio = async (audioPath) => {
 
 const playEndAudio = (audioPath) => {
     const end_audio = new Audio();
-    end_audio.src = audioPath;
+    end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
 }
 
@@ -124,18 +129,18 @@ const corrValue = ref(0);
 
 
 const syllables = ref([
-    { id: 1, name: 'МЫШ', part: 1, audio: '/assets/audio/Task11/331.11.mp3' },
-    { id: 2, name: 'ГУШКА', part: 2, audio: '/assets/audio/Task11/337.11.mp3' },
-    { id: 3, name: 'ЛЯ', part: 1, audio: '/assets/audio/Task11/332.11.mp3' },
-    { id: 4, name: 'ЧИК', part: 2, audio: '/assets/audio/Task11/338.11.mp3' },
-    { id: 5, name: 'ЗАЙ', part: 1, audio: '/assets/audio/Task11/333.11.mp3' },
-    { id: 6, name: 'СИЧКА', part: 2, audio: '/assets/audio/Task11/339.11.mp3' },
-    { id: 7, name: 'ЛИ', part: 1, audio: '/assets/audio/Task11/334.11.mp3' },
-    { id: 8, name: 'КА', part: 2, audio: '/assets/audio/Task11/340.11.mp3' },
-    { id: 9, name: 'ВОЛ', part: 1, audio: '/assets/audio/Task11/335.11.mp3' },
-    { id: 10, name: 'ВЕДЬ', part: 2, audio: '/assets/audio/Task11/341.11.mp3' },
-    { id: 11, name: 'МЕД', part: 1, audio: '/assets/audio/Task11/336.11.mp3' },
-    { id: 12, name: 'ЧОК', part: 2, audio: '/assets/audio/Task11/342.11.mp3' },
+    { id: 1, name: 'МЫШ', part: 1, audio: 'Task11/331.11.mp3' },
+    { id: 2, name: 'ГУШКА', part: 2, audio: 'Task11/337.11.mp3' },
+    { id: 3, name: 'ЛЯ', part: 1, audio: 'Task11/332.11.mp3' },
+    { id: 4, name: 'ЧИК', part: 2, audio: 'Task11/338.11.mp3' },
+    { id: 5, name: 'ЗАЙ', part: 1, audio: 'Task11/333.11.mp3' },
+    { id: 6, name: 'СИЧКА', part: 2, audio: 'Task11/339.11.mp3' },
+    { id: 7, name: 'ЛИ', part: 1, audio: 'Task11/334.11.mp3' },
+    { id: 8, name: 'КА', part: 2, audio: 'Task11/340.11.mp3' },
+    { id: 9, name: 'ВОЛ', part: 1, audio: 'Task11/335.11.mp3' },
+    { id: 10, name: 'ВЕДЬ', part: 2, audio: 'Task11/341.11.mp3' },
+    { id: 11, name: 'МЕД', part: 1, audio: 'Task11/336.11.mp3' },
+    { id: 12, name: 'ЧОК', part: 2, audio: 'Task11/342.11.mp3' },
 ]);
 const dropIndex = ref(syllables.value.length - 1);
 const drag = (event, syllable, id, index) => {
@@ -145,11 +150,11 @@ const drag = (event, syllable, id, index) => {
 };
 const finish_answers = ref([]);
 const fairytails = ref([
-    { id: 1, name: 'ТРИ МЕДВЕДЯ', correct: false, audio: '/assets/audio/Task11/343.11.mp3' },
-    { id: 2, name: 'ТЕРЕМОК', correct: true, audio: '/assets/audio/Task11/344.11.mp3' },
-    { id: 3, name: 'РЕПКА', correct: false, audio: '/assets/audio/Task11/345.11.mp3' },
-    { id: 4, name: 'КОЛОБОК', correct: false, audio: '/assets/audio/Task11/346.11.mp3' },
-    { id: 5, name: 'ГУСИ-ЛЕБЕДИ', correct: false, audio: '/assets/audio/Task11/347.11.mp3' },
+    { id: 1, name: 'ТРИ МЕДВЕДЯ', correct: false, audio: 'Task11/343.11.mp3' },
+    { id: 2, name: 'ТЕРЕМОК', correct: true, audio: 'Task11/344.11.mp3' },
+    { id: 3, name: 'РЕПКА', correct: false, audio: 'Task11/345.11.mp3' },
+    { id: 4, name: 'КОЛОБОК', correct: false, audio: 'Task11/346.11.mp3' },
+    { id: 5, name: 'ГУСИ-ЛЕБЕДИ', correct: false, audio: 'Task11/347.11.mp3' },
 ]);
 
 const answers = ref([
@@ -164,7 +169,7 @@ const answers = ref([
 const drop = (event, part, row) => {
     event.preventDefault();
     if (syllables.value[dropIndex.value].part != part) {
-        playEndAudio('/assets/audio/Common/2.1.mp3');
+        playEndAudio('Common/2.1.mp3');
         return false;
     }
     let text = event.dataTransfer.getData('text');
@@ -187,7 +192,7 @@ const drop = (event, part, row) => {
             event.target.value = text;
             finish_answers.value.push(word.toLowerCase());
             syllables.value.splice(dropIndex.value, 1);
-            playEndAudio('/assets/audio/Common/1.2.mp3');
+            playEndAudio('Common/1.2.mp3');
             event.target.classList.add('check');
             setTimeout(() => {
                 event.target.classList.add('item');
@@ -207,7 +212,7 @@ const chooseFairyTail = (event, status) => {
     if (status === true) {
         event.target.value = status;
         event.target.classList.add('green');
-        playEndAudio('/assets/audio/Common/1.2.mp3');
+        playEndAudio('Common/1.2.mp3');
         fairytails.value = fairytails.value.filter(
             (item) => item.correct == true,
         );
@@ -224,7 +229,7 @@ const chooseFairyTail = (event, status) => {
         }, 2000);
     } else {
         event.target.value = status;
-        playEndAudio('/assets/audio/Common/2.1.mp3');
+        playEndAudio('Common/2.1.mp3');
         event.target.classList.add('red');
         setTimeout(() => {
             event.target.classList.remove('red');

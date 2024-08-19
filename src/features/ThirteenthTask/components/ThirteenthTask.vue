@@ -41,8 +41,7 @@
             </div>
         </div>
     </template>
-
-    <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/Lesya.gif" text="Чудесно!" v-else
+    <TaskResultBanner :img="getImageUrl('Cup.png')" :bg="getImageUrl('lesya.gif')" text="Чудесно!" v-else
         class="end-modal" @next="next" @hide="hide"></TaskResultBanner>
 </template>
 
@@ -83,8 +82,12 @@ const props = defineProps({
     }
 });
 
+const getImageUrl = (path) => {
+  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
+
 const playAudio = async (audioPath) => {
-    audio.value.src = audioPath;
+    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     if (props.finish === true) {
         await audio.value.play();
     }
@@ -92,7 +95,7 @@ const playAudio = async (audioPath) => {
 
 const playEndAudio = (audioPath) => {
     const end_audio = new Audio();
-    end_audio.src = audioPath;
+    end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
 }
 
@@ -108,12 +111,12 @@ const is_correct = ref(null);
 const corrValue = ref(0);
 
 const words = ref([
-    { id: 1, name: 'РАДЫ', audio: '/assets/audio/Task13/371.13.mp3' },
-    { id: 2, name: 'РАССТРОЕНЫ', audio: '/assets/audio/Task13/372.13.mp3' },
-    { id: 3, name: 'ДЕТСКУЮ', audio: '/assets/audio/Task13/373.13.mp3' },
-    { id: 4, name: 'ВЗРОСЛУЮ', audio: '/assets/audio/Task13/374.13.mp3' },
-    { id: 5, name: 'ОБЩАТЬСЯ', audio: '/assets/audio/Task13/375.13.mp3' },
-    { id: 6, name: 'РУГАТЬСЯ', audio: '/assets/audio/Task13/376.13.mp3' }
+    { id: 1, name: 'РАДЫ', audio: 'Task13/371.13.mp3' },
+    { id: 2, name: 'РАССТРОЕНЫ', audio: 'Task13/372.13.mp3' },
+    { id: 3, name: 'ДЕТСКУЮ', audio: 'Task13/373.13.mp3' },
+    { id: 4, name: 'ВЗРОСЛУЮ', audio: 'Task13/374.13.mp3' },
+    { id: 5, name: 'ОБЩАТЬСЯ', audio: 'Task13/375.13.mp3' },
+    { id: 6, name: 'РУГАТЬСЯ', audio: 'Task13/376.13.mp3' }
 ]);
 const answer_drop = ref('?');
 const answer = ref('');
@@ -136,7 +139,7 @@ const drop = (event) => {
         (answer.value === 'РАДЫ' && text === 'ОБЩАТЬСЯ') ||
         (answer.value === 'ОБЩАТЬСЯ' && text === 'ДЕТСКУЮ')
     ) {
-        playAudio('/assets/audio/Common/1.2.mp3');
+        playAudio('Common/1.2.mp3');
         elem.classList.add('green');
         answer_drop.value = text;
         setTimeout(() => {
@@ -149,7 +152,7 @@ const drop = (event) => {
         if (text === 'ДЕТСКУЮ') {
             event.target.classList.add('green');
 
-            playAudio('/assets/audio/Common/1.2.mp3');
+            playAudio('Common/1.2.mp3');
             setTimeout(() => {
                 event.target.classList.remove('green');
                 if (is_correct.value === false) {
@@ -163,7 +166,7 @@ const drop = (event) => {
         }
     }
     else {
-        playAudio('/assets/audio/Common/2.1.mp3');
+        playAudio('Common/2.1.mp3');
         elem.classList.add('red');
         setTimeout(() => {
             elem.classList.remove('red');

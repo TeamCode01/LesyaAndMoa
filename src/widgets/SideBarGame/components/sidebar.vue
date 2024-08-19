@@ -150,10 +150,10 @@ const tasks = ref([
 const SeeTask = ref(false);
 const taskId = ref(null);
 const finish = ref(false);
-const taskImage = ref('../assets/backgrounds/animals.jpg');
+const taskImage = ref('animals.jpg');
 const timeVal = ref(15);
-const taskAudio = ref('../assets/audio/Task1/12.1.mp3');
-const startAudio = ref('../assets/audio/Task1/11.1_.mp3');
+const taskAudio = ref('Task1/12.1.mp3');
+const startAudio = ref('Task1/11.1_.mp3');
 const endTime = ref(false);
 const tasks_server = ref([]);
 const answers = ref([]);
@@ -176,7 +176,7 @@ const close = () => {
 
 
 const playAudio = (audioPath) => {
-    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;;
+    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     audio.value.play();
     audio.value.addEventListener('ended', () => {
         finish.value = true;

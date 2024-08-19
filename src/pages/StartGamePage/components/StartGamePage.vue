@@ -54,7 +54,7 @@ import { useAnswerStore } from "@layouts/stores/answers";
 const { methods } = gameActions;
 const { startGameRequest } = methods;
 const answerStore = useAnswerStore();
-let img = ref('../assets/backgrounds/animals.jpg');
+let img = ref('animals.jpg');
 let audio = ref('../assets/audio/Task1/11.1_.mp3');
 const ids = ref([1, 2, 3, 4, 5, 6, 7, 8, 16, 18]);
 const showBtn = ref(false);
@@ -134,7 +134,7 @@ watch(
 
 onMounted(() => {
   showHand();
-  document.getElementById('background-banner').src = img.value;
+  document.getElementById('background-banner').src = getImageUrl(img.value);
 
   window.addEventListener('resize', () => {
     windowWidth.value = window.innerWidth
