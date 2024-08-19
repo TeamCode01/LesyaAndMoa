@@ -37,19 +37,19 @@
             </div>
         </div>
         <div class="pagination">
-            <button @click="prevPage" :disabled="currentPage === 1">
-                &lt;&lt;
+            <button @click="previousPage" :disabled="currentPage === 1">
+                «
             </button>
-            <button
-                v-for="page in totalPages"
-                :key="page"
-                @click="changePage(page)"
-                :class="{ active: page === currentPage }"
-            >
-                {{ page }}
-            </button>
+            <span v-for="page in totalPages" :key="page">
+                <button
+                    @click="setPage(page)"
+                    :class="{ active: page === currentPage }"
+                >
+                    {{ page }}
+                </button>
+            </span>
             <button @click="nextPage" :disabled="currentPage === totalPages">
-                &gt;&gt;
+                »
             </button>
         </div>
     </div>
@@ -97,7 +97,8 @@ const paginatedNews = computed(() => {
     return news.value.slice(start, start + itemsPerPage);
 });
 
-const changePage = (page) => {
+const setPage = (page) => {
+    if (page < 1 || page > totalPages.value) return;
     currentPage.value = page;
 };
 
@@ -107,15 +108,13 @@ const nextPage = () => {
     }
 };
 
-const prevPage = () => {
+const previousPage = () => {
     if (currentPage.value > 1) {
         currentPage.value--;
     }
 };
 
-onMounted(async () => {
-    await GetNews();
-});
+GetNews();
 </script>
 <style>
 .news-h {
@@ -169,5 +168,20 @@ onMounted(async () => {
 }
 .news-list__desc {
     margin-bottom: 12px;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+}
+
+.active {
+    font-weight: bold;
+    text-decoration: underline;
 }
 </style>
