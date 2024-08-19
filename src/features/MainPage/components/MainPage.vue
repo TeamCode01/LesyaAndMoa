@@ -6,7 +6,7 @@
       <div v-if="show_socials" class="networks__wrapper">
         <ShareNetwork class="networks" v-for="network in networks" :network="network.network" :key="network.network"
           :url="sharing.url" :title="sharing.title" :description="sharing.description">
-          <img class="networks__icon" :src="network.icon" />
+          <img class="networks__icon" :src="getImageUrl(network.icon)" />
         </ShareNetwork>
         <div @click="copyLink" class="network__copy">
           <img class="networks__icon" src="@app/assets/icons/link_copy_icon.svg" alt="copy" />
@@ -292,6 +292,10 @@ const sharing = ref({
     "Увлекательное приключение с интерактивными заданиями для профилактики и коррекции дислексии .",
 });
 
+const getImageUrl = (path) => {
+ return new URL(`/assets/icons/${path}`, import.meta.url).href;
+};
+
 // const fetchImageUrl = (network) => {
 //   switch (network) {
 //     case "odnoklassniki":
@@ -306,39 +310,15 @@ const sharing = ref({
 //       return "";
 //   }
 // };
-const fetchImageUrl = computed((network) => {
-  switch (network) {
-    case "odnoklassniki":
-      const imgUrl = new URL('/assets/icons/brandico--odnoklassniki-rect.svg',
-        import.meta.url)
-      return imgUrl
-      break;
-    case "telegram":
-      const imgUrl2 = new URL('./assets/icons/logos--telegram.svg"',
-        import.meta.url)
-      return imgUrl2
-      break;
-    case "vk":
-      const imgUrl3 = new URL('@app/assets/icons/ri--vk-fill.svg',
-        import.meta.url)
-      return imgUrl3
-      break;
-    case "whatsapp":
-      const imgUrl4 = new URL('/assets/icons/logos--whatsapp-icon.svg',
-        import.meta.url)
-      return imgUrl4
-      break;
-  }
-});
 const networks = ref([
   {
     network: "odnoklassniki",
-    icon: fetchImageUrl("odnoklassniki"),
+    icon: 'brandico--odnoklassniki-rect.svg',
     width: "30px",
   },
-  { network: "telegram", icon: fetchImageUrl("telegram"), width: "30px" },
-  { network: "vk", icon: fetchImageUrl("vk"), width: "30px" },
-  { network: "whatsapp", icon: fetchImageUrl("whatsapp"), width: "30px" },
+  { network: "telegram", icon: 'logos--telegram.svg', width: "30px" },
+  { network: "vk", icon: 'ri--vk-fill.svg', width: "30px" },
+  { network: "whatsapp", icon: 'logos--whatsapp-icon.svg', width: "30px" },
 ]);
 const setCookieOnce = () => {
   localStorage.setItem("stopCookie", true);
