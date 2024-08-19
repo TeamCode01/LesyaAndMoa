@@ -298,7 +298,7 @@ const networks = ref([
     icon: "@app/assets/icons/brandico--odnoklassniki-rect.svg",
     width: "30px",
   },
-  { network: "telegram", icon: "@app/assets/icons/logos--telegram.svg", width: "30px" },
+  { network: "telegram", icon: require("@app/assets/icons/logos--telegram.svg"), width: "30px" },
   { network: "vk", icon: "@app/assets/icons/ri--vk-fill.svg", width: "30px" },
   { network: "whatsapp", icon: "@app/assets/icons/logos--whatsapp-icon.svg", width: "30px" },
 ]);
