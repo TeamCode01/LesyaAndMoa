@@ -280,7 +280,7 @@ const clickText = (syllable) => {
     }, 500);
 }
 
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -377,6 +377,7 @@ const drop = (event, place) => {
                 if (is_correct.value === false) {
                     endGameRequest(props.childId, corrValue.value);
                     emit('correct');
+                    emit('open');
                 }
                 startGame.value = false;
                 playAudio('/assets/audio/Task8/297.8_.mp3')

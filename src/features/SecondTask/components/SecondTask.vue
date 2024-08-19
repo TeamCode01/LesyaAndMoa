@@ -31,7 +31,7 @@ import gameActions from '@mixins/gameAction';
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -54,7 +54,7 @@ const hide = () => {
 const corrValue = ref(0);
 
 const next = () => {
-    emit('next-modal', is_started.value);
+    emit('next-modal');
     endGame.value = true;
 
 }
@@ -98,6 +98,7 @@ const chooseTask = (event, status) => {
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);
                 emit('correct');
+                emit('open');
             }
             endGame.value = true;
             event.target.classList.remove('green');
@@ -113,14 +114,14 @@ const chooseTask = (event, status) => {
     }
 }
 
-onMounted(async () => {
-    const correct = await getCorrectAnswer(2, props.childId);
+onMounted( () => {
+    const correct = getCorrectAnswer(2, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
 </script>
 <style lang="scss" scoped>
-*{
+* {
     user-select: none;
 }
 

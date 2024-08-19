@@ -3,130 +3,66 @@
         <div class="task_block__wrapper">
             <template v-if="startGame">
                 <div class="task_block__close" @click="hide()">
-                    <img
-                        class="close-icon"
-                        src="@app/assets/icons/close-icon.svg"
-                        alt="крест"
-                    />
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
-                    <p
-                        class="title-h4 task_block__title SeventeenthTask__title"
-                    >
+                    <p class="title-h4 task_block__title SeventeenthTask__title">
                         Собери слова из двух частей. <br />
                         Соедини полученные слова с картинками.
                     </p>
                 </div>
-                <canvas
-                    class="canvas_draw"
-                    ref="canvasRef"
-                    @mousedown="engage"
-                    @mouseup="disengage"
-                    @mousemove="draw"
-                    @click="voiceActing"
-                    v-show="endFirstTask && true"
-                ></canvas>
-                <div
-                    class="draggable-list"
-                    ref="taskBlock"
-                    @dragover.prevent
-                    @drop="missDrop($event)"
-                >
-                    <DragndropComponent
-                        :left="PuzzleCords.x"
-                        :top="PuzzleCords.y"
-                        v-if="isDrag && !endFirstTask"
-                    >
+                <canvas class="canvas_draw" ref="canvasRef" @mousedown="engage" @mouseup="disengage" @mousemove="draw"
+                    @click="voiceActing" v-show="endFirstTask && true"></canvas>
+                <div class="draggable-list" ref="taskBlock" @dragover.prevent @drop="missDrop($event)">
+                    <DragndropComponent :left="PuzzleCords.x" :top="PuzzleCords.y" v-if="isDrag && !endFirstTask">
                         <template v-slot:task>
                             <div draggable="false">
-                                <img
-                                    :src="draggableBlock.src"
-                                    :alt="draggableBlock.class"
-                                    :class="[draggableBlock.class]"
-                                    draggable="false"
-                                    @mouseup="endPosition($event)"
-                                    @mousemove="getPuzzleCords($event)"
-                                    @mouseleave="mouseLeaveFromPuzzle()"
-                                />
+                                <img :src="draggableBlock.src" :alt="draggableBlock.class"
+                                    :class="[draggableBlock.class]" draggable="false" @mouseup="endPosition($event)"
+                                    @mousemove="getPuzzleCords($event)" @mouseleave="mouseLeaveFromPuzzle()" />
                             </div>
                         </template>
                     </DragndropComponent>
 
-                    <transition
-                        name="fade-words-top"
-                        @after-enter="getCenterCords()"
-                    >
-                        <div
-                            class="draggable-list__words-top"
-                            v-if="endFirstTask"
-                        >
-                            <div
-                                class="draggable-list__word-top"
-                                v-for="word in secondTask[0]"
-                                :key="word.id"
-                            >
+                    <transition name="fade-words-top" @after-enter="getCenterCords()">
+                        <div class="draggable-list__words-top" v-if="endFirstTask">
+                            <div class="draggable-list__word-top" v-for="word in secondTask[0]" :key="word.id">
                                 <div class="draggable-list__word">
                                     {{ word.text }}
                                 </div>
-                                <img
-                                    height="16px"
-                                    src="/assets/creatures/SeventeenthTask/green-circle.svg"
-                                    alt="green-circle"
-                                    class="draggable-list__word-top-circle"
-                                    :ref="
-                                        (el) => {
+                                <img height="16px" src="/assets/creatures/SeventeenthTask/green-circle.svg"
+                                    alt="green-circle" class="draggable-list__word-top-circle" :ref="(el) => {
                                             refPoints[1][word.id - 1] = el;
                                         }
-                                    "
-                                />
+                                        " />
                             </div>
                         </div>
                     </transition>
 
                     <div class="draggable-list__syllables" v-if="!endFirstTask">
-                        <div
-                            class="draggable-list__set-syllables"
-                            v-for="row in firstTask[0]"
-                            :key="row"
-                            draggable="false"
-                        >
-                            <div
-                                v-for="word in row"
-                                :key="word.id"
-                                @mousedown.left="
-                                    ($event) => startPosition($event, word)
-                                "
-                                @mouseenter="()=>{
+                        <div class="draggable-list__set-syllables" v-for="row in firstTask[0]" :key="row"
+                            draggable="false">
+                            <div v-for="word in row" :key="word.id" @mousedown.left="($event) => startPosition($event, word)
+                                " @mouseenter="() => {
                                     if (word.isActive) {
                                         playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)
                                     }
-                                }"
-                                :ref="
-                                    (el) => {
+                                }" :ref="(el) => {
                                         refPuzzles[word.id - 1] = el;
                                     }
-                                "
-                                draggable="false"
-                            >
-                                <img
-                                    :src="
-                                        word.error == 0
-                                            ? word.src
-                                            : word.error == 1
+                                    " draggable="false">
+                                <img :src="word.error == 0
+                                        ? word.src
+                                        : word.error == 1
                                             ? word.srcRight
                                             : word.srcError
-                                    "
-                                    :alt="word.class"
-                                    :class="[word.class]"
-                                    draggable="false"
-                                    :style="{
+                                    " :alt="word.class" :class="[word.class]" draggable="false" :style="{
                                         opacity: word.isActive ? '100%' : '0%',
                                         cursor: word.isActive
                                             ? 'pointer'
                                             : 'auto',
-                                    }"
-                                />
+                                    }" />
                             </div>
                         </div>
                     </div>
@@ -134,11 +70,7 @@
                     <transition name="fade-words">
                         <div class="draggable-list__words" v-if="!endFirstTask">
                             <transition-group name="fade-word">
-                                <div
-                                    class="draggable-list__word"
-                                    v-for="word in firstTask[1]"
-                                    :key="word.id"
-                                >
+                                <div class="draggable-list__word" v-for="word in firstTask[1]" :key="word.id">
                                     {{ word.text }}
                                 </div>
                             </transition-group>
@@ -146,51 +78,24 @@
                     </transition>
 
                     <transition name="fade-pictures">
-                        <div
-                            class="draggable-list__pictures"
-                            v-if="endFirstTask"
-                        >
-                            <div
-                                class="draggable-list__picture"
-                                v-for="picture in secondTask[1]"
-                                :key="picture.id"
-                            >
-                                <img
-                                    height="16px"
-                                    src="/assets/creatures/SeventeenthTask/green-circle.svg"
-                                    alt="green-circle"
-                                    class="draggable-list__word-top-circle"
-                                    :ref="
-                                        (el) => {
+                        <div class="draggable-list__pictures" v-if="endFirstTask">
+                            <div class="draggable-list__picture" v-for="picture in secondTask[1]" :key="picture.id">
+                                <img height="16px" src="/assets/creatures/SeventeenthTask/green-circle.svg"
+                                    alt="green-circle" class="draggable-list__word-top-circle" :ref="(el) => {
                                             refPoints[2][picture.id - 1] = el;
                                         }
-                                    "
-                                />
-                                <img
-                                    :src="picture.src"
-                                    :alt="picture.alt"
-                                    class="draggable-list__lesyaandmoa"
-                                    v-if="!endSecondTask"
-                                />
-                                <img
-                                    :src="picture.endsrc"
-                                    :alt="picture.endalt"
-                                    class="draggable-list__lesyaandmoa"
-                                    v-else
-                                />
+                                        " />
+                                <img :src="picture.src" :alt="picture.alt" class="draggable-list__lesyaandmoa"
+                                    v-if="!endSecondTask" />
+                                <img :src="picture.endsrc" :alt="picture.endalt" class="draggable-list__lesyaandmoa"
+                                    v-else />
                             </div>
                         </div>
                     </transition>
                 </div>
             </template>
-            <TaskResultBanner
-                img="/assets/backgrounds/Cup.png"
-                bg="/assets/backgrounds/lesya.gif"
-                text="Потрясающе!"
-                v-if="!startGame"
-                @next="next()"
-                @hide="hide()"
-            ></TaskResultBanner>
+            <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/lesya.gif" text="Потрясающе!"
+                v-if="!startGame" @next="next()" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -212,14 +117,21 @@ import DragndropComponent from './DragndropComponent.vue';
 
 import { dataFirstTask, dataSecondTask } from './task.js';
 import audioMap from './audioMap'
+import gameActions from '@mixins/gameAction';
 
-const emit = defineEmits(['close', 'next-modal']);
+const { methods } = gameActions;
+const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 
 const props = defineProps({
     end: {
         type: Boolean,
         required: false,
     },
+    childId: {
+        type: Number,
+        required: false,
+    }
 });
 const hide = () => {
     emit('close');
@@ -234,7 +146,9 @@ const next = () => {
 //
 
 const audio = ref(new Audio());
-
+const is_correct = ref(null);
+const is_started = ref(null);
+const corrValue = ref(0);
 const playAudio = (audioPath) => {
     audio.value.src = audioPath;
     audio.value.play();
@@ -366,16 +280,16 @@ const endPosition = (event) => {
             firstTask.value[1].push(word);
             firstTask.value[1].sort((a, b) => a.id - b.id);
 
-            
+
             setTimeout(() => {
                 firstTaskAnswerCounter.value += 1;
                 let audio_word = new Audio(`/assets/audio/Task17/${audioMap.get('слово-' + word.id)}`);
                 audio_word.play();
-                
+
                 setTimeout(() => {
                     if (firstTaskAnswerCounter.value == 5) {
-                    endFirstTask.value = true;
-                }
+                        endFirstTask.value = true;
+                    }
                 }, 1000)
             }, 1000);
         } else {
@@ -738,8 +652,7 @@ const disengage = (event) => {
                 ].done = true;
                 centralCords.value[endIds.row][endIds.column - 1].done = true;
                 playAudio(
-                    `/assets/audio/Common/1.${
-                        Math.floor(Math.random() * 3) + 1
+                    `/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1
                     }.mp3`
                 );
 
@@ -758,8 +671,7 @@ const disengage = (event) => {
                 }
             } else {
                 playAudio(
-                    `/assets/audio/Common/2.${
-                        Math.floor(Math.random() * 3) + 1
+                    `/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1
                     }.mp3`
                 );
             }
@@ -771,7 +683,7 @@ const disengage = (event) => {
 };
 
 
-const voiceActing = () => {};
+const voiceActing = () => { };
 
 const finalDraw = () => {
     console.log(centralCords.value);
@@ -808,13 +720,20 @@ const finalDraw = () => {
     }
 
     setTimeout(() => {
+        if (is_correct.value === false) {
+            endGameRequest(props.childId, corrValue.value);
+            emit('correct');
+            emit('open');
+        }
         startGame.value = false;
     }, 5000);
 };
 
 onMounted(async () => {
     canvas = canvasRef.value;
-
+    const correct = getCorrectAnswer(17, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
     ctx = canvas.getContext('2d');
     await resizeCanvas();
     window.addEventListener('resize', () => {
@@ -844,6 +763,7 @@ watch(endFirstTask, () => {
 
 .SeventeenthTask__title {
     width: 520px;
+
     @media (max-width: 1024px) {
         width: 440px;
         font-weight: 400;
@@ -860,6 +780,7 @@ watch(endFirstTask, () => {
     justify-content: space-between;
     width: 1000px;
     height: 414px;
+
     @media (max-width: 1024px) {
         width: 860px;
         height: 316px;
@@ -884,6 +805,7 @@ watch(endFirstTask, () => {
     justify-content: space-between;
     width: 100%;
     height: 90px;
+
     @media (max-width: 1024px) {
         height: 72px;
     }
@@ -891,6 +813,7 @@ watch(endFirstTask, () => {
 
 .draggable-list__set-syllables:nth-child(2) {
     padding: 0 110px;
+
     @media (max-width: 1024px) {
         padding: 0 70px;
     }
@@ -900,6 +823,7 @@ watch(endFirstTask, () => {
     cursor: pointer;
     width: 100px;
     height: 90px;
+
     @media (max-width: 1024px) {
         width: 80px;
         height: 72px;
@@ -910,6 +834,7 @@ watch(endFirstTask, () => {
     cursor: pointer;
     width: 124px;
     height: 90px;
+
     @media (max-width: 1024px) {
         width: 100px;
         height: 72px;
@@ -921,6 +846,7 @@ watch(endFirstTask, () => {
     column-gap: 50px;
     width: 100%;
     height: 48px;
+
     @media (max-width: 1024px) {
         height: 40px;
         column-gap: 40px;
@@ -939,6 +865,7 @@ watch(endFirstTask, () => {
     width: 160px;
     height: 48px;
     border-radius: 6px;
+
     @media (max-width: 1024px) {
         width: 140px;
         height: 40px;
@@ -951,6 +878,7 @@ watch(endFirstTask, () => {
     justify-content: space-between;
     width: 100%;
     height: 80px;
+
     @media (max-width: 1024px) {
         height: 62px;
     }
@@ -963,6 +891,7 @@ watch(endFirstTask, () => {
     justify-content: space-between;
     width: 160px;
     height: 100%;
+
     @media (max-width: 1024px) {
         width: 140px;
     }
@@ -971,6 +900,7 @@ watch(endFirstTask, () => {
 .draggable-list__word-top-circle {
     width: 16px;
     height: 16px;
+
     @media (max-width: 1024px) {
         width: 14px;
         height: 14px;
@@ -982,6 +912,7 @@ watch(endFirstTask, () => {
     justify-content: space-between;
     width: 100%;
     height: 152px;
+
     @media (max-width: 1024px) {
         height: 127px;
     }
@@ -994,6 +925,7 @@ watch(endFirstTask, () => {
     justify-content: space-between;
     width: 160px;
     height: 100%;
+
     @media (max-width: 1024px) {
         width: 140px;
     }
@@ -1002,6 +934,7 @@ watch(endFirstTask, () => {
 .draggable-list__lesyaandmoa {
     width: 160px;
     height: 120px;
+
     @media (max-width: 1024px) {
         width: 140px;
         height: 105px;
@@ -1025,9 +958,11 @@ watch(endFirstTask, () => {
     0% {
         opacity: 0;
     }
+
     99% {
         opacity: 0;
     }
+
     100% {
         opacity: 100;
     }
@@ -1042,6 +977,7 @@ watch(endFirstTask, () => {
     transform: translateY(366px);
     position: absolute;
 }
+
 .fade-words-leave-to {
     top: 0;
     position: absolute;
@@ -1050,9 +986,11 @@ watch(endFirstTask, () => {
 .fade-pictures-enter-active {
     transition: all 1s;
 }
+
 .fade-pictures-enter-from {
     opacity: 0;
 }
+
 .fade-pictures-enter-to {
     opacity: 100;
 }
@@ -1067,9 +1005,11 @@ watch(endFirstTask, () => {
     0% {
         scale: 0;
     }
+
     50% {
         scale: 1.1;
     }
+
     100% {
         scale: 1;
     }

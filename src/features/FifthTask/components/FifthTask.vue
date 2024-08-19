@@ -83,7 +83,7 @@ const syllables = ref({
     }
 })
 
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const is_correct = ref(null);
 const props = defineProps({
     end: {
@@ -120,6 +120,7 @@ const onSelection = (firstIndex, id) => {
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);
                 emit('correct');
+                emit('open');
             }
             startGame.value = false;
             playAudio('/assets/audio/Task5/77.5_.mp3');

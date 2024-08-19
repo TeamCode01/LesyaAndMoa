@@ -109,7 +109,7 @@ import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -128,8 +128,8 @@ const next = () => {
     emit('next-modal');
 };
 
-onMounted(async () => {
-    const correct = await getCorrectAnswer(6, props.childId);
+onMounted(() => {
+    const correct = getCorrectAnswer(6, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 });
@@ -218,6 +218,7 @@ const clickItem = (word) => {
                     if (is_correct.value === false) {
                         endGameRequest(props.childId, corrValue.value);
                         emit('correct');
+                        emit('open');
                     }
                 },1000)
 

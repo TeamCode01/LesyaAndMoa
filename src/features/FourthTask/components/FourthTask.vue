@@ -56,7 +56,7 @@ const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 
 const startGame = ref(true);
 const firstListen = ref(true);
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -134,6 +134,7 @@ const onSelection = (firstIndex, id) => {
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);
                 emit('correct');
+                emit('open');
             }
             startGame.value = false;
             playAudio('/assets/audio/Task4/60.4_.mp3');

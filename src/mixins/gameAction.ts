@@ -1,3 +1,4 @@
+
 import { useAnswerStore } from './../layouts/stores/answers';
 import { HTTP } from '@app/http';
 import type { Answer } from './../layouts/stores/answers';
@@ -20,6 +21,7 @@ const gameActions = {
         },
         getCorrectAnswer(id: number, childId: number) {
             answerStore.getAnswers(childId);
+            gameActions.methods.startGameRequest(childId, id);
             let correctAnswer: Answer = answerStore.answers.filter((item: Answer) => item.task.id === id)[0];
             let correctId = correctAnswer.id;
             let is_correct = correctAnswer.is_correct;
