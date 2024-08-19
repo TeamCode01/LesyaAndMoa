@@ -73,15 +73,15 @@ const formatDate = (dateString) => {
 
 const GetNews = async () => {
     try {
-        const response = await HTTP.get('/news/', {
+        const response = await HTTP.get('/news/?limit=9', {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
-        news.value = response.data;
+        news.value = response.data.results;
         console.log(response.data);
         // totalPages.value = Math.ceil(response.data.count / itemsPerPage);
-        console.log(totalPages.value);
+        // console.log(totalPages.value);
     } catch (error) {
         console.log('errr', error);
         error.value = error.response.data;
