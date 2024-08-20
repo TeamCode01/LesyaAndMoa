@@ -6,90 +6,12 @@ const routes: RouteRecordRaw[] = [
         component: () =>
             import('@layouts/MainLayout/components/MainLayout.vue'),
         meta: {
-            redirectTo: 'Login',
-        },
-        children: [
-            {
-                path: '/login',
-                name: 'Login',
-                meta: {
-                    hiddenBreadcrumbs: true,
-                },
-                component: () =>
-                    import('@pages/LoginPage/components/LoginPage.vue'),
-            },
-            {
-                path: '/change-password',
-                name: 'ChangePassword',
-                component: () =>
-                    import(
-                        '@pages/ChangePasswordPage/components/ChangePasswordPage.vue'
-                    ),
-            },
-            {
-                path: '/create-password',
-                name: 'CreatePassword',
-                component: () =>
-                    import(
-                        '@pages/ChangePasswordPage/components/CreatePasswordPage.vue'
-                    ),
-            }, {
-                path: '/profile-page',
-                name: 'profile-page',
-                component: () =>
-                    import(
-                        '@pages/ProfilePage/components/ProfilePage.vue'
-                    ),
-            },
-            {
-                path: '/registration',
-                name: 'Registration',
-                meta: {
-                    hiddenBreadcrumbs: true,
-                },
-                component: () =>
-                    import('@pages/RegisterPage/components/RegisterPage.vue'),
-            },
-
-            {
-                path: ':catchAll(.*)*',
-                name: '404',
-                component: () =>
-                    import('@pages/404Page/components/404Page.vue'),
-            },
-            {
-                path: '/policy-page',
-                name: 'policy-page',
-                component: () =>
-                    import('@pages/PolicyPage/components/PolicyPage.vue'),
-            },
-            {
-                path: '/game',
-                children: [
-                    {
-                        path: ':idChildOrGroup',
-                        name: 'Game',
-                        component: () =>
-                            import(
-                                '@pages/StartGamePage/components/StartGamePage.vue'
-                            ),
-                    },
-                ],
-            },
-
-        ],
-    },
-    {
-        path: '/',
-        component: () =>
-            import('@layouts/MainLayout/components/MainLayout.vue'),
-        meta: {
             label: 'Главная',
             redirectTo: 'main-page',
         },
         children: [
             {
-                path: '/main-page',
+                path: '',
                 name: 'main-page',
                 component: () =>
                     import('@pages/MainPage/components/MainPage.vue'),
@@ -141,6 +63,88 @@ const routes: RouteRecordRaw[] = [
                                 ]
                             },
                         ]
+                    },
+                ],
+            },
+            {
+                path: '/login',
+                name: 'Login',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
+                component: () =>
+                    import('@pages/LoginPage/components/LoginPage.vue'),
+            },
+            {
+                path: '/change-password',
+                name: 'ChangePassword',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
+                component: () =>
+                    import(
+                        '@pages/ChangePasswordPage/components/ChangePasswordPage.vue'
+                    ),
+            },
+            {
+                path: '/create-password',
+                name: 'CreatePassword',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
+                component: () =>
+                    import(
+                        '@pages/ChangePasswordPage/components/CreatePasswordPage.vue'
+                    ),
+            }, {
+                path: '/profile-page',
+                name: 'profile-page',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
+                component: () =>
+                    import(
+                        '@pages/ProfilePage/components/ProfilePage.vue'
+                    ),
+            },
+            {
+                path: '/registration',
+                name: 'Registration',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
+                component: () =>
+                    import('@pages/RegisterPage/components/RegisterPage.vue'),
+            },
+
+            {
+                path: ':catchAll(.*)*',
+                name: '404',
+                component: () =>
+                    import('@pages/404Page/components/404Page.vue'),
+            },
+            {
+                path: '/policy-page',
+                name: 'policy-page',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
+                component: () =>
+                    import('@pages/PolicyPage/components/PolicyPage.vue'),
+            },
+            {
+                path: '/game',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
+                children: [
+                    {
+                        path: ':idChildOrGroup',
+                        name: 'Game',
+                        component: () =>
+                            import(
+                                '@pages/StartGamePage/components/StartGamePage.vue'
+                            ),
                     },
                 ],
             },
