@@ -8,15 +8,8 @@
             Чтобы начать обучение, создайте новую группу
         </p>
     </div>
-    <div
-        class="profile-child"
-        v-if="userStore.currentUser.tasks_type === 'индивидуальный'"
-    >
-        <div
-            class="profile-child__wrapper"
-            v-for="(block, index) in userStore.children"
-            :key="index"
-        >
+    <div class="profile-child" v-if="userStore.currentUser.tasks_type === 'индивидуальный'">
+        <div class="profile-child__wrapper" v-for="(block, index) in userStore.children" :key="index">
             <div class="delete-profile">
                 <modalConfirm label="Удалить профиль">
                     <template #default="{ close }">
@@ -57,7 +50,7 @@
                 </p>
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
-                    <v-progress-linear v-model:value="block.progress" height="30" class="scale">
+                    <v-progress-linear v-model="skill.progress" height="30" class="scale">
                         <template v-slot:default="{ value }">
                             <strong>{{ Math.ceil(value) }}%</strong>
                         </template>
@@ -155,27 +148,12 @@
                 </v-card>
             </template>
         </modalWindow>
-        <img
-            v-if="userStore.children.length"
-            class="profile__img"
-            src="@app/assets/img/Profile/lesyaandmoa.svg"
-        />
-        <img
-            v-if="!userStore.children.length"
-            class="profile-child__img"
-            src="@app/assets/img/Profile/lesyaMoaParentAndChild.svg"
-            alt=""
-        />
+        <img v-if="userStore.children.length" class="profile__img" src="@app/assets/img/Profile/lesyaandmoa.svg" />
+        <img v-if="!userStore.children.length" class="profile-child__img"
+            src="@app/assets/img/Profile/lesyaMoaParentAndChild.svg" alt="" />
     </div>
-    <div
-        class="profile-child"
-        v-if="userStore.currentUser.tasks_type === 'групповой'"
-    >
-        <div
-            class="profile-child__wrapper"
-            v-for="(block, index) in userStore.groups"
-            :key="index"
-        >
+    <div class="profile-child" v-if="userStore.currentUser.tasks_type === 'групповой'">
+        <div class="profile-child__wrapper" v-for="(block, index) in userStore.groups" :key="index">
             <div class="delete-profile">
                 <modalConfirm label="Удалить профиль">
                     <template #default="{ close }">
@@ -197,19 +175,11 @@
                                     </div>
                                 </div>
                                 <div class="delete-profile_btn">
-                                    <Button
-                                        class="delete-btn"
-                                        label="Удалить"
-                                        @click="
-                                            deleteChild(block.id, index);
-                                            close();
-                                        "
-                                    ></Button>
-                                    <Button
-                                        label="Отмена"
-                                        class="delete-btn"
-                                        @click="close"
-                                    ></Button>
+                                    <Button class="delete-btn" label="Удалить" @click="
+                                        deleteChild(block.id, index);
+                                    close();
+                                    "></Button>
+                                    <Button label="Отмена" class="delete-btn" @click="close"></Button>
                                 </div>
                             </div>
                         </div>
@@ -222,28 +192,18 @@
                 </p>
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
-                    <v-progress-linear
-                        v-model:value="block.progress"
-                        height="30"
-                        class="scale"
-                    >
+                    <v-progress-linear v-model="skill.progress" height="30" class="scale">
                         <template v-slot:default="{ value }">
                             <strong>{{ Math.ceil(value) }}%</strong>
                         </template>
                     </v-progress-linear>
                 </div>
-                <RouterLink
-                    :to="{
-                        name: 'Game',
-                        params: { idChildOrGroup: block.id },
-                    }"
-                    class="router-link"
-                >
-                    <Button
-                        label="Перейти к обучению"
-                        class="profile__btn"
-                    ></Button
-                ></RouterLink>
+                <RouterLink :to="{
+                    name: 'Game',
+                    params: { idChildOrGroup: block.id },
+                }" class="router-link">
+                    <Button label="Перейти к обучению" class="profile__btn"></Button>
+                </RouterLink>
             </div>
         </div>
         <modalWindow label="Добавить группу">
@@ -300,30 +260,17 @@
                 </v-card>
             </template>
         </modalWindow>
-        <img
-            v-if="!userStore.groups.length"
-            class="profile-child__img"
-            src="@app/assets/img/Profile/Moa.png"
-            alt=""
-        />
-        <img
-            v-if="userStore.groups.length"
-            class="profile-child__img"
-            src="@app/assets/img/Profile/lesyaProfileGroup.svg"
-            alt=""
-        />
-        <img
-            v-if="false"
-            class="profile__img"
-            src="@app/assets/img/Profile/Frame 277138543.png"
-        />
+        <img v-if="!userStore.groups.length" class="profile-child__img" src="@app/assets/img/Profile/Moa.png" alt="" />
+        <img v-if="userStore.groups.length" class="profile-child__img"
+            src="@app/assets/img/Profile/lesyaProfileGroup.svg" alt="" />
+        <img v-if="false" class="profile__img" src="@app/assets/img/Profile/Frame 277138543.png" />
     </div>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { modalWindow, modalConfirm } from '@shared/components/modals';
 import { HTTP } from '@app/http';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { SelectSort } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
@@ -446,7 +393,7 @@ const AddChild = async () => {
         });
         form.value = response.data;
         await userStore.getChildren();
-        await fetchSkills();
+        fetchSkills();
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -462,7 +409,7 @@ const AddGroup = async () => {
         });
         formGroup.value = response.data;
         await userStore.getChildren();
-        await fetchSkills();
+         fetchSkills();
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -492,19 +439,33 @@ const GetSkill = async (id, index) => {
             },
         });
         skill.value = response.data;
+        console.log('skill');
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
     }
 };
-const fetchSkills = async () => {
+const fetchSkills = () => {
     for (let i = 0; i < userStore.children.length; i++) {
         const id = userStore.children[i].id;
-        await GetSkill(id, i);
+        console.log('id', id, 'i', i, skill.value);
+        GetSkill(id, i);
     }
 };
-onMounted(async () => {
-    await fetchSkills();
+
+watch(
+    () => userStore.children,
+    (newSkill) => {
+        if (!newSkill) {
+            return;
+        }
+        // skill.value = newSkill;
+        fetchSkills();
+    }
+);
+
+onMounted(() => {
+    // fetchSkills();
 });
 </script>
 <style lang="scss" scoped>

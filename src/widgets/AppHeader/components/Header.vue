@@ -3,7 +3,7 @@
         <div class="container">
             <div class="header__wrapper">
                 <div class="header__logo">
-                    <router-link to="/">
+                    <router-link to="/main-page">
                         <img class="header__logo_main" src="@app/assets/icons/LogoLesya.png"
                             alt="Логотип сайта Леся и Моа" /></router-link>
                 </div>

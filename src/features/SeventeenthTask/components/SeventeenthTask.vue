@@ -94,7 +94,7 @@
                     </transition>
                 </div>
             </template>
-            <TaskResultBanner img="/assets/backgrounds/Cup.png" bg="/assets/backgrounds/lesya.gif" text="Потрясающе!"
+            <TaskResultBanner :img="getImageUrl('Cup.png')" :bg="getImageUrl('lesya.gif')" text="Потрясающе!"
                 v-if="!startGame" @next="next()" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
@@ -155,6 +155,9 @@ const playAudio = (audioPath) => {
 }
 
 const startGame = ref(true);
+const getImageUrl = (path) => {
+ return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
 
 const firstTask = ref();
 const secondTask = ref();

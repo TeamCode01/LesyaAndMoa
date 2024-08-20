@@ -84,8 +84,7 @@
                 </div>
             </template>
             <TaskResultBanner
-                img="/assets/backgrounds/Diamond.png"
-                bg="/assets/backgrounds/moa.gif"
+              :img="getImageUrl('Diamond.png')" :bg="getImageUrl('moa.gif')"
                 text="Блистательно!"
                 v-if="usedWord.length >= 15"
                 @hide="hide()"
@@ -134,6 +133,9 @@ onMounted(() => {
     is_correct.value = correct.is_correct;
 });
 
+const getImageUrl = (path) => {
+ return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
 
 const corrValue = ref(0)
 const is_correct = ref(null)
@@ -170,7 +172,7 @@ const answersCounter = ref(0)
 
 const blockButtons = ref(true);
 
-let audio = new Audio();
+let audio = ref(new Audio());
 
 const randomMusic = (first = false) => {
     let randomNumber = Math.floor(Math.random() * legalWords.length);
@@ -183,8 +185,8 @@ const randomMusic = (first = false) => {
     taskWord.value = item;
 
     let file = dict.get(`${item}`);
-    audio = new Audio(`/assets/audio/Task6/${file}`);
-
+    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
+    // new Audio(`Task6/${file}`);
     usedWord.value.push(item);
 
     repeated.value = false;
@@ -206,7 +208,7 @@ const selectedWord = ref();
 const clickItem = (word) => {
     if (word.text == taskWord.value) {
         let reactionAudio = new Audio(
-            `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
+            `Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
         );
         reactionAudio.play();
         blockButtons.value = true;
@@ -222,13 +224,13 @@ const clickItem = (word) => {
                     }
                 },1000)
 
-                let audio = new Audio('/assets/audio/Task6/259.6_.mp3');
+                let audio = new Audio('Task6/259.6_.mp3');
                 audio.play();
             }
         }, 2000)
     } else {
         let reactionAudio = new Audio(
-            `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
+            `Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
         );
         reactionAudio.play();
     }

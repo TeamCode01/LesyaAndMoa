@@ -52,7 +52,7 @@
                 <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
                     class="task_block__wrapper_answer" />
             </template>
-            <TaskResultBanner img="/assets/backgrounds/Diamond.png" bg="/assets/backgrounds/moa.gif" text="Изумительно!"
+            <TaskResultBanner :img="getImageUrl('Diamond.png')" :bg="getImageUrl('moa.gif')" text="Изумительно!"
                 v-if="answersCounter >= 55" @hide="hide()" @next="next()"></TaskResultBanner>
         </div>
     </div>
@@ -97,6 +97,9 @@ const is_correct = ref(null);
 const is_started = ref(null);
 const corrValue = ref(0);
 
+const getImageUrl = (path) => {
+ return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
 const taskArray = ref([]);
 taskArray.value = dataTask;
 
