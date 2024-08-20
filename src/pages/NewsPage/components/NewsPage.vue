@@ -35,8 +35,6 @@ const GetNews = async (id) => {
             },
         });
         news.value = response.data;
-        console.log('dd', news.value);
-        console.log(response.data);
     } catch (error) {
         console.log('errr', error);
         error.value = error.response.data;
@@ -48,8 +46,8 @@ watch(
 
     async (newId, oldId) => {
         if (!newId || route.name !== 'page') return;
-        await replaceTargetObjects([news.value]);
         await GetNews(newId);
+        await replaceTargetObjects([news.value]);
     },
     {
         immediate: true,
