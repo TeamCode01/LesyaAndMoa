@@ -4,7 +4,7 @@
             <div class="footer__wrapper">
                 <div class="footer__wrapper_info">
                     <div class="footer__logo">
-                        <router-link to="/"> <img class="footer__logo_main" src="@app/assets/icons/LogoLesya.png"
+                        <router-link to="/main-page"> <img class="footer__logo_main" src="@app/assets/icons/LogoLesya.png"
                                 alt="Логотип сайта Леся и Моа" /></router-link>
                         <a href="https://grant.obr.so/" target="_blank">
                             <img class="footer__logo_sot footer__logo_sot-small" src="@app/assets/icons/SOT.png"

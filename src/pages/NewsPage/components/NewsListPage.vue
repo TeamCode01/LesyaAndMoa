@@ -3,26 +3,16 @@
         <div class="news-h">
             <div class="news-h__wrapper">
                 <h1>Новости</h1>
-                <img
-                    class="news-h__img"
-                    src="@app/assets/img/News/image-moa.png"
-                    alt=""
-                />
+                <img class="news-h__img" src="@app/assets/img/News/image-moa.png" alt="" />
             </div>
         </div>
         <div class="news-list">
-            <div
-                class="news-list__card"
-                v-for="(block, index) in news"
-                :key="index"
-            >
-                <router-link
-                    :to="{
-                        name: 'news-page',
-                        params: { id: block?.id },
-                    }"
-                    :key="block.id"
-                >
+            <div class="news-list__card" v-for="(block, index) in news" :key="index">
+
+                <RouterLink :to="{
+                    name: 'page',
+                    params: { id: block.id },
+                }">
                     <div class="news-list__card-img">
                         <img :src="block.image" alt="" />
                     </div>
@@ -33,7 +23,8 @@
                             {{ formatDate(block.created_at) }}
                         </p>
                     </div>
-                </router-link>
+                </RouterLink>
+
             </div>
         </div>
         <div>
@@ -119,6 +110,7 @@ onMounted(() => {
     margin-top: 80px;
     margin-bottom: 50px;
 }
+
 .news-h__wrapper {
     background: #d2efff;
     border-radius: 20px;
@@ -127,17 +119,20 @@ onMounted(() => {
     text-align: center;
     align-content: center;
 }
+
 .news-h__wrapper h1 {
     font-family: 'Nunito', sans-serif;
     font-weight: 500;
     font-size: 50px;
     line-height: 50px;
 }
+
 .news-h__wrapper img {
     position: absolute;
     right: 10%;
     bottom: 2%;
 }
+
 .news-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -145,15 +140,18 @@ onMounted(() => {
     row-gap: 40px;
     margin-bottom: 60px;
 }
+
 .news-list__card {
     width: 387px;
     height: 100%;
 }
+
 .news-list__card-img {
     display: flex;
     justify-content: center;
     margin-bottom: 12px;
 }
+
 .news-list__card-img img {
     width: 387px;
     height: 240px;
@@ -161,9 +159,11 @@ onMounted(() => {
     object-fit: cover;
     overflow: hidden;
 }
+
 .news-list__title {
     margin-bottom: 12px;
 }
+
 .news-list__desc {
     margin-bottom: 12px;
 }
