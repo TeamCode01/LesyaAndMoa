@@ -36,20 +36,20 @@
                 </router-link>
             </div>
         </div>
-        <div class="pagination">
-            <button @click="previousPage" :disabled="currentPage === 1">
-                «
+        <div>
+            <button @click="prevPage" :disabled="currentPage === 1">
+                <img
+                    class="news-arrow"
+                    src="@app/assets/icons/arrows.svg"
+                    alt=""
+                />
             </button>
-            <span v-for="page in totalPages" :key="page">
-                <button
-                    @click="setPage(page)"
-                    :class="{ active: page === currentPage }"
-                >
-                    {{ page }}
-                </button>
-            </span>
-            <button @click="nextPage" :disabled="currentPage === totalPages">
-                »
+            <span>{{ currentPage }}</span>
+            <button
+                @click="nextPage"
+                :disabled="currentPage * itemsPerPage >= totalItems"
+            >
+                <img src="@app/assets/icons/arrows.svg" alt="" />
             </button>
         </div>
     </div>
@@ -60,8 +60,9 @@ import { ref, onMounted, computed } from 'vue';
 
 const news = ref([]);
 const error = ref([]);
-const currentPage = ref(1);
+let currentPage = 1;
 const itemsPerPage = 9;
+let totalItems = 0;
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -72,14 +73,21 @@ const formatDate = (dateString) => {
     });
 };
 
-const GetNews = async () => {
+const GetNews = async (page = 1) => {
     try {
-        const response = await HTTP.get('/news/?limit=100', {
+        const offset = (page - 1) * itemsPerPage;
+        const response = await HTTP.get('/news/', {
+            params: {
+                limit: itemsPerPage,
+                offset: offset,
+            },
             headers: {
                 'Content-Type': 'application/json',
             },
         });
+
         news.value = response.data.results;
+        totalItems = response.data.total;
         console.log(response.data);
     } catch (error) {
         console.log('errr', error);
@@ -88,33 +96,23 @@ const GetNews = async () => {
     }
 };
 
-const totalPages = computed(() => {
-    return Math.ceil(news.value.length / itemsPerPage);
-});
-
-const paginatedNews = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage;
-    return news.value.slice(start, start + itemsPerPage);
-});
-
-const setPage = (page) => {
-    if (page < 1 || page > totalPages.value) return;
-    currentPage.value = page;
-};
-
 const nextPage = () => {
-    if (currentPage.value < totalPages.value) {
-        currentPage.value++;
+    if (currentPage * itemsPerPage < totalItems) {
+        currentPage++;
+        GetNews(currentPage);
     }
 };
 
-const previousPage = () => {
-    if (currentPage.value > 1) {
-        currentPage.value--;
+const prevPage = () => {
+    if (currentPage > 1) {
+        currentPage--;
+        GetNews(currentPage);
     }
 };
 
-GetNews();
+onMounted(() => {
+    GetNews(currentPage);
+});
 </script>
 <style>
 .news-h {
@@ -169,19 +167,8 @@ GetNews();
 .news-list__desc {
     margin-bottom: 12px;
 }
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
 
-.pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
-}
-
-.active {
-    font-weight: bold;
-    text-decoration: underline;
+.news-arrow {
+    transform: scale(-1, 1);
 }
 </style>
