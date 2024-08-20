@@ -19,23 +19,56 @@
                 <!-- САМА ИГРА -->
                 <div class="draggable-list">
                     <!-- ВАРИАНТЫ ОТВЕТОВ -->
-                    <div class="draggable-list__words">
-                        <div 
-                            class="draggable-list__set-words" 
+                    <!--<div class="draggable-list__words">
+                        <VueDraggableNext
+                            tag="div" 
+                            :group="{ name: 'words', pull: 'clone', put: false }"
+                            :sort="false"
+                            @unchoose="checkAnswer($event)"
+                            @choose="dragLetter($event, word.id, word.text)"
+
+                            class="draggable-list__set-words"
                             v-for="row in Task" 
-                            :key="row" 
+                            :key="row"
                             >
                                 <div 
                                 class="draggable-list__word" 
                                 v-for="word in row" :key="word" 
                                 :class="{void : !word.isActive, item_wrong : word.error == -1 }"
-                                :draggable="word.isActive" 
+                                :draggable="word.isActive"
+                                
                                 @dragstart="dragLetter($event, word.id, word.text)"
                                 @touchstart="touchStart($event, word.id, word.text)"
                                 :data-word_id="word.id" 
                                 :data-word_text="word.text" >
                                     {{ word.text }}
                                 </div>
+                        </VueDraggableNext>
+                    </div>-->
+
+
+                    <div class="draggable-list__words">
+                        <div
+                            class="draggable-list__set-words"
+                            v-for="row in Task" 
+                            :key="row">
+
+                            <VueDraggableNext
+                            v-for="word in row" :key="word.id" 
+                            :group="{ name: 'words', pull: 'clone', put: false }"
+                            :sort="false"
+                            :options="{ draggable: word.isActive }"
+                            
+                            @choose="($event)=>{ console.log('choose'); dragLetter($event, word.id, word.text)}"
+                            @unchoose="($event)=>{checkAnswer($event)}">
+
+                                <div 
+                                class="draggable-list__word" 
+                                :class="{void : word.isActive == false, item_wrong : word.error == -1 }"
+                                :data-word_id="word.id">
+                                    {{ word.text }}
+                                </div>
+                            </VueDraggableNext>
                         </div>
                     </div>
 
@@ -47,18 +80,30 @@
                         <!-- ВЕРХНИЕ ЛОДОЧКИ -->
                         <div class="draggable-list__answer-wrapper">
                             <div class="draggable-list__question-word" v-for="word in Answer.data[0]" :key="word">
-                                <div class="draggable-list__question-block" v-for="letter in word.data" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)" @touchend="touchEnd($event, letter.id, letter.isActive)">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" draggable="false">
-                                    <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }"> {{ letter.text }} </div>
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside" draggable="false">
-                                </div>
+
+                                <VueDraggableNext :sort="false" :group="{ name: 'answer', pull: false, put: !letter.isActive}" 
+                                    class="draggable-list__question-block" 
+                                    v-for="letter in word.data" :key="letter.id"
+                                    :options="{disabled: false}"
+
+                                    @add="addLetter($event, letter.id, letter.isActive, letter.text)"
+                                    ghost-class="none"
+                                    >
+
+                                    <div class="draggable-list__question-boat-wrapper" draggable="false">
+                                        <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" draggable="false">
+                                        <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }"> {{ letter.text }} </div>
+                                        <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside" draggable="false">
+                                    </div>
+                                </VueDraggableNext>
+
                             </div>
                         </div>
 
                         <!-- ВОДА -->
                         <div>
                             <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png" alt="" draggable="false"/>
-                        </div>
+                        </div>  
 
                         <!-- НИЖНИЕ ЛОДОЧКИ -->
                         <div class="draggable-list__answer-wrapper" >
@@ -66,13 +111,23 @@
                                 v-for="word in Answer.data[1]" 
                                 :key="word"
                                 >
-                                <div class="draggable-list__question-block" v-for="letter in word.data" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)" @touchend="touchEnd($event, letter.id, letter.isActive)">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" draggable="false">
-                                    <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }">
-                                        {{ letter.text }}
-                                    </div>
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside" draggable="false">
-                                </div>
+                                    <VueDraggableNext :sort="false" :group="{ name: 'answer', pull: false, put: !letter.isActive}" 
+                                    class="draggable-list__question-block" 
+                                    v-for="letter in word.data" :key="letter" 
+                                    :options="{disabled: false}"
+
+                                    @add="addLetter($event, letter.id, letter.isActive, letter.text)"
+                                    ghost-class="none">
+
+                                        <div class="draggable-list__question-boat-wrapper">
+                                            <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" draggable="false">
+                                            <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }">
+                                                {{ letter.text }}
+                                            </div>
+                                            <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside" draggable="false">
+                                        </div>    
+                                    
+                                    </VueDraggableNext>
                             </div>
                         </div>
 
@@ -162,35 +217,41 @@ const dataTrans = ref({})
 
 const isTouch = ref(false)
 
+const refWords = ref({})
 
-const touchStart = (event, id, text) => {
-    isTouch.value = true
-    dragLetter(event, id, text)
-};
+const isDrag = ref(false);
 
 const dragLetter = (event, id, text) => {
     //event.dataTransfer.setData('text', `${id}`);
-    console.log('start')
-    dataTrans.value = id
+    if (isDrag.value == false) {
 
-    if (dragAudio.value) dragAudio.value.pause();
-    dragAudio.value.src = `/assets/audio/Task12/${audioMap.get(text)}`;
-    dragAudio.value.play();
+        console.log('dragstart', id, text, event)
+        dataTrans.value = id
+
+        if (dragAudio.value) dragAudio.value.pause();
+        dragAudio.value.src = `/assets/audio/Task12/${audioMap.get(text)}`;
+        dragAudio.value.play();
+
+        isDrag.value = true
+}
 };
 
-const touchEnd = (event, id, text) => {
-    if (isTouch.value == true) dropLetter(event, id, text)
-    isTouch.value = false
-};
 
 const dropLetter = (event, id, isActive) => {
     //let dragid = event.dataTransfer.getData('text')
     let dragid = dataTrans.value
     let audioPath = ''
-    console.log('end')
 
-    if (!isActive) {
+    console.log('drop', dragid, id, isActive, event)
+    console.log(' ')
+
+    //event.target.parentNode.removeChild(event.target)
+    
+    let taskDOM = document.querySelector('.draggable-list__words')
+
+    if (!isActive && isDrag.value == true) {
         if (dragid == id){
+            
             Answer.value.data.map((row) =>
                 row.map((word) => {
                     word.data.map((letter) => {
@@ -222,11 +283,27 @@ const dropLetter = (event, id, isActive) => {
                     });
                 })
             );
+            
+            console.dir(taskDOM.children)
+
+            Array.from(taskDOM.children).map(row => {
+                Array.from(row.children).forEach(word => {
+                    let word_block = word.children[0]
+
+                    if (word_block.dataset.word_id == dragid){
+                        word_block.style = 'opacity: 0;'
+                        word_block.draggable = 'false'
+                        word.draggable = 'false'
+                    }
+                })
+            })
 
             Task.value.map((row) =>
                 row.map((word) => {
-                    if (word.id == id) {
+                    
+                    if (word.id == dragid) {
                         word.isActive = !word.isActive;
+                        console.log(refWords.value[word.id] == document.querySelectorAll('.draggable-list__word')[1])
                     }
                 })
             );
@@ -271,6 +348,8 @@ const dropLetter = (event, id, isActive) => {
             }, 7000);
         }
         else {
+            
+
             Task.value.map((row) =>
                 row.map((word) => {
 
@@ -280,7 +359,7 @@ const dropLetter = (event, id, isActive) => {
                             word.error = 0;
                         }, 1000)
 
-                    }
+                    }   
                 })
             );
             let reactionAudio = new Audio(
@@ -289,9 +368,23 @@ const dropLetter = (event, id, isActive) => {
             reactionAudio.play();
         }
     }
+
+    isDrag.value = false
 }
 
+const checkAnswer = (event) => {
+    console.log('unchoose')
+    if (event.to.className == event.from.className) return true
 
+    else event.to.removeChild(event.item)
+    return false
+}
+
+const addLetter = (event, id, isActive, text) => {
+    console.log('add', event)
+
+    dropLetter(event, id, isActive)
+}
 
 </script>
 
@@ -409,9 +502,9 @@ const dropLetter = (event, id, isActive) => {
     margin-left: 8px;
     width: 100px;
     height: 34px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+}
+
+.draggable-list__question-boat-wrapper{
 }
 
 .draggable-list__answer-water {
@@ -423,7 +516,8 @@ const dropLetter = (event, id, isActive) => {
 
 .boat-frontside{
     position: relative;
-    bottom: 77px;
+    bottom: 83px;
+    margin: auto;
 }
 
 .draggable-list__question-text{
@@ -431,6 +525,7 @@ const dropLetter = (event, id, isActive) => {
     transform: translateY(-65px);
     z-index: -1;
     margin: auto;
+    width: fit-content;
 }
 
 .item_right {
@@ -442,5 +537,9 @@ const dropLetter = (event, id, isActive) => {
 
 .void {
     opacity: 0%;
+}
+
+.none{
+    display: none
 }
 </style>
