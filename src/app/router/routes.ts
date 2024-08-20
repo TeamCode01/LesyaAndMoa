@@ -128,7 +128,7 @@ const routes: RouteRecordRaw[] = [
                             {
                                 path: 'news-item',
                                 meta: {
-                                    label: 'block.title',
+                                    label: 'news.title',
                                     isObject: true,
                                 },
                                 children: [
