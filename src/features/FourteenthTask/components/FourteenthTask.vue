@@ -189,8 +189,8 @@ import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 
-onMounted(async () => {
-    const correct = await getCorrectAnswer(14, props.childId);
+onMounted(() => {
+    const correct = getCorrectAnswer(14, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 });
@@ -198,7 +198,7 @@ onMounted(async () => {
 const corrValue = ref(0)
 const is_correct = ref(null)
 
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -400,14 +400,15 @@ const endPosition = (event) => {
                     block.sound.error = 0
                     block.word.error = 0
                     answersCounter.value += 1
-                    
-                    
+
+
                     if (answersCounter.value == 4) {
 
                         setTimeout(() => {
                             if (is_correct.value === false) {
                                 endGameRequest(props.childId, corrValue.value);
                                 emit('correct');
+                                emit('open');
                             }
                         },1000)
 
@@ -422,14 +423,14 @@ const endPosition = (event) => {
         let reactionAudio = new Audio(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`);
         reactionAudio.play();
 
-        
+
     }
 
     else if (type_index != -1 && blocks_index != -1 && block_index != -1){
 
         let flag = false
         let answer_type = Answer.value[block_index][`${blocks_index == 0 ? 'word' : 'sound'}`].type
-        
+
 
         Answer.value.map((block)=>{
             if (Answer.value[block_index][draggableBlock.value.type].isActive || answer_type != draggableBlock.value.type ) {
@@ -460,7 +461,7 @@ const endPosition = (event) => {
         }
 
 
-        
+
     }
 
     draggableBlock.value.text = '';

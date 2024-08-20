@@ -39,7 +39,7 @@
                     <input type="checkbox" v-model="form.data_processing_agreement" />
                     <div class="regCheck_text">
                         даю согласие на обработку персональных данных
-                        и ознакомлен с <router-link class="form-question-link" to="/policy-page">политикой
+                        и ознакомлен с <router-link class="form-question-link" to="/policy-page" target="_blank">политикой
                             конфиденциальности</router-link>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
     </div>
 </template>
 <script setup>
-import { ref, inject } from 'vue';
+import { ref } from 'vue';
 import { HTTP } from '@app/http';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
@@ -69,7 +69,6 @@ const tasksChoose = ref([
 ]);
 
 const router = useRouter();
-const swal = inject('$swal');
 const form = ref({
     email: '',
     password: '',
@@ -113,25 +112,9 @@ const RegisterUser = async () => {
         router.push({
             name: 'Login',
         });
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'успешно',
-            showConfirmButton: false,
-            timer: 1500,
-        });
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
-        if (isError.value) {
-            swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: `ошибка`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-        }
     }
 };
 </script>

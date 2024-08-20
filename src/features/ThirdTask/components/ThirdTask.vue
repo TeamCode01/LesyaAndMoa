@@ -24,28 +24,28 @@
                     </div>
                 </div>
                 <div class="ThirdTask__answer">
-                    <div class="box" id="box" @mouseover="playAudio('@app/assets/audio/Task3/32.3_слово.mp3')"
-                        @drop="drop($event, 0)" @dragover="allowDrop($event)">
+                    <div class="box" id="box" @mouseover="playAudio('Task3/32.3_слово.mp3')" @drop="drop($event, 0)"
+                        @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array">
                             {{ item }}
                         </div>
                     </div>
-                    <div class="box2" id="box2" @mouseover="playAudio('@app/assets/audio/Task3/32.3_вариант.mp3')"
-                        @drop="drop($event, 1)" @dragover="allowDrop($event)">
+                    <div class="box2" id="box2" @mouseover="playAudio('Task3/32.3_вариант.mp3')" @drop="drop($event, 1)"
+                        @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array_two">
                             {{ item }}
                         </div>
                     </div>
-                    <div class="box3" id="box3" @mouseover="playAudio('@app/assets/audio/Task3/33.3.mp3')"
-                        @drop="drop($event, 2)" @dragover="allowDrop($event)">
+                    <div class="box3" id="box3" @mouseover="playAudio('Task3/33.3.mp3')" @drop="drop($event, 2)"
+                        @dragover="allowDrop($event)">
                         <div class="letter__item" v-for="item in array_three">
                             {{ item }}
                         </div>
                     </div>
                 </div>
             </template>
-            <TaskResultBanner img="../assets/backgrounds/king.png" bg="../assets/backgrounds/Lesya.png" text="Великолепно!"
-                v-else @next="next()" @hide="hide" class="end-modal"></TaskResultBanner>
+            <TaskResultBanner :img="getImageUrl('king.png')" :bg="getImageUrl('lesya.gif')"
+                text="Великолепно!" v-else @next="next()" @hide="hide" class="end-modal"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -58,7 +58,7 @@ import gameActions from '@mixins/gameAction';
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
-const emit = defineEmits(['close', 'next-modal', 'correct']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const endGame = ref(false);
 const audio = ref(new Audio());
 const hide = () => {
@@ -89,9 +89,13 @@ const props = defineProps({
 const is_correct = ref(null);
 const is_started = ref(null);
 
+const getImageUrl = (path) => {
+  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
+
 
 const playAudio = async (audioPath) => {
-    audio.value.src = audioPath;
+    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     if (props.finish === true) {
         await audio.value.play();
     }
@@ -106,7 +110,7 @@ const stopAudio = (audioPath) => {
 
 const playEndAudio = (audioPath) => {
     const end_audio = new Audio();
-    end_audio.src = audioPath;
+    end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
 }
 
@@ -141,7 +145,7 @@ const drop = (event, index) => {
         // setTimeout(() => {
         //     elem.classList.remove('green');
         // }, 2000);
-        playEndAudio('../assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('Other/1. общее для разных заданий.mp3');
 
     } else if (array_two_result.value.find((item) => item.name === letter) && index === 1) {
         // elem.classList.add('green');
@@ -150,7 +154,7 @@ const drop = (event, index) => {
         // }, 2000);
         array_two.value.push(letter);
         letters.value.splice(dropIndex.value, 1)
-        playEndAudio('../assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('Other/1. общее для разных заданий.mp3');
     }
     else if (array_three_result.value.find((item) => item.name === letter) && index === 2) {
         // elem.classList.add('green');
@@ -160,14 +164,14 @@ const drop = (event, index) => {
         array_three.value.push(letter);
         letters.value.splice(dropIndex.value, 1)
 
-        playEndAudio('../assets/audio/Other/1. общее для разных заданий.mp3');
+        playEndAudio('Other/1. общее для разных заданий.mp3');
 
     } else {
         elem.classList.add('red');
         setTimeout(() => {
             elem.classList.remove('red');
         }, 2000);
-        playEndAudio('../assets/audio/Other/2. общее для разных заданий.mp3');
+        playEndAudio('Other/2. общее для разных заданий.mp3');
 
         return false;
     }
@@ -176,6 +180,7 @@ const drop = (event, index) => {
         if (is_correct.value === false) {
             endGameRequest(props.childId, corrValue.value);
             emit('correct');
+            emit('open');
         }
         setTimeout(() => {
             endGame.value = true;
@@ -189,14 +194,14 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(async () => {
-    const correct = await getCorrectAnswer(3, props.childId);
+onMounted(() => {
+    const correct = getCorrectAnswer(3, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
 </script>
 <style lang="scss" scoped>
-*{
+* {
     user-select: none;
 }
 

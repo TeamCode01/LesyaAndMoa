@@ -1,22 +1,18 @@
 <template>
-
-
+  <cookieModal v-if="showCookie" @close="closeCookie" @accept="acceptCookie('cookie', cur_date, 1)" />
   <div @click="show_socials = !show_socials" class="link-share">
     <Transition name="slide-fade">
       <div v-if="show_socials" class="networks__wrapper">
         <ShareNetwork class="networks" v-for="network in networks" :network="network.network" :key="network.network"
           :url="sharing.url" :title="sharing.title" :description="sharing.description">
-          <img class="networks__icon" :src="network.icon" />
+          <img class="networks__icon" :src="getImageUrl(network.icon)" />
         </ShareNetwork>
         <div @click="copyLink" class="network__copy">
           <img class="networks__icon" src="@app/assets/icons/link_copy_icon.svg" alt="copy" />
         </div>
-
-
         <div @click="show_socials = true" class="networks__close">
           <img class="networks__icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
         </div>
-
       </div>
     </Transition>
     <img v-if="!show_socials" src="@app/assets/backgrounds/share-img.svg" alt="share">
@@ -28,7 +24,7 @@
     </div>
   </Transition>
 
-  <cookieModal v-if="showCookie" @close="closeCookie" @accept="acceptCookie('cookie', cur_date, 1)" />
+
   <div class="main">
     <img src="@app/assets/backgrounds/main-bg.jpg" alt="main-bg" class="main__bg">
     <div class="main__wrapper">
@@ -110,33 +106,22 @@
             Как сложно нам читать и понимать прочитанное, когда
             некоторые буквы или слова всего лишь отражены зеркально!
           </p>
-          <!--
-                        <p class="text" id="item1-bottom-text">
-                            Вперед с новыми друзьями к новым вершинам знания!
-                        </p>
-                    -->
-
         </div>
       </div>
       <div class="about__wrapper-item_second">
         <div class="about__wrapper-item_second-container">
           <p class="text-small about__wrapper-item_second-text">
-            Иногда ребятам сложно «продираться» сквозь форму к смыслу
-            слов и на это уходит много сил. Ребятам с дислексией в текстовом
-            облике слов часто чудится какая-то абракадабра. Это особенность восприятия ими визуального облика слов.
-            В большинстве случаев интеллект ребят в порядке, они хорошо
-            решают примеры или изъясняются устно.
+            Иногда ребятам сложно «продираться» сквозь форму к смыслу слов и на это уходит
+            много сил. Ребятам с дислексией в текстовом облике слов часто чудится какая-то
+            абракадабра. Это особенность восприятия ими визуального облика слов.
+            В большинстве случаев интеллект ребят в порядке, они хорошо решают примеры или
+            изъясняются устно.
           </p>
           <p class="text-small about__wrapper-item_second-text">
-            Чтобы помочь, таким ребятам, наша команда создала этот
-            обучающий курс. Дети смогут ощутить себя настоящими
-            помощниками друзей-инопланетян, не знающих нашего языка,
-            натренируют их в чтении слогов и различении звуков,
-            помогут понимать слова, предложения и тексты.
-          </p>
-
-          <p class="text-small about__wrapper-item_second-text">
-            Вперед с новыми друзьями к новым вершинам знания!
+            Чтобы помочь, таким ребятам, наша команда создала этот обучающий курс. Дети
+            смогут ощутить себя настоящими помощниками друзей-инопланетян, не знающих
+            нашего языка, натренируют их в чтении слогов и различении звуков, помогут
+            понимать слова, предложения и тексты.
           </p>
 
         </div>
@@ -192,6 +177,13 @@
           @click="next('carousel_authors')" src="@app/assets/icons/icon-pink.svg" alt="right">
       </div>
 
+      <div class="arrows">
+        <img v-if="currentSlideAuthor > 0 && windowWidth < 768" @click="prev('carousel_authors')"
+          src="@app/assets/icons/arrow-left.svg" alt="left" />
+        <img v-if="
+          currentSlideAuthor < slideAuthors.length - authorsToShow && windowWidth < 768
+        " @click="next('carousel_authors')" src="@app/assets/icons/icon-pink.svg" alt="right" />
+      </div>
     </div>
   </div>
   <div class="advantages">
@@ -225,9 +217,7 @@
         </p>
       </div>
     </div>
-
   </div>
-
   <div class="news" id="news">
     <h2 class="title-h2 news__title">Новости</h2>
 
@@ -253,19 +243,19 @@
 
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
-import { Button } from '@shared/components/buttons';
+import { ref, onMounted, computed } from "vue";
+import { Button } from "@shared/components/buttons";
 import news from "@app/assets/backgrounds/news.png";
 import nastya from "@app/assets/backgrounds/nastya.png";
 import anna from "@app/assets/backgrounds/anna.png";
 import maria from "@app/assets/backgrounds/maria.png";
-import arrow from '@app/assets/icons/Arrow.svg';
-import { CarouselItem } from '@shared/components/carousel';
-import 'vue3-carousel/dist/carousel.css'
-import { Carousel, Slide } from 'vue3-carousel'
-import { TestTask } from '@features/TestTask';
-import { useUserStore } from '@layouts/stores/user';
-import { cookieModal } from '@shared/components/modals';
+import arrow from "@app/assets/icons/Arrow.svg";
+import { CarouselItem } from "@shared/components/carousel";
+import "vue3-carousel/dist/carousel.css";
+import { Carousel, Slide } from "vue3-carousel";
+import { TestTask } from "@features/TestTask";
+import { useUserStore } from "@layouts/stores/user";
+import { cookieModal } from "@shared/components/modals";
 
 const windowWidth = ref(window.innerWidth);
 const userStore = useUserStore();
@@ -288,39 +278,44 @@ const copyLink = () => {
 
 const sharing = ref({
   url: `${window.location.href}`,
-  title: 'Леся и Моа.',
-  description: 'Увлекательное приключение с интерактивными заданиями для профилактики и коррекции дислексии .',
-})
+  title: "Леся и Моа.",
+  description:
+    "Увлекательное приключение с интерактивными заданиями для профилактики и коррекции дислексии .",
+});
+
+const getImageUrl = (path) => {
+  return new URL(`/assets/icons/${path}`, import.meta.url).href;
+};
 
 const networks = ref([
-  { network: 'odnoklassniki', icon: '../assets/icons/brandico--odnoklassniki-rect.svg', width: '30px' },
-  { network: 'telegram', icon: '../assets/icons/logos--telegram.svg', width: '30px' },
-  { network: 'vk', icon: '../assets/icons/ri--vk-fill.svg', width: '30px' },
-  { network: 'whatsapp', icon: '../assets/icons/logos--whatsapp-icon.svg', width: '30px' },
-])
-
+  {
+    network: "odnoklassniki",
+    icon: 'brandico--odnoklassniki-rect.svg',
+    width: "30px",
+  },
+  { network: "telegram", icon: 'logos--telegram.svg', width: "30px" },
+  { network: "vk", icon: 'ri--vk-fill.svg', width: "30px" },
+  { network: "whatsapp", icon: 'logos--whatsapp-icon.svg', width: "30px" },
+]);
 const setCookieOnce = () => {
-  localStorage.setItem('stopCookie', true);
-}
+  localStorage.setItem("stopCookie", true);
+};
+
 
 
 const next = (carousel_name) => {
-  if (carousel_name == 'carousel_authors') {
+  if (carousel_name == "carousel_authors") {
     carousel_authors.value.next();
-  }
-  else {
+  } else {
     carousel.value.next();
-  };
-}
+  }
+};
 
 const prev = (carousel_name) => {
-  if (carousel_name == 'carousel_authors') {
+  if (carousel_name == "carousel_authors") {
     carousel_authors.value.prev();
+  } else {
   }
-  else {
-    carousel.value.prev()
-  };
-
 }
 const cur_date = new Date();
 cur_date.toLocaleString();
@@ -343,6 +338,7 @@ const acceptCookie = (name, value, days) => {
 }
 
 const slideItems = ref([
+
   {
     img: news,
     name: ' Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
@@ -410,7 +406,7 @@ const openTest = () => {
   document.documentElement.style.setProperty('--scroll-position', `${scrollY}px`);
   document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
   isOpen.value = true;
-  playTestAudio('../assets/audio/TestTask/4.тестовое задание.mp3');
+  playTestAudio('4.тестовое задание.mp3');
 }
 
 const close = () => {
@@ -418,14 +414,13 @@ const close = () => {
   document.body.classList.remove('no-scroll');
 }
 
-
 const playAudio = (audioPath) => {
-  audio.value.src = audioPath;
+  audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
   audio.value.play();
 }
 
 const playTestAudio = (audioPath) => {
-  audio.value.src = audioPath;
+  audio.value.src = new URL(`/assets/audio/TestTask/${audioPath}`, import.meta.url).href;
   audio.value.play();
 }
 
@@ -447,8 +442,6 @@ const skip = () => {
   showBtn.value = true;
 }
 
-
-
 onMounted(() => {
   const test = document.getElementById('test');
   if (localStorage.getItem('stopCookie') === 'true') {
@@ -460,9 +453,9 @@ onMounted(() => {
   function handleScroll() {
     const posTop = test.getBoundingClientRect().top;
     if (posTop + test.clientHeight <= window.innerHeight && posTop >= 0) {
-      playAudio('../assets/audio/Music/звук 1_.mp3');
+      playAudio('Music/звук 1_.mp3');
       setTimeout(() => {
-        playAudio('../assets/audio/TestTask/3.тестовое задание.mp3');
+        playAudio('TestTask/3.тестовое задание.mp3');
         audio.value.addEventListener('ended', () => {
           audio.value.src = '';
           showBtn.value = true;
@@ -473,7 +466,6 @@ onMounted(() => {
     }
   }
 
-
   windowWidth.value = window.innerWidth;
   itemsToShow.value = windowWidth.value >= 660 ? 2 : 1
   authorsToShow.value = windowWidth.value >= 650 ? 2 : 1
@@ -483,7 +475,6 @@ onMounted(() => {
     itemsToShow.value = windowWidth.value >= 660 ? 2 : 1
     authorsToShow.value = windowWidth.value >= 650 ? 2 : 1
   });
-
 
 })
 </script>
@@ -509,7 +500,6 @@ onMounted(() => {
     transition: all ease 0.25s;
   }
 }
-
 
 .link-share {
   display: flex;
@@ -575,7 +565,6 @@ onMounted(() => {
   /* Запоминает место прокрутки */
 }
 
-
 .carousel {
   max-width: 800px;
   width: 100%;
@@ -591,7 +580,6 @@ onMounted(() => {
   margin: 0px auto !important;
   width: 100%;
 }
-
 
 .carousel-item {
   display: flex;
@@ -963,7 +951,6 @@ onMounted(() => {
       }
 
       @media (max-width: 568px) {
-
         text-align: start;
       }
     }
@@ -1124,7 +1111,6 @@ onMounted(() => {
 
           @media (max-width: 568px) {
             height: 590px;
-
           }
         }
 

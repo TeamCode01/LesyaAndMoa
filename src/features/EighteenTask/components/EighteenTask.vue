@@ -20,7 +20,7 @@
             </div>
         </div>
     </template>
-    <TaskResultBanner :is_end="true" bg="/assets/backgrounds/bg_end.jpg" class="end-modal" v-else @hide="hide()">
+    <TaskResultBanner :is_end="true" :bg="getImageUrl('bg_end.jpg')" class="end-modal" v-else @hide="hide()">
     </TaskResultBanner>
 </template>
 <script setup>
@@ -50,12 +50,14 @@ const props = defineProps({
         required: false,
     },
 });
-
+const getImageUrl = (path) => {
+  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
 const audio = ref(new Audio());
 const is_correct = ref(null);
 const corrValue = ref(0);
 const playAudio = (audioPath) => {
-    audio.value.src = audioPath;
+    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     audio.value.play();
 }
 
@@ -66,7 +68,7 @@ const sendAnswer = () => {
     const answer_input = document.getElementById('input');
     if (answer.value === correct_answer.value) {
         answer_input.classList.add('green');
-        playAudio('/assets/audio/Other/1. общее для разных заданий.mp3');
+        playAudio('Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
             answer_input.classList.remove('green');
             endGame.value = true;
@@ -81,15 +83,15 @@ const sendAnswer = () => {
 
     } else {
         answer_input.classList.add('red');
-        playAudio('/assets/audio/Other/2. общее для разных заданий.mp3');
+        playAudio('Other/2. общее для разных заданий.mp3');
         setTimeout(() => {
             answer_input.classList.remove('red');
         }, 2000)
     }
 }
 
-onMounted(async () => {
-    const correct = await getCorrectAnswer(18, props.childId);
+onMounted(() => {
+    const correct = getCorrectAnswer(18, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })

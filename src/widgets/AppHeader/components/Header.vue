@@ -27,7 +27,7 @@
                 <div class="header__wrapper_adaptive">
                     <div v-if="Object.keys(userStore.currentUser).length" class="header__wrapper_avatar">
                         <img src="@app/assets/icons/avatar.png" alt="Аватарка" />
-                        <div @click="showModalMini = true">
+                        <div @click="showBurger()">
                             <img class="header__wrapper_avatar_arrow" src="@app/assets/icons/icons-chevron.svg"
                                 alt="arrow" />
                         </div>
@@ -48,7 +48,7 @@
                     <!-- <Button class="btn_info" v-if="user !== null" label="Выйти" @click="logOut"></Button> -->
                     <div v-if="Object.keys(userStore.currentUser).length" class="header__wrapper_avatar">
                         <img src="@app/assets/icons/avatar.png" alt="Аватарка" />
-                        <div @click="showModalMini = true">
+                        <div @click="showBurger()">
                             <img class="header__wrapper_avatar_arrow" src="@app/assets/icons/icons-chevron.svg"
                                 alt="arrow" />
                         </div>
@@ -94,7 +94,7 @@
         </div>
     </div>
     <div class="modal-mini" v-if="showModalMini">
-        <div class="close" @click="showModalMini = false">
+        <div class="close" @click="closeMenu()">
             <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
         </div>
         <div class="modal__wrapper_mini">
@@ -126,8 +126,6 @@ const showModalMini = ref(false);
 const router = useRouter();
 const userStore = useUserStore();
 
-// const user = ref(localStorage.getItem('Token'));
-
 const showBurger = () => {
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
@@ -136,16 +134,24 @@ const showBurger = () => {
     );
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
-    if (showModal.value === false) {
-        showModal.value = true;
+
+    // if (showModal.value === false) {
+    //     showModal.value = true;
+    // } else {
+    //     showModal.value = false;
+    //     document.body.classList.remove('no-scroll');
+    // }
+    if (showModalMini.value === false) {
+        showModalMini.value = true;
     } else {
-        showModal.value = false;
+        showModalMini.value = false;
         document.body.classList.remove('no-scroll');
     }
 };
 
 const closeMenu = () => {
-    showModal.value = false;
+    showModalMini.value = false;
+    // showModal.value = false;
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
 };
 
@@ -166,7 +172,7 @@ const Login = () => {
     router.push({ name: 'Login' });
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .link-small {
     cursor: pointer;
 }

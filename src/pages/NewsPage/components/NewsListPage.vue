@@ -36,31 +36,32 @@
                 </router-link>
             </div>
         </div>
-        <!-- <div class="pagination">
-            <button @click="prevPage" :disabled="currentPage === 1">«</button>
-            <button
-                v-for="page in totalPages"
-                :key="page"
-                @click="changePage(page)"
-            >
-                {{ page }}
+        <div class="pagination">
+            <button @click="previousPage" :disabled="currentPage === 1">
+                «
             </button>
+            <span v-for="page in totalPages" :key="page">
+                <button
+                    @click="setPage(page)"
+                    :class="{ active: page === currentPage }"
+                >
+                    {{ page }}
+                </button>
+            </span>
             <button @click="nextPage" :disabled="currentPage === totalPages">
                 »
             </button>
-        </div> -->
+        </div>
     </div>
 </template>
 <script setup>
 import { HTTP } from '@app/http';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 const news = ref([]);
 const error = ref([]);
-// const totalPages = ref(0);
-// const currentPage = ref(1);
-// const itemsPerPage = 9;
-// const apiURL = 'https://леся-моа.рф/api/v1/news/';
+const currentPage = ref(1);
+const itemsPerPage = 9;
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -73,15 +74,13 @@ const formatDate = (dateString) => {
 
 const GetNews = async () => {
     try {
-        const response = await HTTP.get('/news/', {
+        const response = await HTTP.get('/news/?limit=100', {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
-        news.value = response.data;
+        news.value = response.data.results;
         console.log(response.data);
-        // totalPages.value = Math.ceil(response.data.count / itemsPerPage);
-        console.log(totalPages.value);
     } catch (error) {
         console.log('errr', error);
         error.value = error.response.data;
@@ -89,28 +88,33 @@ const GetNews = async () => {
     }
 };
 
-// const changePage = (page) => {
-//     currentPage.value = page;
-//     const offset = (page - 1) * itemsPerPage;
-//     GetNews(`${apiURL}?offset=${offset}&limit=${itemsPerPage}`);
-// };
-
-// const nextPage = () => {
-//     if (currentPage.value < totalPages.value) {
-//         changePage(currentPage.value + 1);
-//     }
-// };
-
-// const prevPage = () => {
-//     if (currentPage.value > 1) {
-//         changePage(currentPage.value - 1);
-//     }
-// };
-
-onMounted(async () => {
-    await GetNews();
-    // GetNews(`${apiURL}?offset=0&limit=${itemsPerPage}`);
+const totalPages = computed(() => {
+    return Math.ceil(news.value.length / itemsPerPage);
 });
+
+const paginatedNews = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage;
+    return news.value.slice(start, start + itemsPerPage);
+});
+
+const setPage = (page) => {
+    if (page < 1 || page > totalPages.value) return;
+    currentPage.value = page;
+};
+
+const nextPage = () => {
+    if (currentPage.value < totalPages.value) {
+        currentPage.value++;
+    }
+};
+
+const previousPage = () => {
+    if (currentPage.value > 1) {
+        currentPage.value--;
+    }
+};
+
+GetNews();
 </script>
 <style>
 .news-h {
@@ -164,5 +168,20 @@ onMounted(async () => {
 }
 .news-list__desc {
     margin-bottom: 12px;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+}
+
+.active {
+    font-weight: bold;
+    text-decoration: underline;
 }
 </style>

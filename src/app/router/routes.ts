@@ -82,6 +82,7 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 path: '/news-page',
+                name: 'news-page-list',
                 component: () =>
                     import('@pages/NewsPage/components/NewsListPage.vue'),
 
@@ -95,7 +96,6 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
         ],
-
     },
 ];
 
