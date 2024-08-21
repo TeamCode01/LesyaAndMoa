@@ -172,7 +172,7 @@ const answersCounter = ref(0)
 
 const blockButtons = ref(true);
 
-let audio = ref(new Audio());
+let audio = new Audio();
 
 const randomMusic = (first = false) => {
     let randomNumber = Math.floor(Math.random() * legalWords.length);
@@ -185,7 +185,7 @@ const randomMusic = (first = false) => {
     taskWord.value = item;
 
     let file = dict.get(`${item}`);
-    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
+    // audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     // new Audio(`Task6/${file}`);
     usedWord.value.push(item);
 

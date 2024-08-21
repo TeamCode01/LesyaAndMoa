@@ -11,15 +11,6 @@ const routes: RouteRecordRaw[] = [
         },
         children: [
             {
-                path: '',
-                name: 'main-page',
-                component: () =>
-                    import('@pages/MainPage/components/MainPage.vue'),
-                meta: {
-                    hiddenBreadcrumbs: true,
-                },
-            },
-            {
                 path: '/about-project',
                 name: 'about-project',
                 component: () =>
@@ -74,6 +65,15 @@ const routes: RouteRecordRaw[] = [
                 },
                 component: () =>
                     import('@pages/LoginPage/components/LoginPage.vue'),
+            },
+            {
+                path: '',
+                name: 'main-page',
+                component: () =>
+                    import('@pages/MainPage/components/MainPage.vue'),
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
             },
             {
                 path: '/change-password',
@@ -140,14 +140,21 @@ const routes: RouteRecordRaw[] = [
                 children: [
                     {
                         path: ':idChildOrGroup',
-                        name: 'Game',
-                        component: () =>
-                            import(
-                                '@pages/StartGamePage/components/StartGamePage.vue'
-                            ),
+                        children: [
+                            {
+                                path: '',
+                                name: 'Game',
+                                component: () =>
+                                    import(
+                                        '@pages/StartGamePage/components/StartGamePage.vue'
+                                    ),
+                            }
+                        ]
                     },
-                ],
+                ]
+
             },
+
         ]
     }
 ];

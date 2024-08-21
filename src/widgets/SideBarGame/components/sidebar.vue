@@ -194,6 +194,7 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
         taskAudio.value = audio_task
         endTime.value = false;
         taskImage.value = img;
+        console.log('see', SeeTask.value);
         if (ids.value.includes(taskId.value)) {
 
             playAudio('Music/звук 1_.mp3');
@@ -201,7 +202,7 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
                 show_hand.value = true;
                 emit('hand', show_hand.value)
             })
-            if (audio_ids_music.value.includes(taskId.value)) {
+            if (audio_ids_music.value.includes(taskId.value) && SeeTask.value === false ) {
                 audio.value.addEventListener('ended', () => {
                     playAudio('Other/10.общее.mp3');
                     audio.value.addEventListener('ended', () => {
@@ -245,6 +246,7 @@ const checkOpen = (id) => {
 
 const openTask = (taskId) => {
     SeeTask.value = true;
+    console.log('see', SeeTask.value);
     finish.value = false;
     playAudio(taskAudio.value);
     setTimeout(() => {

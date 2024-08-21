@@ -3,16 +3,16 @@
         <div class="container">
             <div class="header__wrapper">
                 <div class="header__logo">
-                    <router-link to="/main-page">
+                    <router-link to="/">
                         <img class="header__logo_main" src="@app/assets/icons/LogoLesya.png"
                             alt="Логотип сайта Леся и Моа" /></router-link>
                 </div>
                 <ul class="header__wrapper_links">
                     <li>
-                        <router-link class="link-small" to="/about-project">О проекте</router-link>
+                        <router-link class="link-small" :to="'/about-project'">О проекте</router-link>
                     </li>
                     <li>
-                        <router-link class="link-small" to="/news-page">Новости</router-link>
+                        <router-link class="link-small" :to="'/news-page'">Новости</router-link>
                     </li>
                     <li>
                         <router-link class="link-small"
