@@ -11,7 +11,7 @@
                         Верно соотнеси слово, его толкование и картинку.
                     </p>
                 </div>
-                <canvas @mousedown="engage" @mouseup="disengage" @mousemove="draw" @click="voiceActing" ref="canvasRef"
+                <canvas @mousedown="engage" @mouseup="disengage" @mousemove="draw" @touchstart="engage" @touchend="disengage" @touchmove="draw" @click="voiceActing" ref="canvasRef"
                     class="canvas_draw"></canvas>
                 <div class="draggable-list">
                     <div class="draggable-list__words">
@@ -398,6 +398,23 @@ const playAudio = (audioPath) => {
 
 const getCursorPosition = (event) => {
     const rect = canvas.getBoundingClientRect();
+    if (event.type == "touchstart" || event.type == "touchmove") {
+        console.log(event)
+        return {
+            x: event.touches[0].clientX - rect.left,
+            y: event.touches[0].clientY - rect.top
+        }
+    }
+
+    else if (event.type == "touchend") {
+        return {
+            x: event.changedTouches[0].clientX - rect.left,
+            y: event.changedTouches[0].clientY - rect.top
+        }
+    }
+
+
+    
     return {
         x: event.clientX - rect.left,
         y: event.clientY - rect.top

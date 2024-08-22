@@ -12,48 +12,6 @@
                         Соедини полученные слова с картинками.
                     </p>
                 </div>
-<<<<<<< HEAD
-                <canvas
-                    class="canvas_draw"
-                    ref="canvasRef"
-                    @mousedown="engage"
-                    @mouseup="disengage"
-                    @mousemove="draw"
-
-                    @touchstart="engage"
-                    @touchend="disengage"
-                    @touchmove="draw"
-
-                    @click="voiceActing"
-                    v-show="endFirstTask && true"
-                ></canvas>
-                <div
-                    class="draggable-list"
-                    ref="taskBlock"
-                    @dragover.prevent
-                    @drop="missDrop($event)"
-                >
-                    <DragndropComponent
-                        :left="PuzzleCords.x"
-                        :top="PuzzleCords.y"
-                        v-if="isDrag && !endFirstTask"
-                    >
-                        <template v-slot:task>
-                            <div draggable="false">
-                                <img
-                                    :src="draggableBlock.src"
-                                    :alt="draggableBlock.class"
-                                    :class="[draggableBlock.class]"
-                                    draggable="false"
-                                    @mouseup="endPosition($event)"
-                                    @mousemove="getPuzzleCords($event)"
-                                    @mouseleave="mouseLeaveFromPuzzle()"
-
-                                    @touchend="endPosition($event)"
-                                    @touchmove.prevent="($event)=>{getPuzzleCords($event)}"
-                                    
-                                />
-=======
                 <canvas class="canvas_draw" ref="canvasRef" @mousedown="engage" @mouseup="disengage" @mousemove="draw"
                     @click="voiceActing" v-show="endFirstTask && true"></canvas>
                 <div class="draggable-list" ref="taskBlock" @dragover.prevent @drop="missDrop($event)">
@@ -63,7 +21,6 @@
                                 <img :src="draggableBlock.src" :alt="draggableBlock.class"
                                     :class="[draggableBlock.class]" draggable="false" @mouseup="endPosition($event)"
                                     @mousemove="getPuzzleCords($event)" @mouseleave="mouseLeaveFromPuzzle()" />
->>>>>>> 379d0111886c038f2b4803aee21adb438b481891
                             </div>
                         </template>
                     </DragndropComponent>
@@ -84,48 +41,16 @@
                     </transition>
 
                     <div class="draggable-list__syllables" v-if="!endFirstTask">
-<<<<<<< HEAD
-                        <div
-                            class="draggable-list__set-syllables"
-                            v-for="row in firstTask[0]"
-                            :key="row"
-                            draggable="false"
-                        >
-                            <div
-                                v-for="word in row"
-                                :key="word.id"
-                                @mousedown.left="
-                                    ($event) => startPosition($event, word)
-                                "
-                                @touchstart="($event) => {
-                                    if (word.isActive) {
-                                        playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)
-                                    }
-                                    startPosition($event, word)
-
-                                    }"
-                                @mouseenter="()=>{
-                                    if (word.isActive) {
-                                        playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)
-                                    }
-                                }"
-
-
-                                :ref="
-                                    (el) => {
-=======
                         <div class="draggable-list__set-syllables" v-for="row in firstTask[0]" :key="row"
                             draggable="false">
-                            <div v-for="word in row" :key="word.id" @mousedown.left="($event) => startPosition($event, word)
-                                " @mouseenter="() => {
+                            <div v-for="word in row" :key="word.id" @mousedown.left="($event) => startPosition($event, word)" 
+                                @mouseenter="() => {
                                     if (word.isActive) {
                                         playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)
-                                    }
-                                }" :ref="(el) => {
->>>>>>> 379d0111886c038f2b4803aee21adb438b481891
-                                        refPuzzles[word.id - 1] = el;
-                                    }
-                                    " draggable="false">
+                                    }}" 
+                                    
+                                :ref="(el) => { refPuzzles[word.id - 1] = el}" 
+                                draggable="false">
                                 <img :src="word.error == 0
                                         ? word.src
                                         : word.error == 1

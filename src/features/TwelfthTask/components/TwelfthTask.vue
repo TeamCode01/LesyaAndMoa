@@ -59,9 +59,9 @@
                             :sort="false"
                             :options="{ draggable: word.isActive }"
                             
-                            @choose="($event)=>{ console.log('choose'); dragLetter($event, word.id, word.text)}"
+                            @choose="($event)=>{ if (wordIsActive($event)) dragLetter($event, word.id, word.text)}"
                             @unchoose="($event)=>{checkAnswer($event)}">
-
+                            
                                 <div 
                                 class="draggable-list__word" 
                                 :class="{void : word.isActive == false, item_wrong : word.error == -1 }"
@@ -85,6 +85,7 @@
                                     class="draggable-list__question-block" 
                                     v-for="letter in word.data" :key="letter.id"
                                     :options="{disabled: false}"
+                                    draggable="false"
 
                                     @add="addLetter($event, letter.id, letter.isActive, letter.text)"
                                     ghost-class="none"
@@ -115,6 +116,7 @@
                                     class="draggable-list__question-block" 
                                     v-for="letter in word.data" :key="letter" 
                                     :options="{disabled: false}"
+                                    draggable="false"
 
                                     @add="addLetter($event, letter.id, letter.isActive, letter.text)"
                                     ghost-class="none">
@@ -278,16 +280,22 @@ const dropLetter = (event, id, isActive) => {
                 })
             );
             
-            console.dir(taskDOM.children)
 
             Array.from(taskDOM.children).map(row => {
                 Array.from(row.children).forEach(word => {
                     let word_block = word.children[0]
 
+
                     if (word_block.dataset.word_id == dragid){
-                        word_block.style = 'opacity: 0;'
-                        word_block.draggable = 'false'
-                        word.draggable = 'false'
+
+                        word_block.classList.add = 'opacity: 0;'
+                        word_block.setAttribute('draggable', 'false')
+                        word_block.dataset['word_isActive'] = false
+
+                        word.classList.add('void')
+                        word.setAttribute('ghost-class', 'none')
+                        word.setAttribute('drag-class', 'none')
+                        
                     }
                 })
             })
@@ -345,6 +353,22 @@ const dropLetter = (event, id, isActive) => {
         else {
             
 
+            Array.from(taskDOM.children).map(row => {
+                Array.from(row.children).forEach(word => {
+                    let word_block = word.children[0]
+
+
+                    if (word_block.dataset.word_id == dragid){
+
+                        word_block.classList.add('item_wrong')
+                        
+                        setTimeout(()=>{
+                            word_block.classList.remove('item_wrong')
+                        }, 1000)
+                    }
+                })
+            })
+
             Task.value.map((row) =>
                 row.map((word) => {
 
@@ -381,11 +405,12 @@ const addLetter = (event, id, isActive, text) => {
     dropLetter(event, id, isActive)
 }
 
-onMounted(() => {
-    const correct = getCorrectAnswer(12, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-})
+const wordIsActive = (event) => {
+    if (event.item.dataset['word_isActive'] == 'false') return false
+    return true
+}
+
+
 </script>
 <style scoped lang='scss'>
 *{
