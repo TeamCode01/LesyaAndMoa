@@ -17,8 +17,15 @@
             Чтобы начать обучение, создайте новую группу
         </p>
     </div>
-    <div class="profile-child" v-if="userStore.currentUser.tasks_type === 'индивидуальный'">
-        <div class="profile-child__wrapper" v-for="(block, index) in userStore.children" :key="index">
+    <div
+        class="profile-child"
+        v-if="userStore.currentUser.tasks_type === 'индивидуальный'"
+    >
+        <div
+            class="profile-child__wrapper"
+            v-for="(block, index) in userStore.children"
+            :key="index"
+        >
             <div class="delete-profile">
                 <modalConfirm label="Удалить профиль">
                     <template #default="{ close }">
@@ -70,7 +77,11 @@
                 </p>
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
-                    <v-progress-linear v-model="skill.progress" height="30" class="scale">
+                    <v-progress-linear
+                        v-model="skill.progress"
+                        height="30"
+                        class="scale"
+                    >
                         <template v-slot:default="{ value }">
                             <strong>{{ Math.ceil(value) }}%</strong>
                         </template>
@@ -243,12 +254,27 @@
                 </v-card>
             </template>
         </modalWindow>
-        <img v-if="userStore.children.length" class="profile__img" src="@app/assets/img/Profile/lesyaandmoa.svg" />
-        <img v-if="!userStore.children.length" class="profile-child__img"
-            src="@app/assets/img/Profile/lesyaMoaParentAndChild.svg" alt="" />
+        <img
+            v-if="userStore.children.length"
+            class="profile__img"
+            src="@app/assets/img/Profile/lesyaandmoa.svg"
+        />
+        <img
+            v-if="!userStore.children.length"
+            class="profile-child__img"
+            src="@app/assets/img/Profile/lesyaMoaParentAndChild.svg"
+            alt=""
+        />
     </div>
-    <div class="profile-child" v-if="userStore.currentUser.tasks_type === 'групповой'">
-        <div class="profile-child__wrapper" v-for="(block, index) in userStore.groups" :key="index">
+    <div
+        class="profile-child"
+        v-if="userStore.currentUser.tasks_type === 'групповой'"
+    >
+        <div
+            class="profile-child__wrapper"
+            v-for="(block, index) in groups"
+            :key="index"
+        >
             <div class="delete-profile">
                 <modalConfirm label="Удалить профиль">
                     <template #default="{ close }">
@@ -270,11 +296,19 @@
                                     </div>
                                 </div>
                                 <div class="delete-profile_btn">
-                                    <Button class="delete-btn" label="Удалить" @click="
-                                        deleteChild(block.id, index);
-                                    close();
-                                    "></Button>
-                                    <Button label="Отмена" class="delete-btn" @click="close"></Button>
+                                    <Button
+                                        class="delete-btn"
+                                        label="Удалить"
+                                        @click="
+                                            deleteGroup(block.id, index);
+                                            close();
+                                        "
+                                    ></Button>
+                                    <Button
+                                        label="Отмена"
+                                        class="delete-btn"
+                                        @click="close"
+                                    ></Button>
                                 </div>
                             </div>
                         </div>
@@ -287,17 +321,27 @@
                 </p>
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
-                    <v-progress-linear v-model="skill.progress" height="30" class="scale">
+                    <v-progress-linear
+                        v-model="skill.progress"
+                        height="30"
+                        class="scale"
+                    >
                         <template v-slot:default="{ value }">
                             <strong>{{ Math.ceil(value) }}%</strong>
                         </template>
                     </v-progress-linear>
                 </div>
-                <RouterLink :to="{
-                    name: 'Game',
-                    params: { idChildOrGroup: block.id },
-                }" class="router-link">
-                    <Button label="Перейти к обучению" class="profile__btn"></Button>
+                <RouterLink
+                    :to="{
+                        name: 'Game',
+                        params: { idChildOrGroup: block.id },
+                    }"
+                    class="router-link"
+                >
+                    <Button
+                        label="Перейти к обучению"
+                        class="profile__btn"
+                    ></Button>
                 </RouterLink>
             </div>
         </div>
@@ -397,10 +441,18 @@
                 </v-card>
             </template>
         </modalWindow>
-        <img v-if="!userStore.groups.length" class="profile-child__img" src="@app/assets/img/Profile/Moa.png" alt="" />
-        <img v-if="userStore.groups.length" class="profile-child__img"
-            src="@app/assets/img/Profile/lesyaProfileGroup.svg" alt="" />
-        <img v-if="false" class="profile__img" src="@app/assets/img/Profile/Frame 277138543.png" />
+        <img
+            v-if="!groups.length"
+            class="profile-child__img"
+            src="@app/assets/img/Profile/Moa.svg"
+            alt=""
+        />
+        <img
+            v-if="groups.length"
+            class="profile-child__img"
+            src="@app/assets/img/Profile/lesyaProfileGroup.svg"
+            alt=""
+        />
     </div>
 </template>
 <script setup>
@@ -558,8 +610,8 @@ const AddGroup = async () => {
             },
         });
         formGroup.value = response.data;
-        await userStore.getChildren();
-         fetchSkills();
+        await GetGroup();
+        fetchSkills();
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -625,10 +677,11 @@ watch(
         }
         // skill.value = newSkill;
         fetchSkills();
-    }
+    },
 );
 
 onMounted(() => {
+    GetGroup();
     // fetchSkills();
 });
 </script>
