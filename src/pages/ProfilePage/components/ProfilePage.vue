@@ -117,7 +117,10 @@
                             <Input
                                 placeholder="Фамилия"
                                 name="login"
-                                class="form-input"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.first_name,
+                                }"
                                 v-model:value="form.first_name"
                                 @blur="v$.first_name.$touch()"
                             ></Input>
@@ -132,7 +135,10 @@
                             <Input
                                 placeholder="Имя"
                                 name="login"
-                                class="form-input"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.last_name,
+                                }"
                                 v-model:value="form.last_name"
                                 @blur="v$.last_name.$touch()"
                             ></Input>
@@ -168,7 +174,10 @@
                             <Input
                                 @blur="v$.age.$touch()"
                                 name="login"
-                                class="form-input"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.age,
+                                }"
                                 v-model:value="form.age"
                             ></Input>
                             <span v-if="isError.age" class="error-message">{{
@@ -201,7 +210,10 @@
                             <Input
                                 @blur="v$.school.$touch()"
                                 name="login"
-                                class="form-input"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.school,
+                                }"
                                 v-model:value="form.school"
                             ></Input>
                             <span v-if="isError.school" class="error-message">{{
@@ -213,7 +225,10 @@
                             <Input
                                 @blur="v$.grade.$touch()"
                                 name="login"
-                                class="form-input"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.grade,
+                                }"
                                 v-model:value="form.grade"
                             ></Input>
                             <span v-if="isError.grade" class="error-message">{{
@@ -357,9 +372,12 @@
                             <label>Название группы</label>
                             <Input
                                 name="login"
-                                class="form-input"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.name,
+                                }"
                                 v-model:value="formGroup.name"
-                                @blur="v$.name.$touch()"
+                                @blur="V$.name.$touch()"
                             ></Input>
                             <span v-if="isError.name" class="error-message">{{
                                 isError.name[0]
@@ -368,9 +386,12 @@
                         <div class="form-input">
                             <label>Количество учеников в группе</label>
                             <Input
-                                @blur="v$.number_of_students.$touch()"
+                                @blur="V$.number_of_students.$touch()"
                                 name="login"
-                                class="form-input"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.number_of_students,
+                                }"
                                 v-model:value="formGroup.number_of_students"
                             ></Input>
                             <span
@@ -382,9 +403,12 @@
                         <div class="form-input">
                             <label>Средний возраст учеников группы</label>
                             <Input
-                                @blur="v$.average_age.$touch()"
+                                @blur="V$.average_age.$touch()"
                                 name="login"
-                                class="form-input"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.average_age,
+                                }"
                                 v-model:value="formGroup.average_age"
                             ></Input>
                             <span
@@ -396,7 +420,7 @@
                         <div class="form-input">
                             <label>Регион</label>
                             <SelectSort
-                                @blur="v$.region.$touch()"
+                                @blur="V$.region.$touch()"
                                 @click="GetRegion"
                                 :items="reg"
                                 v-model="formGroup.region"
@@ -417,9 +441,12 @@
                         <div class="form-input">
                             <label>Школа</label>
                             <Input
-                                @blur="v$.school.$touch()"
+                                @blur="V$.school.$touch()"
                                 name="login"
-                                class="form-input"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.school,
+                                }"
                                 v-model:value="formGroup.school"
                             ></Input>
                             <span v-if="isError.school" class="error-message">{{
@@ -514,6 +541,7 @@ const rules = {
 };
 
 const v$ = useVuelidate(rules, form, formGroup);
+const V$ = useVuelidate(rules, formGroup);
 const isError = ref({});
 
 watchEffect(() => {
@@ -543,10 +571,18 @@ watchEffect(() => {
         if (v$.value.region.$error) {
             isError.value.region = ['Поле должно быть заполнено'];
         }
-        if (v$.value.name.$error) {
+    }
+    if (V$.value.$invalid) {
+        if (V$.value.school.$error) {
+            isError.value.school = ['Поле должно быть заполнено'];
+        }
+        if (V$.value.region.$error) {
+            isError.value.region = ['Поле должно быть заполнено'];
+        }
+        if (V$.value.name.$error) {
             isError.value.name = ['Поле должно быть заполнено'];
         }
-        if (v$.value.number_of_students.$error) {
+        if (V$.value.number_of_students.$error) {
             isError.value.number_of_students = ['Поле должно быть заполнено'];
         }
         if (
@@ -554,6 +590,9 @@ watchEffect(() => {
             formGroup.value.average_age > 17
         ) {
             isError.value.average_age = ['Возраст должен быть между 0 и 17'];
+        }
+        if (V$.value.average_age.$error) {
+            isError.value.average_age = ['Поле должно быть заполнено'];
         }
     }
 });
@@ -934,9 +973,5 @@ onMounted(() => {
     font-size: 16px;
     font-weight: 400;
     line-height: 21.82px;
-}
-
-.error-border {
-    border: 2px solid #ff535c !important;
 }
 </style>

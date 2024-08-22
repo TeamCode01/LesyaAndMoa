@@ -5,47 +5,99 @@
             <div class="Form">
                 <div class="login-input-pass">
                     <label>Логин</label>
-                    <Input @blur="v$.email.$touch()" placeholder="Введите логин" name="login" class="form-input"
-                        v-model:value="form.email"></Input>
+                    <Input
+                        @blur="v$.email.$touch()"
+                        placeholder="Введите логин"
+                        name="login"
+                        :class="{
+                            'form-input': true,
+                            red: isError.email,
+                        }"
+                        v-model:value="form.email"
+                    ></Input>
                     <span v-if="isError.email" class="error-message">{{
                         isError.email[0]
-                        }}</span>
+                    }}</span>
                 </div>
                 <div class="login-input-pass">
                     <label>Введите пароль</label>
-                    <Input @blur="v$.password.$touch()" placeholder="Введите пароль" name="password" class="form-input"
-                        v-model:value="form.password" type="password"></Input>
+                    <Input
+                        @blur="v$.password.$touch()"
+                        placeholder="Введите пароль"
+                        name="password"
+                        :class="{
+                            'form-input': true,
+                            red: isError.password,
+                        }"
+                        v-model:value="form.password"
+                        type="password"
+                    ></Input>
                     <span v-if="isError.password" class="error-message">{{
                         isError.password[0]
-                        }}</span>
+                    }}</span>
                 </div>
                 <div class="login-input-pass">
                     <label>Повторите пароль</label>
-                    <Input @blur="v$.re_password.$touch()" placeholder="Введите пароль" name="password"
-                        class="form-input" v-model:value="form.re_password" type="password"></Input>
+                    <Input
+                        @blur="v$.re_password.$touch()"
+                        placeholder="Введите пароль"
+                        name="password"
+                        :class="{
+                            'form-input': true,
+                            red: isError.re_password,
+                        }"
+                        v-model:value="form.re_password"
+                        type="password"
+                    ></Input>
                     <span v-if="isError.re_password" class="error-message">{{
                         isError.re_password[0]
-                        }}</span>
+                    }}</span>
                 </div>
-                <SelectSort @blur="v$.tasks_type.$touch()" v-model="form.tasks_type" :items="tasksChoose"
-                    name="select_position" id="select-position" :options="tasksChoose" class="invents-select" clearable
-                    placeholder="Выберите формат занятий" variant="outlined" :sorts-boolean="false"
-                    @update:value="changeOption" v-bind="props" />
+                <SelectSort
+                    @blur="v$.tasks_type.$touch()"
+                    v-model="form.tasks_type"
+                    :items="tasksChoose"
+                    name="select_position"
+                    id="select-position"
+                    :options="tasksChoose"
+                    class="invents-select"
+                    clearable
+                    placeholder="Выберите формат занятий"
+                    variant="outlined"
+                    :sorts-boolean="false"
+                    @update:value="changeOption"
+                    v-bind="props"
+                />
                 <span v-if="isError.tasks_type" class="error-message">{{
                     isError.tasks_type[0]
-                    }}</span>
+                }}</span>
 
                 <div class="regCheck">
-                    <input type="checkbox" v-model="form.data_processing_agreement" />
+                    <input
+                        type="checkbox"
+                        v-model="form.data_processing_agreement"
+                    />
                     <div class="regCheck_text">
                         даю согласие на обработку персональных данных
-                        и ознакомлен с <router-link class="form-question-link" to="/policy-page" target="_blank">политикой
-                            конфиденциальности</router-link>
+                        и ознакомлен с <router-link
+                            class="form-question-link"
+                            to="/policy-page"
+                            target="_blank"
+                            >политикой конфиденциальности</router-link
+                        >
                     </div>
                 </div>
-                <Button label="Зарегистрироваться" class="form-btn" @click="RegisterUser"></Button>
+                <Button
+                    label="Зарегистрироваться"
+                    class="form-btn"
+                    @click="RegisterUser"
+                ></Button>
                 <div class="form-question">
-                    Уже есть аккаунт?&nbsp;<router-link class="form-question-link" to="/Login">Войти</router-link>
+                    Уже есть аккаунт?&nbsp;<router-link
+                        class="form-question-link"
+                        to="/Login"
+                        >Войти</router-link
+                    >
                 </div>
             </div>
         </div>
@@ -91,13 +143,15 @@ watchEffect(() => {
     isError.value = {};
     if (v$.value.$invalid) {
         if (v$.value.email.$error) {
-            isError.value.email = ['Поле должно быть заполнено'];
+            isError.value.email = ['Неверный e-mail'];
         }
         if (v$.value.password.$error) {
-            isError.value.password = ['Поле должно быть заполнено'];
+            isError.value.password = [
+                'Пароль должен содержать не менее 8 символов, используйте латиницу, спецсимволы (@#$%&*!), заглавные и прописные буквы, цифры.',
+            ];
         }
         if (v$.value.re_password.$error) {
-            isError.value.re_password = ['Поле должно быть заполнено'];
+            isError.value.re_password = ['Пароли не совпадают'];
         }
         if (v$.value.tasks_type.$error) {
             isError.value.tasks_type = ['Поле должно быть заполнено'];
