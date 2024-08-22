@@ -68,7 +68,7 @@
                             <img :ref="el => refColumns[4][rowId_index - 1] = el" alt="green-circle"
                                 src="/assets/creatures/SeventeenthTask/green-circle.svg" class="draggable-list__circle"
                                 draggable="false" />
-                            <img :src="images[option][rowId].url" class="draggable-list__image">
+                            <img :src="images[option][rowId].ur l" class="draggable-list__image">
                         </div>
                     </div>
                 </div>

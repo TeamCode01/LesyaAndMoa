@@ -21,50 +21,62 @@
                     <!-- ВАРИАНТЫ ОТВЕТОВ -->
                     <div class="draggable-list__words">
                         <div class="draggable-list__set-words" v-for="row in Task" :key="row">
-                            <div class="draggable-list__word" v-for="word in row" :key="word" :class="{void : !word.isActive, item_wrong : word.error == -1 }"
-                            :draggable="word.isActive" @dragstart="dragLetter($event, word.id, word.text)">
+                            <div class="draggable-list__word" v-for="word in row" :key="word"
+                                :class="{ void: !word.isActive, item_wrong: word.error == -1 }"
+                                :draggable="word.isActive" @dragstart="dragLetter($event, word.id, word.text)">
                                 {{ word.text }}
                             </div>
                         </div>
                     </div>
 
                     <!-- ЛОДОЧКИ -->
-<!-- TODO Для последующего разраба -->
-<!-- TODO Лодочка распилина на 2 части, чтоб удобнее было перекрыть кнопку при ответе. {{}} место для ответа -->
-<!-- TODO Скрее всего, это хардкод, но в голове у меня только такое решение созрело -->
+                    <!-- TODO Для последующего разраба -->
+                    <!-- TODO Лодочка распилина на 2 части, чтоб удобнее было перекрыть кнопку при ответе. {{}} место для ответа -->
+                    <!-- TODO Скрее всего, это хардкод, но в голове у меня только такое решение созрело -->
                     <div class="draggable-list__answer">
                         <!-- ВЕРХНИЕ ЛОДОЧКИ -->
                         <div class="draggable-list__answer-wrapper">
                             <div class="draggable-list__question-word" v-for="word in Answer.data[0]" :key="word">
-                                <div class="draggable-list__question-block" v-for="letter in word.data" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" draggable="false">
-                                    <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }"> {{ letter.text }} </div>
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside" draggable="false">
+                                <div class="draggable-list__question-block" v-for="letter in word.data" :key="letter"
+                                    @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
+                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt=""
+                                        class="draggable-list__question-boat" draggable="false">
+                                    <div class="draggable-list__question-text draggable-list__word"
+                                        :class="{ void: !letter.isActive, item_right: letter.error == 1 }"> {{
+                                        letter.text }} </div>
+                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt=""
+                                        class="draggable-list__question-boat boat-frontside" draggable="false">
                                 </div>
                             </div>
                         </div>
 
                         <!-- ВОДА -->
                         <div>
-                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png" alt="" draggable="false"/>
+                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png"
+                                alt="" draggable="false" />
                         </div>
 
                         <!-- НИЖНИЕ ЛОДОЧКИ -->
-                        <div class="draggable-list__answer-wrapper" >
+                        <div class="draggable-list__answer-wrapper">
                             <div class="draggable-list__question-word" v-for="word in Answer.data[1]" :key="word">
-                                <div class="draggable-list__question-block" v-for="letter in word.data" :key="letter" @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
-                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt="" class="draggable-list__question-boat" draggable="false">
-                                    <div class="draggable-list__question-text draggable-list__word" :class="{void : !letter.isActive, item_right : letter.error == 1 }">
+                                <div class="draggable-list__question-block" v-for="letter in word.data" :key="letter"
+                                    @dragover.prevent @drop="dropLetter($event, letter.id, letter.isActive)">
+                                    <img src="/assets/creatures/TwelfthTask/boat.png" alt=""
+                                        class="draggable-list__question-boat" draggable="false">
+                                    <div class="draggable-list__question-text draggable-list__word"
+                                        :class="{ void: !letter.isActive, item_right: letter.error == 1 }">
                                         {{ letter.text }}
                                     </div>
-                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt="" class="draggable-list__question-boat boat-frontside" draggable="false">
+                                    <img src="/assets/creatures/TwelfthTask/frontside.png" alt=""
+                                        class="draggable-list__question-boat boat-frontside" draggable="false">
                                 </div>
                             </div>
                         </div>
 
                         <!-- ВОДА -->
                         <div>
-                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png" alt="" draggable="false"/>
+                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png"
+                                alt="" draggable="false" />
                         </div>
                     </div>
                 </div>
@@ -119,7 +131,7 @@ const hideModal = () => {
     show.value = false;
 }
 const getImageUrl = (path) => {
- return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 const Task = ref()
 const Answer = ref()
@@ -134,7 +146,7 @@ const dragAudio = ref(new Audio());
 const dragLetter = (event, id, text) => {
     event.dataTransfer.setData('text', `${id}`);
     if (dragAudio.value) dragAudio.value.pause();
-    dragAudio.value.src = `/assets/audio/Task12/${audioMap.get(text)}`;
+    dragAudio.value.src = new URL(`/assets/audio/Task12/${audioMap.get(text)}`, import.meta.url).href;
     dragAudio.value.play();
 };
 
@@ -143,7 +155,7 @@ const dropLetter = (event, id, isActive) => {
     let audioPath = ''
 
     if (!isActive) {
-        if (dragid == id){
+        if (dragid == id) {
             Answer.value.data.map((row) =>
                 row.map((word) => {
                     word.data.map((letter) => {
@@ -153,22 +165,22 @@ const dropLetter = (event, id, isActive) => {
                             word.answerCounter += 1;
 
                             if (word.id == 1 && word.answerCounter == 4) {
-                                audioPath = '/assets/audio/Task12/з.12 полн.слово веселые.mp3'
+                                audioPath = new URL('/assets/audio/Task12/з.12 полн.слово веселые.mp3', import.meta.url).href;
                                 Answer.value.answerCounter += 1
                             }
                             else if (word.id == 2 && word.answerCounter == 3) {
-                                audioPath = '/assets/audio/Task12/з.12 полн.слово ребята.mp3'
+                                audioPath = new URL('/assets/audio/Task12/з.12 полн.слово ребята.mp3', import.meta.url).href;
                                 Answer.value.answerCounter += 1
                             }
                             else if (word.id == 3 && word.answerCounter == 2) {
-                                audioPath = '/assets/audio/Task12/з.12 полн.слово наши.mp3'
+                                audioPath = new URL('/assets/audio/Task12/з.12 полн.слово наши.mp3', import.meta.url).href;
                                 Answer.value.answerCounter += 1
                             }
                             else if (word.id == 4 && word.answerCounter == 2) {
-                                audioPath = '/assets/audio/Task12/з.12 полн.слово друзья.mp3'
+                                audioPath = new URL('/assets/audio/Task12/з.12 полн.слово друзья.mp3', import.meta.url).href;
                                 Answer.value.answerCounter += 1
                             }
-                            setTimeout(()=>{
+                            setTimeout(() => {
                                 letter.error = 0;
                             }, 1000)
                         }
@@ -184,9 +196,9 @@ const dropLetter = (event, id, isActive) => {
                 })
             );
 
-
+            let reactionPath = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
             let reactionAudio = new Audio(
-                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
+                reactionPath
             );
             reactionAudio.play();
 
@@ -200,7 +212,8 @@ const dropLetter = (event, id, isActive) => {
 
             if (Answer.value.answerCounter == 4) {
                 setTimeout(() => {
-                    let audio = new Audio('/assets/audio/Task12/з.12 полн.текст Веселые ребята наши друзья.mp3');
+                    let audioPath_4 = new URL('/assets/audio/Task12/з.12 полн.текст Веселые ребята наши друзья.mp3', import.meta.url).href;
+                    let audio = new Audio(audioPath_4);
                     audio.play();
                 }, 2000)
             }
@@ -216,9 +229,9 @@ const dropLetter = (event, id, isActive) => {
                             emit('correct');
                             emit('open');
                         }
-                    },1000)
-
-                    let audio = new Audio('/assets/audio/Task12/368.12_.mp3');
+                    }, 1000)
+                     let audio_path = new URL('/assets/audio/Task12/368.12_.mp3', import.meta.url).href
+                    let audio = new Audio(audio_path);
                     audio.play();
                 }
 
@@ -230,15 +243,16 @@ const dropLetter = (event, id, isActive) => {
 
                     if (word.id == dragid) {
                         word.error = -1;
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             word.error = 0;
                         }, 1000)
 
                     }
                 })
             );
+            let reactionPath_2 = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
             let reactionAudio = new Audio(
-                `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
+                 reactionPath_2
             );
             reactionAudio.play();
         }
@@ -252,7 +266,7 @@ onMounted(() => {
 })
 </script>
 <style scoped lang='scss'>
-*{
+* {
     user-select: none;
 }
 
@@ -280,6 +294,7 @@ onMounted(() => {
     margin-top: 60px;
     width: 100%;
     height: 386px;
+
     @media (max-width: 1024px) {
         height: 302px;
         margin-top: 48px;
@@ -293,6 +308,7 @@ onMounted(() => {
     justify-content: space-between;
     width: 889px;
     height: 136px;
+
     @media (max-width: 1024px) {
         height: 116px;
     }
@@ -373,12 +389,12 @@ onMounted(() => {
     height: 20px;
 }
 
-.boat-frontside{
+.boat-frontside {
     position: relative;
     bottom: 77px;
 }
 
-.draggable-list__question-text{
+.draggable-list__question-text {
     position: relative;
     transform: translateY(-65px);
     z-index: -1;
@@ -388,6 +404,7 @@ onMounted(() => {
 .item_right {
     border: 2px solid #5ccf54;
 }
+
 .item_wrong {
     border: 2px solid #db0000;
 }
