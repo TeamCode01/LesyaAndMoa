@@ -243,7 +243,7 @@
 
 </template>
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, onUnmounted } from "vue";
 import { Button } from "@shared/components/buttons";
 import news from "@app/assets/backgrounds/news.png";
 import nastya from "@app/assets/backgrounds/nastya.png";
@@ -256,6 +256,7 @@ import { Carousel, Slide } from "vue3-carousel";
 import { TestTask } from "@features/TestTask";
 import { useUserStore } from "@layouts/stores/user";
 import { cookieModal } from "@shared/components/modals";
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from "vue-router";
 
 const windowWidth = ref(window.innerWidth);
 const userStore = useUserStore();
@@ -424,6 +425,30 @@ const playTestAudio = (audioPath) => {
   audio.value.play();
 }
 
+function handleScroll(e) {
+  const test = document.getElementById('test');
+  const posTop = test.getBoundingClientRect().top;
+  if (posTop + test.clientHeight <= window.innerHeight) {
+    playAudio('Music/звук 1_.mp3');
+    audio.value.addEventListener('ended', () => {
+      playAudio('TestTask/3.тестовое задание.mp3');
+      audio.value.addEventListener('ended', () => {
+        audio.value.pause();
+      })
+    })
+    if (posTop + test.offsetHeight < 0) {
+      audio.value.pause();
+      console.log('pause');
+    } else {
+      audio.value.play();
+      console.log('play');
+    }
+
+    // document.removeEventListener('scroll', handleScroll);
+  }
+
+}
+
 const mute = () => {
   isMuted.value = !isMuted.value
   if (isMuted.value === true) {
@@ -443,28 +468,13 @@ const skip = () => {
 }
 
 onMounted(() => {
-  const test = document.getElementById('test');
   if (localStorage.getItem('stopCookie') === 'true') {
     showCookie.value = false;
   } else {
     showCookie.value = true;
   }
+  console.log('Audio', audio.value, audio.value.paused)
   document.addEventListener('scroll', handleScroll);
-  function handleScroll() {
-    const posTop = test.getBoundingClientRect().top;
-    if (posTop + test.clientHeight <= window.innerHeight && posTop >= 0) {
-      playAudio('Music/звук 1_.mp3');
-      setTimeout(() => {
-        playAudio('TestTask/3.тестовое задание.mp3');
-        audio.value.addEventListener('ended', () => {
-          audio.value.src = '';
-          showBtn.value = true;
-        })
-      }, 14000)
-
-      document.removeEventListener('scroll', handleScroll);
-    }
-  }
 
   windowWidth.value = window.innerWidth;
   itemsToShow.value = windowWidth.value >= 660 ? 2 : 1
@@ -476,6 +486,22 @@ onMounted(() => {
     authorsToShow.value = windowWidth.value >= 650 ? 2 : 1
   });
 
+})
+onUnmounted(() => {
+  document.removeEventListener('scroll', handleScroll);
+  audio.value.pause();
+})
+
+onBeforeRouteLeave(() => {
+  audio.value.pause();
+});
+
+onBeforeRouteUpdate(() => {
+  if (audio.value.paused) {
+    audio.value.play();
+  } else {
+    audio.value.pause();
+  }
 })
 </script>
 <style lang="scss" scoped>

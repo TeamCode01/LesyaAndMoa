@@ -64,7 +64,7 @@
                     </div>
                     <div class="draggable-list__answer-zone">
                         <div class="draggable-list__answer" v-for="answer in Answer" :key="answer">
-                            <img :src="answer.img" alt="lesyaandmoa" class="lesyaandmoa" />
+                            <img :src="getPictureUrl(answer.img)" alt="lesyaandmoa" class="lesyaandmoa" />
                             <div class="draggable-list__subanswer">
                                 <div class="draggable-list__word"
                                     :class="{ 'item_right': answer.word.error == 1, 'item_wrong': answer.word.error == -1 }"
@@ -162,7 +162,9 @@ const draggableBlock = ref({
     type: '',
     id: 0,
 });
-
+const getPictureUrl = (path) => {
+ return new URL(`/assets/img/${path}`, import.meta.url).href;
+};
 const getImageUrl = (path) => {
  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
@@ -338,16 +340,16 @@ const endPosition = (event) => {
                                 emit('open');
                             }
                         }, 1000)
-
-                        let finalaudio = new Audio('/assets/audio/Task14/388.14.mp3');
+                         let finalaudio_path = new URL('/assets/audio/Task14/388.14.mp3', import.meta.url).href
+                        let finalaudio = new Audio(finalaudio_path);
                         finalaudio.play();
                     }
                 }, 1000)
 
             }
         })
-
-        let reactionAudio = new Audio(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`);
+        let reactionAudio_path = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
+        let reactionAudio = new Audio(reactionAudio_path);
         reactionAudio.play();
 
 
@@ -382,8 +384,8 @@ const endPosition = (event) => {
                     }
                 });
             });
-
-            let reactionAudio = new Audio(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`);
+            let reactionAudio_path = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
+            let reactionAudio = new Audio(reactionAudio_path);
             reactionAudio.play();
         }
 

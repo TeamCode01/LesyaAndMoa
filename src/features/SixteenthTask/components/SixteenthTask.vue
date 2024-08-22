@@ -23,8 +23,8 @@
                                     " v-for="letter in word" :key="letter.id" draggable="true" @dragstart="
                                         dragLetter($event, wordid, letter.id)
                                         ">{{
-                                        letter.isActive ? letter.text : ''
-                                    }}</span>
+                                            letter.isActive ? letter.text : ''
+                                        }}</span>
                             </div>
                         </div>
                     </div>
@@ -98,7 +98,7 @@ const is_started = ref(null);
 const corrValue = ref(0);
 
 const getImageUrl = (path) => {
- return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 const taskArray = ref([]);
 taskArray.value = dataTask;
@@ -126,7 +126,8 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                                 letter.isActive = true;
                                 if (word.word.every((item) => { return item.isActive })) {
                                     console.log(`${audioMap.get('слово-' + word.wordid)}`)
-                                    let audio = new Audio(`/assets/audio/Task16/${audioMap.get('слово-' + word.wordid)}`);
+                                    let wordPath = new URL(`/assets/audio/Task6/${audioMap.get('слово-' + word.wordid)}`, import.meta.url).href;
+                                    let audio = new Audio(wordPath);
                                     setTimeout(() => {
                                         audio.play();
                                     }, 1000)
@@ -144,9 +145,10 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                         });
                 });
             });
+            let reactionPath = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
 
             let reactionAudio = new Audio(
-                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
+                reactionPath
             );
             reactionAudio.play();
             event.target.classList.add(
@@ -160,7 +162,8 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                     event.target.classList.remove(
                         'draggable-list__subcontainer-square_right'
                     );
-                    let audio = new Audio(`/assets/audio/Task16/${audioMap.get('final')}`);
+                    let audioPathSrc = new URL(`/assets/audio/Task16/${audioMap.get('final')}`, import.meta.url).href
+                    let audio = new Audio(audioPathSrc);
                     audio.play();
                 }, 2000);
 
@@ -192,8 +195,9 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
     } else {
         if (!letterIsActive) {
             event.target.classList.add('draggable-list__subcontainer-square_wrong');
+            let reactionAudioSrc = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
             let reactionAudio = new Audio(
-                `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
+                reactionAudioSrc
             );
             reactionAudio.play();
             setTimeout(() => {

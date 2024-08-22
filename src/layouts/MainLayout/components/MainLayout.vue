@@ -12,9 +12,9 @@
 <script setup>
 import { useUserStore } from "@layouts/stores/user";
 import { AppBreadcrumbs, useBreadcrumbsStore } from '@shared/index';
+const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
 import { storeToRefs } from 'pinia';
 import { onMounted, watch } from "vue";
-const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
 const userStore = useUserStore();
 
 watch(
@@ -30,8 +30,5 @@ onMounted(async () => {
   if (localStorage.getItem("Token") !== null) {
     await userStore.getUser();
   }
-  //   if (userStore.currentUser.tasks_type === "индивидуальный") {
-  //     await userStore.getChildren();
-  //   }
 });
 </script>

@@ -143,7 +143,7 @@ for (let row = 1; row in taskData; row++) {
 const playAudio = (text) => {
     if (!audio.value.paused) audio.value.pause()
     if (text) {
-        audio.value.src = `/assets/audio/Task15/${audioMap.get(text)}`;
+        audio.value.src = new URL(`/assets/audio/Task15/${audioMap.get(text)}`, import.meta.url).href;
         audio.value.play()
     }
 }
@@ -175,7 +175,7 @@ const dropLetter = (event, x, y, id, isActive) => {
                                 (word.id == 7 && word.answerCounter == 4)
                             ) {
                                 setTimeout(() => {
-                                    let audioPath = `/assets/audio/Task15/${audioMap.get('слово-' + word.id)}`
+                                    let audioPath = new URL(`/assets/audio/Task15/${audioMap.get('слово-' + word.id)}`, import.meta.url).href
                                     let word_audio = new Audio(audioPath);
                                     word_audio.play()
                                 }, 1000)
@@ -194,8 +194,10 @@ const dropLetter = (event, x, y, id, isActive) => {
 
             answersCounter.value += 1;
             event.target.classList.add('task_block__letter_right');
+            let reactionAudioSrc = new URL(
+                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
             let reactionAudio = new Audio(
-                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
+                reactionAudioSrc
             );
             reactionAudio.play();
 
@@ -210,8 +212,8 @@ const dropLetter = (event, x, y, id, isActive) => {
                             emit('open');
                         }
                     }, 1000)
-
-                    let finalaudio = new Audio('/assets/audio/Task15/426.15_.mp3');
+                    let finalSrc = new URL('/assets/audio/Task15/426.15_.mp3', import.meta.url).href
+                    let finalaudio = new Audio(finalSrc);
                     finalaudio.play();
                 }
 
@@ -219,8 +221,10 @@ const dropLetter = (event, x, y, id, isActive) => {
         } else {
             event.target.classList.add('task_block__letter_wrong');
 
+            let reactionAudioSrc = new URL(
+                `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
             let reactionAudio = new Audio(
-                `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
+                reactionAudioSrc
             );
             reactionAudio.play();
 

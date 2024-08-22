@@ -113,11 +113,11 @@ const refresh = () => {
 
 const playSound = () => {
   if (ids.value.includes(task_id.value)) {
-    startAudio.value.src = audio.value;
-    show_hand.value = false;
+    startAudio.value.src = new URL(`/assets/audio/${audio.value}`, import.meta.url).href;
     startAudio.value.play();
     startAudio.value.addEventListener('ended', () => {
       showBtn.value = true;
+      show_hand.value = false;
     })
   }
 }
