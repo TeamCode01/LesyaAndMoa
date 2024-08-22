@@ -9,10 +9,10 @@
                 </div>
                 <ul class="header__wrapper_links">
                     <li>
-                        <router-link class="link-small" to="/about-project">О проекте</router-link>
+                        <router-link class="link-small" :to="'/about-project'">О проекте</router-link>
                     </li>
                     <li>
-                        <router-link class="link-small" to="/news-page">Новости</router-link>
+                        <router-link class="link-small" :to="'/news-page'">Новости</router-link>
                     </li>
                     <li>
                         <router-link class="link-small"

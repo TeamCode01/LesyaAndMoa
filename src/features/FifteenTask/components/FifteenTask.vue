@@ -3,11 +3,7 @@
         <div class="task_block__wrapper">
             <template v-if="answersCounter < 26">
                 <div class="task_block__close" @click="hide">
-                    <img
-                        class="close-icon"
-                        src="@app/assets/icons/close-icon.svg"
-                        alt="крест"
-                    />
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
@@ -17,33 +13,21 @@
                 </div>
                 <div class="draggable-list">
                     <div class="draggable-list__items">
-                        <div
-                            class="draggable-list__item"
-                            v-for="row in taskData"
-                            :key="row"
-                        >
-                            <div
-                                class="draggable-list__button"
-                                :class="{
-                                    'draggable-list__button_main':
-                                        word.x == 0 || word.y == 0,
-                                    'draggable-list__button_task':
-                                        word.x != 0 && word.y != 0,
-                                }"
-                                v-for="word in row"
-                                :key="word.text"
-                                :disabled="word.x == 0 || word.y == 0"
-                                :draggable="word.x != 0 && word.y != 0"
-                                @dragstart="
+                        <div class="draggable-list__item" v-for="row in taskData" :key="row">
+                            <div class="draggable-list__button" :class="{
+                                'draggable-list__button_main':
+                                    word.x == 0 || word.y == 0,
+                                'draggable-list__button_task':
+                                    word.x != 0 && word.y != 0,
+                            }" v-for="word in row" :key="word.text" :disabled="word.x == 0 || word.y == 0"
+                                :draggable="word.x != 0 && word.y != 0" @dragstart="
                                     dragLetter(
                                         $event,
                                         word.x,
                                         word.y,
                                         word.text
                                     )
-                                "
-                                @mousedown="playAudio(word.text)"
-                            >
+                                    " @mousedown="playAudio(word.text)">
                                 {{ word.text }}
                             </div>
                         </div>
@@ -52,72 +36,40 @@
 
                 <div class="task_block__list" v-if="true">
                     <div class="task_block__items">
-                        <div
-                            class="task_block__row"
-                            v-for="row in rowsData"
-                            :key="row.id"
-                        >
-                            <div
-                                class="task_block__word"
-                                v-for="word in row.data"
-                                :key="word.id"
-                            >
-                                <div
-                                    class="task_block__letter"
-                                    v-for="letter in word.data"
-                                    :key="letter"
-                                    @drop="
-                                        dropLetter(
-                                            $event,
-                                            letter.x,
-                                            letter.y,
-                                            letter.id,
-                                            letter.isActive
-                                        )
-                                    "
-                                    @dragover.prevent
-                                    :class="{
+                        <div class="task_block__row" v-for="row in rowsData" :key="row.id">
+                            <div class="task_block__word" v-for="word in row.data" :key="word.id">
+                                <div class="task_block__letter" v-for="letter in word.data" :key="letter" @drop="
+                                    dropLetter(
+                                        $event,
+                                        letter.x,
+                                        letter.y,
+                                        letter.id,
+                                        letter.isActive
+                                    )
+                                    " @dragover.prevent :class="{
                                         task_block__letter_active:
                                             letter.isActive,
-                                    }"
-                                >
+                                    }">
                                     {{ letter.text }}
                                 </div>
-                                <img
-                                    class="comma"
-                                    src="/assets/icons/comma-blue.svg"
-                                    alt="comma-blue"
-                                    v-if="
-                                        [18].includes(word.data.slice(-1)[0].id) &&
-                                        word.data.slice(-1)[0].isActive
-                                    "
-                                />
-                                <div
-                                    class="draggable-list__full-stop"
-                                    v-if="
-                                        [6, 26].includes(
-                                            word.data.slice(-1)[0].id
-                                        ) && word.data.slice(-1)[0].isActive
-                                    "
-                                >
-                                    <img
-                                        src="/assets/icons/full-stop-blue.svg"
-                                        alt="full-stop-blue"
-                                    />
+                                <img class="comma" src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="
+                                    [18].includes(word.data.slice(-1)[0].id) &&
+                                    word.data.slice(-1)[0].isActive
+                                " />
+                                <div class="draggable-list__full-stop" v-if="
+                                    [6, 26].includes(
+                                        word.data.slice(-1)[0].id
+                                    ) && word.data.slice(-1)[0].isActive
+                                ">
+                                    <img src="/assets/icons/full-stop-blue.svg" alt="full-stop-blue" />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </template>
-            <TaskResultBanner
-                img="/assets/backgrounds/king.png"
-                bg="/assets/backgrounds/lesya.gif"
-                text="Блестяще!"
-                v-if="answersCounter == 26"
-                @next="next()"
-                @hide="hide()"
-            ></TaskResultBanner>
+            <TaskResultBanner :img="getImageUrl('king.png')" :bg="getImageUrl('lesya.gif')" text="Блестяще!"
+                v-if="answersCounter == 26" @next="next()" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -163,6 +115,10 @@ const next = () => {
     emit('next-modal');
 };
 
+const getImageUrl = (path) => {
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
+
 onMounted(() => {
     //let audio = new Audio('/assets/audio/Task6/79.6.mp3');
     //audio.play();
@@ -186,7 +142,7 @@ for (let row = 1; row in taskData; row++) {
 
 const playAudio = (text) => {
     if (!audio.value.paused) audio.value.pause()
-    if (text){
+    if (text) {
         audio.value.src = `/assets/audio/Task15/${audioMap.get(text)}`;
         audio.value.play()
     }
@@ -214,12 +170,12 @@ const dropLetter = (event, x, y, id, isActive) => {
 
                             if (
                                 ((word.id == 1 || word.id == 3 || word.id == 8 || word.id == 10 || word.id == 13) && word.answerCounter == 1) ||
-                                ( (word.id == 2 ||word.id == 4 || word.id == 5 || word.id == 6 || word.id == 11 || word.id == 12 || word.id == 14) && word.answerCounter == 2) ||
-                                (  word.id == 9 && word.answerCounter == 3) ||
-                                ( word.id == 7 && word.answerCounter == 4)
+                                ((word.id == 2 || word.id == 4 || word.id == 5 || word.id == 6 || word.id == 11 || word.id == 12 || word.id == 14) && word.answerCounter == 2) ||
+                                (word.id == 9 && word.answerCounter == 3) ||
+                                (word.id == 7 && word.answerCounter == 4)
                             ) {
                                 setTimeout(() => {
-                                    let audioPath = `/assets/audio/Task15/${audioMap.get('слово-'+word.id)}`
+                                    let audioPath = `/assets/audio/Task15/${audioMap.get('слово-' + word.id)}`
                                     let word_audio = new Audio(audioPath);
                                     word_audio.play()
                                 }, 1000)
@@ -253,7 +209,7 @@ const dropLetter = (event, x, y, id, isActive) => {
                             emit('correct');
                             emit('open');
                         }
-                    },1000)
+                    }, 1000)
 
                     let finalaudio = new Audio('/assets/audio/Task15/426.15_.mp3');
                     finalaudio.play();
@@ -276,7 +232,7 @@ const dropLetter = (event, x, y, id, isActive) => {
 };
 </script>
 <style lang="scss" scoped>
-*{
+* {
     user-select: none;
 }
 
@@ -287,6 +243,7 @@ const dropLetter = (event, x, y, id, isActive) => {
     align-items: center;
     justify-content: center;
     margin-top: 40px;
+
     @media (max-width: 1024px) {
         gap: 60px;
     }
@@ -299,15 +256,18 @@ const dropLetter = (event, x, y, id, isActive) => {
     justify-content: center;
     width: 540px;
     gap: 2px;
+
     @media (max-width: 1024px) {
         gap: 2px;
     }
 }
+
 .draggable-list__item {
     display: flex;
     justify-content: center;
     gap: 2px;
 }
+
 .draggable-list__item {
     width: 100%;
     height: 40px;
@@ -381,6 +341,7 @@ const dropLetter = (event, x, y, id, isActive) => {
 .item_right {
     border: 2px solid #5ccf54;
 }
+
 .item_wrong {
     border: 2px solid #db0000;
 }
@@ -393,20 +354,24 @@ const dropLetter = (event, x, y, id, isActive) => {
     width: 1074px;
     margin-top: 60px;
 }
+
 .task_block__items {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
+
 .task_block__row {
     display: flex;
     gap: 16px;
     justify-content: center;
 }
+
 .task_block__word {
     display: flex;
     gap: 2px;
 }
+
 .task_block__letter {
     display: flex;
     align-items: center;
@@ -434,6 +399,7 @@ const dropLetter = (event, x, y, id, isActive) => {
 .task_block__letter_wrong {
     border: 2px solid #db0000;
 }
+
 .task_block__letter_right {
     border: 2px solid #5ccf54;
 }
@@ -443,11 +409,13 @@ const dropLetter = (event, x, y, id, isActive) => {
     align-items: flex-end;
     width: 11px;
     height: 40px;
+
     @media (max-width: 1024px) {
         width: 8px;
         height: 40px;
     }
 }
+
 .comma {
     position: relative;
     top: -4px;

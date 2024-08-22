@@ -12,15 +12,21 @@
                 </div>
             </div>
             <div class="news-description"></div>
-            <router-link :to="{ name: 'news-page-list' }"></router-link>
+            <router-link :to="{ name: 'news' }"></router-link>
         </div>
     </div>
 </template>
 <script setup>
 import { HTTP } from '@app/http';
-import { ref } from 'vue';
-const news = ref([]);
+import { ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { usePage } from '@shared';
+const news = ref({});
+const route = useRoute();
 const error = ref([]);
+let id = route.params.id;
+
+const { replaceTargetObjects } = usePage();
 const GetNews = async (id) => {
     try {
         const response = await HTTP.get(`/news/${id}`, {
@@ -28,12 +34,23 @@ const GetNews = async (id) => {
                 'Content-Type': 'application/json',
             },
         });
-        news.value = response.data.results;
-        console.log(response.data);
+        news.value = response.data;
     } catch (error) {
         console.log('errr', error);
         error.value = error.response.data;
-        console.error('There was an error!', error);
     }
 };
+
+watch(
+    () => route.params.id,
+
+    async (newId, oldId) => {
+        if (!newId || route.name !== 'page') return;
+        await GetNews(newId);
+        await replaceTargetObjects([news.value]);
+    },
+    {
+        immediate: true,
+    },
+);
 </script>

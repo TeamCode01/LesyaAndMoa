@@ -140,16 +140,11 @@
                     </div>
                 </div>
             </template>
-            <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Превосходно!"
+            <TaskResultBanner :img="getImageUrl('flowers.png')" :bg="getImageUrl('moa.gif')" text="Превосходно!"
                 v-if="answersCounter == 11" @next="next" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
-
-
-
-
-
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { Timer } from '@shared/components/timer';
@@ -197,9 +192,9 @@ const show = ref(false);
 const hideModal = () => {
     show.value = false;
 }
-
-
-
+const getImageUrl = (path) => {
+ return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
 const Task = ref()
 const Answer = ref()
 

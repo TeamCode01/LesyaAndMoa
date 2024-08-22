@@ -53,13 +53,15 @@
                 </div>
                 <div class="description_block-img">
                     <img src="@app/assets/img/AboutProject/Moa.svg" alt="Moa" class="img-moa" />
-                    <img src="@app/assets/img/AboutProject/moa-background.svg" alt="moa-background" class="moa-background"/>
+                    <img src="@app/assets/img/AboutProject/moa-background.svg" alt="moa-background"
+                        class="moa-background" />
                 </div>
             </div>
             <div class="description_block2">
                 <div class="description_block-img2">
-                    <img src="@app/assets/img/AboutProject/Lesya.svg" alt="Lesya" class="img-lesya"/>
-                    <img src="@app/assets/img/AboutProject/lesya-background.svg" alt="lesya-background" class="lesya-background"/>
+                    <img src="@app/assets/img/AboutProject/Lesya.svg" alt="Lesya" class="img-lesya" />
+                    <img src="@app/assets/img/AboutProject/lesya-background.svg" alt="lesya-background"
+                        class="lesya-background" />
                 </div>
                 <div class="description_block-text">
 
@@ -107,7 +109,7 @@
                     </p>
                 </div>
                 <div class="support_block-QR">
-                    <img src="@app/assets/img/AboutProject/qr.png" alt="QR" class="support_block-QR-img"/>
+                    <img src="@app/assets/img/AboutProject/qr.png" alt="QR" class="support_block-QR-img" />
                 </div>
             </div>
         </div>
@@ -117,6 +119,7 @@
 .container {
     margin: 0 auto;
     max-width: 1440px;
+
     @media (max-width: 1350px) {
         padding: 0 40px;
     }
@@ -136,49 +139,56 @@ h1 {
         font-size: 40px;
         line-height: 40px;
     }
+
     @media (max-width: 568px) {
         font-size: 24px;
         line-height: 30px;
     }
 }
+
 .description {
     display: flex;
     flex-direction: column;
     margin-bottom: 80px;
 }
+
 .description_block {
     display: flex;
     flex-direction: row;
     max-width: 1200px;
     position: relative;
+
     @media (max-width: 940px) {
         flex-direction: column;
         align-items: center;
     }
 }
+
 .description_block2 {
     display: flex;
     max-width: 1200px;
     position: relative;
+
     @media (max-width: 940px) {
         flex-direction: column-reverse;
         align-items: center;
     }
 }
+
 // .description_block-img {
-    // width: 25%;
-    // float: left;
-    // position: absolute;
-    // top: 20px;
-    // right: 100px;
-    // z-index: -1;
-    // @media (max-width: 1350px) {
-    //     width: 33%;
-    // }
-    // @media (max-width: 1200px) {
-    //     width: 33%;
-    //     top: 20%;
-    // }
+// width: 25%;
+// float: left;
+// position: absolute;
+// top: 20px;
+// right: 100px;
+// z-index: -1;
+// @media (max-width: 1350px) {
+//     width: 33%;
+// }
+// @media (max-width: 1200px) {
+//     width: 33%;
+//     top: 20%;
+// }
 // }
 
 .description_block-img,
@@ -203,6 +213,7 @@ h1 {
     z-index: -1;
     object-fit: cover;
     width: 360px;
+
     @media (max-width: 568px) {
         width: 360px;
         top: 200px;
@@ -213,6 +224,7 @@ h1 {
     position: absolute;
     bottom: -150px;
     z-index: -1;
+
     @media (max-width: 568px) {
         width: 360px;
         bottom: -80px;
@@ -222,9 +234,11 @@ h1 {
 .description_block-img2 {
     height: 385px;
 }
+
 .description_block-text {
     width: 75%;
     float: right;
+
     @media (max-width: 1350px) {
         width: 67%;
     }
@@ -234,23 +248,29 @@ h1 {
     font-size: 16px;
     font-family: Nunito;
 }
+
 h4 {
     font-family: Nunito;
     font-size: 20px;
     font-weight: normal;
 }
+
 .description_block-text p {
     margin: 20px 0;
 }
+
 .description_block-text-p {
     margin-bottom: 40px !important;
 }
+
 .description_block-author h4 {
     margin-bottom: 10px;
 }
+
 .description_block-author p {
     margin: 0;
 }
+
 .support h3 {
     font-family: Nunito;
     text-align: center;
@@ -258,6 +278,7 @@ h4 {
     font-size: 32px;
     margin-bottom: 48px;
 }
+
 .support_block {
     background-color: #c8efc5;
     border-radius: 20px;
@@ -267,28 +288,34 @@ h4 {
     padding: 20px;
     margin-bottom: 100px;
     gap: 20px;
+
     @media (max-width: 1024px) {
         align-items: center;
     }
+
     @media (max-width: 568px) {
         flex-direction: column;
         align-items: center;
         height: 270px;
     }
+
     &-QR {
         @media (max-width: 568px) {
             width: 145px;
             height: 145px;
         }
+
         @media (max-width: 400px) {
-                width: 120px;
-                height: 120px;
-            }
+            width: 120px;
+            height: 120px;
+        }
+
         &-img {
             @media (max-width: 568px) {
                 width: 145px;
                 height: 145px;
             }
+
             @media (max-width: 400px) {
                 width: 120px;
                 height: 120px;
@@ -306,3 +333,16 @@ h4 {
     font-family: Nunito;
 }
 </style>
+
+<script setup>
+import { ref, watch } from 'vue';
+
+// watch(() => breadcrumbs,
+//     (newBread) => {
+//         if (!newBread) {
+//             return
+//         }
+//         hidden = false;
+//     })
+
+</script>

@@ -3,26 +3,16 @@
         <div class="news-h">
             <div class="news-h__wrapper">
                 <h1>Новости</h1>
-                <img
-                    class="news-h__img"
-                    src="@app/assets/img/News/image-moa.png"
-                    alt=""
-                />
+                <img class="news-h__img" src="@app/assets/img/News/image-moa.png" alt="" />
             </div>
         </div>
         <div class="news-list">
-            <div
-                class="news-list__card"
-                v-for="(block, index) in news"
-                :key="index"
-            >
-                <router-link
-                    :to="{
-                        name: 'news-page',
-                        params: { id: block?.id },
-                    }"
-                    :key="block.id"
-                >
+            <div class="news-list__card" v-for="(block, index) in news" :key="index">
+
+                <RouterLink :to="{
+                    name: 'page',
+                    params: { id: block.id },
+                }">
                     <div class="news-list__card-img">
                         <img :src="block.image" alt="" />
                     </div>
@@ -33,23 +23,24 @@
                             {{ formatDate(block.created_at) }}
                         </p>
                     </div>
-                </router-link>
+                </RouterLink>
+
             </div>
         </div>
-        <div class="pagination">
-            <button @click="previousPage" :disabled="currentPage === 1">
-                «
+        <div>
+            <button @click="prevPage" :disabled="currentPage === 1">
+                <img
+                    class="news-arrow"
+                    src="@app/assets/icons/arrows.svg"
+                    alt=""
+                />
             </button>
-            <span v-for="page in totalPages" :key="page">
-                <button
-                    @click="setPage(page)"
-                    :class="{ active: page === currentPage }"
-                >
-                    {{ page }}
-                </button>
-            </span>
-            <button @click="nextPage" :disabled="currentPage === totalPages">
-                »
+            <span>{{ currentPage }}</span>
+            <button
+                @click="nextPage"
+                :disabled="currentPage * itemsPerPage >= totalItems"
+            >
+                <img src="@app/assets/icons/arrows.svg" alt="" />
             </button>
         </div>
     </div>
@@ -60,8 +51,9 @@ import { ref, onMounted, computed } from 'vue';
 
 const news = ref([]);
 const error = ref([]);
-const currentPage = ref(1);
+let currentPage = 1;
 const itemsPerPage = 9;
+let totalItems = 0;
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -72,14 +64,21 @@ const formatDate = (dateString) => {
     });
 };
 
-const GetNews = async () => {
+const GetNews = async (page = 1) => {
     try {
-        const response = await HTTP.get('/news/?limit=100', {
+        const offset = (page - 1) * itemsPerPage;
+        const response = await HTTP.get('/news/', {
+            params: {
+                limit: itemsPerPage,
+                offset: offset,
+            },
             headers: {
                 'Content-Type': 'application/json',
             },
         });
+
         news.value = response.data.results;
+        totalItems = response.data.total;
         console.log(response.data);
     } catch (error) {
         console.log('errr', error);
@@ -88,39 +87,30 @@ const GetNews = async () => {
     }
 };
 
-const totalPages = computed(() => {
-    return Math.ceil(news.value.length / itemsPerPage);
-});
-
-const paginatedNews = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage;
-    return news.value.slice(start, start + itemsPerPage);
-});
-
-const setPage = (page) => {
-    if (page < 1 || page > totalPages.value) return;
-    currentPage.value = page;
-};
-
 const nextPage = () => {
-    if (currentPage.value < totalPages.value) {
-        currentPage.value++;
+    if (currentPage * itemsPerPage < totalItems) {
+        currentPage++;
+        GetNews(currentPage);
     }
 };
 
-const previousPage = () => {
-    if (currentPage.value > 1) {
-        currentPage.value--;
+const prevPage = () => {
+    if (currentPage > 1) {
+        currentPage--;
+        GetNews(currentPage);
     }
 };
 
-GetNews();
+onMounted(() => {
+    GetNews(currentPage);
+});
 </script>
 <style>
 .news-h {
     margin-top: 80px;
     margin-bottom: 50px;
 }
+
 .news-h__wrapper {
     background: #d2efff;
     border-radius: 20px;
@@ -129,17 +119,20 @@ GetNews();
     text-align: center;
     align-content: center;
 }
+
 .news-h__wrapper h1 {
     font-family: 'Nunito', sans-serif;
     font-weight: 500;
     font-size: 50px;
     line-height: 50px;
 }
+
 .news-h__wrapper img {
     position: absolute;
     right: 10%;
     bottom: 2%;
 }
+
 .news-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -147,15 +140,18 @@ GetNews();
     row-gap: 40px;
     margin-bottom: 60px;
 }
+
 .news-list__card {
     width: 387px;
     height: 100%;
 }
+
 .news-list__card-img {
     display: flex;
     justify-content: center;
     margin-bottom: 12px;
 }
+
 .news-list__card-img img {
     width: 387px;
     height: 240px;
@@ -163,25 +159,16 @@ GetNews();
     object-fit: cover;
     overflow: hidden;
 }
+
 .news-list__title {
     margin-bottom: 12px;
 }
+
 .news-list__desc {
     margin-bottom: 12px;
 }
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
 
-.pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
-}
-
-.active {
-    font-weight: bold;
-    text-decoration: underline;
+.news-arrow {
+    transform: scale(-1, 1);
 }
 </style>

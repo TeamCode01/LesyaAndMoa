@@ -71,8 +71,6 @@ const getImageUrl = (path) => {
  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
-
-
 const audio = ref(new Audio());
 
 const playAudio = async (audioPath) => {
