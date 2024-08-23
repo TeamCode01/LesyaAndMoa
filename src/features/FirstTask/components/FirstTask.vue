@@ -14,15 +14,25 @@
 
                 <div class="draggable-list__wrapper">
                     <div class="draggable-list">
-                        <div v-for="(item, index) in words" :key="item.id" :id="item.id + '_elem'"
-                            class="list-group-item item" draggable="true" @mouseover="playAudio(item.audio)"
-                            @mouseout="stopAudio(item.audio)" @dragstart="drag($event, item.name, item.id, index)"
-                            @dragover.prevent :value="item.name">
-                            {{ item.name }}
-                        </div>
+                        <VueDraggableNext tag="div" :group="{ name: 'words', pull: 'clone', put: false }" :sort="false" v-for="(item, index) in words" :key="item.id" 
+                            @mouseover="playAudio(item.audio)"
+                            @mouseout="stopAudio(item.audio)" 
+                            @touchstart="playAudio(item.audio)"
+                            @touchcancel="stopAudio(item.audio)"
+                            
+
+                            @choose="()=>{ drag( item.name, item.id, index)}"
+                            >
+                            <div class="list-group-item item" :id="item.id + '_elem'" :value="item.name">
+                                {{ item.name }}
+                            </div>
+                        </VueDraggableNext>
                     </div>
-                    <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
+                    <VueDraggableNext tag="div" :group="{ name: 'answers', pull: false, put: true }" :sort="false" @add="($event)=>{drop($event)}" ghost-class="none">
+                        <input v-model="answer"
+
                         class="FirstTask__wrapper_answer" />
+                    </VueDraggableNext>
                 </div>
             </div>
         </div>
@@ -121,18 +131,35 @@ const answer = ref('');
 
 const answer_arr = ref([]);
 const dropIndex = ref(words.value.length - 1);
-const drag = (event, word, id, index) => {
-    event.dataTransfer.setData('text', word);
-    event.dataTransfer.setData('id', id);
+
+const dataTransfer = ref({})
+const drag = (word, id, index) => {
+    //event.dataTransfer.setData('text', word);
+    //event.dataTransfer.setData('id', id);
+    dataTransfer.value.text = word;
+    dataTransfer.value.id = id
+
+    console.log(dataTransfer.value)
     dropIndex.value = index;
 };
 
 
 const drop = (event) => {
     event.preventDefault();
-    let text = event.dataTransfer.getData('text');
-    let id = event.dataTransfer.getData('id');
+    //let text = event.dataTransfer.getData('text');
+    //let id = event.dataTransfer.getData('id');
+
+    let text = dataTransfer.value.text
+    let id = dataTransfer.value.id
+
     let elem = document.getElementById(id + '_elem')
+
+
+    Array.from(event.to.children).forEach(element => {
+        if (element.tagName == 'DIV') {
+            console.log(element); event.to.removeChild(element)
+        }
+    })
 
     if (answer_arr.value.length == 0) {
 
@@ -179,10 +206,8 @@ const drop = (event) => {
             endGame.value = true;
         }, 2000)
     }
-};
 
-const allowDrop = (event) => {
-    event.preventDefault();
+   
 };
 
 onMounted(() => {
@@ -190,6 +215,12 @@ onMounted(() => {
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
+
+const allowDrop = (event) => {
+    event.preventDefault();
+};
+
+
 </script>
 <style lang="scss" scoped>
 
@@ -300,5 +331,9 @@ onMounted(() => {
     border-radius: 6px;
     border: none;
     cursor: pointer;
+}
+
+.none {
+    display: none;
 }
 </style>

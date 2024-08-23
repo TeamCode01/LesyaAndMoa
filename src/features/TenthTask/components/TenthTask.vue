@@ -15,27 +15,44 @@
                     <div class="draggable-list__words">
                         <div class="draggable-list__set-words" v-for="(line, index_line) in prepositions"
                             :key="index_line">
-                            <div v-for="(item, index) in line" :key="item.id" :id="item.id + '_elem'"
-                                :class="{ 'draggable-list__word': true, correct_select: item.correct, not_correct_select: item.correct === false }"
-                                @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)" draggable="true"
-                                @dragstart="drag($event, item, index)" @dragover.prevent :value="item.text">
-                                {{ item.text }}
-                            </div>
+                            <VueDraggableNext v-for="(item, index) in line" :key="item.id" 
+                            :group="{ name: 'letters', pull: 'clone', put: false }" :sort="false"
+                            @choose="drag($event, item, index)"
+                            
+                            @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
+                            @touchstart="playAudio(item.audio)"
+                            >
+
+                                <div :id="item.id + '_elem'"
+                                    :class="{ 'draggable-list__word': true, correct_select: item.correct, not_correct_select: item.correct === false }"
+                                    
+                                    :value="item.text">
+                                    {{ item.text }}
+                                </div>
+
+                            </VueDraggableNext>
                         </div>
                     </div>
                     <div class="draggable-list__answer">
                         <div class="draggable-list__answer-wrapper">
                             <p>{{ questions[currStage].first_part }}</p>
-                            <div class="draggable-list__quastion-block" v-if="!givenAnswer[1]">
-                                <input @drop="drop($event, 1)" @dragover="allowDrop($event)" class="answer" readonly  @focus="($event)=>{$event.target.blur()}"/>
-                            </div>
+                            <VueDraggableNext class="draggable-list__quastion-block" v-if="!givenAnswer[1]"
+                                :group="{ name: 'letters', pull: false, put: true }" :sort="false"
+                                @add="drop($event, 1)" ghost-class="none">
+
+                                <input class="answer" readonly @focus="($event)=>{$event.target.blur()}"/>
+
+                            </VueDraggableNext>
                             <p v-else>&nbsp;{{ questions[currStage].first_answer }}&nbsp;</p>
                             <p>{{ questions[currStage].second_part }}</p>
                             <template v-if="currStage > 2">
-                                <div class="draggable-list__quastion-block" v-if="!givenAnswer[2]">
-                                    <input @drop="drop($event, 2)" @dragover="allowDrop($event)" class="answer"
-                                        readonly />
-                                </div>
+                                <VueDraggableNext class="draggable-list__quastion-block" v-if="!givenAnswer[2]"
+                                    :group="{ name: 'letters', pull: false, put: true }" :sort="false"
+                                    @add="drop($event, 2)" ghost-class="none">
+                                    
+                                    <input class="answer" readonly @focus="($event)=>{$event.target.blur()}"/>
+
+                                </VueDraggableNext>
                                 <p v-else>&nbsp;{{ questions[currStage].second_answer }}&nbsp;</p>
                                 <p>{{ questions[currStage].third_part }}</p>
                             </template>
@@ -130,31 +147,48 @@ const getImageUrl = (path) => {
  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
-
+const dataTransfer = ref({})
 const drag = (event, preposition, index) => {
-    event.dataTransfer.setData('text', preposition.text);
-    event.dataTransfer.setData('id', index);
+    // event.dataTransfer.setData('text', preposition.text);
+    // event.dataTransfer.setData('id', index);
     // playAudio(preposition.audio);
+
+    dataTransfer.value.text = preposition.text;
+    dataTransfer.value.id = index;
 };
 
+let fromBlock
+
 const drop = (event, num) => {
-    const text = event.dataTransfer.getData('text');
-    const id = event.dataTransfer.getData('id');
+    // const text = event.dataTransfer.getData('text');
+    // const id = event.dataTransfer.getData('id');
+
+    const text = dataTransfer.value.text;
+    const id = dataTransfer.value.id
+
+    fromBlock = event.from.children[0];
+
+    Array.from(event.to.children).forEach(element => {
+        if (element.classList.contains('draggable-list__word')) {
+            event.to.removeChild(element)
+        }
+    })
+
     if (currStage.value <= 2) {
         if (text.toLowerCase() == questions.value[currStage.value].first_answer) {
-            correctAnswer(id, true);
+            correctAnswer(id, true, fromBlock);
             givenAnswer.value[1] = true;
             setTimeout(() => {
                 givenAnswer.value[1] = false;
                 currStage.value += 1;
             }, 2000)
         } else {
-            correctAnswer(id, false);
+            correctAnswer(id, false, fromBlock);
         }
     } else {
         if (num == 1) {
             if (text.toLowerCase() == questions.value[currStage.value].first_answer) {
-                correctAnswer(id, true);
+                correctAnswer(id, true, fromBlock);
                 givenAnswer.value[1] = true;
                 if (givenAnswer.value[1] && givenAnswer.value[2]) {
                     setTimeout(() => {
@@ -168,11 +202,11 @@ const drop = (event, num) => {
                     }, 2000)
                 }
             } else {
-                correctAnswer(id, false);
+                correctAnswer(id, false, fromBlock);
             }
         } else {
             if (text.toLowerCase() == questions.value[currStage.value].second_answer) {
-                correctAnswer(id, true);
+                correctAnswer(id, true, fromBlock);
                 givenAnswer.value[2] = true;
                 if (givenAnswer.value[1] && givenAnswer.value[2]) {
                     setTimeout(() => {
@@ -191,20 +225,29 @@ const drop = (event, num) => {
                     }, 2000)
                 }
             } else {
-                correctAnswer(id, false);
+                correctAnswer(id, false, fromBlock);
             }
         }
     }
 };
 
-const correctAnswer = (id, correct) => {
+const correctAnswer = (id, correct, block) => {
     correct ? playEndAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`) : playEndAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     if (id <= 5) {
+        block.classList.add(`${correct ? 'correct_select' : 'not_correct_select'}`);
         prepositions.value[1][id].correct = correct;
-        setTimeout(() => prepositions.value[1][id].correct = null, 2000);
+        setTimeout(() => {
+            prepositions.value[1][id].correct = null
+            block.classList.remove(`${correct ? 'correct_select' : 'not_correct_select'}`);
+        }, 2000);
     } else {
+        console.log(prepositions.value[2], id)
+        block.classList.add(`${correct ? 'correct_select' : 'not_correct_select'}`);
         prepositions.value[2][id].correct = correct;
-        setTimeout(() => prepositions.value[2][id].correct = null, 2000);
+        setTimeout(() => {
+            prepositions.value[2][id].correct = null;
+            block.classList.remove(`${correct ? 'correct_select' : 'not_correct_select'}`);
+        }, 2000);
     }
 }
 
@@ -389,5 +432,13 @@ onMounted(async () => {
         width: 15px;
         height: 34px;
     }
+}
+
+.hidden {
+    opacity: 0%;
+}
+
+.none {
+    display: none;
 }
 </style>

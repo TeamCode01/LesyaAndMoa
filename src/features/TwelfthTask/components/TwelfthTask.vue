@@ -19,33 +19,6 @@
                 <!-- САМА ИГРА -->
                 <div class="draggable-list">
                     <!-- ВАРИАНТЫ ОТВЕТОВ -->
-                    <!--<div class="draggable-list__words">
-                        <VueDraggableNext
-                            tag="div" 
-                            :group="{ name: 'words', pull: 'clone', put: false }"
-                            :sort="false"
-                            @unchoose="checkAnswer($event)"
-                            @choose="dragLetter($event, word.id, word.text)"
-
-                            class="draggable-list__set-words"
-                            v-for="row in Task" 
-                            :key="row"
-                            >
-                                <div 
-                                class="draggable-list__word" 
-                                v-for="word in row" :key="word" 
-                                :class="{void : !word.isActive, item_wrong : word.error == -1 }"
-                                :draggable="word.isActive"
-                                
-                                @dragstart="dragLetter($event, word.id, word.text)"
-                                @touchstart="touchStart($event, word.id, word.text)"
-                                :data-word_id="word.id" 
-                                :data-word_text="word.text" >
-                                    {{ word.text }}
-                                </div>
-                        </VueDraggableNext>
-                    </div>-->
-
 
                     <div class="draggable-list__words">
                         <div
@@ -140,17 +113,21 @@
                     </div>
                 </div>
             </template>
-            <TaskResultBanner :img="getImageUrl('flowers.png')" :bg="getImageUrl('moa.gif')" text="Превосходно!"
+            <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Превосходно!"
                 v-if="answersCounter == 11" @next="next" @hide="hide()"></TaskResultBanner>
         </div>
     </div>
 </template>
+
+
+
+
+
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
-import draggable from 'vuedraggable';
 import { VueDraggableNext } from 'vue-draggable-next';
 
 import { dataTask, dataAnswer } from './task.js'
@@ -192,9 +169,9 @@ const show = ref(false);
 const hideModal = () => {
     show.value = false;
 }
-const getImageUrl = (path) => {
- return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
-};
+
+
+
 const Task = ref()
 const Answer = ref()
 
@@ -364,18 +341,6 @@ const dropLetter = (event, id, isActive) => {
                 })
             })
 
-            Task.value.map((row) =>
-                row.map((word) => {
-
-                    if (word.id == dragid) {
-                        word.error = -1;
-                        setTimeout(()=>{
-                            word.error = 0;
-                        }, 1000)
-
-                    }   
-                })
-            );
             let reactionAudio = new Audio(
                 `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
             );
@@ -552,9 +517,11 @@ const wordIsActive = (event) => {
 
 .void {
     opacity: 0%;
+    cursor: default;
 }
 
 .none{
-    display: none
+    display: none;
+    cursor: default;
 }
 </style>

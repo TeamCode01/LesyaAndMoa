@@ -15,49 +15,57 @@
                 </div>
                 <div class="NineTask__content">
                     <div class="draggable-list">
-                        <div class="list-group-item item" v-for="(item, index) in letterss" :id="item.id"
-                            :key="item.id" draggable="true" @mouseover="playAudio(item.audio)"
-                            @mouseout="stopAudio(item.audio)" @dragstart="drag($event, item.name, item.id, index)"
-                            @dragover.prevent :value="item">
-                            {{ item.name }}
-                        </div>
+                        <VueDraggableNext v-for="(item, index) in letterss" :key="item.id"
+                        :group="{ name: 'letters', pull: 'clone', put: false }" :sort="false"
+                        @choose="drag($event, item.name, item.id, index)">
+                            <div class="list-group-item item" :id="item.id"
+                                @mouseover="playAudio(item.audio)"
+                                @mouseout="stopAudio(item.audio)" 
+                                @touchstart="playAudio(item.audio)"
+                                @touchcancel="stopAudio(item.audio)"
+
+                                :value="item">
+                                {{ item.name }}
+                            </div>
+                        </VueDraggableNext>
                     </div>
 
                     <div class="input-group">
+
                         <div class="big-letters">
-                            <input @drop="drop($event, 1, 1)" type="text" class="input-item"
-                                @dragover="allowDrop($event)" />
-                            <input @drop="drop($event, 1, 2)" @dragover="allowDrop($event)" type="text"
-                                class="input-item" /><input @drop="drop($event, 1, 3)" @dragover="allowDrop($event)"
-                                type="text" class="input-item" /><input @drop="drop($event, 1, 2)" type="text"
-                                class="input-item" @dragover="allowDrop($event)" /><input @drop="drop($event, 1, 5)"
-                                @dragover="allowDrop($event)" type="text" class="input-item" /><input type="text"
-                                @drop="drop($event, 1, 6)" @dragover="allowDrop($event)" class="input-item" /><input
-                                @drop="drop($event, 1, 7)" @dragover="allowDrop($event)" type="text"
-                                class="input-item" />
+
+                            <VueDraggableNext :group="{ name: 'big-letters', pull: false, put: true }" 
+                            :sort="false" v-for="i in 7" :key="i" @add="drop($event, 1, i)" ghost-class="none">
+                                <input type="text" class="input-item" />
+                            </VueDraggableNext>
+
                         </div>
 
                         <div class="middle-letters">
-                            <input type="text" @drop="drop($event, 2, 1)" class="input-item" /><input type="text"
-                                @drop="drop($event, 2, 2)" class="input-item" /><input type="text"
-                                @drop="drop($event, 2, 3)" class="input-item" /><input type="text"
-                                @drop="drop($event, 2, 4)" class="input-item" /><input type="text"
-                                @drop="drop($event, 2, 5)" class="input-item" /><input @drop="drop($event, 2, 6)"
-                                type="text" class="input-item" />
+
+                            <VueDraggableNext :group="{ name: 'middle-letters', pull: false, put: true }" 
+                            :sort="false" v-for="i in 6" :key="i" @add="drop($event, 2, i)" ghost-class="none">
+                                <input type="text" class="input-item" />
+                            </VueDraggableNext>
+
                         </div>
 
                         <div class="pre-middle-letters">
-                            <input type="text" @drop="drop($event, 3, 1)" class="input-item" /><input type="text"
-                                @drop="drop($event, 3, 2)" class="input-item" /><input type="text"
-                                @drop="drop($event, 3, 3)" class="input-item" /><input type="text"
-                                @drop="drop($event, 3, 4)" class="input-item" /><input type="text" class="input-item"
-                                @drop="drop($event, 3, 5)" />
+
+                            <VueDraggableNext :group="{ name: 'pre-middle-letters', pull: false, put: true }" 
+                            :sort="false" v-for="i in 5" :key="i" @add="drop($event, 3, i)" ghost-class="none">
+                                <input type="text" class="input-item" />
+                            </VueDraggableNext>
+
                         </div>
 
                         <div class="small-letters">
-                            <input type="text" @drop="drop($event, 4, 1)" class="input-item" /><input type="text"
-                                @drop="drop($event, 4, 2)" class="input-item" /><input type="text"
-                                @drop="drop($event, 4, 3)" class="input-item" />
+
+                            <VueDraggableNext :group="{ name: 'small-letters', pull: false, put: true }" 
+                            :sort="false" v-for="i in 3" :key="i" @add="drop($event, 4, i)" ghost-class="none">
+                                <input type="text" class="input-item" />
+                            </VueDraggableNext>
+
                         </div>
                     </div>
                 </div>
@@ -71,7 +79,10 @@
 import { ref, onMounted } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+
+import { VueDraggableNext } from 'vue-draggable-next';
 import gameActions from '@mixins/gameAction';
+
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
@@ -154,9 +165,14 @@ const letterss = ref([
     { id: 'ch', name: 'Ч', audio: 'Task9/313.9.mp3' },
     { id: 'A', name: 'А', audio: 'Task9/314.9.mp3' },
 ]);
+
+const dataTransfer = ref({})
 const drag = (event, letter, id, index) => {
-    event.dataTransfer.setData('text', letter);
-    event.dataTransfer.setData('id', id);
+    // event.dataTransfer.setData('text', letter);
+    // event.dataTransfer.setData('id', id);
+
+    dataTransfer.value.text = letter
+    dataTransfer.value.id = id
     dropIndex.value = index;
 };
 const dropIndex = ref(letterss.value.length - 1);
@@ -193,17 +209,27 @@ const arr = ref({
 });
 
 const drop = (event, word, letter) => {
-    event.preventDefault();
-    let text = event.dataTransfer.getData('text');
-    let id = event.dataTransfer.getData('id');
+    // event.preventDefault();
+    // let text = event.dataTransfer.getData('text');
+    // let id = event.dataTransfer.getData('id');
+
+    let text = dataTransfer.value.text;
+    let id = dataTransfer.value.id;
     let elem = document.getElementById(id);
+
+    Array.from(event.to.children).forEach(element => {
+        if (element.classList.contains('list-group-item')) {
+            event.to.removeChild(element)
+        }
+    })
+
     if (arr.value[word][letter].answer === text.toLowerCase()) {
-        event.target.value = text;
+        event.to.children[0].value = text;
         letterss.value.splice(dropIndex.value, 1);
-        event.target.classList.add(arr.value[word][letter].className, 'green');
+        event.to.children[0].classList.add(arr.value[word][letter].className, 'green');
 
         setTimeout(() => {
-            event.target.classList.remove('green');
+            event.to.children[0].classList.remove('green');
         }, 2000)
         playEndAudio('Common/1.2.mp3');
         if (letterss.value.length === 0) {
@@ -230,11 +256,11 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(() => {
-    const correct = getCorrectAnswer(9, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-})
+// onMounted(() => {
+//     const correct = getCorrectAnswer(9, props.childId);
+//     corrValue.value = correct.correctId;
+//     is_correct.value = correct.is_correct;
+// })
 </script>
 <style lang="scss" scoped>
 * {
@@ -662,5 +688,13 @@ onMounted(() => {
     font-family: 'Nunito Sans';
     font-weight: 800;
     line-height: 25px;
+}
+
+.hidden {  
+    opacity: 0%;
+}
+
+.none {
+    display: none;
 }
 </style>
