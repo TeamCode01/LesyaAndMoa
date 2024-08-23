@@ -139,11 +139,11 @@ const tasks = ref([
     { id: 10, name: 'Задание 10', disabled: false, done: false, open: false, time: 30, end: false, img: 'task10.jpg', audio: 'Task10/317.10.mp3', startAudio: 'Task10/316.10.mp3' },
     { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 35, end: false, img: 'task11.jpg', audio: 'Task11/330.11.mp3', startAudio: 'Task11/329.11.mp3' },
     { id: 12, name: 'Задание 12', disabled: false, done: false, open: false, time: 35, end: false, img: 'task12.jpg', startAudio: 'Task12/349.12.mp3' },
-    { id: 13, name: 'Задание 13', disabled: true, done: false, open: false, time: 30, end: false, img: 'task13.jpg', audio: 'Task13/370.13.mp3', startAudio: 'Task13/369.13.mp3' },
-    { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false, img: 'task14.jpg', audio: 'Task14/379.14.mp3', startAudio: 'Task14/378.14_.mp3' },
-    { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: 'task15.jpg', audio: 'Task15/390.15.mp3', startAudio: 'Task15/389.15.mp3' },
-    { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 60, end: false, img: 'task16.jpg', startAudio: 'Task16/427.16_.mp3' },
-    { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: 'task17.jpg', audio: 'Task17/454.17.mp3', startAudio: 'Task17/453.17.mp3' },
+    { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false, img: 'task13.jpg', audio: 'Task13/370.13.mp3', startAudio: 'Task13/369.13.mp3' },
+    { id: 14, name: 'Задание 14', disabled: false, done: false, open: false, time: 30, end: false, img: 'task14.jpg', audio: 'Task14/379.14.mp3', startAudio: 'Task14/378.14_.mp3' },
+    { id: 15, name: 'Задание 15', disabled: false, done: false, open: false, time: 60, end: false, img: 'task15.jpg', audio: 'Task15/390.15.mp3', startAudio: 'Task15/389.15.mp3' },
+    { id: 16, name: 'Задание 16', disabled: false, done: false, open: false, time: 60, end: false, img: 'task16.jpg', startAudio: 'Task16/427.16_.mp3' },
+    { id: 17, name: 'Задание 17', disabled: false, done: false, open: false, time: 30, end: false, img: 'task17.jpg', audio: 'Task17/454.17.mp3', startAudio: 'Task17/453.17.mp3' },
     { id: 18, name: 'Задание 18', disabled: true, done: false, open: false, time: 120, end: false, img: 'task18.jpg', audio: 'Task18/471.18.mp3', startAudio: 'Task18/470.18_.mp3' },
 ])
 
@@ -194,21 +194,19 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
         taskAudio.value = audio_task
         endTime.value = false;
         taskImage.value = img;
-        console.log('see', SeeTask.value);
         if (ids.value.includes(taskId.value)) {
-
             playAudio('Music/звук 1_.mp3');
             audio.value.addEventListener('ended', () => {
                 show_hand.value = true;
                 emit('hand', show_hand.value)
             })
-            if (audio_ids_music.value.includes(taskId.value) && SeeTask.value === false ) {
+            if (audio_ids_music.value.includes(taskId.value)) {
                 audio.value.addEventListener('ended', () => {
                     playAudio('Other/10.общее.mp3');
                     audio.value.addEventListener('ended', () => {
                         show_hand.value = true;
                         emit('hand', show_hand.value)
-                        audio.value.src = ''
+                        audio.value.pause();
                     })
                 })
             }
@@ -244,9 +242,10 @@ const checkOpen = (id) => {
     })
 }
 
+
+
 const openTask = (taskId) => {
     SeeTask.value = true;
-    console.log('see', SeeTask.value);
     finish.value = false;
     playAudio(taskAudio.value);
     setTimeout(() => {
@@ -255,6 +254,8 @@ const openTask = (taskId) => {
 
 
 };
+
+console.log('see', SeeTask.value);
 
 const next = (id, audio_task) => {
     SeeTask.value = false;

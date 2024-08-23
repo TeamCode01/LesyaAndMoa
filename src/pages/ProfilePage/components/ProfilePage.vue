@@ -1,15 +1,31 @@
 <template>
-    <div class="profile__wrapper" v-if="!(userStore.children.length || groups.length)">
+    <div
+        class="profile__wrapper"
+        v-if="!(userStore.children.length || groups.length)"
+    >
         <p class="text text__profile">Спасибо за регистрацию!</p>
-        <p class="text profile__text" v-if="userStore.currentUser.tasks_type === 'индивидуальный'">
+        <p
+            class="text profile__text"
+            v-if="userStore.currentUser.tasks_type === 'индивидуальный'"
+        >
             Чтобы начать обучение, добавьте ребенка
         </p>
-        <p class="text profile__text" v-if="userStore.currentUser.tasks_type === 'групповой'">
+        <p
+            class="text profile__text"
+            v-if="userStore.currentUser.tasks_type === 'групповой'"
+        >
             Чтобы начать обучение, создайте новую группу
         </p>
     </div>
-    <div class="profile-child" v-if="userStore.currentUser.tasks_type === 'индивидуальный'">
-        <div class="profile-child__wrapper" v-for="(block, index) in userStore.children" :key="index">
+    <div
+        class="profile-child"
+        v-if="userStore.currentUser.tasks_type === 'индивидуальный'"
+    >
+        <div
+            class="profile-child__wrapper"
+            v-for="(block, index) in userStore.children"
+            :key="index"
+        >
             <div class="delete-profile">
                 <modalConfirm label="Удалить профиль">
                     <template #default="{ close }">
@@ -26,18 +42,29 @@
                                         будут удалены.
                                     </p>
                                     <div class="regCheck delete-check">
-                                        <input type="checkbox" v-model="check" />
+                                        <input
+                                            type="checkbox"
+                                            v-model="check"
+                                        />
                                         <div>
                                             &nbsp;Да, я хочу удалить профиль
                                         </div>
                                     </div>
                                 </div>
                                 <div class="delete-profile_btn">
-                                    <Button class="delete-btn" label="Удалить" @click="
-                                        deleteChild(block.id, index);
-                                    close();
-                                    "></Button>
-                                    <Button label="Отмена" class="delete-btn" @click="close"></Button>
+                                    <Button
+                                        class="delete-btn"
+                                        label="Удалить"
+                                        @click="
+                                            deleteChild(block.id, index);
+                                            close();
+                                        "
+                                    ></Button>
+                                    <Button
+                                        label="Отмена"
+                                        class="delete-btn"
+                                        @click="close"
+                                    ></Button>
                                 </div>
                             </div>
                         </div>
@@ -50,88 +77,178 @@
                 </p>
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
-                    <v-progress-linear v-model="skill.progress" height="30" class="scale">
+                    <v-progress-linear
+                        v-model="skill.progress"
+                        height="30"
+                        class="scale"
+                    >
                         <template v-slot:default="{ value }">
                             <strong>{{ Math.ceil(value) }}%</strong>
                         </template>
                     </v-progress-linear>
                 </div>
-                <RouterLink :to="{
-                    name: 'Game',
-                    params: { idChildOrGroup: block.id },
-                }" class="router-link">
-                    <Button label="Перейти к обучению" class="profile__btn"></Button>
+                <RouterLink
+                    :to="{
+                        name: 'Game',
+                        params: { idChildOrGroup: block.id },
+                    }"
+                    class="router-link"
+                >
+                    <Button
+                        label="Перейти к обучению"
+                        class="profile__btn"
+                    ></Button>
                 </RouterLink>
             </div>
         </div>
-        <modalWindow v-if="userStore.currentUser.tasks_type === 'индивидуальный'" label="Добавить ребёнка">
+        <modalWindow
+            v-if="userStore.currentUser.tasks_type === 'индивидуальный'"
+            label="Добавить ребёнка"
+        >
             <template #default="{ close }">
-                <v-card prepend-icon="mdi-account" title="Введите данные ребёнка" class="window">
+                <v-card
+                    prepend-icon="mdi-account"
+                    title="Введите данные ребёнка"
+                    class="window"
+                >
                     <v-card-text>
                         <div class="form-input">
                             <label>Фамилия</label>
-                            <Input placeholder="Фамилия" name="login" class="form-input" v-model:value="form.first_name"
-                                @blur="v$.first_name.$touch()"></Input>
-                            <span v-if="isError.first_name" class="error-message">{{ isError.first_name[0] }}</span>
+                            <Input
+                                placeholder="Фамилия"
+                                name="login"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.first_name,
+                                }"
+                                v-model:value="form.first_name"
+                                @blur="v$.first_name.$touch()"
+                            ></Input>
+                            <span
+                                v-if="isError.first_name"
+                                class="error-message"
+                                >{{ isError.first_name[0] }}</span
+                            >
                         </div>
                         <div class="form-input">
                             <label>Имя</label>
-                            <Input placeholder="Имя" name="login" class="form-input" v-model:value="form.last_name"
-                                @blur="v$.last_name.$touch()"></Input>
-                            <span v-if="isError.last_name" class="error-message">{{ isError.last_name[0] }}</span>
+                            <Input
+                                placeholder="Имя"
+                                name="login"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.last_name,
+                                }"
+                                v-model:value="form.last_name"
+                                @blur="v$.last_name.$touch()"
+                            ></Input>
+                            <span
+                                v-if="isError.last_name"
+                                class="error-message"
+                                >{{ isError.last_name[0] }}</span
+                            >
                         </div>
                         <div class="form-input">
                             <label>Пол</label>
-                            <SelectSort @blur="v$.sex.$touch()" v-model="form.sex" :items="tasksChoose"
-                                name="select_position" id="select-position" :options="tasksChoose"
-                                class="invents-select" clearable placeholder="Выберите пол" variant="outlined"
-                                :sorts-boolean="false" @update:value="changeOption" v-bind="props" />
+                            <SelectSort
+                                @blur="v$.sex.$touch()"
+                                v-model="form.sex"
+                                :items="tasksChoose"
+                                name="select_position"
+                                id="select-position"
+                                :options="tasksChoose"
+                                class="invents-select"
+                                clearable
+                                placeholder="Выберите пол"
+                                variant="outlined"
+                                :sorts-boolean="false"
+                                @update:value="changeOption"
+                                v-bind="props"
+                            />
                             <span v-if="isError.sex" class="error-message">{{
                                 isError.sex[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Возраст</label>
-                            <Input @blur="v$.age.$touch()" name="login" class="form-input"
-                                v-model:value="form.age"></Input>
+                            <Input
+                                @blur="v$.age.$touch()"
+                                name="login"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.age,
+                                }"
+                                v-model:value="form.age"
+                            ></Input>
                             <span v-if="isError.age" class="error-message">{{
                                 isError.age[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Регион</label>
-                            <SelectSort @blur="v$.region.$touch()" @click="GetRegion" :items="reg" v-model="form.region"
-                                :options="reg" name="select_position" id="select-position" class="invents-select"
-                                clearable placeholder="Выберите регион из списка" variant="outlined"
-                                :sorts-boolean="false" @update:value="changeOption" />
+                            <SelectSort
+                                @blur="v$.region.$touch()"
+                                @click="GetRegion"
+                                :items="reg"
+                                v-model="form.region"
+                                :options="reg"
+                                name="select_position"
+                                id="select-position"
+                                class="invents-select"
+                                clearable
+                                placeholder="Выберите регион из списка"
+                                variant="outlined"
+                                :sorts-boolean="false"
+                                @update:value="changeOption"
+                            />
                             <span v-if="isError.region" class="error-message">{{
                                 isError.region[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Школа</label>
-                            <Input @blur="v$.school.$touch()" name="login" class="form-input"
-                                v-model:value="form.school"></Input>
+                            <Input
+                                @blur="v$.school.$touch()"
+                                name="login"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.school,
+                                }"
+                                v-model:value="form.school"
+                            ></Input>
                             <span v-if="isError.school" class="error-message">{{
                                 isError.school[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Класс</label>
-                            <Input @blur="v$.grade.$touch()" name="login" class="form-input"
-                                v-model:value="form.grade"></Input>
+                            <Input
+                                @blur="v$.grade.$touch()"
+                                name="login"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.grade,
+                                }"
+                                v-model:value="form.grade"
+                            ></Input>
                             <span v-if="isError.grade" class="error-message">{{
                                 isError.grade[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="regCheck">
-                            <input type="checkbox" v-model="form.attended_speech_therapist" />
+                            <input
+                                type="checkbox"
+                                v-model="form.attended_speech_therapist"
+                            />
                             <div class="regCheck_text">
                                 Ребенок ранее посещал логопеда?
                             </div>
                         </div>
                         <div class="regCheck">
-                            <input type="checkbox" v-model="form.data_processing_agreement" />
+                            <input
+                                type="checkbox"
+                                v-model="form.data_processing_agreement"
+                            />
                             <div class="regCheck_text">
                                 даю согласие на обработку персональных данных
                                 и ознакомлен с политикой конфиденциальности
@@ -140,20 +257,39 @@
                     </v-card-text>
 
                     <v-card-actions>
-                        <Button label="Добавить ребёнка" class="profile__btn add-child-btn" @click="
-                            AddChild();
-                        close();
-                        "></Button>
+                        <Button
+                            label="Добавить ребёнка"
+                            class="profile__btn add-child-btn"
+                            @click="
+                                AddChild();
+                                close();
+                            "
+                        ></Button>
                     </v-card-actions>
                 </v-card>
             </template>
         </modalWindow>
-        <img v-if="userStore.children.length" class="profile__img" src="@app/assets/img/Profile/lesyaandmoa.svg" />
-        <img v-if="!userStore.children.length" class="profile-child__img"
-            src="@app/assets/img/Profile/lesyaMoaParentAndChild.svg" alt="" />
+        <img
+            v-if="userStore.children.length"
+            class="profile__img"
+            src="@app/assets/img/Profile/lesyaandmoa.svg"
+        />
+        <img
+            v-if="!userStore.children.length"
+            class="profile-child__img"
+            src="@app/assets/img/Profile/lesyaMoaParentAndChild.svg"
+            alt=""
+        />
     </div>
-    <div class="profile-child" v-if="userStore.currentUser.tasks_type === 'групповой'">
-        <div class="profile-child__wrapper" v-for="(block, index) in userStore.groups" :key="index">
+    <div
+        class="profile-child"
+        v-if="userStore.currentUser.tasks_type === 'групповой'"
+    >
+        <div
+            class="profile-child__wrapper"
+            v-for="(block, index) in groups"
+            :key="index"
+        >
             <div class="delete-profile">
                 <modalConfirm label="Удалить профиль">
                     <template #default="{ close }">
@@ -175,11 +311,19 @@
                                     </div>
                                 </div>
                                 <div class="delete-profile_btn">
-                                    <Button class="delete-btn" label="Удалить" @click="
-                                        deleteChild(block.id, index);
-                                    close();
-                                    "></Button>
-                                    <Button label="Отмена" class="delete-btn" @click="close"></Button>
+                                    <Button
+                                        class="delete-btn"
+                                        label="Удалить"
+                                        @click="
+                                            deleteGroup(block.id, index);
+                                            close();
+                                        "
+                                    ></Button>
+                                    <Button
+                                        label="Отмена"
+                                        class="delete-btn"
+                                        @click="close"
+                                    ></Button>
                                 </div>
                             </div>
                         </div>
@@ -192,78 +336,150 @@
                 </p>
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
-                    <v-progress-linear v-model="skill.progress" height="30" class="scale">
+                    <v-progress-linear
+                        v-model="skill.progress"
+                        height="30"
+                        class="scale"
+                    >
                         <template v-slot:default="{ value }">
                             <strong>{{ Math.ceil(value) }}%</strong>
                         </template>
                     </v-progress-linear>
                 </div>
-                <router-link :to="{
-                    name: 'Game',
-                    params: { idChildOrGroup: block.id },
-                }" class="router-link">
-                    <Button label="Перейти к обучению" class="profile__btn"></Button>
-                </router-link>
+                <RouterLink
+                    :to="{
+                        name: 'Game',
+                        params: { idChildOrGroup: block.id },
+                    }"
+                    class="router-link"
+                >
+                    <Button
+                        label="Перейти к обучению"
+                        class="profile__btn"
+                    ></Button>
+                </RouterLink>
             </div>
         </div>
         <modalWindow label="Добавить группу">
             <template #default="{ close }">
-                <v-card prepend-icon="mdi-account" title="Введите данные группы" class="window">
+                <v-card
+                    prepend-icon="mdi-account"
+                    title="Введите данные группы"
+                    class="window"
+                >
                     <v-card-text>
                         <div class="form-input">
                             <label>Название группы</label>
-                            <Input name="login" class="form-input" v-model:value="formGroup.name"
-                                @blur="v$.name.$touch()"></Input>
+                            <Input
+                                name="login"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.name,
+                                }"
+                                v-model:value="formGroup.name"
+                                @blur="V$.name.$touch()"
+                            ></Input>
                             <span v-if="isError.name" class="error-message">{{
                                 isError.name[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Количество учеников в группе</label>
-                            <Input @blur="v$.number_of_students.$touch()" name="login" class="form-input"
-                                v-model:value="formGroup.number_of_students"></Input>
-                            <span v-if="isError.number_of_students" class="error-message">{{
-                                isError.number_of_students[0] }}</span>
+                            <Input
+                                @blur="V$.number_of_students.$touch()"
+                                name="login"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.number_of_students,
+                                }"
+                                v-model:value="formGroup.number_of_students"
+                            ></Input>
+                            <span
+                                v-if="isError.number_of_students"
+                                class="error-message"
+                                >{{ isError.number_of_students[0] }}</span
+                            >
                         </div>
                         <div class="form-input">
                             <label>Средний возраст учеников группы</label>
-                            <Input @blur="v$.average_age.$touch()" name="login" class="form-input"
-                                v-model:value="formGroup.average_age"></Input>
-                            <span v-if="isError.average_age" class="error-message">{{ isError.average_age[0] }}</span>
+                            <Input
+                                @blur="V$.average_age.$touch()"
+                                name="login"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.average_age,
+                                }"
+                                v-model:value="formGroup.average_age"
+                            ></Input>
+                            <span
+                                v-if="isError.average_age"
+                                class="error-message"
+                                >{{ isError.average_age[0] }}</span
+                            >
                         </div>
                         <div class="form-input">
                             <label>Регион</label>
-                            <SelectSort @blur="v$.region.$touch()" @click="GetRegion" :items="reg"
-                                v-model="formGroup.region" :options="reg" name="select_position" id="select-position"
-                                class="invents-select" clearable placeholder="Выберите регион из списка"
-                                variant="outlined" :sorts-boolean="false" @update:value="changeOption" />
+                            <SelectSort
+                                @blur="V$.region.$touch()"
+                                @click="GetRegion"
+                                :items="reg"
+                                v-model="formGroup.region"
+                                :options="reg"
+                                name="select_position"
+                                id="select-position"
+                                class="invents-select"
+                                clearable
+                                placeholder="Выберите регион из списка"
+                                variant="outlined"
+                                :sorts-boolean="false"
+                                @update:value="changeOption"
+                            />
                             <span v-if="isError.region" class="error-message">{{
                                 isError.region[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Школа</label>
-                            <Input @blur="v$.school.$touch()" name="login" class="form-input"
-                                v-model:value="formGroup.school"></Input>
+                            <Input
+                                @blur="V$.school.$touch()"
+                                name="login"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.school,
+                                }"
+                                v-model:value="formGroup.school"
+                            ></Input>
                             <span v-if="isError.school" class="error-message">{{
                                 isError.school[0]
-                                }}</span>
+                            }}</span>
                         </div>
                     </v-card-text>
 
                     <v-card-actions>
-                        <Button label="Добавить группу" class="profile__btn add-child-btn" @click="
-                            AddGroup();
-                        close();
-                        "></Button>
+                        <Button
+                            label="Добавить группу"
+                            class="profile__btn add-child-btn"
+                            @click="
+                                AddGroup();
+                                close();
+                            "
+                        ></Button>
                     </v-card-actions>
                 </v-card>
             </template>
         </modalWindow>
-        <img v-if="!userStore.groups.length" class="profile-child__img" src="@app/assets/img/Profile/Moa.png" alt="" />
-        <img v-if="userStore.groups.length" class="profile-child__img"
-            src="@app/assets/img/Profile/lesyaProfileGroup.svg" alt="" />
-        <img v-if="false" class="profile__img" src="@app/assets/img/Profile/Frame 277138543.png" />
+        <img
+            v-if="!groups.length"
+            class="profile-child__img"
+            src="@app/assets/img/Profile/Moa.svg"
+            alt=""
+        />
+        <img
+            v-if="groups.length"
+            class="profile-child__img"
+            src="@app/assets/img/Profile/lesyaProfileGroup.svg"
+            alt=""
+        />
     </div>
 </template>
 <script setup>
@@ -325,6 +541,7 @@ const rules = {
 };
 
 const v$ = useVuelidate(rules, form, formGroup);
+const V$ = useVuelidate(rules, formGroup);
 const isError = ref({});
 
 watchEffect(() => {
@@ -354,10 +571,18 @@ watchEffect(() => {
         if (v$.value.region.$error) {
             isError.value.region = ['Поле должно быть заполнено'];
         }
-        if (v$.value.name.$error) {
+    }
+    if (V$.value.$invalid) {
+        if (V$.value.school.$error) {
+            isError.value.school = ['Поле должно быть заполнено'];
+        }
+        if (V$.value.region.$error) {
+            isError.value.region = ['Поле должно быть заполнено'];
+        }
+        if (V$.value.name.$error) {
             isError.value.name = ['Поле должно быть заполнено'];
         }
-        if (v$.value.number_of_students.$error) {
+        if (V$.value.number_of_students.$error) {
             isError.value.number_of_students = ['Поле должно быть заполнено'];
         }
         if (
@@ -365,6 +590,9 @@ watchEffect(() => {
             formGroup.value.average_age > 17
         ) {
             isError.value.average_age = ['Возраст должен быть между 0 и 17'];
+        }
+        if (V$.value.average_age.$error) {
+            isError.value.average_age = ['Поле должно быть заполнено'];
         }
     }
 });
@@ -421,7 +649,7 @@ const AddGroup = async () => {
             },
         });
         formGroup.value = response.data;
-        await userStore.getChildren();
+        await GetGroup();
         fetchSkills();
     } catch (error) {
         console.log('errr', error);
@@ -488,10 +716,11 @@ watch(
         }
         // skill.value = newSkill;
         fetchSkills();
-    }
+    },
 );
 
 onMounted(() => {
+    GetGroup();
     // fetchSkills();
 });
 </script>
@@ -744,9 +973,5 @@ onMounted(() => {
     font-size: 16px;
     font-weight: 400;
     line-height: 21.82px;
-}
-
-.error-border {
-    border: 2px solid #ff535c !important;
 }
 </style>

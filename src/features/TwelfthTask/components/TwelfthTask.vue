@@ -46,9 +46,9 @@
                     </div>
 
                     <!-- ЛОДОЧКИ -->
-<!-- TODO Для последующего разраба -->
-<!-- TODO Лодочка распилина на 2 части, чтоб удобнее было перекрыть кнопку при ответе. {{}} место для ответа -->
-<!-- TODO Скрее всего, это хардкод, но в голове у меня только такое решение созрело -->
+                    <!-- TODO Для последующего разраба -->
+                    <!-- TODO Лодочка распилина на 2 части, чтоб удобнее было перекрыть кнопку при ответе. {{}} место для ответа -->
+                    <!-- TODO Скрее всего, это хардкод, но в голове у меня только такое решение созрело -->
                     <div class="draggable-list__answer">
                         <!-- ВЕРХНИЕ ЛОДОЧКИ -->
                         <div class="draggable-list__answer-wrapper">
@@ -108,7 +108,8 @@
 
                         <!-- ВОДА -->
                         <div>
-                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png" alt="" draggable="false"/>
+                            <img class="draggable-list__answer-water" src="/assets/creatures/TwelfthTask/water.png"
+                                alt="" draggable="false" />
                         </div>
                     </div>
                 </div>
@@ -169,9 +170,9 @@ const show = ref(false);
 const hideModal = () => {
     show.value = false;
 }
-
-
-
+const getImageUrl = (path) => {
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
 const Task = ref()
 const Answer = ref()
 
@@ -190,18 +191,10 @@ const refWords = ref({})
 const isDrag = ref(false);
 
 const dragLetter = (event, id, text) => {
-    //event.dataTransfer.setData('text', `${id}`);
-    if (isDrag.value == false) {
-
-        console.log('dragstart', id, text, event)
-        dataTrans.value = id
-
-        if (dragAudio.value) dragAudio.value.pause();
-        dragAudio.value.src = `/assets/audio/Task12/${audioMap.get(text)}`;
-        dragAudio.value.play();
-
-        isDrag.value = true
-}
+    event.dataTransfer.setData('text', `${id}`);
+    if (dragAudio.value) dragAudio.value.pause();
+    dragAudio.value.src = new URL(`/assets/audio/Task12/${audioMap.get(text)}`, import.meta.url).href;
+    dragAudio.value.play();
 };
 
 
@@ -229,22 +222,22 @@ const dropLetter = (event, id, isActive) => {
                             word.answerCounter += 1;
 
                             if (word.id == 1 && word.answerCounter == 4) {
-                                audioPath = '/assets/audio/Task12/з.12 полн.слово веселые.mp3'
+                                audioPath = new URL('/assets/audio/Task12/з.12 полн.слово веселые.mp3', import.meta.url).href;
                                 Answer.value.answerCounter += 1
                             }
                             else if (word.id == 2 && word.answerCounter == 3) {
-                                audioPath = '/assets/audio/Task12/з.12 полн.слово ребята.mp3'
+                                audioPath = new URL('/assets/audio/Task12/з.12 полн.слово ребята.mp3', import.meta.url).href;
                                 Answer.value.answerCounter += 1
                             }
                             else if (word.id == 3 && word.answerCounter == 2) {
-                                audioPath = '/assets/audio/Task12/з.12 полн.слово наши.mp3'
+                                audioPath = new URL('/assets/audio/Task12/з.12 полн.слово наши.mp3', import.meta.url).href;
                                 Answer.value.answerCounter += 1
                             }
                             else if (word.id == 4 && word.answerCounter == 2) {
-                                audioPath = '/assets/audio/Task12/з.12 полн.слово друзья.mp3'
+                                audioPath = new URL('/assets/audio/Task12/з.12 полн.слово друзья.mp3', import.meta.url).href;
                                 Answer.value.answerCounter += 1
                             }
-                            setTimeout(()=>{
+                            setTimeout(() => {
                                 letter.error = 0;
                             }, 1000)
                         }
@@ -282,9 +275,9 @@ const dropLetter = (event, id, isActive) => {
                 })
             );
 
-
+            let reactionPath = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
             let reactionAudio = new Audio(
-                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
+                reactionPath
             );
             reactionAudio.play();
 
@@ -298,7 +291,8 @@ const dropLetter = (event, id, isActive) => {
 
             if (Answer.value.answerCounter == 4) {
                 setTimeout(() => {
-                    let audio = new Audio('/assets/audio/Task12/з.12 полн.текст Веселые ребята наши друзья.mp3');
+                    let audioPath_4 = new URL('/assets/audio/Task12/з.12 полн.текст Веселые ребята наши друзья.mp3', import.meta.url).href;
+                    let audio = new Audio(audioPath_4);
                     audio.play();
                 }, 2000)
             }
@@ -314,16 +308,15 @@ const dropLetter = (event, id, isActive) => {
                             emit('correct');
                             emit('open');
                         }
-                    },1000)
-
-                    let audio = new Audio('/assets/audio/Task12/368.12_.mp3');
+                    }, 1000)
+                    let audio_path = new URL('/assets/audio/Task12/368.12_.mp3', import.meta.url).href
+                    let audio = new Audio(audio_path);
                     audio.play();
                 }
 
             }, 7000);
         }
         else {
-            
 
             Array.from(taskDOM.children).map(row => {
                 Array.from(row.children).forEach(word => {
@@ -338,12 +331,10 @@ const dropLetter = (event, id, isActive) => {
                             word_block.classList.remove('item_wrong')
                         }, 1000)
                     }
-                })
-            })
-
-            let reactionAudio = new Audio(
-                `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
+                })}
             );
+            let reactionPath_2 = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
+            let reactionAudio = new Audio( reactionPath_2 );
             reactionAudio.play();
         }
     }
@@ -373,7 +364,7 @@ const wordIsActive = (event) => {
 
 </script>
 <style scoped lang='scss'>
-*{
+* {
     user-select: none;
 }
 
@@ -401,6 +392,7 @@ const wordIsActive = (event) => {
     margin-top: 60px;
     width: 100%;
     height: 386px;
+
     @media (max-width: 1024px) {
         height: 302px;
         margin-top: 48px;
@@ -414,6 +406,7 @@ const wordIsActive = (event) => {
     justify-content: space-between;
     width: 889px;
     height: 136px;
+
     @media (max-width: 1024px) {
         height: 116px;
     }
@@ -494,13 +487,13 @@ const wordIsActive = (event) => {
     height: 20px;
 }
 
-.boat-frontside{
+.boat-frontside {
     position: relative;
     bottom: 83px;
     margin: auto;
 }
 
-.draggable-list__question-text{
+.draggable-list__question-text {
     position: relative;
     transform: translateY(-65px);
     z-index: -1;
@@ -511,6 +504,7 @@ const wordIsActive = (event) => {
 .item_right {
     border: 2px solid #5ccf54;
 }
+
 .item_wrong {
     border: 2px solid #db0000;
 }

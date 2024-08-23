@@ -18,13 +18,16 @@
                             :key="stringid">
                             <div class="draggable-list__letters" :id="'letters-' + wordid"
                                 v-for="{ wordid, word } in string" :key="wordid">
-                                <span :class="'draggable-list__letter' +
-                                    letter.classid
-                                    " v-for="letter in word" :key="letter.id" draggable="true" @dragstart="
-                                        dragLetter($event, wordid, letter.id)
-                                        ">{{
-                                        letter.isActive ? letter.text : ''
-                                    }}</span>
+
+                                <VueDraggableNext v-for="letter in word" :key="letter.id" class="letter_wrapper" 
+                                :group="{ name: 'words', pull: 'clone', put: false }" :sort="false"
+                                @choose="dragLetter($event, wordid, letter.id)" :ghost-class="'hidden'" :drag-class="'block'">
+
+                                    <span :class="'draggable-list__letter' + letter.classid"  >
+                                        {{ letter.isActive ? letter.text : ''}}
+                                    </span>
+
+                                </VueDraggableNext>
                             </div>
                         </div>
                     </div>
@@ -33,13 +36,13 @@
                             :key="stringid">
                             <div :class="'draggable-list__subcontainer' + wordid" v-for="{ wordid, word } in string"
                                 :key="wordid">
-                                <div class="draggable-list__subcontainer-square"
-                                    :data-answer="letter.text.toUpperCase()" @drop="
-                                        //dropLetter($event, wordid, letter);
-                                        dropLetterNew($event, wordid, letter.id, letter.isActive)
-                                        " @dragover.prevent v-for="letter in word" :key="letter.id">
-                                    {{ letter.isActive ? letter.text : '' }}
-                                </div>
+                                <VueDraggableNext @add="dropLetterNew($event, wordid, letter.id, letter.isActive)" v-for="letter in word" :key="letter.id"
+                                :group="{ name: 'answer', pull: false, put: true }" :sort="false" :ghost-class="'none'" draggable="false">
+                                    <div class="draggable-list__subcontainer-square"
+                                    :data-answer="letter.text.toUpperCase()">
+                                        {{ letter.isActive ? letter.text : '' }}
+                                    </div>
+                                </VueDraggableNext>
                                 <img src="/assets/icons/comma-blue.svg" alt="comma-blue"
                                     v-if="[6, 7, 8, 9].includes(wordid)" />
                                 <div class="draggable-list__full-stop" v-if="wordid == 10">
@@ -98,7 +101,7 @@ const is_started = ref(null);
 const corrValue = ref(0);
 
 const getImageUrl = (path) => {
- return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 const taskArray = ref([]);
 taskArray.value = dataTask;
@@ -108,13 +111,24 @@ answerArray.value = dataAnswer;
 
 const answersCounter = ref(0);
 
+
+const dataTransfer = ref({})
 const dragLetter = (event, wordID, letterID) => {
-    event.dataTransfer.setData('text', `${wordID} ${letterID}`);
+    // event.dataTransfer.setData('text', `${wordID} ${letterID}`);
+
+    dataTransfer.value.wordID = wordID;
+    dataTransfer.value.letterID = letterID
 };
 
 const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
-    let dragwordID = event.dataTransfer.getData('text').split(' ')[0];
-    let dragletterID = event.dataTransfer.getData('text').split(' ')[1];
+    // let dragwordID = event.dataTransfer.getData('text').split(' ')[0];
+    // let dragletterID = event.dataTransfer.getData('text').split(' ')[1];
+
+    event.to.removeChild(event.item)
+
+    let dragwordID = dataTransfer.value.wordID;
+    let dragletterID = dataTransfer.value.letterID;
+
 
     if (wordID == dragwordID) {
         if (letterID == dragletterID) {
@@ -125,8 +139,8 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                             if (letter.id == letterID) {
                                 letter.isActive = true;
                                 if (word.word.every((item) => { return item.isActive })) {
-                                    console.log(`${audioMap.get('слово-' + word.wordid)}`)
-                                    let audio = new Audio(`/assets/audio/Task16/${audioMap.get('слово-' + word.wordid)}`);
+                                    let wordPath = new URL(`/assets/audio/Task6/${audioMap.get('слово-' + word.wordid)}`, import.meta.url).href;
+                                    let audio = new Audio(wordPath);
                                     setTimeout(() => {
                                         audio.play();
                                     }, 1000)
@@ -144,23 +158,25 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                         });
                 });
             });
+            let reactionPath = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
 
             let reactionAudio = new Audio(
-                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
+                reactionPath
             );
             reactionAudio.play();
-            event.target.classList.add(
+            event.to.children[0].classList.add(
                 'draggable-list__subcontainer-square_right'
             );
 
-            console.log(answersCounter.value);
+            event.from.removeChild(event.from.children[0])
 
             if (answersCounter.value == 54) {
                 setTimeout(() => {
-                    event.target.classList.remove(
+                    event.to.children[0].classList.remove(
                         'draggable-list__subcontainer-square_right'
                     );
-                    let audio = new Audio(`/assets/audio/Task16/${audioMap.get('final')}`);
+                    let audioPathSrc = new URL(`/assets/audio/Task16/${audioMap.get('final')}`, import.meta.url).href
+                    let audio = new Audio(audioPathSrc);
                     audio.play();
                 }, 2000);
 
@@ -171,7 +187,7 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
             else {
                 answersCounter.value += 1;
                 setTimeout(() => {
-                    event.target.classList.remove(
+                    event.to.children[0].classList.remove(
                         'draggable-list__subcontainer-square_right'
                     );
                 }, 2000);
@@ -179,11 +195,11 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
 
         } else {
             if (!letterIsActive) {
-                event.target.classList.add(
+                event.to.children[0].classList.add(
                     'draggable-list__subcontainer-square_warning'
                 );
                 setTimeout(() => {
-                    event.target.classList.remove(
+                    event.to.children[0].classList.remove(
                         'draggable-list__subcontainer-square_warning'
                     );
                 }, 2000);
@@ -191,13 +207,14 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
         }
     } else {
         if (!letterIsActive) {
-            event.target.classList.add('draggable-list__subcontainer-square_wrong');
+            event.to.children[0].classList.add('draggable-list__subcontainer-square_wrong');
+            let reactionAudioSrc = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
             let reactionAudio = new Audio(
-                `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
+                reactionAudioSrc
             );
             reactionAudio.play();
             setTimeout(() => {
-                event.target.classList.remove(
+                event.to.children[0].classList.remove(
                     'draggable-list__subcontainer-square_wrong'
                 );
             }, 2000);
@@ -225,11 +242,11 @@ const resetTask = () => {
     answersCounter.value = 0;
 };
 
-onMounted(() => {
-    const correct = getCorrectAnswer(16, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-});
+// onMounted(() => {
+//     const correct = getCorrectAnswer(16, props.childId);
+//     corrValue.value = correct.correctId;
+//     is_correct.value = correct.is_correct;
+// });
 </script>
 
 <style lang="scss" scoped>
@@ -713,5 +730,28 @@ onMounted(() => {
 
 .draggable-list__subcontainer-square_right {
     border: 2px solid #5ccf54;
+}
+
+.letter_wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+
+.none{
+    display: none !important;
+}
+
+.block {
+    display: flex !important;
+    opacity: 100% !important;
+
+    font-size: 36px;
+    font-weight: 300;
+}
+
+.hidden{
+    opacity: 0% !important;
 }
 </style>

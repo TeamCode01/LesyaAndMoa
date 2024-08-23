@@ -12,7 +12,9 @@
                         Соедини полученные слова с картинками.
                     </p>
                 </div>
-                <canvas class="canvas_draw" ref="canvasRef" @mousedown="engage" @mouseup="disengage" @mousemove="draw"
+                <canvas class="canvas_draw" ref="canvasRef"
+                    @mousedown="engage" @mouseup="disengage" @mousemove="draw"
+                    @touchstart="engage" @touchend="disengage" @touchmove="draw"
                     @click="voiceActing" v-show="endFirstTask && true"></canvas>
                 <div class="draggable-list" ref="taskBlock" @dragover.prevent @drop="missDrop($event)">
                     <DragndropComponent :left="PuzzleCords.x" :top="PuzzleCords.y" v-if="isDrag && !endFirstTask">
@@ -43,26 +45,25 @@
                     <div class="draggable-list__syllables" v-if="!endFirstTask">
                         <div class="draggable-list__set-syllables" v-for="row in firstTask[0]" :key="row"
                             draggable="false">
-                            <div v-for="word in row" :key="word.id" @mousedown.left="($event) => startPosition($event, word)" 
-                                @mouseenter="() => {
-                                    if (word.isActive) {
-                                        playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)
-                                    }}" 
-                                    
-                                :ref="(el) => { refPuzzles[word.id - 1] = el}" 
-                                draggable="false">
-                                <img :src="word.error == 0
-                                        ? word.src
-                                        : word.error == 1
-                                            ? word.srcRight
-                                            : word.srcError
-                                    " :alt="word.class" :class="[word.class]" draggable="false" :style="{
-                                        opacity: word.isActive ? '100%' : '0%',
-                                        cursor: word.isActive
-                                            ? 'pointer'
-                                            : 'auto',
-                                    }" />
-                            </div>
+
+                            <VueDraggableNext :group="`${ (word.id == dragIdPuzzle) ? { name: 'word', pull: 'clone', put: false } : { name: 'word', pull: 'clone', put: true } }`"
+                                :sort="false" @add = "drop($event, word)" :class="[word.class]"
+                                :ghost-class="word.id == dragIdPuzzle ? 'hidden' : 'none'" :drag-class="'block'"
+                                @choose="($event)=>{drag($event, word)}"
+                                :data-is-active="word.isActive"
+                                v-for="word in row" :key="word.id">
+
+                                <div  @mousedown.left="($event) => startPosition($event, word)" 
+                                    @mouseenter="() => {if (word.isActive) { playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)}}" 
+                                    :ref="(el) => { refPuzzles[word.id - 1] = el}" 
+                                    draggable="false">
+                                    <img :src="word.error == 0 ? word.src : word.error == 1 ? word.srcRight : word.srcError" :alt="word.class"  draggable="false" 
+                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" />
+                                </div>
+
+
+                            </VueDraggableNext>
+                            
                         </div>
                     </div>
 
@@ -144,6 +145,8 @@ const next = () => {
 // ПЕРВЫЙ ЭТАП ЗАДАНИЯ
 //
 
+const dragIdPuzzle = ref()
+
 const audio = ref(new Audio());
 const is_correct = ref(null);
 const is_started = ref(null);
@@ -179,6 +182,84 @@ const startId = ref(0);
 firstTask.value = structuredClone(dataFirstTask);
 firstTask.value[1] = [];
 secondTask.value = structuredClone(dataSecondTask);
+
+const dataTransfer = ref({})
+const drag = (event, word) => {
+    event.from.dataset['isActive'] = 'false';
+    dragIdPuzzle.value = word.id;
+    dataTransfer.value = word;
+    console.log('drag', event);
+}
+
+const drop = (event, word) => {
+    
+    console.log('drop', event)
+    let dragElem = event.item
+    event.to.removeChild(event.item)
+
+    if (event.to.dataset['isActive'] == 'false') {
+        console.log(event.from)
+        event.from.appendChild(dragElem)
+        return
+    }
+
+
+    let dragSrcError = dataTransfer.value.srcError
+    let dragSrc = dataTransfer.value.src
+
+    if (dataTransfer.value.answer == word.id){
+
+        event.to.removeChild(event.to.children[0])
+        event.to.dataset['isActive'] = 'false';
+
+        playAudio(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`);
+
+        let answer = {};
+            if (dataTransfer.value.id == 1 || dataTransfer.value.id == 14) {
+                answer.id = 1;
+                answer.text = 'РОМАШКА';
+            } else if (dataTransfer.value.id == 2 || dataTransfer.value.id == 9) {
+                answer.id = 5;
+                answer.text = 'ОБЛАКА';
+            } else if (dataTransfer.value.id == 3 || dataTransfer.value.id == 6) {
+                answer.id = 3;
+                answer.text = 'КОРОВА';
+            } else if (dataTransfer.value.id == 4 || dataTransfer.value.id == 11) {
+                answer.id = 2;
+                answer.text = 'ДЕРЕВО';
+            } else if (dataTransfer.value.id == 5 || dataTransfer.value.id == 8) {
+                answer.id = 4;
+                answer.text = 'РЕКА';
+            }
+
+            firstTask.value[1].push(answer);
+            firstTask.value[1].sort((a, b) => a.id - b.id);
+
+            setTimeout(() => {
+                firstTaskAnswerCounter.value += 1;
+                let audio_word = new Audio(`/assets/audio/Task17/${audioMap.get('слово-' + answer.id)}`);
+                audio_word.play();
+
+                setTimeout(() => {
+                    if (firstTaskAnswerCounter.value == 5) {
+                        endFirstTask.value = true;
+                    }
+                }, 2000)
+            }, 1000);
+    }
+    else{
+        event.from.appendChild(dragElem)
+        playAudio(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`)
+
+        event.from.children[0].children[0].src = dragSrcError;
+        event.to.children[0].children[0].src = word.srcError
+
+        setTimeout(()=>{
+            event.from.children[0].children[0].src = dragSrc;
+            event.to.children[0].children[0].src = word.src
+        }, 2000)
+    }
+}
 
 const getPuzzleCords = (event) => {
     if (event.type == 'touchmove' || event.type == 'touchstart') {
@@ -447,9 +528,22 @@ const resizeCanvas = async () => {
 
 const getCursorPosition = (event) => {
     const rect = canvas.getBoundingClientRect();
+    if (event.type == "touchstart" || event.type == "touchmove") {
+        console.log(event)
+        return {
+            x: event.touches[0].clientX - rect.left,
+            y: event.touches[0].clientY - rect.top
+        }
+    }
+    else if (event.type == "touchend") {
+        return {
+            x: event.changedTouches[0].clientX - rect.left,
+            y: event.changedTouches[0].clientY - rect.top
+        }
+    }
     return {
         x: event.clientX - rect.left,
-        y: event.clientY - rect.top,
+        y: event.clientY - rect.top
     };
 };
 
@@ -743,9 +837,9 @@ const finalDraw = () => {
 
 onMounted(async () => {
     canvas = canvasRef.value;
-    const correct = getCorrectAnswer(17, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    // const correct = getCorrectAnswer(17, props.childId);
+    // corrValue.value = correct.correctId;
+    // is_correct.value = correct.is_correct;
     ctx = canvas.getContext('2d');
     await resizeCanvas();
     window.addEventListener('resize', () => {
@@ -817,6 +911,8 @@ watch(endFirstTask, () => {
     justify-content: space-between;
     width: 100%;
     height: 90px;
+
+    column-gap: 113px;
 
     @media (max-width: 1024px) {
         height: 72px;
@@ -1025,5 +1121,25 @@ watch(endFirstTask, () => {
     100% {
         scale: 1;
     }
+}
+
+.none{
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.dot{
+    width: 1px;
+    height: 1px;
+}
+
+.block {
+    display: flex !important;
+    opacity: 100% !important;
+}
+
+.hidden{
+    opacity: 0% !important;
 }
 </style>

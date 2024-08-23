@@ -14,22 +14,19 @@
                 <div class="draggable-list">
                     <div class="draggable-list__items">
                         <div class="draggable-list__item" v-for="row in taskData" :key="row">
-                            <div class="draggable-list__button" :class="{
-                                'draggable-list__button_main':
-                                    word.x == 0 || word.y == 0,
-                                'draggable-list__button_task':
-                                    word.x != 0 && word.y != 0,
-                            }" v-for="word in row" :key="word.text" :disabled="word.x == 0 || word.y == 0"
-                                :draggable="word.x != 0 && word.y != 0" @dragstart="
-                                    dragLetter(
-                                        $event,
-                                        word.x,
-                                        word.y,
-                                        word.text
-                                    )
-                                    " @mousedown="playAudio(word.text)">
-                                {{ word.text }}
-                            </div>
+                            <VueDraggableNext v-for="word in row" :key="word.text" 
+                            :group="(word.x == 0 || word.y == 0) ? { name: 'words', pull: false, put: false } : { name: 'words', pull: 'clone', put: false }" :sort="false"
+                            @choose="($event)=>{drag($event, word)}" ghost-class="block" :drag-class="`${(word.x == 0 || word.y == 0) ? 'hidden' : 'block'}`" data-is-active='true'>
+                                <div class="draggable-list__button" :class="{
+                                    'draggable-list__button_main':
+                                        word.x == 0 || word.y == 0,
+                                    'draggable-list__button_task':
+                                        word.x != 0 && word.y != 0,
+                                }"
+                                    @click="playAudio(word.text)">
+                                    {{ word.text }}
+                                </div>
+                            </VueDraggableNext>
                         </div>
                     </div>
                 </div>
@@ -38,20 +35,17 @@
                     <div class="task_block__items">
                         <div class="task_block__row" v-for="row in rowsData" :key="row.id">
                             <div class="task_block__word" v-for="word in row.data" :key="word.id">
-                                <div class="task_block__letter" v-for="letter in word.data" :key="letter" @drop="
-                                    dropLetter(
-                                        $event,
-                                        letter.x,
-                                        letter.y,
-                                        letter.id,
-                                        letter.isActive
-                                    )
-                                    " @dragover.prevent :class="{
-                                        task_block__letter_active:
-                                            letter.isActive,
-                                    }">
+
+                                <VueDraggableNext v-for="letter in word.data" :key="letter" :group="{ name: 'speakers', pull: false, put: true }" :sort="false"
+                                @add = "dropLetter($event, letter)" :ghost-class="'none'" >
+
+                                    <div class="task_block__letter" 
+                                    :class="{ task_block__letter_active: letter.isActive}">
                                     {{ letter.text }}
                                 </div>
+
+                                </VueDraggableNext>
+                                
                                 <img class="comma" src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="
                                     [18].includes(word.data.slice(-1)[0].id) &&
                                     word.data.slice(-1)[0].isActive
@@ -88,11 +82,11 @@ import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 
-onMounted(() => {
-    const correct = getCorrectAnswer(15, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-});
+// onMounted(() => {
+//     const correct = getCorrectAnswer(15, props.childId);
+//     corrValue.value = correct.correctId;
+//     is_correct.value = correct.is_correct;
+// });
 
 const corrValue = ref(0)
 const is_correct = ref(null)
@@ -143,19 +137,35 @@ for (let row = 1; row in taskData; row++) {
 const playAudio = (text) => {
     if (!audio.value.paused) audio.value.pause()
     if (text) {
-        audio.value.src = `/assets/audio/Task15/${audioMap.get(text)}`;
+        audio.value.src = new URL(`/assets/audio/Task15/${audioMap.get(text)}`, import.meta.url).href;
         audio.value.play()
     }
 }
 
-const dragLetter = (event, x, y, text) => {
-    event.dataTransfer.setData('text', `${x} ${y} ${text}`);
+const dataTransfer = ref({})
+
+const drag = (event, word) => {
+    // event.dataTransfer.setData('text', `${x} ${y} ${text}`);
+
+    dataTransfer.value = word
 };
 
-const dropLetter = (event, x, y, id, isActive) => {
-    let dragx = event.dataTransfer.getData('text').split(' ')[0];
-    let dragy = event.dataTransfer.getData('text').split(' ')[1];
-    let dragtext = event.dataTransfer.getData('text').split(' ')[2];
+const dropLetter = (event, letter) => {
+    // let dragx = event.dataTransfer.getData('text').split(' ')[0];
+    // let dragy = event.dataTransfer.getData('text').split(' ')[1];
+    // let dragtext = event.dataTransfer.getData('text').split(' ')[2];
+
+    event.to.removeChild(event.item)
+
+    let dragx = dataTransfer.value.x;
+    let dragy = dataTransfer.value.y;
+    let dragtext = dataTransfer.value.text
+
+    let x = letter.x;
+    let y = letter.y;
+    let id = letter.id;
+    let isActive = letter.isActive;
+
 
     if (!isActive) {
         if (dragx == x && dragy == y) {
@@ -175,7 +185,7 @@ const dropLetter = (event, x, y, id, isActive) => {
                                 (word.id == 7 && word.answerCounter == 4)
                             ) {
                                 setTimeout(() => {
-                                    let audioPath = `/assets/audio/Task15/${audioMap.get('слово-' + word.id)}`
+                                    let audioPath = new URL(`/assets/audio/Task15/${audioMap.get('слово-' + word.id)}`, import.meta.url).href
                                     let word_audio = new Audio(audioPath);
                                     word_audio.play()
                                 }, 1000)
@@ -194,8 +204,10 @@ const dropLetter = (event, x, y, id, isActive) => {
 
             answersCounter.value += 1;
             event.target.classList.add('task_block__letter_right');
+            let reactionAudioSrc = new URL(
+                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
             let reactionAudio = new Audio(
-                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
+                reactionAudioSrc
             );
             reactionAudio.play();
 
@@ -210,8 +222,8 @@ const dropLetter = (event, x, y, id, isActive) => {
                             emit('open');
                         }
                     }, 1000)
-
-                    let finalaudio = new Audio('/assets/audio/Task15/426.15_.mp3');
+                    let finalSrc = new URL('/assets/audio/Task15/426.15_.mp3', import.meta.url).href
+                    let finalaudio = new Audio(finalSrc);
                     finalaudio.play();
                 }
 
@@ -219,8 +231,10 @@ const dropLetter = (event, x, y, id, isActive) => {
         } else {
             event.target.classList.add('task_block__letter_wrong');
 
+            let reactionAudioSrc = new URL(
+                `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
             let reactionAudio = new Audio(
-                `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
+                reactionAudioSrc
             );
             reactionAudio.play();
 
@@ -421,5 +435,18 @@ const dropLetter = (event, x, y, id, isActive) => {
     top: -4px;
     transform: scale(0.85);
     fill: rgb(15, 87, 7);
+}
+
+.none{
+    display: none !important;
+}
+
+.block {
+    display: flex !important;
+    opacity: 100% !important;
+}
+
+.hidden{
+    opacity: 0% !important;
 }
 </style>

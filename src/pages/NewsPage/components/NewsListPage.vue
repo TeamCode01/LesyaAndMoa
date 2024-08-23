@@ -3,16 +3,26 @@
         <div class="news-h">
             <div class="news-h__wrapper">
                 <h1>Новости</h1>
-                <img class="news-h__img" src="@app/assets/img/News/image-moa.png" alt="" />
+                <img
+                    class="news-h__img"
+                    src="@app/assets/img/News/image-moa.png"
+                    alt=""
+                />
             </div>
         </div>
         <div class="news-list">
-            <div class="news-list__card" v-for="(block, index) in news" :key="index">
-
-                <RouterLink :to="{
-                    name: 'page',
-                    params: { id: block.id },
-                }">
+            <div
+                class="news-list__card"
+                v-for="(block, index) in news"
+                :key="index"
+            >
+                <RouterLink
+                    class="router-news"
+                    :to="{
+                        name: 'page',
+                        params: { id: block.id },
+                    }"
+                >
                     <div class="news-list__card-img">
                         <img :src="block.image" alt="" />
                     </div>
@@ -24,23 +34,36 @@
                         </p>
                     </div>
                 </RouterLink>
-
             </div>
         </div>
-        <div>
+        <div class="news-pagination">
             <button @click="prevPage" :disabled="currentPage === 1">
                 <img
-                    class="news-arrow"
+                    v-if="!(currentPage === 1)"
+                    class="news-arrow news-arrows"
                     src="@app/assets/icons/arrows.svg"
                     alt=""
                 />
             </button>
-            <span>{{ currentPage }}</span>
+
+            <p
+                class="news-page__list"
+                v-for="page in pages"
+                :key="page"
+                @click="setCurrentPage(page)"
+            >
+                &nbsp;&nbsp;{{ page }}&nbsp;&nbsp;
+            </p>
+
             <button
                 @click="nextPage"
                 :disabled="currentPage * itemsPerPage >= totalItems"
             >
-                <img src="@app/assets/icons/arrows.svg" alt="" />
+                <img
+                    class="news-arrows"
+                    src="@app/assets/icons/arrows.svg"
+                    alt=""
+                />
             </button>
         </div>
     </div>
@@ -54,6 +77,9 @@ const error = ref([]);
 let currentPage = 1;
 const itemsPerPage = 9;
 let totalItems = 0;
+const pagesToShow = 4;
+
+const pages = ref([]);
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -79,6 +105,7 @@ const GetNews = async (page = 1) => {
 
         news.value = response.data.results;
         totalItems = response.data.total;
+        generatePages();
         console.log(response.data);
     } catch (error) {
         console.log('errr', error);
@@ -101,11 +128,27 @@ const prevPage = () => {
     }
 };
 
+const setCurrentPage = (page) => {
+    currentPage = page;
+    GetNews(page);
+};
+
+const generatePages = () => {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
+    const endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+
+    pages.value = Array.from(
+        { length: endPage - startPage + 1 },
+        (_, index) => startPage + index,
+    );
+};
+
 onMounted(() => {
     GetNews(currentPage);
 });
 </script>
-<style>
+<style scoped>
 .news-h {
     margin-top: 80px;
     margin-bottom: 50px;
@@ -170,5 +213,39 @@ onMounted(() => {
 
 .news-arrow {
     transform: scale(-1, 1);
+}
+
+.news-pagination {
+    margin-bottom: 100px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.news-page__list {
+    padding-bottom: 5px;
+}
+.news-list__card-box {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+}
+.router-news {
+    text-decoration: none;
+}
+.news-list__title {
+    font-size: 20px;
+    color: #313131;
+    font-weight: 400;
+}
+.news-list__desc {
+    font-size: 16px;
+    color: #313131;
+}
+.news-list__data {
+    font-size: 14px;
+    color: #818181;
 }
 </style>

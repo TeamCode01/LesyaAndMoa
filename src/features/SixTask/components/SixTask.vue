@@ -3,11 +3,7 @@
         <div class="task_block__wrapper">
             <template v-if="usedWord.length < 15">
                 <div class="task_block__close" @click="hide">
-                    <img
-                        class="close-icon"
-                        src="@app/assets/icons/close-icon.svg"
-                        alt="крест"
-                    />
+                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
@@ -17,79 +13,45 @@
                 </div>
                 <div class="draggable-list">
                     <div class="draggable-list__items">
-                        <div
-                            class="draggable-list__item"
-                            v-for="row in taskData"
-                            :key="row"
-                        >
-                            <button
-                                class="draggable-list__button"
-                                :class="{
-                                    item_right:
-                                        word.text == taskWord &&
-                                        word.text == selectedWord &&
-                                        word.text != '',
-                                    item_wrong:
-                                        word.text != taskWord &&
-                                        word.text == selectedWord &&
-                                        word.text != '',
-                                }"
-                                v-for="word in row"
-                                :key="word.id"
-                                :disabled="
-                                    word.text.trim().length < 2 ||
-                                    taskWord == '' ||
-                                    blockButtons == true
-                                "
-                                @click="clickItem(word)"
-                            >
+                        <div class="draggable-list__item" v-for="row in taskData" :key="row">
+                            <button class="draggable-list__button" :class="{
+                                item_right:
+                                    word.text == taskWord &&
+                                    word.text == selectedWord &&
+                                    word.text != '',
+                                item_wrong:
+                                    word.text != taskWord &&
+                                    word.text == selectedWord &&
+                                    word.text != '',
+                            }" v-for="word in row" :key="word.id" :disabled="word.text.trim().length < 2 ||
+                                taskWord == '' ||
+                                blockButtons == true
+                                " @click="clickItem(word)">
                                 {{ word.text }}
                             </button>
                         </div>
                     </div>
                     <div v-if="!repeated">
-                        <button
-                            class="draggable-list__button_final"
-                            @click="
-                                () => {
-                                    if (firstMusic) randomMusic();
-                                    playMusic();
-                                }
-                            "
-                        >
-                            <span class="draggable-list__button-speaker"
-                                >Прослушать</span
-                            >
-                            <img
-                                src="@app\assets\icons\speaker.svg"
-                                alt="speaker"
-                            />
+                        <button class="draggable-list__button_final" @click="() => {
+                            if (firstMusic) randomMusic();
+                            playMusic();
+                        }
+                            ">
+                            <span class="draggable-list__button-speaker">Прослушать</span>
+                            <img src="@app\assets\icons\speaker.svg" alt="speaker" />
                         </button>
                     </div>
                     <div v-if="repeated">
-                        <button
-                            class="draggable-list__button_final"
-                            @click="playMusic()"
-                            :disabled="blockButtons == true"
-                        >
-                            <span class="draggable-list__button-repeat"
-                                >Повторить</span
-                            >
-                            <img
-                                src="@app\assets\icons\repeat.svg"
-                                alt="repeat"
-                            />
+                        <button class="draggable-list__button_final" @click="playMusic()"
+                            :disabled="blockButtons == true">
+                            <span class="draggable-list__button-repeat">Повторить</span>
+                            <img src="@app\assets\icons\repeat.svg" alt="repeat" />
                         </button>
                     </div>
                 </div>
             </template>
-            <TaskResultBanner
-              :img="getImageUrl('Diamond.png')" :bg="getImageUrl('moa.gif')"
-                text="Блистательно!"
-                v-if="usedWord.length >= 15"
-                @hide="hide()"
-                @next="next()"
-            ></TaskResultBanner>
+            <TaskResultBanner :img="getImageUrl('Diamond.png')" :bg="getImageUrl('moa.gif')" text="Блистательно!"
+                v-if="usedWord.length >= 15" @hide="hide()" @next="next()"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -134,7 +96,7 @@ onMounted(() => {
 });
 
 const getImageUrl = (path) => {
- return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
 const corrValue = ref(0)
@@ -185,8 +147,9 @@ const randomMusic = (first = false) => {
     taskWord.value = item;
 
     let file = dict.get(`${item}`);
-    // audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
-    // new Audio(`Task6/${file}`);
+    let audioPath3 = new URL(`/assets/audio/Task6/${file}`, import.meta.url).href
+    audio = new Audio(audioPath3);
+    audio.play();
     usedWord.value.push(item);
 
     repeated.value = false;
@@ -207,8 +170,9 @@ const selectedWord = ref();
 
 const clickItem = (word) => {
     if (word.text == taskWord.value) {
+        let audioPath = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
         let reactionAudio = new Audio(
-            `Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
+            audioPath
         );
         reactionAudio.play();
         blockButtons.value = true;
@@ -222,15 +186,16 @@ const clickItem = (word) => {
                         emit('correct');
                         emit('open');
                     }
-                },1000)
-
-                let audio = new Audio('Task6/259.6_.mp3');
+                }, 1000)
+                let audioPathSimple = new URL(`/assets/audio/Task6/259.6_.mp3`, import.meta.url).href;
+                let audio = new Audio(audioPathSimple);
                 audio.play();
             }
         }, 2000)
     } else {
+        let audioPath2 = new URL(`/assets/audio/Task6/wrong.1.mp3`, import.meta.url).href;
         let reactionAudio = new Audio(
-            `Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`
+            audioPath2
         );
         reactionAudio.play();
     }
@@ -247,7 +212,7 @@ const clickItem = (word) => {
 
 </script>
 <style lang="scss" scoped>
-*{
+* {
     user-select: none;
 }
 
@@ -258,6 +223,7 @@ const clickItem = (word) => {
     align-items: center;
     justify-content: center;
     margin-top: 60px;
+
     @media (max-width: 1024px) {
         gap: 60px;
     }
@@ -270,15 +236,18 @@ const clickItem = (word) => {
     justify-content: center;
     width: 540px;
     gap: 4px;
+
     @media (max-width: 1024px) {
         gap: 4px;
     }
 }
+
 .draggable-list__item {
     display: flex;
     justify-content: center;
     gap: 4px;
 }
+
 .draggable-list__item {
     width: 100%;
     height: 40px;
@@ -338,6 +307,7 @@ const clickItem = (word) => {
 .item_right {
     border: 2px solid #5ccf54;
 }
+
 .item_wrong {
     border: 2px solid #db0000;
 }
