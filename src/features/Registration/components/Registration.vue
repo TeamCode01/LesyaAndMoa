@@ -150,7 +150,7 @@ watchEffect(() => {
                 'Пароль должен содержать не менее 8 символов, используйте латиницу, спецсимволы (@#$%&*!), заглавные и прописные буквы, цифры.',
             ];
         }
-        if (v$.value.re_password.$error) {
+        if (form.value.password != form.value.re_password) {
             isError.value.re_password = ['Пароли не совпадают'];
         }
         if (v$.value.tasks_type.$error) {
