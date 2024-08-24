@@ -85,6 +85,7 @@ const audio = ref(new Audio());
 
 const playAudio = async (audioPath) => {
     audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
+    console.log(props.finish)
     if (props.finish === true) {
         await audio.value.play();
     }

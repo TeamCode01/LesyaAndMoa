@@ -208,11 +208,11 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-// onMounted(() => {
-//     const correct = getCorrectAnswer(13, props.childId);
-//     corrValue.value = correct.correctId;
-//     is_correct.value = correct.is_correct;
-// })
+onMounted(() => {
+    const correct = getCorrectAnswer(13, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+})
 </script>
 <style lang="scss" scoped>
 * {

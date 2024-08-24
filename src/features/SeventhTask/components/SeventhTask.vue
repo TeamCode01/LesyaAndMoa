@@ -21,7 +21,7 @@
                                 :class="{ 'draggable-list__word': true, correct_select: word.correct, not_correct_select: word.correct === false }">
                                 {{ word.word }}</div>
                             <img :ref="el => refColumns[1][word_index - 1] = el" alt="green-circle"
-                                src="/assets/creatures/SeventeenthTask/green-circle.svg" class="draggable-list__circle"
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
                                 draggable="false" />
                         </div>
                     </div>
@@ -29,13 +29,13 @@
                         <div class="draggable-list__sentence-container"
                             v-for="(sentence, sentence_index) in sentences[option]" :key="sentence_index">
                             <img :ref="el => refColumns[2][sentence_index - 1] = el" alt="green-circle"
-                                src="/assets/creatures/SeventeenthTask/green-circle.svg" class="draggable-list__circle"
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
                                 draggable="false" />
                             <div :ref="el => refBlockSound[2][sentence_index - 1] = el"
                                 :class="{ 'draggable-list__sentence': true, correct_select: sentence.correct, not_correct_select: sentence.correct === false }">
                                 {{ sentence.sentence }}</div>
                             <img :ref="el => refColumns[3][sentence_index - 1] = el" alt="green-circle"
-                                src="/assets/creatures/SeventeenthTask/green-circle.svg" class="draggable-list__circle"
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
                                 draggable="false" />
                         </div>
                     </div>
@@ -43,12 +43,12 @@
                         <div class="draggable-list__sentence-container"
                             v-for="(rowId, rowId_index) in correctRowId[option][2]" :key="rowId_index">
                             <img :ref="el => refColumns[2][rowId_index - 1] = el" alt="green-circle"
-                                src="/assets/creatures/SeventeenthTask/green-circle.svg" class="draggable-list__circle"
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
                                 draggable="false" />
                             <div :ref="el => refBlockSound[2][rowId_index - 1] = el" class="draggable-list__sentence">{{
                                 sentences[option][rowId].sentence }}</div>
                             <img :ref="el => refColumns[3][rowId_index - 1] = el" alt="green-circle"
-                                src="/assets/creatures/SeventeenthTask/green-circle.svg" class="draggable-list__circle"
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
                                 draggable="false" />
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                         <div class="draggable-list__picture-container" v-for="(img, img_index) in images[option]"
                             :key="img_index">
                             <img :ref="el => refColumns[4][img_index - 1] = el" alt="green-circle"
-                                src="/assets/creatures/SeventeenthTask/green-circle.svg" class="draggable-list__circle"
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
                                 draggable="false" />
                             <img :src="img.url" class="draggable-list__image">
                         </div>
@@ -66,7 +66,7 @@
                         <div class="draggable-list__picture-container"
                             v-for="(rowId, rowId_index) in correctRowId[option][3]" :key="rowId_index">
                             <img :ref="el => refColumns[4][rowId_index - 1] = el" alt="green-circle"
-                                src="/assets/creatures/SeventeenthTask/green-circle.svg" class="draggable-list__circle"
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
                                 draggable="false" />
                             <img :src="images[option][rowId].url" class="draggable-list__image">
                         </div>
@@ -80,11 +80,32 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import gameActions from '@mixins/gameAction';
+
+onMounted(() => {
+
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+    
+    console.log('Компонент создан')
+})
+
+onBeforeUnmount(() => {
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('Компонент уничтожен')
+})
+
+
+
+
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const startGame = ref(true);
@@ -131,9 +152,7 @@ const startCords = ref({
     y: 0,
 })
 
-const getImageUrl = (path) => {
- return new URL(`/assets/creatures/${path}`, import.meta.url).href;
-};
+const audio = ref(new Audio());
 const isFirstPassing = ref(true);
 const isFirstOptionCompleted = ref(false);
 const isSecondOptionCompleted = ref(false);
@@ -149,28 +168,28 @@ const words = ref({
     1: {
         1: {
             word: 'КОНЬ',
-            audio: 'Task7/262.7.mp3',
+            audio: '/assets/audio/Task7/262.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 4,
         },
         2: {
             word: 'ТОПЬ',
-            audio: 'Task7/263.7.mp3',
+            audio: '/assets/audio/Task7/263.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 3,
         },
         3: {
             word: 'ТОП',
-            audio: 'Task7/264.7.mp3',
+            audio: '/assets/audio/Task7/264.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 2,
         },
         4: {
             word: 'КОН',
-            audio: 'Task7/265.7.mp3',
+            audio: '/assets/audio/Task7/265.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 1,
@@ -179,28 +198,28 @@ const words = ref({
     2: {
         1: {
             word: 'СЕЛ',
-            audio: 'Task7/270.7.mp3',
+            audio: '/assets/audio/Task7/270.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 2,
         },
         2: {
             word: 'СЪЕЛ',
-            audio: 'Task7/271.7.mp3',
+            audio: '/assets/audio/Task7/271.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 1,
         },
         3: {
             word: 'МЕЛ',
-            audio: 'Task7/272.7.mp3',
+            audio: '/assets/audio/Task7/272.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 4,
         },
         4: {
             word: 'МЕЛЬ',
-            audio: 'Task7/273.7.mp3',
+            audio: '/assets/audio/Task7/273.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 3,
@@ -212,7 +231,7 @@ const sentences = ref({
     1: {
         1: {
             sentence: 'одна партия какой-либо игры',
-            audio: 'Task7/266.7.mp3',
+            audio: '/assets/audio/Task7/266.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -221,7 +240,7 @@ const sentences = ref({
         },
         2: {
             sentence: 'легкая женская одежда для верхней половины тела',
-            audio: 'Task7/267.7.mp3',
+            audio: '/assets/audio/Task7/267.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -230,7 +249,7 @@ const sentences = ref({
         },
         3: {
             sentence: 'топкое, болотистое место',
-            audio: 'Task7/268.7.mp3',
+            audio: '/assets/audio/Task7/268.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -239,7 +258,7 @@ const sentences = ref({
         },
         4: {
             sentence: 'то же, что лошадь, вьючное животное',
-            audio: 'Task7/269.7.mp3',
+            audio: '/assets/audio/ask7/269.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -250,7 +269,7 @@ const sentences = ref({
     2: {
         1: {
             sentence: 'принял пищу, покушал',
-            audio: 'Task7/275.7.mp3',
+            audio: '/assets/audio/Task7/275.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -259,7 +278,7 @@ const sentences = ref({
         },
         2: {
             sentence: 'принял положение сидя',
-            audio: 'Task7/274.7.mp3',
+            audio: '/assets/audio/Task7/274.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -268,7 +287,7 @@ const sentences = ref({
         },
         3: {
             sentence: 'неглубокое место в реке, озере или в море',
-            audio: 'Task7/277.7.mp3',
+            audio: '/assets/audio/Task7/277.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -277,7 +296,7 @@ const sentences = ref({
         },
         4: {
             sentence: 'белый известняк для окраски, писания (на доске)',
-            audio: 'Task7/276.7.mp3',
+            audio: '/assets/audio/Task7/276.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -290,25 +309,25 @@ const sentences = ref({
 const images = ref({
     1: {
         1: {
-            url: "/assets/creatures/SeventhTask/girl's-top.png",
+            url: new URL("/assets/creatures/SeventhTask/girl's-top.png", import.meta.url).href,
             correct: null,
             correctLeft: false,
             correctLeftRow: 2,
         },
         2: {
-            url: "/assets/creatures/SeventhTask/chess.png",
+            url: new URL("/assets/creatures/SeventhTask/chess.png", import.meta.url).href,
             correct: null,
             correctLeft: false,
             correctLeftRow: 1,
         },
         3: {
-            url: "/assets/creatures/SeventhTask/horse.png",
+            url: new URL("/assets/creatures/SeventhTask/horse.png", import.meta.url).href,
             correct: null,
             correctLeft: false,
             correctLeftRow: 4,
         },
         4: {
-            url: "/assets/creatures/SeventhTask/swamp.png",
+            url: new URL("/assets/creatures/SeventhTask/swamp.png", import.meta.url).href,
             correct: null,
             correctLeft: false,
             correctLeftRow: 3,
@@ -316,25 +335,25 @@ const images = ref({
     },
     2: {
         1: {
-            url: "/assets/creatures/SeventhTask/chalk.png",
+            url: new URL("/assets/creatures/SeventhTask/chalk.png", import.meta.url).href,
             correct: null,
             correctLeft: false,
             correctLeftRow: 4
         },
         2: {
-            url: "/assets/creatures/SeventhTask/shallow.png",
+            url: new URL("/assets/creatures/SeventhTask/shallow.png", import.meta.url).href,
             correct: null,
             correctLeft: false,
             correctLeftRow: 3
         },
         3: {
-            url: "/assets/creatures/SeventhTask/food.png",
+            url: new URL("/assets/creatures/SeventhTask/food.png", import.meta.url).href,
             correct: null,
             correctLeft: false,
             correctLeftRow: 1
         },
         4: {
-            url: "/assets/creatures/SeventhTask/sit.png",
+            url: new URL("/assets/creatures/SeventhTask/sit.png", import.meta.url).href,
             correct: null,
             correctLeft: false,
             correctLeftRow: 2
@@ -352,7 +371,11 @@ const props = defineProps({
     childId: {
         type: Number,
         required: false,
-    }
+    },
+
+    finish: {
+        type: Boolean
+    },
 });
 const hide = () => {
     emit('close');
@@ -384,6 +407,7 @@ const voiceActing = () => {
     }
     if (onBlock) {
         if (clickOnColumn == 1) {
+
             playAudio(words.value[option.value][+clickOnRow + 1].audio);
         } else if (clickOnColumn == 2) {
             playAudio(sentences.value[option.value][+clickOnRow + 1].audio);
@@ -391,15 +415,31 @@ const voiceActing = () => {
     }
 }
 
+
+const getSrcUrl = (path) => {
+ return new URL(path, import.meta.url).href;
+};
+
+const getImageUrl = (path) => {
+  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
+
+
 const playAudio = (audioPath) => {
-    const audio = new Audio(audioPath);
-    audio.play();
+    audio.value.src = new URL(audioPath, import.meta.url).href;
+    audio.value.play();
+}
+const stopAudio = (audioPath) => {
+    if (audio.value.paused) {
+        playAudio(audioPath);
+    } else {
+        audio.value.pause();
+    }
 }
 
 const getCursorPosition = (event) => {
     const rect = canvas.getBoundingClientRect();
     if (event.type == "touchstart" || event.type == "touchmove") {
-        console.log(event)
         return {
             x: event.touches[0].clientX - rect.left,
             y: event.touches[0].clientY - rect.top
@@ -620,7 +660,7 @@ const disengage = (event) => {
             if (correct) {
                 countAnswers.value++;
 
-                playAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
+                playAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
 
                 lines.value.push({
                     startX: startCords.value.x,
@@ -633,7 +673,7 @@ const disengage = (event) => {
                     if (isFirstPassing.value) {
                         setTimeout(() => {
                             showCorrectRow.value = true;
-                            playAudio(`Task7/278.7.mp3`);
+                            playAudio(`/assets/audio/Task7/278.7.mp3`);
                             redrawCorrectRows();
                         }, 1000);
                         setTimeout(() => {
@@ -665,7 +705,7 @@ const disengage = (event) => {
                         if (isFirstOptionCompleted.value && isSecondOptionCompleted.value) {
                             setTimeout(() => {
                                 showCorrectRow.value = true;
-                                playAudio(`Task7/278.7.mp3`);
+                                playAudio(`/assets/audio/Task7/278.7.mp3`);
                                 redrawCorrectRows();
                             }, 1000);
                             setTimeout(() => {
@@ -680,7 +720,7 @@ const disengage = (event) => {
                     }
                 }
             } else {
-                playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+                playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
             }
         }
         isDrawing.value = false;

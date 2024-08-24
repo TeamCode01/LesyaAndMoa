@@ -242,11 +242,11 @@ const resetTask = () => {
     answersCounter.value = 0;
 };
 
-// onMounted(() => {
-//     const correct = getCorrectAnswer(16, props.childId);
-//     corrValue.value = correct.correctId;
-//     is_correct.value = correct.is_correct;
-// });
+onMounted(() => {
+    const correct = getCorrectAnswer(16, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+});
 </script>
 
 <style lang="scss" scoped>

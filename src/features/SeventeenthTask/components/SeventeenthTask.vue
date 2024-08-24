@@ -17,15 +17,6 @@
                     @touchstart="engage" @touchend="disengage" @touchmove="draw"
                     @click="voiceActing" v-show="endFirstTask && true"></canvas>
                 <div class="draggable-list" ref="taskBlock" @dragover.prevent @drop="missDrop($event)">
-                    <DragndropComponent :left="PuzzleCords.x" :top="PuzzleCords.y" v-if="isDrag && !endFirstTask">
-                        <template v-slot:task>
-                            <div draggable="false">
-                                <img :src="draggableBlock.src" :alt="draggableBlock.class"
-                                    :class="[draggableBlock.class]" draggable="false" @mouseup="endPosition($event)"
-                                    @mousemove="getPuzzleCords($event)" @mouseleave="mouseLeaveFromPuzzle()" />
-                            </div>
-                        </template>
-                    </DragndropComponent>
 
                     <transition name="fade-words-top" @after-enter="getCenterCords()">
                         <div class="draggable-list__words-top" v-if="endFirstTask">
@@ -53,7 +44,7 @@
                                 :data-is-active="word.isActive"
                                 v-for="word in row" :key="word.id">
 
-                                <div  @mousedown.left="($event) => startPosition($event, word)" 
+                                <div
                                     @mouseenter="() => {if (word.isActive) { playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)}}" 
                                     :ref="(el) => { refPuzzles[word.id - 1] = el}" 
                                     draggable="false">
@@ -152,7 +143,7 @@ const is_correct = ref(null);
 const is_started = ref(null);
 const corrValue = ref(0);
 const playAudio = (audioPath) => {
-    audio.value.src = audioPath;
+    audio.value.src = new URL(audioPath, import.meta.url).href;
     audio.value.play();
 }
 
@@ -212,6 +203,9 @@ const drop = (event, word) => {
         event.to.removeChild(event.to.children[0])
         event.to.dataset['isActive'] = 'false';
 
+        event.to.classList.add('standart_cursor')
+        event.from.classList.add('standart_cursor')
+
         playAudio(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`);
 
         let answer = {};
@@ -261,207 +255,6 @@ const drop = (event, word) => {
     }
 }
 
-const getPuzzleCords = (event) => {
-    if (event.type == 'touchmove' || event.type == 'touchstart') {
-        event.clientX = event.touches[0].clientX;
-        event.clientY = event.touches[0].clientY;
-    }
-    PuzzleCords.value.x =
-        event.clientX -
-        taskBlock.value.getBoundingClientRect().x -
-        event.target.getBoundingClientRect().width / 2;
-    PuzzleCords.value.y =
-        event.clientY -
-        taskBlock.value.getBoundingClientRect().y -
-        event.target.getBoundingClientRect().height / 2;
-};
-
-const startPosition = (event, word) => {
-    if (!word.isActive) return;
-    if (event.type == 'touchstart') {
-        console.log('start', event)
-    }
-    draggableBlock.value.src = word.src;
-    draggableBlock.value.class = word.class;
-
-    getPuzzleCords(event);
-    isDrag.value = true;
-    startId.value = word.id;
-    word.isActive = false;
-
-    getCentralPuzzleCords();
-};
-
-const getCentralPuzzleCords = () => {
-    refPuzzles.value.forEach((puzzle, index) => {
-        centralPuzzleCords.value[index] = {
-            x:
-                puzzle.getBoundingClientRect().x +
-                puzzle.getBoundingClientRect().width / 2,
-            y:
-                puzzle.getBoundingClientRect().y +
-                puzzle.getBoundingClientRect().height / 2,
-            xmin: puzzle.getBoundingClientRect().x,
-            xmax:
-                puzzle.getBoundingClientRect().x +
-                puzzle.getBoundingClientRect().width,
-            ymin: puzzle.getBoundingClientRect().y,
-            ymax:
-                puzzle.getBoundingClientRect().y +
-                puzzle.getBoundingClientRect().height,
-        };
-    });
-};
-
-const getPuzzleUnderMouse = (event) => {
-    let correctIndex = -1;
-    centralPuzzleCords.value.forEach((puzzle, index) => {
-        if (
-            event.clientX > puzzle.xmin &&
-            event.clientX < puzzle.xmax &&
-            event.clientY > puzzle.ymin &&
-            event.clientY < puzzle.ymax
-        ) {
-            correctIndex = index;
-        }
-    });
-    return correctIndex;
-};
-
-const endPosition = (event) => {
-    let index = getPuzzleUnderMouse(event);
-    console.log('endPosition', index);
-
-    if (index != -1) {
-        let answertId = index + 1;
-
-        if (rightAnswer(index)) {
-            firstTask.value[0].map((row) => {
-                row.map((word) => {
-                    if (word.id == answertId || word.id == startId.value) {
-                        word.error = 1;
-                        word.isActive = true;
-                        setTimeout(() => {
-                            word.isActive = false;
-                            word.error = 0;
-                        }, 1000);
-                    }
-                });
-            });
-            playAudio(
-                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
-            );
-
-            let word = {};
-            if (startId.value == 1 || startId.value == 14) {
-                word.id = 1;
-                word.text = 'РОМАШКА';
-            } else if (startId.value == 2 || startId.value == 9) {
-                word.id = 5;
-                word.text = 'ОБЛАКА';
-            } else if (startId.value == 3 || startId.value == 6) {
-                word.id = 3;
-                word.text = 'КОРОВА';
-            } else if (startId.value == 4 || startId.value == 11) {
-                word.id = 2;
-                word.text = 'ДЕРЕВО';
-            } else if (startId.value == 5 || startId.value == 8) {
-                word.id = 4;
-                word.text = 'РЕКА';
-            }
-
-            firstTask.value[1].push(word);
-            firstTask.value[1].sort((a, b) => a.id - b.id);
-
-
-            setTimeout(() => {
-                firstTaskAnswerCounter.value += 1;
-                let audio_word = new Audio(`/assets/audio/Task17/${audioMap.get('слово-' + word.id)}`);
-                audio_word.play();
-
-                setTimeout(() => {
-                    if (firstTaskAnswerCounter.value == 5) {
-                        endFirstTask.value = true;
-                    }
-                }, 1000)
-            }, 1000);
-        } else {
-            let flag = false;
-
-            firstTask.value[0].map((row) => {
-                row.map((word) => {
-                    if (word.id == answertId || word.id == startId.value) {
-                        if (word.id == startId.value) word.isActive = true;
-                        if (word.isActive == false) flag = true;
-                    }
-                });
-            });
-
-            if (!flag) {
-                if (startId.value != answertId) {
-                    firstTask.value[0].map((row) => {
-                        row.map((word) => {
-                            if (
-                                word.id == answertId ||
-                                word.id == startId.value
-                            ) {
-                                word.error = -1;
-
-                                setTimeout(() => {
-                                    word.isActive = true;
-                                    word.error = 0;
-                                }, 1000);
-                            }
-                        });
-                    });
-                    playAudio(
-                        `/assets/audio/Task6/wrong.${Math.ceil(
-                            Math.random() * 3
-                        )}.mp3`
-                    );
-                }
-            }
-        }
-    }
-    isDrag.value = false;
-
-    if (startId.value != -1) {
-        firstTask.value[0].map((row) => {
-            row.map((word) => {
-                if (word.id == startId.value) word.isActive = true;
-            });
-        });
-    }
-};
-
-const rightAnswer = (index) => {
-    let correctId = index + 1;
-
-    if (startId.value == 1 && correctId == 14) return true;
-    else if (startId.value == 2 && correctId == 9) return true;
-    else if (startId.value == 3 && correctId == 6) return true;
-    else if (startId.value == 4 && correctId == 11) return true;
-    else if (startId.value == 5 && correctId == 8) return true;
-    else if (startId.value == 6 && correctId == 3) return true;
-    else if (startId.value == 8 && correctId == 5) return true;
-    else if (startId.value == 9 && correctId == 2) return true;
-    else if (startId.value == 11 && correctId == 4) return true;
-    else if (startId.value == 14 && correctId == 1) return true;
-
-    return false;
-};
-
-const mouseLeaveFromPuzzle = () => {
-    isDrag.value = false;
-
-    if (startId.value != -1) {
-        firstTask.value[0].map((row) => {
-            row.map((word) => {
-                if (word.id == startId.value) word.isActive = true;
-            });
-        });
-    }
-};
 
 //
 // ВТОРОЙ ЭТАП ЗАДАНИЯ
@@ -831,23 +624,26 @@ const finalDraw = () => {
             emit('correct');
             emit('open');
         }
+        playAudio('/assets/audio/Task17/469.17_.mp3');
         startGame.value = false;
-    }, 5000);
+    }, 4000);
 };
 
 onMounted(async () => {
     canvas = canvasRef.value;
-    // const correct = getCorrectAnswer(17, props.childId);
-    // corrValue.value = correct.correctId;
-    // is_correct.value = correct.is_correct;
+    const correct = getCorrectAnswer(17, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
     ctx = canvas.getContext('2d');
     await resizeCanvas();
+    console.log('компонент создан')
     window.addEventListener('resize', () => {
         resizeCanvas();
     });
 });
 
 onBeforeUnmount(() => {
+    console.log('компонент удален')
     window.removeEventListener('resize', () => {
         resizeCanvas();
     });
@@ -1141,5 +937,9 @@ watch(endFirstTask, () => {
 
 .hidden{
     opacity: 0% !important;
+}
+
+.standart_cursor{
+    cursor: default !important;
 }
 </style>

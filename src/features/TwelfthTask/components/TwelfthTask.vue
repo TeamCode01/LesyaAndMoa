@@ -142,6 +142,12 @@ const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const corrValue = ref(0)
 const is_correct = ref(null)
 
+onMounted(async () => {
+    const correct = await getCorrectAnswer(8, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+})
+
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 
 const hide = () => {
@@ -291,7 +297,18 @@ const dropLetter = (event, id, isActive) => {
 
 
             if (Answer.value.answerCounter == 4) {
+
+
+
                 setTimeout(() => {
+
+                    if (is_correct.value === false) {
+                        endGameRequest(props.childId, corrValue.value);
+                        emit('correct');
+                        emit('open');
+                    }
+                    startGame.value = false;
+
                     let audioPath_4 = new URL('/assets/audio/Task12/з.12 полн.текст Веселые ребята наши друзья.mp3', import.meta.url).href;
                     let audio = new Audio(audioPath_4);
                     audio.play();

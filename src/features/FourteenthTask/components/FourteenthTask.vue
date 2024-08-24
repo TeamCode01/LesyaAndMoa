@@ -106,11 +106,11 @@ import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 
-// onMounted(() => {
-//     const correct = getCorrectAnswer(14, props.childId);
-//     corrValue.value = correct.correctId;
-//     is_correct.value = correct.is_correct;
-// });
+onMounted(() => {
+    const correct = getCorrectAnswer(14, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+});
 
 const corrValue = ref(0)
 const is_correct = ref(null)

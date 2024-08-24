@@ -82,11 +82,11 @@ import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 
-// onMounted(() => {
-//     const correct = getCorrectAnswer(15, props.childId);
-//     corrValue.value = correct.correctId;
-//     is_correct.value = correct.is_correct;
-// });
+onMounted(() => {
+    const correct = getCorrectAnswer(15, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+});
 
 const corrValue = ref(0)
 const is_correct = ref(null)
@@ -113,10 +113,6 @@ const getImageUrl = (path) => {
     return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
-onMounted(() => {
-    //let audio = new Audio('/assets/audio/Task6/79.6.mp3');
-    //audio.play();
-});
 
 let legalWords = [];
 

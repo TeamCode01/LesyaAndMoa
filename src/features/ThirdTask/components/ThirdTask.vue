@@ -16,10 +16,11 @@
                 <div class="draggable-list">
                     <div class="list-group ThirdTask__wrapper_block">
                         <VueDraggableNext v-for="(item, index) in letters" :key="index"  @choose="drag($event, item.name, item.id, index) "
-                            :group="{ name: 'words', pull: 'clone', put: false }" :sort="false">
+                            :group="{ name: 'words', pull: 'clone', put: false }" :sort="false"
+                            @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)" 
+                            @touchstart="playAudio(item.audio)" @touchcancel="stopAudio(item.audio)">
                             <div :id="item.id + '_elem'"
-                                class="list-group-item item" @mouseover="playAudio(item.audio)"
-                                @mouseout="stopAudio(item.audio)" @touchstart="playAudio(item.audio)" @touchcancel="stopAudio(item.audio)"
+                                class="list-group-item item" 
                                 :value="item.name">
                                     {{ item.name }}
                             </div>
@@ -27,20 +28,20 @@
                     </div>
                 </div>
                 <div class="ThirdTask__answer">
-                    <VueDraggableNext class="box" id="box" @mouseover="playAudio('Task3/32.3_слово.mp3')" @add="drop($event, 0)"
-                        :group="{ name: 'box', pull: false, put: true }" :sort="false" ghost-class="none">
+                    <VueDraggableNext class="box" id="box" @mouseenter="playAudio('Task3/32.3_слово.mp3')" @add="drop($event, 0)"
+                        :group="{ name: 'box', pull: false, put: true }" :sort="false" ghost-class="none" draggable="false">
                         <div class="letter__item" v-for="item in array">
                             {{ item }}
                         </div>
                     </VueDraggableNext>
                     <VueDraggableNext class="box2" id="box2" @mouseover="playAudio('Task3/32.3_вариант.mp3')" @add="drop($event, 1)"
-                        :group="{ name: 'box2', pull: false, put: true }" :sort="false" ghost-class="none">
+                        :group="{ name: 'box2', pull: false, put: true }" :sort="false" ghost-class="none" draggable="false">
                         <div class="letter__item" v-for="item in array_two">
                             {{ item }}
                         </div>
                     </VueDraggableNext>
                     <VueDraggableNext class="box3" id="box3" @mouseover="playAudio('Task3/33.3.mp3')" @add="drop($event, 2)"
-                        :group="{ name: 'box3', pull: false, put: true }" :sort="false" ghost-class="none">
+                        :group="{ name: 'box3', pull: false, put: true }" :sort="false" ghost-class="none" draggable="false">
                         <div class="letter__item" v-for="item in array_three">
                             {{ item }}
                         </div>
@@ -121,7 +122,7 @@ const playEndAudio = (audioPath) => {
 
 
 
-const letters = ref([{ id: 1, name: 'к', type: 'глухой', audio: '../assets/audio/Task3/34.3.mp3' }, { id: 2, name: 'ч', type: 'глухой', audio: '../assets/audio/Task3/35.3.mp3' }, { id: 3, name: 'с', type: 'глухой', audio: '../assets/audio/Task3/36.3.mp3' }, { id: 4, name: 'о', type: 'звонкий', audio: '../assets/audio/Task3/37.3.mp3' }, { id: 5, name: 'ф', type: 'глухой', audio: '../assets/audio/Task3/38.3.mp3' }, { id: 6, name: 'з', type: 'средний', audio: '../assets/audio/Task3/39.3.mp3' }, { id: 7, name: 'и', type: 'звонкий', audio: '../assets/audio/Task3/40.3.mp3' }, { id: 8, name: 'г', type: 'средний', audio: '../assets/audio/Task3/41.3.mp3' }, { id: 9, name: 'д', type: 'средний', audio: '../assets/audio/Task3/42.3.mp3' }])
+const letters = ref([{ id: 1, name: 'к', type: 'глухой', audio: 'Task3/34.3.mp3' }, { id: 2, name: 'ч', type: 'глухой', audio: 'Task3/35.3.mp3' }, { id: 3, name: 'с', type: 'глухой', audio: 'Task3/36.3.mp3' }, { id: 4, name: 'о', type: 'звонкий', audio: 'Task3/37.3.mp3' }, { id: 5, name: 'ф', type: 'глухой', audio: 'Task3/38.3.mp3' }, { id: 6, name: 'з', type: 'средний', audio: 'Task3/39.3.mp3' }, { id: 7, name: 'и', type: 'звонкий', audio: 'Task3/40.3.mp3' }, { id: 8, name: 'г', type: 'средний', audio: 'Task3/41.3.mp3' }, { id: 9, name: 'д', type: 'средний', audio: 'Task3/42.3.mp3' }])
 const answer = ref('');
 const array = ref([]);
 const array_two = ref([]);
@@ -244,11 +245,11 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-// onMounted(() => {
-//     const correct = getCorrectAnswer(3, props.childId);
-//     corrValue.value = correct.correctId;
-//     is_correct.value = correct.is_correct;
-// })
+onMounted(() => {
+    const correct = getCorrectAnswer(3, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+})
 </script>
 <style lang="scss" scoped>
 * {
