@@ -15,7 +15,7 @@
                 <div class="draggable-list__wrapper">
                     <div class="draggable-list">
                         <VueDraggableNext tag="div" :group="{ name: 'words', pull: 'clone', put: false }" :sort="false" v-for="(item, index) in words" :key="item.id" 
-                            @mouseover="playAudio(item.audio)"
+                            @mouseenter="playAudio(item.audio)"
                             @mouseout="stopAudio(item.audio)" 
                             @touchstart="playAudio(item.audio)"
                             @touchcancel="stopAudio(item.audio)"
@@ -28,7 +28,7 @@
                             </div>
                         </VueDraggableNext>
                     </div>
-                    <VueDraggableNext tag="div" :group="{ name: 'answers', pull: false, put: true }" :sort="false" @add="($event)=>{drop($event)}" ghost-class="none">
+                    <VueDraggableNext tag="div" :group="{ name: 'answers', pull: false, put: true }" :sort="false" @add="($event)=>{drop($event)}" :ghost-class="'none'">
                         <input v-model="answer"
 
                         class="FirstTask__wrapper_answer" />
@@ -100,7 +100,7 @@ const playEndAudio = (audioPath) => {
 }
 
 
-const stopAudio = (audioPath) => {
+const stopAudio = (audioPath = '') => {
     if (audio.value.paused) {
         playAudio(audioPath);
     } else {
@@ -145,7 +145,7 @@ const drag = (word, id, index) => {
 
 
 const drop = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     //let text = event.dataTransfer.getData('text');
     //let id = event.dataTransfer.getData('id');
 
@@ -314,8 +314,17 @@ const allowDrop = (event) => {
             overflow-y: hidden;
             height: 100px;
 
+            @media (max-width: 1200px) {
+                font-size: 20px;
+            }
+
+            @media (max-width: 1130px){
+                font-size: 18px;
+            }
+
             @media(max-width:1024px) {
                 min-height: 80px;
+
             }
         }
     }
