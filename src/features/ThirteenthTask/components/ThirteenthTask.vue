@@ -157,11 +157,8 @@ const drop = (event) => {
     let id = dataTransfer.value.id;
     let elem = document.getElementById(id + '_elem');
 
-    Array.from(event.to.children).forEach(element => {
-        if (element.classList.contains('list-group-item')) {
-            event.to.removeChild(element)
-        }
-    })
+    event.to.removeChild(event.item)
+
 
     if (
         (answer.value === '' && text === 'РАДЫ') ||
@@ -183,15 +180,16 @@ const drop = (event) => {
             event.target.classList.add('green');
 
             playAudio('Common/1.2.mp3');
+            event.target.classList.remove('green');
             setTimeout(() => {
-                event.target.classList.remove('green');
+                
                 if (is_correct.value === false) {
                     endGameRequest(props.childId, corrValue.value);
                     emit('correct');
                     emit('open');
                 }
                 endGame.value = true;
-            }, 20000)
+            }, 2000)
 
         }
     }
@@ -273,7 +271,7 @@ const allowDrop = (event) => {
             }
 
             input { 
-                width: 101px;
+                width: 110px;
                 height: 44px;
                 border: none;
                 border-radius: 6px;

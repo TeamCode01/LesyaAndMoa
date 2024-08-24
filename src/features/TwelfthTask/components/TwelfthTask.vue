@@ -190,8 +190,12 @@ const refWords = ref({})
 
 const isDrag = ref(false);
 
+
+const dataTransfer = ref({})
 const dragLetter = (event, id, text) => {
-    event.dataTransfer.setData('text', `${id}`);
+    //event.dataTransfer.setData('text', `${id}`);
+    dataTransfer.value.id = id;
+    isDrag.value = true;
     if (dragAudio.value) dragAudio.value.pause();
     dragAudio.value.src = new URL(`/assets/audio/Task12/${audioMap.get(text)}`, import.meta.url).href;
     dragAudio.value.play();
@@ -200,19 +204,16 @@ const dragLetter = (event, id, text) => {
 
 const dropLetter = (event, id, isActive) => {
     //let dragid = event.dataTransfer.getData('text')
-    let dragid = dataTrans.value
+    let dragid = dataTransfer.value.id
     let audioPath = ''
 
     console.log('drop', dragid, id, isActive, event)
-    console.log(' ')
-
     //event.target.parentNode.removeChild(event.target)
     
     let taskDOM = document.querySelector('.draggable-list__words')
 
     if (!isActive && isDrag.value == true) {
         if (dragid == id){
-            
             Answer.value.data.map((row) =>
                 row.map((word) => {
                     word.data.map((letter) => {

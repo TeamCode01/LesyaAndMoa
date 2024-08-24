@@ -25,7 +25,9 @@
                     <div class="draggable-list">
                         <VueDraggableNext class="list-group-item item" v-for="(item, index) in syllables" :key="item.id"
                         :group="{ name: 'syllables', pull: 'clone', put: false }" :sort="false"
-                        @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)" @touchstart="playAudio(item.audio)"
+                        @mouseover="playAudio(item.audio)" 
+                        @mouseout="stopAudio(item.audio)" 
+                        @touchstart="playAudio(item.audio)"
                         @choose="drag($event, item.name, item.id, index)">
                             <div :value="item">
                                 {{ item.name }}
