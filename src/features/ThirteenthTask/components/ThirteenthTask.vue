@@ -2,7 +2,7 @@
     <template v-if="endGame === false">
         <div class="ThirteenthTask task_block">
             <div class="ThirteenthTask__wrapper">
-                <div class="task_block__close" @click="hide">
+                <div class="task_block__close" @click="console.log('hide'); hide()">
                     <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
                 <div class="task_block__time">
@@ -13,29 +13,43 @@
                 </div>
 
                 <div class="draggable-list">
-                    <div v-for="(item, index) in words" :id="item.id + '_elem'" :key="index.id"
-                        class="list-group-item item" draggable="true" @mouseover="playAudio(item.audio)"
-                        @mouseout="stopAudio(item.audio)" @dragstart="drag($event, item.name, item.id, index)"
-                        @dragover.prevent :value="item.name">
+                    <VueDraggableNext v-for="(item, index) in words" :key="index.id" @mouseover="playAudio(item.audio)"
+                    @mouseout="stopAudio(item.audio)" @touchstart="playAudio(item.audio)"
+                    @choose="drag($event, item.name, item.id, index)"
+                    :group="{ name: 'words', pull: 'clone', put: false }" :sort="false">
+
+                    
+                        <div :id="item.id + '_elem'" class="list-group-item item"
+                        :value="item.name">
                         {{ item.name }}
-                    </div>
+
+                        </div>
+
+                    </VueDraggableNext>
                 </div>
                 <div class="ThirteenthTask__wrapper_answer" v-show="answer === ''">
                     Мы очень
-                    <input readonly :class="{ correct: answer_drop === 'РАДЫ' }" @drop="drop($event)"
-                        @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
+                    <VueDraggableNext :group="{ name: 'answer1', pull: false, put: true }" :sort="false"
+                    @add = drop($event) ghost-class="none">
+                        
+                        <input readonly :class="{ correct: answer_drop === 'РАДЫ' }" v-model="answer_drop" type="text" />
+                    </VueDraggableNext>
                     с вами познакомиться.
                 </div>
                 <div v-show="answer === 'РАДЫ'" class="ThirteenthTask__wrapper_answer">
                     Нам нравится
-                    <input readonly :class="{ correct: answer_drop === 'ОБЩАТЬСЯ' }" @drop="drop($event)"
-                        @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
+                    <VueDraggableNext :group="{ name: 'answer2', pull: false, put: true }" :sort="false"
+                    @add = drop($event) ghost-class="none">
+                        <input readonly :class="{ correct: answer_drop === 'ОБЩАТЬСЯ' }" v-model="answer_drop" type="text" />
+                    </VueDraggableNext>
                     с вами.
                 </div>
                 <div v-show="answer === 'ОБЩАТЬСЯ'" class="ThirteenthTask__wrapper_answer">
                     Приходите чаще на
-                    <input readonly :class="{ correct: answer_drop === 'ДЕТСКУЮ' }" @drop="drop($event)"
-                        @dragover="allowDrop($event)" v-model="answer_drop" type="text" />
+                    <VueDraggableNext :group="{ name: 'answer3', pull: false, put: true }" :sort="false"
+                    @add = drop($event) ghost-class="none">
+                        <input readonly :class="{ correct: answer_drop === 'ДЕТСКУЮ' }" v-model="answer_drop" type="text" />
+                    </VueDraggableNext>
                     площадку.
                 </div>
             </div>
@@ -54,7 +68,7 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
-const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
+const emit = defineEmits(['close', 'next-modal', 'correct', 'open', 'hide']);
 const endGame = ref(false);
 const hide = () => {
     emit('close');
@@ -123,17 +137,29 @@ const answer = ref('');
 const answer_two = ref('');
 const answer_three = ref('');
 const dropIndex = ref(words.value.length - 1);
+
+const dataTransfer = ref({})
 const drag = (event, word, id, index) => {
-    event.dataTransfer.setData('text', word);
-    event.dataTransfer.setData('id', id);
+    // event.dataTransfer.setData('text', word);
+    // event.dataTransfer.setData('id', id);
+
+    dataTransfer.value.text = word;
+    dataTransfer.value.id = id;
     dropIndex.value = index;
 };
 
 const drop = (event) => {
-    event.preventDefault();
-    let text = event.dataTransfer.getData('text');
-    let id = event.dataTransfer.getData('id');
+    // event.preventDefault();
+    // let text = event.dataTransfer.getData('text');
+    // let id = event.dataTransfer.getData('id');
+
+    let text = dataTransfer.value.text;
+    let id = dataTransfer.value.id;
     let elem = document.getElementById(id + '_elem');
+
+    event.to.removeChild(event.item)
+
+
     if (
         (answer.value === '' && text === 'РАДЫ') ||
         (answer.value === 'РАДЫ' && text === 'ОБЩАТЬСЯ') ||
@@ -143,7 +169,8 @@ const drop = (event) => {
         elem.classList.add('green');
         answer_drop.value = text;
         setTimeout(() => {
-            words.value.splice(dropIndex.value, 1);
+            //words.value.splice(dropIndex.value, 1);
+            elem.parentElement.parentElement.removeChild(elem.parentElement);
             elem.classList.remove('green');
             answer.value = text;
             answer_drop.value = '?';
@@ -153,8 +180,9 @@ const drop = (event) => {
             event.target.classList.add('green');
 
             playAudio('Common/1.2.mp3');
+            event.target.classList.remove('green');
             setTimeout(() => {
-                event.target.classList.remove('green');
+                
                 if (is_correct.value === false) {
                     endGameRequest(props.childId, corrValue.value);
                     emit('correct');
@@ -234,8 +262,16 @@ onMounted(() => {
             overflow-y: hidden;
             height: 100px;
 
-            input {
-                width: 101px;
+            div{
+                display: inline-block;
+            }
+            
+            .none {
+                display: none !important
+            }
+
+            input { 
+                width: 110px;
                 height: 44px;
                 border: none;
                 border-radius: 6px;
@@ -246,6 +282,7 @@ onMounted(() => {
                 outline: none;
                 font-family: 'Nunito';
                 text-align: center;
+                font-family: Inter;
 
             }
         }
@@ -270,4 +307,6 @@ onMounted(() => {
     border: none;
     cursor: pointer;
 }
+
+
 </style>

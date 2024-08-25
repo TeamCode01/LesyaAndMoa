@@ -44,7 +44,7 @@
 <script setup>
 import router from '@app/router';
 import Button from '@shared/components/buttons/button.vue';
-import { onMounted } from 'vue';
+import { onBeforeUnmount, onMounted } from 'vue';
 const emit = defineEmits(['hide', 'next']);
 const hide = () => {
     emit('hide');
@@ -82,8 +82,25 @@ onMounted(() => {
         document.getElementById('result-banner').src = props.img;
     }
     document.getElementById('result-bg').src = props.bg;
+
+
+
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+
+    console.log('banner mount')
 });
 
+
+onBeforeUnmount(() => {
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('banner unmount')
+});
 
 
 </script>

@@ -12,18 +12,11 @@
                         Соедини полученные слова с картинками.
                     </p>
                 </div>
-                <canvas class="canvas_draw" ref="canvasRef" @mousedown="engage" @mouseup="disengage" @mousemove="draw"
+                <canvas class="canvas_draw" ref="canvasRef"
+                    @mousedown="engage" @mouseup="disengage" @mousemove="draw"
+                    @touchstart="engage" @touchend="disengage" @touchmove="draw"
                     @click="voiceActing" v-show="endFirstTask && true"></canvas>
                 <div class="draggable-list" ref="taskBlock" @dragover.prevent @drop="missDrop($event)">
-                    <DragndropComponent :left="PuzzleCords.x" :top="PuzzleCords.y" v-if="isDrag && !endFirstTask">
-                        <template v-slot:task>
-                            <div draggable="false">
-                                <img :src="draggableBlock.src" :alt="draggableBlock.class"
-                                    :class="[draggableBlock.class]" draggable="false" @mouseup="endPosition($event)"
-                                    @mousemove="getPuzzleCords($event)" @mouseleave="mouseLeaveFromPuzzle()" />
-                            </div>
-                        </template>
-                    </DragndropComponent>
 
                     <transition name="fade-words-top" @after-enter="getCenterCords()">
                         <div class="draggable-list__words-top" v-if="endFirstTask">
@@ -43,27 +36,25 @@
                     <div class="draggable-list__syllables" v-if="!endFirstTask">
                         <div class="draggable-list__set-syllables" v-for="row in firstTask[0]" :key="row"
                             draggable="false">
-                            <div v-for="word in row" :key="word.id" @mousedown.left="($event) => startPosition($event, word)
-                                " @mouseenter="() => {
-                                    if (word.isActive) {
-                                        playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)
-                                    }
-                                }" :ref="(el) => {
-                                        refPuzzles[word.id - 1] = el;
-                                    }
-                                    " draggable="false">
-                                <img :src="word.error == 0
-                                        ? word.src
-                                        : word.error == 1
-                                            ? word.srcRight
-                                            : word.srcError
-                                    " :alt="word.class" :class="[word.class]" draggable="false" :style="{
-                                        opacity: word.isActive ? '100%' : '0%',
-                                        cursor: word.isActive
-                                            ? 'pointer'
-                                            : 'auto',
-                                    }" />
-                            </div>
+
+                            <VueDraggableNext :group="`${ (word.id == dragIdPuzzle) ? { name: 'word', pull: 'clone', put: false } : { name: 'word', pull: 'clone', put: true } }`"
+                                :sort="false" @add = "drop($event, word)" :class="[word.class]"
+                                :ghost-class="word.id == dragIdPuzzle ? 'hidden' : 'none'" :drag-class="'block'"
+                                @choose="($event)=>{drag($event, word)}"
+                                :data-is-active="word.isActive"
+                                v-for="word in row" :key="word.id">
+
+                                <div
+                                    @mouseenter="() => {if (word.isActive) { playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)}}" 
+                                    :ref="(el) => { refPuzzles[word.id - 1] = el}" 
+                                    draggable="false">
+                                    <img :src="word.error == 0 ? word.src : word.error == 1 ? word.srcRight : word.srcError" :alt="word.class"  draggable="false" 
+                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" />
+                                </div>
+
+
+                            </VueDraggableNext>
+                            
                         </div>
                     </div>
 
@@ -145,12 +136,14 @@ const next = () => {
 // ПЕРВЫЙ ЭТАП ЗАДАНИЯ
 //
 
+const dragIdPuzzle = ref()
+
 const audio = ref(new Audio());
 const is_correct = ref(null);
 const is_started = ref(null);
 const corrValue = ref(0);
 const playAudio = (audioPath) => {
-    audio.value.src = audioPath;
+    audio.value.src = new URL(audioPath, import.meta.url).href;
     audio.value.play();
 }
 
@@ -181,197 +174,87 @@ firstTask.value = structuredClone(dataFirstTask);
 firstTask.value[1] = [];
 secondTask.value = structuredClone(dataSecondTask);
 
-const getPuzzleCords = (event) => {
-    PuzzleCords.value.x =
-        event.clientX -
-        taskBlock.value.getBoundingClientRect().x -
-        event.target.getBoundingClientRect().width / 2;
-    PuzzleCords.value.y =
-        event.clientY -
-        taskBlock.value.getBoundingClientRect().y -
-        event.target.getBoundingClientRect().height / 2;
-};
+const dataTransfer = ref({})
+const drag = (event, word) => {
+    event.from.dataset['isActive'] = 'false';
+    dragIdPuzzle.value = word.id;
+    dataTransfer.value = word;
+    console.log('drag', event);
+}
 
-const startPosition = (event, word) => {
-    if (!word.isActive) return;
-    draggableBlock.value.src = word.src;
-    draggableBlock.value.class = word.class;
-    getPuzzleCords(event);
-    isDrag.value = true;
-    startId.value = word.id;
-    word.isActive = false;
+const drop = (event, word) => {
+    
+    console.log('drop', event)
+    let dragElem = event.item
+    event.to.removeChild(event.item)
 
-    getCentralPuzzleCords();
-};
+    if (event.to.dataset['isActive'] == 'false') {
+        console.log(event.from)
+        event.from.appendChild(dragElem)
+        return
+    }
 
-const getCentralPuzzleCords = () => {
-    refPuzzles.value.forEach((puzzle, index) => {
-        centralPuzzleCords.value[index] = {
-            x:
-                puzzle.getBoundingClientRect().x +
-                puzzle.getBoundingClientRect().width / 2,
-            y:
-                puzzle.getBoundingClientRect().y +
-                puzzle.getBoundingClientRect().height / 2,
-            xmin: puzzle.getBoundingClientRect().x,
-            xmax:
-                puzzle.getBoundingClientRect().x +
-                puzzle.getBoundingClientRect().width,
-            ymin: puzzle.getBoundingClientRect().y,
-            ymax:
-                puzzle.getBoundingClientRect().y +
-                puzzle.getBoundingClientRect().height,
-        };
-    });
-};
 
-const getPuzzleUnderMouse = (event) => {
-    let correctIndex = -1;
-    centralPuzzleCords.value.forEach((puzzle, index) => {
-        if (
-            event.clientX > puzzle.xmin &&
-            event.clientX < puzzle.xmax &&
-            event.clientY > puzzle.ymin &&
-            event.clientY < puzzle.ymax
-        ) {
-            correctIndex = index;
-        }
-    });
-    return correctIndex;
-};
+    let dragSrcError = dataTransfer.value.srcError
+    let dragSrc = dataTransfer.value.src
 
-const endPosition = (event) => {
-    let index = getPuzzleUnderMouse(event);
-    if (index != -1) {
-        let answertId = index + 1;
+    if (dataTransfer.value.answer == word.id){
 
-        if (rightAnswer(index)) {
-            firstTask.value[0].map((row) => {
-                row.map((word) => {
-                    if (word.id == answertId || word.id == startId.value) {
-                        word.error = 1;
-                        word.isActive = true;
-                        setTimeout(() => {
-                            word.isActive = false;
-                            word.error = 0;
-                        }, 1000);
-                    }
-                });
-            });
-            playAudio(
-                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`
-            );
+        event.to.removeChild(event.to.children[0])
+        event.to.dataset['isActive'] = 'false';
 
-            let word = {};
-            if (startId.value == 1 || startId.value == 14) {
-                word.id = 1;
-                word.text = 'РОМАШКА';
-            } else if (startId.value == 2 || startId.value == 9) {
-                word.id = 5;
-                word.text = 'ОБЛАКА';
-            } else if (startId.value == 3 || startId.value == 6) {
-                word.id = 3;
-                word.text = 'КОРОВА';
-            } else if (startId.value == 4 || startId.value == 11) {
-                word.id = 2;
-                word.text = 'ДЕРЕВО';
-            } else if (startId.value == 5 || startId.value == 8) {
-                word.id = 4;
-                word.text = 'РЕКА';
+        event.to.classList.add('standart_cursor')
+        event.from.classList.add('standart_cursor')
+
+        playAudio(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`);
+
+        let answer = {};
+            if (dataTransfer.value.id == 1 || dataTransfer.value.id == 14) {
+                answer.id = 1;
+                answer.text = 'РОМАШКА';
+            } else if (dataTransfer.value.id == 2 || dataTransfer.value.id == 9) {
+                answer.id = 5;
+                answer.text = 'ОБЛАКА';
+            } else if (dataTransfer.value.id == 3 || dataTransfer.value.id == 6) {
+                answer.id = 3;
+                answer.text = 'КОРОВА';
+            } else if (dataTransfer.value.id == 4 || dataTransfer.value.id == 11) {
+                answer.id = 2;
+                answer.text = 'ДЕРЕВО';
+            } else if (dataTransfer.value.id == 5 || dataTransfer.value.id == 8) {
+                answer.id = 4;
+                answer.text = 'РЕКА';
             }
 
-            firstTask.value[1].push(word);
+            firstTask.value[1].push(answer);
             firstTask.value[1].sort((a, b) => a.id - b.id);
-
 
             setTimeout(() => {
                 firstTaskAnswerCounter.value += 1;
-                let audio_word = new Audio(`/assets/audio/Task17/${audioMap.get('слово-' + word.id)}`);
+                let audio_word = new Audio(`/assets/audio/Task17/${audioMap.get('слово-' + answer.id)}`);
                 audio_word.play();
 
                 setTimeout(() => {
                     if (firstTaskAnswerCounter.value == 5) {
                         endFirstTask.value = true;
                     }
-                }, 1000)
+                }, 2000)
             }, 1000);
-        } else {
-            let flag = false;
-
-            firstTask.value[0].map((row) => {
-                row.map((word) => {
-                    if (word.id == answertId || word.id == startId.value) {
-                        if (word.id == startId.value) word.isActive = true;
-                        if (word.isActive == false) flag = true;
-                    }
-                });
-            });
-
-            if (!flag) {
-                if (startId.value != answertId) {
-                    firstTask.value[0].map((row) => {
-                        row.map((word) => {
-                            if (
-                                word.id == answertId ||
-                                word.id == startId.value
-                            ) {
-                                word.error = -1;
-
-                                setTimeout(() => {
-                                    word.isActive = true;
-                                    word.error = 0;
-                                }, 1000);
-                            }
-                        });
-                    });
-                    playAudio(
-                        `/assets/audio/Task6/wrong.${Math.ceil(
-                            Math.random() * 3
-                        )}.mp3`
-                    );
-                }
-            }
-        }
     }
-    isDrag.value = false;
+    else{
+        event.from.appendChild(dragElem)
+        playAudio(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`)
 
-    if (startId.value != -1) {
-        firstTask.value[0].map((row) => {
-            row.map((word) => {
-                if (word.id == startId.value) word.isActive = true;
-            });
-        });
+        event.from.children[0].children[0].src = dragSrcError;
+        event.to.children[0].children[0].src = word.srcError
+
+        setTimeout(()=>{
+            event.from.children[0].children[0].src = dragSrc;
+            event.to.children[0].children[0].src = word.src
+        }, 2000)
     }
-};
+}
 
-const rightAnswer = (index) => {
-    let correctId = index + 1;
-
-    if (startId.value == 1 && correctId == 14) return true;
-    else if (startId.value == 2 && correctId == 9) return true;
-    else if (startId.value == 3 && correctId == 6) return true;
-    else if (startId.value == 4 && correctId == 11) return true;
-    else if (startId.value == 5 && correctId == 8) return true;
-    else if (startId.value == 6 && correctId == 3) return true;
-    else if (startId.value == 8 && correctId == 5) return true;
-    else if (startId.value == 9 && correctId == 2) return true;
-    else if (startId.value == 11 && correctId == 4) return true;
-    else if (startId.value == 14 && correctId == 1) return true;
-
-    return false;
-};
-
-const mouseLeaveFromPuzzle = () => {
-    isDrag.value = false;
-
-    if (startId.value != -1) {
-        firstTask.value[0].map((row) => {
-            row.map((word) => {
-                if (word.id == startId.value) word.isActive = true;
-            });
-        });
-    }
-};
 
 //
 // ВТОРОЙ ЭТАП ЗАДАНИЯ
@@ -438,9 +321,22 @@ const resizeCanvas = async () => {
 
 const getCursorPosition = (event) => {
     const rect = canvas.getBoundingClientRect();
+    if (event.type == "touchstart" || event.type == "touchmove") {
+        console.log(event)
+        return {
+            x: event.touches[0].clientX - rect.left,
+            y: event.touches[0].clientY - rect.top
+        }
+    }
+    else if (event.type == "touchend") {
+        return {
+            x: event.changedTouches[0].clientX - rect.left,
+            y: event.changedTouches[0].clientY - rect.top
+        }
+    }
     return {
         x: event.clientX - rect.left,
-        y: event.clientY - rect.top,
+        y: event.clientY - rect.top
     };
 };
 
@@ -728,8 +624,9 @@ const finalDraw = () => {
             emit('correct');
             emit('open');
         }
+        playAudio('/assets/audio/Task17/469.17_.mp3');
         startGame.value = false;
-    }, 5000);
+    }, 4000);
 };
 
 onMounted(async () => {
@@ -739,12 +636,14 @@ onMounted(async () => {
     is_correct.value = correct.is_correct;
     ctx = canvas.getContext('2d');
     await resizeCanvas();
+    console.log('компонент создан')
     window.addEventListener('resize', () => {
         resizeCanvas();
     });
 });
 
 onBeforeUnmount(() => {
+    console.log('компонент удален')
     window.removeEventListener('resize', () => {
         resizeCanvas();
     });
@@ -808,6 +707,8 @@ watch(endFirstTask, () => {
     justify-content: space-between;
     width: 100%;
     height: 90px;
+
+    column-gap: 113px;
 
     @media (max-width: 1024px) {
         height: 72px;
@@ -1016,5 +917,29 @@ watch(endFirstTask, () => {
     100% {
         scale: 1;
     }
+}
+
+.none{
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.dot{
+    width: 1px;
+    height: 1px;
+}
+
+.block {
+    display: flex !important;
+    opacity: 100% !important;
+}
+
+.hidden{
+    opacity: 0% !important;
+}
+
+.standart_cursor{
+    cursor: default !important;
 }
 </style>

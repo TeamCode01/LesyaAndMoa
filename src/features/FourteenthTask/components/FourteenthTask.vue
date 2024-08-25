@@ -12,78 +12,72 @@
                     </p>
                 </div>
                 <div class="draggable-list" ref="taskBlock">
-                    <DragndropComponent :left="Cords.x" :top="Cords.y" v-if="isDrag">
-                        <template v-slot:task>
-                            <div draggable="false" v-if="draggableBlock.type == 'word'" @mouseup="endPosition($event)"
-                                @mousemove="getCords($event)" @mouseleave="mouseLeaveFrom()">
-                                <div class="draggable-list__word" :id="`draggable-list__word${draggableBlock.id}`">
-                                    {{ draggableBlock.text }}
-                                </div>
-                            </div>
-
-                            <div draggable="false" v-if="draggableBlock.type == 'sound'" @mouseup="endPosition($event)"
-                                @mouseleave="mouseLeaveFrom()">
-                                <div class="draggable-list__speaker" draggable="false"
-                                    @mousemove.capture="getCords($event)">
-                                    <img src="/assets/icons/speaker-violet.svg" alt="speaker" class="speaker"
-                                        draggable="false" data-sound="sound" @mousemove.stop="() => false" />
-                                </div>
-                            </div>
-                        </template>
-                    </DragndropComponent>
 
                     <div class="draggable-list__draggable-items">
                         <div class="draggable-list__words">
-                            <div class="draggable-list__word"
+
+                            <VueDraggableNext  v-for="word in Task[0]" :key="word.id" :group="{ name: 'words', pull: 'clone', put: false }" :sort="false"
+                            @choose="($event)=>{if (blockIsActive($event.from)) drag($event, word)}" ghost-class="hidden" :drag-class="'block'" data-is-active='true'>
+                                
+                                <div class="draggable-list__word"
                                 :class="{ 'item_right': word.error == 1, 'item_wrong': word.error == -1 }"
-                                :id="`draggable-list__word${word.id}`" v-for="word in Task[0]" :key="word.id"
-                                @mousedown="
-                                    startPosition($event, word, 'word')
-                                    " @mouseenter="playAudio(word.isActive ? word.audio : '/')" :ref="(el) => (refBlocks[0][0][word.id - 1] = el)
-                                    " :style="{
-                                    opacity: word.isActive ? '100%' : '0%',
-                                    cursor: word.isActive ? 'pointer' : 'auto',
-                                }">
+                                :id="`draggable-list__word${word.id}`"
+                                data-answer="true"
+                                @mouseenter="($event)=>{if (blockIsActive($event.target.parentElement)) checkAndPlayAudio(word.audio)}" 
+                                @touchstart="($event)=>{if (blockIsActive($event.target.parentElement)) checkAndPlayAudio(word.audio)}">
                                 {{ word.text }}
                             </div>
+
+                            </VueDraggableNext>
+
+                            
                         </div>
                         <div class="draggable-list__speakers">
-                            <div class="draggable-list__speaker"
+                            
+                            <VueDraggableNext v-for="sound in Task[1]" :key="sound.id" :group="{ name: 'speakers', pull: 'clone', put: false }" :sort="false"
+                            @choose="($event)=>{if (blockIsActive($event.from)) drag($event, sound)}" :ghost-class="'hidden'" :drag-class="'block'" data-is-active='true'>
+                                <div class="draggable-list__speaker"
                                 :class="{ 'item_right': sound.error == 1, 'item_wrong': sound.error == -1 }"
-                                v-for="sound in Task[1]" :key="sound.id" @mousedown.left="
-                                    startPosition($event, sound, 'sound')
-                                    " @mouseenter="playAudio(sound.isActive ? sound.audio : '/')" :ref="(el) => (refBlocks[0][1][sound.id - 1] = el)
-                                    " :style="{
-                                    opacity: sound.isActive ? '100%' : '0%',
-                                    cursor: sound.isActive ? 'pointer' : 'auto',
-                                }">
+                                @mouseenter="($event)=>{if (blockIsActive($event.target.parentElement)) checkAndPlayAudio(sound.audio)}" 
+                                @touchstart="($event)=>{if (blockIsActive($event.target.parentElement)) checkAndPlayAudio(sound.audio)}">
+                        
                                 <img src="/assets/icons/speaker-violet.svg" alt="speaker" class="speaker"
-                                    :draggable="sound.isActive" />
-                            </div>
+                                        :draggable="sound.isActive" />
+                                </div>
+                            </VueDraggableNext>
+
                         </div>
                     </div>
                     <div class="draggable-list__answer-zone">
                         <div class="draggable-list__answer" v-for="answer in Answer" :key="answer">
                             <img :src="getPictureUrl(answer.img)" alt="lesyaandmoa" class="lesyaandmoa" />
                             <div class="draggable-list__subanswer">
-                                <div class="draggable-list__word"
+                                
+                                <VueDraggableNext :group="{ name: 'word', pull: false, put: true }" :sort="false"
+                                @add = "drop($event, 'word', answer.id)" :ghost-class="'none'">
+
+                                    <div class="draggable-list__word"
                                     :class="{ 'item_right': answer.word.error == 1, 'item_wrong': answer.word.error == -1 }"
-                                    :id="`${answer.id == 1 ? 'draggable-list__word1' : 'draggable-list__word5'}`" :ref="(el) =>
-                                        (refBlocks[1][0][answer.id - 1] =
-                                            el)
-                                        " :data-id="answer.id" :data-type="answer.type">
+                                    :id="`${answer.id == 1 ? 'draggable-list__word1' : 'draggable-list__word5'}`" 
+                                    :data-id="answer.id" :data-type="answer.type">
                                     {{ answer.word.isActive ? answer.word.text : "" }}
 
-                                </div>
-                                <div class="draggable-list__speaker"
+                                    </div>
+
+                                </VueDraggableNext>
+
+                                <VueDraggableNext :group="{ name: 'speakers', pull: false, put: true }" :sort="false"
+                                @add = "drop($event, 'sound', answer.id)" :ghost-class="'none'" 
+                                >
+
+                                    <div class="draggable-list__speaker"
                                     :class="{ 'item_right': answer.sound.error == 1, 'item_wrong': answer.sound.error == -1 }"
-                                    :ref="(el) =>
-                                        (refBlocks[1][1][answer.id - 1] =
-                                            el)
-                                        " :data-id="answer.id" :data-type="answer.type">
+                                    :data-id="answer.id" :data-type="answer.type">
                                     <img v-if="answer.sound.isActive" src="/assets/icons/speaker-violet.svg"
                                         alt="speaker" class="speaker" />
-                                </div>
+                                    </div>
+
+                                </VueDraggableNext>
                             </div>
                         </div>
                     </div>
@@ -171,234 +165,82 @@ const getImageUrl = (path) => {
 
 const isDrag = ref(false);
 
-const refBlocks = ref([
-    [[], []],
-    [[], []],
-]);
+const cloneBlock = ref()
 
-const centralCords = ref([
-    [[], []],
-    [[], []],
-]);
+const dataTransfer = ref({})
+const drag = (event, elem) => {
+    console.log(elem)
+    dataTransfer.elem = elem
+    isDrag.value = true
+}
 
-const getCords = (event) => {
-    Cords.value.x =
-        event.clientX -
-        taskBlock.value.getBoundingClientRect().x -
-        event.currentTarget.getBoundingClientRect().width / 2;
+const drop = (event, type, id) => {
+    event.to.removeChild(event.item)
 
-    Cords.value.y =
-        event.clientY -
-        taskBlock.value.getBoundingClientRect().y -
-        event.currentTarget.getBoundingClientRect().height / 2;
-};
+    console.log(type, id)
+    if (isDrag.value == false) return
 
-const startPosition = (event, block, type) => {
-    if (!block.isActive) return;
+    isDrag.value = false
+    let elem = dataTransfer.elem
 
-    draggableBlock.value.text = block.text;
-    draggableBlock.value.type = type;
-    draggableBlock.value.id = block.id;
-    draggableBlock.value.answer = block.answer;
+    console.log(elem, type, id)
 
-    getCords(event);
+    if (elem.type != type) return 
 
-    isDrag.value = true;
-    block.isActive = false;
+    if (elem.answer == id){
+        if (elem.type == 'word') event.to.children[0].innerHTML = elem.text
+        else event.to.children[0].innerHTML = '<img src="/assets/icons/speaker-violet.svg" alt="speaker" class="speaker" />'
 
-    getCentralCords();
-};
+        event.from.dataset['isActive'] = 'false'
+        event.from.classList.add('hidden')
 
-const getCentralCords = () => {
-    refBlocks.value.forEach((type, type_index) => {
-        type.forEach((blocks, blocks_index) => {
-            blocks.forEach((block, block_index) => {
-                centralCords.value[type_index][blocks_index][block_index] = {
-                    x:
-                        block.getBoundingClientRect().x +
-                        block.getBoundingClientRect().width / 2,
-                    y:
-                        block.getBoundingClientRect().y +
-                        block.getBoundingClientRect().height / 2,
-                    xmin: block.getBoundingClientRect().x,
-                    xmax:
-                        block.getBoundingClientRect().x +
-                        block.getBoundingClientRect().width,
-                    ymin: block.getBoundingClientRect().y,
-                    ymax:
-                        block.getBoundingClientRect().y +
-                        block.getBoundingClientRect().height,
-                };
-            });
-        });
-    });
-};
-
-const mouseLeaveFrom = () => {
-    isDrag.value = false;
-
-    if (draggableBlock.value.id != -1) {
-        Task.value.map((type) => {
-            type.map((block) => {
-                if (block.id == draggableBlock.value.id) block.isActive = true;
-            });
-        });
-    }
-};
-
-const getBlockUnderMouse = (event) => {
-    let indexes = { type_index: -1, blocks_index: -1, block_index: -1 };
-    centralCords.value.forEach((type, type_index) => {
-        if (type_index == 1) {
-            type.forEach((blocks, blocks_index) => {
-                blocks.forEach((block, block_index) => {
-                    if (
-                        event.clientX > block.xmin &&
-                        event.clientX < block.xmax &&
-                        event.clientY > block.ymin &&
-                        event.clientY < block.ymax
-                    ) {
-                        indexes = { type_index, blocks_index, block_index };
-                    }
-                });
-            });
-        }
-    });
-
-    return indexes;
-};
-
-const rightAnswer = (indexes) => {
-    let { type_index, blocks_index, block_index } = indexes;
-    if (type_index == -1 || blocks_index == -1 || block_index == -1)
-        return false;
-
-    if (draggableBlock.value.type == 'word' && blocks_index == 0) {
-        if (Answer.value[block_index].id == draggableBlock.value.answer)
-            return true;
-    } else if (draggableBlock.value.type == 'sound' && blocks_index == 1) {
-        if (Answer.value[block_index].id == draggableBlock.value.answer)
-            return true;
-    }
-
-    return false;
-};
-
-const endPosition = (event) => {
-    let { type_index, blocks_index, block_index } = getBlockUnderMouse(event);
-    isDrag.value = false;
-
-    Task.value.map((type) => {
-        type.map((block) => {
-            if (
-                block.id == draggableBlock.value.id &&
-                block.type == draggableBlock.value.type
-            ) {
-                block.isActive = true;
-            }
-        });
-    });
-
-
-    if (rightAnswer({ type_index, blocks_index, block_index })) {
-
-        Task.value.map((type) => {
-            type.map((block) => {
-                if (
-                    block.id == draggableBlock.value.id &&
-                    block.type == draggableBlock.value.type
-                ) {
-                    block.isActive = false;
-                    block.error = 1;
-                }
-            });
-        });
-
-        Answer.value.map((block) => {
-            if (block.id == draggableBlock.value.answer) {
-                if (draggableBlock.value.type == 'word') {
-                    block.word.isActive = true
-                    block.word.error = 1
-                }
-                else {
-                    block.sound.isActive = true
-                    block.sound.error = 1
-                }
-
-                setTimeout(() => {
-                    block.sound.error = 0
-                    block.word.error = 0
-                    answersCounter.value += 1
-
-
-                    if (answersCounter.value == 4) {
-
-                        setTimeout(() => {
-                            if (is_correct.value === false) {
-                                endGameRequest(props.childId, corrValue.value);
-                                emit('correct');
-                                emit('open');
-                            }
-                        }, 1000)
-                         let finalaudio_path = new URL('/assets/audio/Task14/388.14.mp3', import.meta.url).href
-                        let finalaudio = new Audio(finalaudio_path);
-                        finalaudio.play();
-                    }
-                }, 1000)
-
-            }
-        })
+        event.to.children[0].classList.add('item_right')
         let reactionAudio_path = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
         let reactionAudio = new Audio(reactionAudio_path);
         reactionAudio.play();
+        
+        setTimeout(() => {
+            event.to.children[0].classList.remove('item_right')
+            answersCounter.value += 1
 
-
-    }
-
-    else if (type_index != -1 && blocks_index != -1 && block_index != -1) {
-
-        let flag = false
-        let answer_type = Answer.value[block_index][`${blocks_index == 0 ? 'word' : 'sound'}`].type
-
-
-        Answer.value.map((block) => {
-            if (Answer.value[block_index][draggableBlock.value.type].isActive || answer_type != draggableBlock.value.type) {
-                flag = true
-            }
-        })
-
-        if (!flag) {
-
-            Task.value.map((type) => {
-                type.map((block) => {
-                    if (
-                        block.id == draggableBlock.value.id &&
-                        block.type == draggableBlock.value.type
-                    ) {
-                        block.isActive = true;
-                        block.error = -1;
-
-                        setTimeout(() => {
-                            block.error = 0
-                        }, 1000)
+            if (answersCounter.value == 4) {
+                setTimeout(() => {
+                    if (is_correct.value === false) {
+                        endGameRequest(props.childId, corrValue.value);
+                        emit('correct');
+                        emit('open');
                     }
-                });
-            });
-            let reactionAudio_path = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
-            let reactionAudio = new Audio(reactionAudio_path);
-            reactionAudio.play();
-        }
-
-
-
+                }, 1000)
+                let finalaudio_path = new URL('/assets/audio/Task14/388.14.mp3', import.meta.url).href
+                let finalaudio = new Audio(finalaudio_path);
+                finalaudio.play();
+            }
+        }, 2000)
     }
 
-    draggableBlock.value.text = '';
-    draggableBlock.value.type = '';
-    draggableBlock.value.id = 0;
-    draggableBlock.value.answer = '';
+    else{
+        event.from.children[0].classList.add('item_wrong')
+        let reactionAudio_path = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
+        let reactionAudio = new Audio(reactionAudio_path);
+        reactionAudio.play();
+        
+        setTimeout(() => {
+            event.from.children[0].classList.remove('item_wrong')
+        }, 2000)    
+    }
 
-};
+
+    
+}
+
+const blockIsActive = (block) => {
+    console.log(block)
+    return block.dataset['isActive'] == 'true'
+}
+
+const checkAndPlayAudio = (audio) =>{
+    playAudio(new URL(`/assets/audio/${audio}`, import.meta.url).href)
+}
 
 const playAudio = (audioPath) => {
     if (audioPath != '/') {
@@ -618,5 +460,18 @@ const playAudio = (audioPath) => {
 
 .item_wrong {
     border: 2px solid #db0000;
+}
+
+.none{
+    display: none !important;
+}
+
+.block {
+    display: flex !important;
+    opacity: 100% !important;
+}
+
+.hidden{
+    opacity: 0% !important;
 }
 </style>

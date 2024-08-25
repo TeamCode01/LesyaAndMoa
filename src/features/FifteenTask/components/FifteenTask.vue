@@ -14,22 +14,19 @@
                 <div class="draggable-list">
                     <div class="draggable-list__items">
                         <div class="draggable-list__item" v-for="row in taskData" :key="row">
-                            <div class="draggable-list__button" :class="{
-                                'draggable-list__button_main':
-                                    word.x == 0 || word.y == 0,
-                                'draggable-list__button_task':
-                                    word.x != 0 && word.y != 0,
-                            }" v-for="word in row" :key="word.text" :disabled="word.x == 0 || word.y == 0"
-                                :draggable="word.x != 0 && word.y != 0" @dragstart="
-                                    dragLetter(
-                                        $event,
-                                        word.x,
-                                        word.y,
-                                        word.text
-                                    )
-                                    " @mousedown="playAudio(word.text)">
-                                {{ word.text }}
-                            </div>
+                            <VueDraggableNext v-for="word in row" :key="word.text" 
+                            :group="(word.x == 0 || word.y == 0) ? { name: 'words', pull: false, put: false } : { name: 'words', pull: 'clone', put: false }" :sort="false"
+                            @choose="($event)=>{drag($event, word)}" ghost-class="block" :drag-class="`${(word.x == 0 || word.y == 0) ? 'hidden' : 'block'}`" data-is-active='true'>
+                                <div class="draggable-list__button" :class="{
+                                    'draggable-list__button_main':
+                                        word.x == 0 || word.y == 0,
+                                    'draggable-list__button_task':
+                                        word.x != 0 && word.y != 0,
+                                }"
+                                    @click="playAudio(word.text)">
+                                    {{ word.text }}
+                                </div>
+                            </VueDraggableNext>
                         </div>
                     </div>
                 </div>
@@ -38,20 +35,17 @@
                     <div class="task_block__items">
                         <div class="task_block__row" v-for="row in rowsData" :key="row.id">
                             <div class="task_block__word" v-for="word in row.data" :key="word.id">
-                                <div class="task_block__letter" v-for="letter in word.data" :key="letter" @drop="
-                                    dropLetter(
-                                        $event,
-                                        letter.x,
-                                        letter.y,
-                                        letter.id,
-                                        letter.isActive
-                                    )
-                                    " @dragover.prevent :class="{
-                                        task_block__letter_active:
-                                            letter.isActive,
-                                    }">
+
+                                <VueDraggableNext v-for="letter in word.data" :key="letter" :group="{ name: 'speakers', pull: false, put: true }" :sort="false"
+                                @add = "dropLetter($event, letter)" :ghost-class="'none'" >
+
+                                    <div class="task_block__letter" 
+                                    :class="{ task_block__letter_active: letter.isActive}">
                                     {{ letter.text }}
                                 </div>
+
+                                </VueDraggableNext>
+                                
                                 <img class="comma" src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="
                                     [18].includes(word.data.slice(-1)[0].id) &&
                                     word.data.slice(-1)[0].isActive
@@ -119,10 +113,6 @@ const getImageUrl = (path) => {
     return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
-onMounted(() => {
-    //let audio = new Audio('/assets/audio/Task6/79.6.mp3');
-    //audio.play();
-});
 
 let legalWords = [];
 
@@ -148,14 +138,30 @@ const playAudio = (text) => {
     }
 }
 
-const dragLetter = (event, x, y, text) => {
-    event.dataTransfer.setData('text', `${x} ${y} ${text}`);
+const dataTransfer = ref({})
+
+const drag = (event, word) => {
+    // event.dataTransfer.setData('text', `${x} ${y} ${text}`);
+
+    dataTransfer.value = word
 };
 
-const dropLetter = (event, x, y, id, isActive) => {
-    let dragx = event.dataTransfer.getData('text').split(' ')[0];
-    let dragy = event.dataTransfer.getData('text').split(' ')[1];
-    let dragtext = event.dataTransfer.getData('text').split(' ')[2];
+const dropLetter = (event, letter) => {
+    // let dragx = event.dataTransfer.getData('text').split(' ')[0];
+    // let dragy = event.dataTransfer.getData('text').split(' ')[1];
+    // let dragtext = event.dataTransfer.getData('text').split(' ')[2];
+
+    event.to.removeChild(event.item)
+
+    let dragx = dataTransfer.value.x;
+    let dragy = dataTransfer.value.y;
+    let dragtext = dataTransfer.value.text
+
+    let x = letter.x;
+    let y = letter.y;
+    let id = letter.id;
+    let isActive = letter.isActive;
+
 
     if (!isActive) {
         if (dragx == x && dragy == y) {
@@ -425,5 +431,18 @@ const dropLetter = (event, x, y, id, isActive) => {
     top: -4px;
     transform: scale(0.85);
     fill: rgb(15, 87, 7);
+}
+
+.none{
+    display: none !important;
+}
+
+.block {
+    display: flex !important;
+    opacity: 100% !important;
+}
+
+.hidden{
+    opacity: 0% !important;
 }
 </style>

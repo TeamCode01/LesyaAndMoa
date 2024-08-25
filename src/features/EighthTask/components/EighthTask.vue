@@ -25,12 +25,15 @@
                             <div class="draggable-list__steps">
                                 <div class="draggable-list__step" v-for="(syllable, syllable_index) in syllables[1]"
                                     :key="syllable.id">
-                                    <div
-                                        :class="{ 'draggable-list__step-button': true, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false }"
-                                        :draggable="draggable" @dragstart="drag($event, syllable, 1)" @dragover.prevent
-                                        @click="clickText(syllable)" :value="syllable.text">
-                                        {{ syllable.text }}
-                                    </div>
+                                    <VueDraggableNext @choose="drag($event, syllable, 1); clickText(syllable)"
+                                    @unchoose="checkPosition($event)"
+                                    :group="{ name: 'words1', pull: 'clone', put: false }" :sort="false">
+                                        <div
+                                            :class="{ 'draggable-list__step-button': true, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false }"
+                                            :value="syllable.text">
+                                            {{ syllable.text }}
+                                        </div>
+                                    </VueDraggableNext>
                                     <div class="draggable-list__substep" :id="syllable.id_class"></div>
                                 </div>
                             </div>
@@ -43,28 +46,34 @@
                                 <div class="draggable-list__set-syllables1"
                                     v-for="(syllables_row, syllables_row_index) in syllables[2]"
                                     :key="syllables_row_index">
-                                    <div v-for="syllable in syllables_row" :key="syllable.id">
+                                    <VueDraggableNext v-for="syllable in syllables_row" :key="syllable.id"
+                                    @choose="drag($event, syllable, 2); clickText(syllable)"
+                                    @unchoose="checkPosition($event)"
+                                    :group="{ name: 'words2', pull: 'clone', put: false }" :sort="false">
                                         <div
                                             :class="{ 'draggable-list__syllable': true, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false }"
-                                            :draggable="draggable" @dragstart="drag($event, syllable, 2)"
-                                            @dragover.prevent @click="clickText(syllable)" :value="syllable.text">
+                                            :value="syllable.text">
                                             {{ syllable.text }}
                                         </div>
-                                    </div>
+                                    </VueDraggableNext>
                                 </div>
                             </div>
                         </div>
                         <div class="draggable-list__right-wrapper-answer">
                             <div class="draggable-list__right-answer">
-                                <div class="draggable-list__right-answer-square">
-                                    <input @drop="drop($event, 1)" @dragover="allowDrop($event)" @focus="($event)=>{$event.target.blur()}"
-                                        class="answer draggable-list__step-button" readonly
-                                        v-model="squareAnswer.text" />
-                                </div>
-                                <div class="draggable-list__right-answer-circle">
-                                    <input @drop="drop($event, 2)" @dragover="allowDrop($event)" @focus="($event)=>{$event.target.blur()}"
+                                <VueDraggableNext class="draggable-list__right-answer-square"
+                                @add="drop($event, 1)" ghost-class="none" draggable="false"
+                                :group="{ name: 'answer1', pull: false, put: true }" :sort="false">
+                                    <input @focus="($event)=>{$event.target.blur()}" id="squareAnswer"
+                                        class="answer draggable-list__step-button" readonly v-model="squareAnswer.text" />
+                                </VueDraggableNext>
+
+                                <VueDraggableNext class="draggable-list__right-answer-circle"
+                                @add="drop($event, 2)" ghost-class="none" draggable="false"
+                                :group="{ name: 'answer2', pull: false, put: true }" :sort="false">
+                                    <input @focus="($event)=>{$event.target.blur()}" id="circleAnswer"
                                         class="answer draggable-list__syllable" readonly v-model="circleAnswer.text" />
-                                </div>
+                                </VueDraggableNext>
                             </div>
                         </div>
                     </div>
@@ -306,22 +315,54 @@ const playAudio = (audioPath) => {
     }
 }
 
+const dataTransfer = ref({})
+
 const drag = (event, syllable, fromPlace) => {
-    event.dataTransfer.setData('id', syllable.id);
-    event.dataTransfer.setData('fromPlace', fromPlace)
+    // event.dataTransfer.setData('id', syllable.id);
+    // event.dataTransfer.setData('fromPlace', fromPlace)
+
+
+    dataTransfer.value.id = syllable.id;
+    dataTransfer.value.fromPlace = fromPlace
+
+
     // playAudio(syllable.audio);
 };
 
+
+let squareFrom;
+let circleFrom
+
 const drop = (event, place) => {
-    event.preventDefault();
-    const id = event.dataTransfer.getData('id');
-    const fromPlace = event.dataTransfer.getData('fromPlace');
+    //event.preventDefault();
+    // const id = event.dataTransfer.getData('id');
+    // const fromPlace = event.dataTransfer.getData('fromPlace');
+
+    const id = dataTransfer.value.id;
+    const fromPlace = dataTransfer.value.fromPlace;
+
+    
+    Array.from(event.to.children).forEach((element) => {
+        if (element.tagName == 'DIV') {
+            event.to.removeChild(element);
+        }
+    })
+
     if (fromPlace == place) {
         if (place == 1) {
+            squareFrom = event.from.children[0]
+            squareFrom.parentNode.classList.add('hidden')
+            squareFrom.parentNode.setAttribute('ghost-class', 'none')
+            
+
             squareAnswer.value.text = syllables.value[fromPlace][id - 1].text;
             squareAnswer.value.firstIndex = fromPlace;
             squareAnswer.value.secondIndex = id - 1;
         } else {
+            circleFrom = event.from.children[0]
+            circleFrom.parentNode.classList.add('hidden')
+            circleFrom.parentNode.setAttribute('ghost-class', 'none')
+
             if (id < 5) {
                 circleAnswer.value.text = syllables.value[fromPlace][1][id - 1].text;
                 circleAnswer.value.firstIndex = fromPlace;
@@ -352,6 +393,13 @@ const drop = (event, place) => {
         }
         draggable.value = false;
         if (!find) {
+
+            squareFrom.parentNode.classList.remove('hidden')
+            circleFrom.parentNode.classList.remove('hidden')
+
+            squareFrom.classList.add('not_correct_select')
+            circleFrom.classList.add('not_correct_select')
+
             syllables.value[squareAnswer.value.firstIndex][squareAnswer.value.secondIndex].correct = false;
             syllables.value[circleAnswer.value.firstIndex][circleAnswer.value.secondIndex][circleAnswer.value.thirdIndex].correct = false;
             playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
@@ -361,8 +409,21 @@ const drop = (event, place) => {
                 squareAnswer.value = {};
                 circleAnswer.value = {};
                 draggable.value = true;
+
+                squareFrom.classList.remove('not_correct_select')
+                circleFrom.classList.remove('not_correct_select')
+                
+                squareFrom.parentNode.classList.add('hidden')
+                circleFrom.parentNode.classList.add('hidden')
             }, 1000);
         } else {
+
+            squareFrom.parentNode.classList.remove('hidden')
+            circleFrom.parentNode.classList.remove('hidden')
+
+            squareFrom.classList.add('correct_select')
+            circleFrom.classList.add('correct_select')
+
             syllables.value[squareAnswer.value.firstIndex][squareAnswer.value.secondIndex].correct = true;
             syllables.value[circleAnswer.value.firstIndex][circleAnswer.value.secondIndex][circleAnswer.value.thirdIndex].correct = true;
             setTimeout(() => {
@@ -373,6 +434,12 @@ const drop = (event, place) => {
                 squareAnswer.value = {};
                 circleAnswer.value = {};
                 draggable.value = true;
+
+                squareFrom.classList.remove('correct_select')
+                circleFrom.classList.remove('correct_select')
+
+                squareFrom.parentNode.classList.add('hidden')
+                circleFrom.parentNode.classList.add('hidden')
             }, 2000);
         }
         if (countAnswers.value == 8) {
@@ -390,6 +457,10 @@ const drop = (event, place) => {
 
 
 };
+
+const checkPosition = (event) => {
+    if (event.from == event.to) event.from.classList.remove('hidden')
+}
 
 const allowDrop = (event) => {
     event.preventDefault();
@@ -814,6 +885,10 @@ onMounted(async () => {
 
 .hidden {
     opacity: 0%;
+}
+
+.none {
+    display: none;
 }
 
 </style>
