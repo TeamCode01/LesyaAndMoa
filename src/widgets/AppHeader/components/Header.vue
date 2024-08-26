@@ -27,15 +27,15 @@
                 <div class="header__wrapper_adaptive">
                     <div v-if="Object.keys(userStore.currentUser).length" class="header__wrapper_avatar">
                         <img src="@app/assets/icons/avatar.png" alt="Аватарка" />
-                        <div @click="showBurger()">
-                            <img class="header__wrapper_avatar_arrow" src="@app/assets/icons/icons-chevron.svg"
-                                alt="arrow" />
+                        <div id="open-modal" @click="showBurger()">
+                            <img id="modal-mini" class="header__wrapper_avatar_arrow"
+                                src="@app/assets/icons/icons-chevron.svg" alt="arrow" />
                         </div>
                     </div>
                     <Button class="btn_info" id="btn-mini" v-else label="Войти" @click="Login"></Button>
 
                     <div class="header__wrapper_burger" @click="showBurger()">
-                        <img src="@app/assets/icons/burger.png" alt="Бургер меню" />
+                        <img id="burger" src="@app/assets/icons/burger.png" alt="Бургер меню" />
                     </div>
                 </div>
                 <div class="header__wrapper_other">
@@ -48,9 +48,9 @@
                     <!-- <Button class="btn_info" v-if="user !== null" label="Выйти" @click="logOut"></Button> -->
                     <div v-if="Object.keys(userStore.currentUser).length" class="header__wrapper_avatar">
                         <img src="@app/assets/icons/avatar.png" alt="Аватарка" />
-                        <div @click="showBurger()">
-                            <img class="header__wrapper_avatar_arrow" src="@app/assets/icons/icons-chevron.svg"
-                                alt="arrow" />
+                        <div id="open-modal" @click="showBurger()">
+                            <img id="modal-mini" class="header__wrapper_avatar_arrow"
+                                src="@app/assets/icons/icons-chevron.svg" alt="arrow" />
                         </div>
                     </div>
 
@@ -135,12 +135,12 @@ const showBurger = () => {
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
 
-    // if (showModal.value === false) {
-    //     showModal.value = true;
-    // } else {
-    //     showModal.value = false;
-    //     document.body.classList.remove('no-scroll');
-    // }
+    if (showModal.value === false) {
+        showModal.value = true;
+    } else {
+        showModal.value = false;
+        document.body.classList.remove('no-scroll');
+    }
     if (showModalMini.value === false) {
         showModalMini.value = true;
     } else {
@@ -151,7 +151,11 @@ const showBurger = () => {
 
 const closeMenu = () => {
     showModalMini.value = false;
-    // showModal.value = false;
+    if (showModal.value == true) {
+        showModal.value = false;
+        document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    }
+
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
 };
 
@@ -171,6 +175,19 @@ const logOut = async () => {
 const Login = () => {
     router.push({ name: 'Login' });
 };
+
+
+document.addEventListener('click', (event) => {
+    if (event.target.id !== 'modal-mini' && !event.target.matches('.modal__wrapper_mini')) {
+        showModalMini.value = false;
+        document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    }
+    if (event.target.id !== 'burger' && !event.target.matches('.modal__wrapper')) {
+        showModal.value = false;
+        document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    }
+});
+
 </script>
 <style lang="scss">
 .link-small {

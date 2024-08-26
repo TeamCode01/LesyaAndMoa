@@ -16,14 +16,14 @@
             <div class="modal_background" v-if="SeeTask">
                 <FirstTask :childId="props.childId" :finish="finish" :end="endTime" @close="close()"
                     @correct="checkCorrect(1)" @open="checkOpen(2)"
-                    @next-modal="next(2, '../assets/audio/Task2/25.2.mp3')" v-if="taskId === 1">
+                    @next-modal="next(2, 'Task2/25.2.mp3')" v-if="taskId === 1">
                 </FirstTask>
                 <SecondTask @correct="checkCorrect(2)" :childId="props.childId" :finish="finish" :end="endTime"
-                    @close="close()" @open="checkOpen(3)" @next-modal="next(3, '../assets/audio/Task3/31.3.mp3')"
+                    @close="close()" @open="checkOpen(3)" @next-modal="next(3, 'Task3/31.3.mp3')"
                     v-if="taskId === 2">
                 </SecondTask>
                 <ThirdTask @correct="checkCorrect(3)" :childId="props.childId" :finish="finish" :end="endTime"
-                    @close="close()" @open="checkOpen(4)" @next-modal="next(4, '../assets/audio/Task4/45.4.mp3')"
+                    @close="close()" @open="checkOpen(4)" @next-modal="next(4, 'Task4/45.4.mp3')"
                     v-if="taskId === 3">
                 </ThirdTask>
                 <FourthTask @correct="checkCorrect(4)" @open="checkOpen(5)" :end="endTime" :childId="props.childId"
@@ -155,7 +155,6 @@ const timeVal = ref(15);
 const taskAudio = ref('Task1/12.1.mp3');
 const startAudio = ref('Task1/11.1_.mp3');
 const endTime = ref(false);
-const tasks_server = ref([]);
 const answers = ref([]);
 const show_hand = ref(false);
 const show = ref(props.show);
@@ -200,7 +199,8 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
                 show_hand.value = true;
                 emit('hand', show_hand.value)
             })
-            if (audio_ids_music.value.includes(taskId.value)) {
+            console.log('tasks', SeeTask.value);
+            if (audio_ids_music.value.includes(taskId.value) && SeeTask.value === false) {
                 audio.value.addEventListener('ended', () => {
                     playAudio('Other/10.общее.mp3');
                     audio.value.addEventListener('ended', () => {
@@ -212,6 +212,7 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
             }
         } else {
             playAudio(startAudioV)
+            show_hand.value = false;
             props.audioObj = audio.value;
         }
         emit('sendImg', img);
@@ -255,8 +256,6 @@ const openTask = (taskId) => {
 
 };
 
-console.log('see', SeeTask.value);
-
 const next = (id, audio_task) => {
     SeeTask.value = false;
     endTime.value = false;
@@ -276,6 +275,7 @@ watch(
         taskId.value = newId;
     }
 );
+
 
 onMounted(async () => {
     await answerStore.getAnswers(props.childId);

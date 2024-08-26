@@ -20,7 +20,7 @@
                         @choose="drag($event, item.name, item.id, index)">
                             <div class="list-group-item item" :id="item.id"
                                 @mouseover="playAudio(item.audio)"
-                                @mouseout="stopAudio(item.audio)" 
+                                @mouseout="stopAudio(item.audio)"
                                 @touchstart="playAudio(item.audio)"
                                 @touchcancel="stopAudio(item.audio)"
 
@@ -34,7 +34,7 @@
 
                         <div class="big-letters">
 
-                            <VueDraggableNext :group="{ name: 'big-letters', pull: false, put: true }" 
+                            <VueDraggableNext :group="{ name: 'big-letters', pull: false, put: true }"
                             :sort="false" v-for="i in 7" :key="i" @add="drop($event, 1, i)" ghost-class="none">
                                 <input type="text" class="input-item" />
                             </VueDraggableNext>
@@ -43,7 +43,7 @@
 
                         <div class="middle-letters">
 
-                            <VueDraggableNext :group="{ name: 'middle-letters', pull: false, put: true }" 
+                            <VueDraggableNext :group="{ name: 'middle-letters', pull: false, put: true }"
                             :sort="false" v-for="i in 6" :key="i" @add="drop($event, 2, i)" ghost-class="none">
                                 <input type="text" class="input-item" />
                             </VueDraggableNext>
@@ -52,7 +52,7 @@
 
                         <div class="pre-middle-letters">
 
-                            <VueDraggableNext :group="{ name: 'pre-middle-letters', pull: false, put: true }" 
+                            <VueDraggableNext :group="{ name: 'pre-middle-letters', pull: false, put: true }"
                             :sort="false" v-for="i in 5" :key="i" @add="drop($event, 3, i)" ghost-class="none">
                                 <input type="text" class="input-item" />
                             </VueDraggableNext>
@@ -61,7 +61,7 @@
 
                         <div class="small-letters">
 
-                            <VueDraggableNext :group="{ name: 'small-letters', pull: false, put: true }" 
+                            <VueDraggableNext :group="{ name: 'small-letters', pull: false, put: true }"
                             :sort="false" v-for="i in 3" :key="i" @add="drop($event, 4, i)" ghost-class="none">
                                 <input type="text" class="input-item" />
                             </VueDraggableNext>
@@ -287,11 +287,13 @@ onMounted(() => {
     &-group {
         display: flex;
         flex-wrap: wrap;
+        position: fixed;
         max-width: 348px;
-
         justify-content: center;
         margin: 0px auto;
-
+        top: 60%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         column-gap: 2px;
         row-gap: 20px;
     }
@@ -690,7 +692,7 @@ onMounted(() => {
     line-height: 25px;
 }
 
-.hidden {  
+.hidden {
     opacity: 0%;
 }
 

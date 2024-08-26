@@ -510,41 +510,7 @@ const acceptCookie = (name, value, days) => {
 };
 
 const slideItems = ref([
-    // {
-    //     img: news,
-    //     name: ' Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2023',
-    // },
-    // {
-    //     img: news,
-    //     name: ' Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2024',
-    // },
-    // {
-    //     img: news,
-    //     name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2025',
-    // },
-    // {
-    //     img: news,
-    //     name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2026',
-    // },
-    // {
-    //     img: news,
-    //     name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2027',
-    // },
-    // {
-    //     img: news,
-    //     name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2028',
-    // },
-    // {
-    //     img: news,
-    //     name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2028',
-    // },
+
 ]);
 
 const slideAuthors = ref([
@@ -617,10 +583,10 @@ function handleScroll(e) {
         });
         if (posTop + test.offsetHeight < 0) {
             audio.value.pause();
-            console.log('pause');
+
         } else {
             audio.value.play();
-            console.log('play');
+
         }
 
         // document.removeEventListener('scroll', handleScroll);
@@ -658,9 +624,7 @@ const GetNews = async () => {
         });
 
         slideItems.value = response.data.results;
-        console.log(response.data);
     } catch (error) {
-        console.log('errr', error);
         isError.value = error.response.data;
         console.error('There was an error!', error);
     }
@@ -672,7 +636,6 @@ onMounted(() => {
     } else {
         showCookie.value = true;
     }
-    console.log('Audio', audio.value, audio.value.paused);
     document.addEventListener('scroll', handleScroll);
 
     windowWidth.value = window.innerWidth;
