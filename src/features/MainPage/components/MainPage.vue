@@ -618,9 +618,6 @@ const GetNews = async () => {
                 limit: 6,
                 offset: 0,
             },
-            headers: {
-                'Content-Type': 'application/json',
-            },
         });
 
         slideItems.value = response.data.results;

@@ -3,26 +3,15 @@
         <div class="news-h">
             <div class="news-h__wrapper">
                 <h1>Новости</h1>
-                <img
-                    class="news-h__img"
-                    src="@app/assets/img/News/image-moa.png"
-                    alt=""
-                />
+                <img class="news-h__img" src="@app/assets/img/News/image-moa.png" alt="" />
             </div>
         </div>
         <div class="news-list">
-            <div
-                class="news-list__card"
-                v-for="(block, index) in news"
-                :key="index"
-            >
-                <RouterLink
-                    class="router-news"
-                    :to="{
-                        name: 'page',
-                        params: { id: block.id },
-                    }"
-                >
+            <div class="news-list__card" v-for="(block, index) in news" :key="index">
+                <RouterLink class="router-news" :to="{
+                    name: 'page',
+                    params: { id: block.id },
+                }">
                     <div class="news-list__card-img">
                         <img :src="block.image" alt="" />
                     </div>
@@ -38,41 +27,31 @@
         </div>
         <div class="news-pagination">
             <button @click="prevPage" :disabled="currentPage === 1">
-                <img
-                    v-if="!(currentPage === 1)"
-                    class="news-arrow news-arrows"
-                    src="@app/assets/icons/arrows.svg"
-                    alt=""
-                />
+                <img v-if="!(currentPage === 1)" class="news-arrow news-arrows" src="@app/assets/icons/arrows.svg"
+                    alt="" />
             </button>
 
-            <p
-                class="news-page__list"
-                :class="{ 'current-page': page === currentPage }"
-                v-for="page in pages"
-                :key="page"
-                @click="setCurrentPage(page)"
-            >
+            <p class="news-page__list" :class="{ 'current-page': page === currentPage }" v-for="page in pages"
+                :key="page" @click="setCurrentPage(page)">
                 &nbsp;&nbsp;{{ page }}&nbsp;&nbsp;
             </p>
 
-            <button
-                @click="nextPage"
-                :disabled="currentPage * itemsPerPage >= totalItems"
-            >
-                <img
-                    class="news-arrows arrow-news"
-                    src="@app/assets/icons/arrows.svg"
-                    alt=""
-                />
+            <button @click="nextPage" :disabled="currentPage * itemsPerPage >= totalItems">
+                <img class="news-arrows arrow-news" src="@app/assets/icons/arrows.svg" alt="" />
             </button>
         </div>
     </div>
 </template>
 <script setup>
 import { HTTP } from '@app/http';
-import { ref, onMounted, computed } from 'vue';
+import { onActivated, ref, onMounted, computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useBreadcrumbsStore, usePageStore } from '@shared/index';
+import { storeToRefs } from 'pinia';
 
+const { toggleHideBreadcrumbs, setHideBreadcrumbs } = useBreadcrumbsStore();
+
+const route = useRoute();
 const news = ref([]);
 const error = ref([]);
 let currentPage = 1;
@@ -145,9 +124,33 @@ const generatePages = () => {
     );
 };
 
+watch(route.path, () => {
+    console.log('route');
+    toggleHideBreadcrumbs(true);
+    setHideBreadcrumbs(false);
+})
+
 onMounted(() => {
     GetNews(currentPage);
+    toggleHideBreadcrumbs(true);
+    setHideBreadcrumbs(false);
 });
+
+const { hidden } = storeToRefs(useBreadcrumbsStore)
+
+watch(hidden, (newValue) => {
+    if (!newValue) {
+        toggleHideBreadcrumbs(true);
+        setHideBreadcrumbs(false);
+    }
+})
+
+onActivated(() => {
+    toggleHideBreadcrumbs(true);
+    setHideBreadcrumbs(false);
+})
+
+
 </script>
 <style scoped>
 .news-h {
@@ -216,6 +219,7 @@ onMounted(() => {
     transform: scale(-1, 1);
     margin-right: 10px;
 }
+
 .arrow-news {
     margin-left: 10px;
 }
@@ -230,30 +234,37 @@ onMounted(() => {
     justify-content: center;
     cursor: pointer;
 }
+
 .news-page__list {
     padding-bottom: 5px;
 }
+
 .news-list__card-box {
     font-family: 'Nunito', sans-serif;
     font-weight: 400;
     text-decoration: none;
 }
+
 .router-news {
     text-decoration: none;
 }
+
 .news-list__title {
     font-size: 20px;
     color: #313131;
     font-weight: 400;
 }
+
 .news-list__desc {
     font-size: 16px;
     color: #313131;
 }
+
 .news-list__data {
     font-size: 14px;
     color: #818181;
 }
+
 .current-page {
     color: #0d47aa;
 }

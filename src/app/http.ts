@@ -12,7 +12,7 @@ HTTP.interceptors.request.use(
         if (
             config.url == '/token/login/' ||
             (config.url == '/users/' && config.method == 'post') ||
-            config.url == '/reset_password/' ||
+            config.url == '/reset_password/' || config.url == '/news/' ||
             config.url == '/reset_password_confirm/'
         ) {
             delete config.headers.Authorization;
@@ -43,7 +43,7 @@ HTTP.interceptors.response.use(
                     console.log('here');
                     console.log(originalRequest.url);
                     if (
-                        localStorage.getItem('Token') 
+                        localStorage.getItem('Token')
                     ) {
                         console.log('here token yes');
                     } else {

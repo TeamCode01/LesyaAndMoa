@@ -91,7 +91,7 @@ title {
 
 .container {
     margin: 0 auto;
-    padding: 0 120px;
+    padding: 0 120px !important;
     max-width: 1440px;
 
     @media (max-width: 1440px) {
