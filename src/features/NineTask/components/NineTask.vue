@@ -19,7 +19,7 @@
                         :group="{ name: 'letters', pull: 'clone', put: false }" :sort="false"
                         @choose="drag($event, item.name, item.id, index)">
                             <div class="list-group-item item" :id="item.id"
-                                @mouseover="playAudio(item.audio)"
+                                @mouseenter="playAudio(item.audio)"
                                 @mouseout="stopAudio(item.audio)" 
                                 @touchstart="playAudio(item.audio)"
                                 @touchcancel="stopAudio(item.audio)"
@@ -135,7 +135,7 @@ const playEndAudio = (audioPath) => {
 
 const stopAudio = (audioPath) => {
     if (audio.value.paused) {
-        playAudio(audioPath);
+        //playAudio(audioPath);
     } else {
         audio.value.pause();
     }
@@ -257,9 +257,14 @@ const allowDrop = (event) => {
 };
 
 onMounted(() => {
-    const correct = getCorrectAnswer(9, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    try {
+        const correct = getCorrectAnswer(9, props.childId);
+        corrValue.value = correct.correctId;
+        is_correct.value = correct.is_correct;
+    }
+    catch (error) {
+        console.log(error);
+    }
 })
 </script>
 <style lang="scss" scoped>
@@ -336,6 +341,8 @@ onMounted(() => {
     justify-content: center;
     column-gap: 2px;
     margin-bottom: 50px;
+    
+    height: 50px;
 }
 
 .item {

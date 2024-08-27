@@ -117,8 +117,10 @@ const onSelection = (firstIndex, id) => {
         countAnswers.value++;
         playAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
     } else if (!firstListen.value) {
-        syllables.value[firstIndex][id].correct = false;
-        setTimeout(() => syllables.value[firstIndex][temp].correct = null, 2000)
+        if (syllables.value[firstIndex][id].correct != true) {
+            syllables.value[firstIndex][id].correct = false;
+            setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)    
+        }
         playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     }
     if (countAnswers.value == 14) {
@@ -183,16 +185,6 @@ onMounted(async () => {
 .end-modal {
     width: 1200px;
     height: 600px;
-}
-
-.correct_select {
-    border: 2px solid;
-    border-color: #5CCF54;
-}
-
-.not_correct_select {
-    border: 2px solid;
-    border-color: #DB0000;
 }
 
 .draggable-list {
@@ -297,5 +289,17 @@ onMounted(async () => {
     border-radius: 6px;
     border: none;
     cursor: pointer;
+}
+
+.correct_select {
+    padding: 6px 14px;
+    border: 2px solid;
+    border-color: #5CCF54;
+}
+
+.not_correct_select {
+    padding: 6px 14px;
+    border: 2px solid;
+    border-color: #DB0000;
 }
 </style>

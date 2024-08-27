@@ -96,7 +96,6 @@ import { ref, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-import DragndropComponent from './DragndropComponent.vue';
 
 import { dataTask, dataAnswer } from './task';
 import draggable from 'vuedraggable';

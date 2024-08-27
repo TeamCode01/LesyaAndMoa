@@ -83,6 +83,7 @@ const props = defineProps({
 });
 const hide = () => {
     emit('close');
+    console.log('close')
 };
 
 const next = () => {
@@ -90,9 +91,14 @@ const next = () => {
 };
 
 onMounted(() => {
-    const correct = getCorrectAnswer(6, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    try {
+        const correct = getCorrectAnswer(6, props.childId);
+        corrValue.value = correct.correctId;
+        is_correct.value = correct.is_correct;
+    }
+    catch { 
+        console.log('error');
+    }
 });
 
 const getImageUrl = (path) => {
@@ -149,7 +155,7 @@ const randomMusic = (first = false) => {
     let file = dict.get(`${item}`);
     let audioPath3 = new URL(`/assets/audio/Task6/${file}`, import.meta.url).href
     audio = new Audio(audioPath3);
-    audio.play();
+    //audio.play();
     usedWord.value.push(item);
 
     repeated.value = false;
@@ -234,7 +240,6 @@ const clickItem = (word) => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 540px;
     gap: 4px;
 
     @media (max-width: 1024px) {

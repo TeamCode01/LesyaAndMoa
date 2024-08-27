@@ -78,14 +78,20 @@ import { tasksData } from './tasks.js';
 import audioMap from './dict.js'
 
 import gameActions from '@mixins/gameAction';
+import { tr } from 'vuetify/lib/locale/index.mjs';
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 
 onMounted(() => {
-    const correct = getCorrectAnswer(15, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    try {
+        const correct = getCorrectAnswer(15, props.childId);
+        corrValue.value = correct.correctId;
+        is_correct.value = correct.is_correct;
+    }
+    catch (error) {
+        console.log(error);
+    }  
 });
 
 const corrValue = ref(0)
@@ -199,7 +205,9 @@ const dropLetter = (event, letter) => {
             );
 
             answersCounter.value += 1;
-            event.target.classList.add('task_block__letter_right');
+            setTimeout(() => {
+                event.target.children[0].classList.add('task_block__letter_right');
+            }, 1)
             let reactionAudioSrc = new URL(
                 `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
             let reactionAudio = new Audio(
@@ -208,7 +216,7 @@ const dropLetter = (event, letter) => {
             reactionAudio.play();
 
             setTimeout(() => {
-                event.target.classList.remove('task_block__letter_right');
+                event.target.children[0].classList.remove('task_block__letter_right');
 
                 if (answersCounter.value == 26) {
                     setTimeout(() => {
@@ -225,7 +233,7 @@ const dropLetter = (event, letter) => {
 
             }, 2000);
         } else {
-            event.target.classList.add('task_block__letter_wrong');
+            event.target.children[0].classList.add('task_block__letter_wrong');
 
             let reactionAudioSrc = new URL(
                 `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
@@ -235,7 +243,7 @@ const dropLetter = (event, letter) => {
             reactionAudio.play();
 
             setTimeout(() => {
-                event.target.classList.remove('task_block__letter_wrong');
+                event.target.children[0].classList.remove('task_block__letter_wrong');
             }, 2000);
         }
     }

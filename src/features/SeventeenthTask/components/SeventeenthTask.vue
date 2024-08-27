@@ -104,8 +104,6 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
-import DragndropComponent from './DragndropComponent.vue';
-
 import { dataFirstTask, dataSecondTask } from './task.js';
 import audioMap from './audioMap'
 import gameActions from '@mixins/gameAction';
@@ -189,7 +187,10 @@ const drop = (event, word) => {
     event.to.removeChild(event.item)
 
     if (event.to.dataset['isActive'] == 'false') {
-        console.log(event.from)
+        console.log('event')
+        console.log(event.to)
+        console.log(event.to.dataset)
+        event.from.dataset['isActive'] = 'true'
         event.from.appendChild(dragElem)
         return
     }
@@ -247,6 +248,9 @@ const drop = (event, word) => {
 
         event.from.children[0].children[0].src = dragSrcError;
         event.to.children[0].children[0].src = word.srcError
+
+        event.to.dataset['isActive'] = 'true'
+        event.from.dataset['isActive'] = 'true'
 
         setTimeout(()=>{
             event.from.children[0].children[0].src = dragSrc;
@@ -631,9 +635,14 @@ const finalDraw = () => {
 
 onMounted(async () => {
     canvas = canvasRef.value;
-    const correct = getCorrectAnswer(17, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    try {
+        const correct = getCorrectAnswer(17, props.childId);
+        corrValue.value = correct.correctId;
+        is_correct.value = correct.is_correct;
+    }
+    catch (error) {
+        console.log(error);
+    }
     ctx = canvas.getContext('2d');
     await resizeCanvas();
     console.log('компонент создан')
