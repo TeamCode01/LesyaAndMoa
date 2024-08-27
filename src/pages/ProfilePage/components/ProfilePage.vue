@@ -50,7 +50,7 @@
                 </p>
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
-                    <v-progress-linear v-model="skill.progress" height="30" class="scale">
+                    <v-progress-linear v-model="skill[block.id].progress" height="30" class="scale">
                         <template v-slot:default="{ value }">
                             <strong>{{ Math.ceil(value) }}%</strong>
                         </template>
@@ -92,7 +92,7 @@
                                 :sorts-boolean="false" @update:value="changeOption" v-bind="props" />
                             <span v-if="isError.sex" class="error-message">{{
                                 isError.sex[0]
-                            }}</span>
+                                }}</span>
                         </div>
                         <div class="form-input">
                             <label>Возраст</label>
@@ -102,7 +102,7 @@
                             }" v-model:value="form.age"></Input>
                             <span v-if="isError.age" class="error-message">{{
                                 isError.age[0]
-                            }}</span>
+                                }}</span>
                         </div>
                         <div class="form-input">
                             <label>Регион</label>
@@ -112,7 +112,7 @@
                                 :sorts-boolean="false" @update:value="changeOption" />
                             <span v-if="isError.region" class="error-message">{{
                                 isError.region[0]
-                            }}</span>
+                                }}</span>
                         </div>
                         <div class="form-input">
                             <label>Школа</label>
@@ -122,7 +122,7 @@
                             }" v-model:value="form.school"></Input>
                             <span v-if="isError.school" class="error-message">{{
                                 isError.school[0]
-                            }}</span>
+                                }}</span>
                         </div>
                         <div class="form-input">
                             <label>Класс</label>
@@ -132,7 +132,7 @@
                             }" v-model:value="form.grade"></Input>
                             <span v-if="isError.grade" class="error-message">{{
                                 isError.grade[0]
-                            }}</span>
+                                }}</span>
                         </div>
                         <div class="regCheck">
                             <input type="checkbox" v-model="form.attended_speech_therapist" />
@@ -202,7 +202,7 @@
                 </p>
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
-                    <v-progress-linear v-model="skill.progress[childId]" height="30" class="scale">
+                    <v-progress-linear v-model="skill.progress" height="30" class="scale">
                         <template v-slot:default="{ value }">
                             <strong>{{ Math.ceil(value) }}%</strong>
                         </template>
@@ -228,7 +228,7 @@
                             }" v-model:value="formGroup.name" @blur="V$.name.$touch()"></Input>
                             <span v-if="isError.name" class="error-message">{{
                                 isError.name[0]
-                            }}</span>
+                                }}</span>
                         </div>
                         <div class="form-input">
                             <label>Количество учеников в группе</label>
@@ -255,7 +255,7 @@
                                 variant="outlined" :sorts-boolean="false" @update:value="changeOption" />
                             <span v-if="isError.region" class="error-message">{{
                                 isError.region[0]
-                            }}</span>
+                                }}</span>
                         </div>
                         <div class="form-input">
                             <label>Школа</label>
@@ -265,7 +265,7 @@
                             }" v-model:value="formGroup.school"></Input>
                             <span v-if="isError.school" class="error-message">{{
                                 isError.school[0]
-                            }}</span>
+                                }}</span>
                         </div>
                     </v-card-text>
 
@@ -496,7 +496,7 @@ const GetSkill = async (id, index) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        skill.value = response.data;
+        skill.value[id] = response.data;
         console.log('skill', skill.value.progress, id, index);
 
     } catch (error) {
@@ -524,17 +524,17 @@ watch(
     (newSkill) => {
         if (!newSkill) {
             console.log(skill.value, 'here');
-            // return;
         }
-        // skill.value = newSkill
         fetchSkills();
     },
+    { immediate: true }
 );
 
 onMounted(() => {
     if (localStorage.getItem("type") === "групповой") {
         GetGroup();
     }
+    fetchSkills();
 });
 </script>
 <style lang="scss" scoped>

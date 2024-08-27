@@ -103,7 +103,8 @@ const mute = () => {
   }
 }
 const skip = () => {
-  startAudio.value.src = ''
+  startAudio.value.pause();
+  show_hand.value = false;
   showBtn.value = true;
 }
 
@@ -113,6 +114,7 @@ const refresh = () => {
 
 const playSound = () => {
   if (ids.value.includes(task_id.value)) {
+    show_hand.value = false;
     startAudio.value.src = new URL(`/assets/audio/${audio.value}`, import.meta.url).href;
     startAudio.value.play();
     startAudio.value.addEventListener('ended', () => {
