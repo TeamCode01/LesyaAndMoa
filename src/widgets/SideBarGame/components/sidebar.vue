@@ -208,9 +208,7 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
                         audio.value.pause();
                     })
                 })
-            } else {
-                return false;
-            }
+            } 
         } else {
             playAudio(startAudioV)
             show_hand.value = false;
