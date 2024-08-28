@@ -32,7 +32,7 @@ defineProps<BreadcrumbsProps>();
     font-weight: 400;
     list-style: none;
     color: #A3A3A3;
-    padding-top: 40px;
+    padding-top: 40px !important;
 
     @media (max-width: 360px) {
         margin-bottom: 20px;

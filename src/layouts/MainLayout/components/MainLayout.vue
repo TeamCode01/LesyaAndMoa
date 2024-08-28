@@ -15,10 +15,9 @@ import { useUserStore } from "@layouts/stores/user";
 import { AppBreadcrumbs, useBreadcrumbsStore } from '@shared/index';
 import { storeToRefs } from 'pinia';
 const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
-
+const { toggleHideBreadcrumbs, setHideBreadcrumbs } = useBreadcrumbsStore();
 
 const userStore = useUserStore();
-console.log('hid', hidden.value);
 
 watch(
   () => userStore.currentUser,
