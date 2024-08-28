@@ -30,10 +30,13 @@
                             v-for="word in row" :key="word.id" 
                             :group="{ name: 'words', pull: 'clone', put: false }"
                             :sort="false"
-                            :options="{ draggable: word.isActive }"
                             
+                            :ghost-class="'hidden'"
+                            :drag-class="`${!word.isActive ? 'hidden' : ''}`"
+
                             @choose="($event)=>{ if (wordIsActive($event)) dragLetter($event, word.id, word.text)}"
                             @unchoose="($event)=>{checkAnswer($event)}">
+                            
                             
                                 <div 
                                 class="draggable-list__word" 
@@ -115,7 +118,7 @@
                 </div>
             </template>
             <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Превосходно!"
-                v-if="answersCounter == 11" @next="next" @hide="hide()"></TaskResultBanner>
+                v-if="answersCounter == 11" @next="next" @hide="hide()" class="end-modal"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -259,9 +262,6 @@ const dropLetter = (event, id, isActive) => {
 
 
                     if (word_block.dataset.word_id == dragid){
-
-                        word_block.classList.add = 'opacity: 0;'
-                        word_block.setAttribute('draggable', 'false')
                         word_block.dataset['word_isActive'] = false
 
                         word.classList.add('void')
@@ -379,11 +379,38 @@ const wordIsActive = (event) => {
     return true
 }
 
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
 
 </script>
 <style scoped lang='scss'>
 * {
     user-select: none;
+}
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
+
+    
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .TwelfthTask {

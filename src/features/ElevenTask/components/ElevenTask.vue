@@ -308,6 +308,24 @@ onMounted(() => {
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 <style lang="scss" scoped>
 *{
@@ -316,6 +334,11 @@ onMounted(() => {
 .end-modal {
     width: 1200px;
     height: 600px;
+    
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .fairy_tales__wrapper {

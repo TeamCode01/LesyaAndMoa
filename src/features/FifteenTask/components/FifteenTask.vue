@@ -63,7 +63,7 @@
                 </div>
             </template>
             <TaskResultBanner :img="getImageUrl('king.png')" :bg="getImageUrl('lesya.gif')" text="Блестяще!"
-                v-if="answersCounter == 26" @next="next()" @hide="hide()"></TaskResultBanner>
+                v-if="answersCounter == 26" @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -248,10 +248,39 @@ const dropLetter = (event, letter) => {
         }
     }
 };
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 <style lang="scss" scoped>
 * {
     user-select: none;
+}
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
+
+    
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .draggable-list {

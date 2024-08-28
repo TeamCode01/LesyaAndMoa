@@ -25,11 +25,15 @@
                             <div class="draggable-list__steps">
                                 <div class="draggable-list__step" v-for="(syllable, syllable_index) in syllables[1]"
                                     :key="syllable.id">
-                                    <VueDraggableNext @choose="drag($event, syllable, 1); clickText(syllable)"
+                                    <VueDraggableNext @choose="drag($event, syllable, 1); clickText($event, syllable)"
                                     @unchoose="checkPosition($event)"
-                                    :group="{ name: 'words1', pull: 'clone', put: false }" :sort="false">
+                                    :group="{ name: 'words1', pull: 'clone', put: false }" :sort="false"
+                                    data-isActive="true"
+                                    :ghost-class="'hidden'"
+                                    :class="{hidden: syllable.hidden}"
+                                    class="draggable-list__step-button__wrapper">
                                         <div
-                                            :class="{ 'draggable-list__step-button': true, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false }"
+                                            :class="{'draggable-list__step-button' : true, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false }"
                                             :value="syllable.text">
                                             {{ syllable.text }}
                                         </div>
@@ -47,9 +51,14 @@
                                     v-for="(syllables_row, syllables_row_index) in syllables[2]"
                                     :key="syllables_row_index">
                                     <VueDraggableNext v-for="syllable in syllables_row" :key="syllable.id"
-                                    @choose="drag($event, syllable, 2); clickText(syllable)"
+                                    @choose="drag($event, syllable, 2); clickText($event, syllable)"
                                     @unchoose="checkPosition($event)"
-                                    :group="{ name: 'words2', pull: 'clone', put: false }" :sort="false">
+                                    :group="{ name: 'words2', pull: 'clone', put: false }" :sort="false"
+                                    data-isActive="true"
+                                    :ghost-class="'hidden'"
+
+                                    :drag-class="`${syllable.drag_class == true ? 'hidden' : ''}`"
+                                    class="draggable-list__syllable__wrapper">
                                         <div
                                             :class="{ 'draggable-list__syllable': true, hidden: syllable.hidden, correct_select: syllable.correct, not_correct_select: syllable.correct === false }"
                                             :value="syllable.text">
@@ -70,6 +79,7 @@
 
                                 <VueDraggableNext class="draggable-list__right-answer-circle"
                                 @add="drop($event, 2)" ghost-class="none" draggable="false"
+                                @drop="console.log('!!!!')"
                                 :group="{ name: 'answer2', pull: false, put: true }" :sort="false">
                                     <input @focus="($event)=>{$event.target.blur()}" id="circleAnswer"
                                         class="answer draggable-list__syllable" readonly v-model="circleAnswer.text" />
@@ -120,6 +130,7 @@ const syllables = ref({
         audio: 'Task8/281.8.mp3',
         correct: null,
         hidden: false,
+        drag_class: false
     }, {
         id: 2,
         id_class: 'step2',
@@ -127,6 +138,7 @@ const syllables = ref({
         audio: 'Task8/282.8.mp3',
         correct: null,
         hidden: false,
+        drag_class: false
     }, {
         id: 3,
         id_class: 'step3',
@@ -134,6 +146,7 @@ const syllables = ref({
         audio: 'Task8/283.8.mp3',
         correct: null,
         hidden: false,
+        drag_class: false
     }, {
         id: 4,
         id_class: 'step4',
@@ -141,6 +154,7 @@ const syllables = ref({
         audio: 'Task8/284.8.mp3',
         correct: null,
         hidden: false,
+        drag_class: false
     }, {
         id: 5,
         id_class: 'step5',
@@ -148,6 +162,7 @@ const syllables = ref({
         audio: 'Task8/285.8.mp3',
         correct: null,
         hidden: false,
+        drag_class: false
     }, {
         id: 6,
         id_class: 'step6',
@@ -155,6 +170,7 @@ const syllables = ref({
         audio: 'Task8/286.8.mp3',
         correct: null,
         hidden: false,
+        drag_class: false
     }, {
         id: 7,
         id_class: 'step7',
@@ -162,6 +178,7 @@ const syllables = ref({
         audio: 'Task8/287.8.mp3',
         correct: null,
         hidden: false,
+        drag_class: false
     }, {
         id: 8,
         id_class: 'step8',
@@ -169,6 +186,7 @@ const syllables = ref({
         audio: 'Task8/288.8.mp3',
         correct: null,
         hidden: false,
+        drag_class: false
     }],
     2: {
         1: [{
@@ -177,24 +195,28 @@ const syllables = ref({
             audio: 'Task8/289.8.mp3',
             correct: null,
             hidden: false,
+            drag_class: false
         }, {
             id: 2,
             text: 'ТЕР',
             audio: 'Task8/290.8.mp3',
             correct: null,
             hidden: false,
+            drag_class: false
         }, {
             id: 3,
             text: 'РО',
             audio: 'Task8/291.8.mp3',
             correct: null,
             hidden: false,
+            drag_class: false
         }, {
             id: 4,
             text: 'ЛЕ',
             audio: 'Task8/292.8.mp3',
             correct: null,
             hidden: false,
+            drag_class: false
         }],
         2: [{
             id: 5,
@@ -202,24 +224,28 @@ const syllables = ref({
             audio: 'Task8/293.8.mp3',
             correct: null,
             hidden: false,
+            drag_class: false
         }, {
             id: 6,
             text: 'ТО',
             audio: 'Task8/294.8.mp3',
             correct: null,
             hidden: false,
+            drag_class: false
         }, {
             id: 7,
             text: 'РАБЛЬ',
             audio: 'Task8/295.8.mp3',
             correct: null,
             hidden: false,
+            drag_class: false
         }, {
             id: 8,
             text: 'ВА',
             audio: 'Task8/296.8.mp3',
             correct: null,
             hidden: false,
+            drag_class: false
         }]
     }
 })
@@ -228,6 +254,11 @@ const countAnswers = ref(0);
 const corrValue = ref(0);
 const is_correct = ref(null);
 const correctAnswers = ref([{}, {}, {}, {}, {}, {}, {}, {}])
+
+const dragClasses = ref({
+    1: [false, false, false, false, false, false, false, false],
+    2: [false, false, false, false, false, false, false, false]
+})
 const getImageUrl = (path) => {
  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
@@ -282,8 +313,8 @@ const answers = ref([
     },
 ])
 
-const clickText = (syllable) => {
-    if (soundPlayed) return;
+const clickText = (event, syllable) => {
+    if (soundPlayed || event.target.dataset['isactive'] !== 'true') return;
     playAudio(syllable.audio)
     soundPlayed = true;
     setTimeout(() => {
@@ -317,58 +348,115 @@ const playAudio = (audioPath) => {
 
 const dataTransfer = ref({})
 
+const checkDragAndDrop = ref(false)
+
 const drag = (event, syllable, fromPlace) => {
     // event.dataTransfer.setData('id', syllable.id);
     // event.dataTransfer.setData('fromPlace', fromPlace)
+    if (event.from.classList.contains('hidden') || event.from.dataset['isactive'] !== 'true') {
+        checkDragAndDrop.value = false;
+        dataTransfer.value.id = '';
+        dataTransfer.value.fromPlace = ''
+        return
+    }
 
-
+    
+    checkDragAndDrop.value = true;
     dataTransfer.value.id = syllable.id;
     dataTransfer.value.fromPlace = fromPlace
 
+    
 
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+    }
+    else{
+        //syllable.drag_class = true;
+        event.from.classList.add('hidden')
+    }
+    //
     // playAudio(syllable.audio);
 };
 
 
 let squareFrom;
-let circleFrom
+let circleFrom;
+let squareDOM;
+let circleDOM;
+
 
 const drop = (event, place) => {
     //event.preventDefault();
     // const id = event.dataTransfer.getData('id');
     // const fromPlace = event.dataTransfer.getData('fromPlace');
 
+    event.to.removeChild(event.item)
+    event.from.classList.remove('hidden')
+    console.log('drop', checkDragAndDrop.value)
+
+
+    if (checkDragAndDrop.value == false) {
+        event.from.classList.add('hidden')
+        return
+    }
+
     const id = dataTransfer.value.id;
     const fromPlace = dataTransfer.value.fromPlace;
 
+
     
-    Array.from(event.to.children).forEach((element) => {
-        if (element.tagName == 'DIV') {
-            event.to.removeChild(element);
-        }
-    })
 
     if (fromPlace == place) {
         if (place == 1) {
-            squareFrom = event.from.children[0]
-            squareFrom.parentNode.classList.add('hidden')
-            squareFrom.parentNode.setAttribute('ghost-class', 'none')
+
+            if (squareAnswer.value.text && squareAnswer.value.text != event.item.innerHTML){
+                squareFrom.classList.remove('none')
+                squareFrom.removeAttribute('ghost-class')
+                squareFrom.dataset['isactive'] = 'true'
+                squareFrom.children[0].classList.remove('standrart_cursor')
+                squareFrom.children[0].classList.remove('not_correct_select')
+            }
+
+            squareDOM = event.item;
+            squareFrom = event.from
+            squareFrom.classList.add('none')
+            squareFrom.setAttribute('ghost-class', 'none')
+            squareFrom.setAttribute('drag-class', 'none')
             
+            squareFrom.dataset['isactive'] = 'false'
+            squareFrom.children[0].classList.add('standrart_cursor')
 
             squareAnswer.value.text = syllables.value[fromPlace][id - 1].text;
             squareAnswer.value.firstIndex = fromPlace;
             squareAnswer.value.secondIndex = id - 1;
         } else {
-            circleFrom = event.from.children[0]
-            circleFrom.parentNode.classList.add('hidden')
-            circleFrom.parentNode.setAttribute('ghost-class', 'none')
+
+
+            if (circleAnswer.value.text && circleAnswer.value.text != event.item.innerHTML){
+                console.log(circleAnswer.value.text, event.item.innerHTML, circleAnswer.value.text == event.item.innerHTML)
+                circleFrom.classList.remove('hidden')
+                circleFrom.removeAttribute('ghost-class')
+                circleFrom.dataset['isactive'] = 'true'
+                circleFrom.children[0].classList.remove('standrart_cursor')
+                circleFrom.children[0].classList.remove('not_correct_select')
+            }
+
+            circleDOM = event.item;
+            circleFrom = event.from
+            circleFrom.classList.add('hidden')
+            circleFrom.setAttribute('ghost-class', 'none')
+            //circleFrom.setAttribute('drag-class', 'none')
+            circleFrom.dataset['isactive'] = 'false'
+            circleFrom.children[0].classList.add('standrart_cursor')
+            
 
             if (id < 5) {
+                syllables.value[fromPlace][1][id - 1].drag_class = true
                 circleAnswer.value.text = syllables.value[fromPlace][1][id - 1].text;
                 circleAnswer.value.firstIndex = fromPlace;
                 circleAnswer.value.secondIndex = 1;
                 circleAnswer.value.thirdIndex = id - 1;
             } else {
+                syllables.value[fromPlace][2][id - 5].drag_class = true
                 circleAnswer.value.text = syllables.value[fromPlace][2][id - 5].text;
                 circleAnswer.value.firstIndex = fromPlace;
                 circleAnswer.value.secondIndex = 2;
@@ -377,6 +465,10 @@ const drop = (event, place) => {
         }
     }
     if (squareAnswer.value.text && circleAnswer.value.text) {
+
+        //squareFrom.appendChild(squareDOM)
+        console.log(squareDOM, circleDOM)
+
         let strAnswer = squareAnswer.value.text + circleAnswer.value.text;
         strAnswer = strAnswer.toLowerCase()
         strAnswer = strAnswer[0].toUpperCase() + strAnswer.slice(1);
@@ -392,13 +484,20 @@ const drop = (event, place) => {
             }
         }
         draggable.value = false;
+
+        squareFrom.children[0].classList.remove('standrart_cursor')
+        circleFrom.children[0].classList.remove('standrart_cursor')
+
+        squareFrom.classList.remove('none')
+        circleFrom.classList.remove('hidden')
+
         if (!find) {
 
-            squareFrom.parentNode.classList.remove('hidden')
-            circleFrom.parentNode.classList.remove('hidden')
+            squareFrom.dataset['isactive'] = 'true'
+            circleFrom.dataset['isactive'] = 'true'
 
-            squareFrom.classList.add('not_correct_select')
-            circleFrom.classList.add('not_correct_select')
+            squareFrom.children[0].classList.add('not_correct_select')
+            circleFrom.children[0].classList.add('not_correct_select')
 
             syllables.value[squareAnswer.value.firstIndex][squareAnswer.value.secondIndex].correct = false;
             syllables.value[circleAnswer.value.firstIndex][circleAnswer.value.secondIndex][circleAnswer.value.thirdIndex].correct = false;
@@ -410,19 +509,16 @@ const drop = (event, place) => {
                 circleAnswer.value = {};
                 draggable.value = true;
 
-                squareFrom.classList.remove('not_correct_select')
-                circleFrom.classList.remove('not_correct_select')
-                
-                squareFrom.parentNode.classList.add('hidden')
-                circleFrom.parentNode.classList.add('hidden')
+                squareFrom.children[0].classList.remove('not_correct_select')
+                circleFrom.children[0].classList.remove('not_correct_select')
             }, 1000);
         } else {
 
-            squareFrom.parentNode.classList.remove('hidden')
-            circleFrom.parentNode.classList.remove('hidden')
+            squareFrom.children[0].classList.add('correct_select')
+            circleFrom.children[0].classList.add('correct_select')
 
-            squareFrom.classList.add('correct_select')
-            circleFrom.classList.add('correct_select')
+            squareFrom.dataset['isactive'] = 'false'
+            circleFrom.dataset['isactive'] = 'false'
 
             syllables.value[squareAnswer.value.firstIndex][squareAnswer.value.secondIndex].correct = true;
             syllables.value[circleAnswer.value.firstIndex][circleAnswer.value.secondIndex][circleAnswer.value.thirdIndex].correct = true;
@@ -435,11 +531,16 @@ const drop = (event, place) => {
                 circleAnswer.value = {};
                 draggable.value = true;
 
-                squareFrom.classList.remove('correct_select')
-                circleFrom.classList.remove('correct_select')
+                squareFrom.children[0].classList.remove('correct_select')
+                circleFrom.children[0].classList.remove('correct_select')
+                
+                squareFrom.removeChild(squareFrom.children[0])
+                circleFrom.removeChild(circleFrom.children[0])
 
-                squareFrom.parentNode.classList.add('hidden')
-                circleFrom.parentNode.classList.add('hidden')
+                squareFrom.classList.add('hidden')
+                circleFrom.classList.add('hidden')
+
+
             }, 2000);
         }
         if (countAnswers.value == 8) {
@@ -459,7 +560,7 @@ const drop = (event, place) => {
 };
 
 const checkPosition = (event) => {
-    if (event.from == event.to) event.from.classList.remove('hidden')
+    if (event.from == event.to && event.from.classList.contains('hidden') && event.from.dataset['isactive'] === 'true') event.from.classList.remove('hidden')
 }
 
 const allowDrop = (event) => {
@@ -477,6 +578,24 @@ onMounted(async () => {
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 
 <style lang="scss" scoped>
@@ -488,6 +607,11 @@ onMounted(async () => {
 .end-modal {
     width: 1200px;
     height: 600px;
+    
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .answer {
@@ -638,6 +762,17 @@ onMounted(async () => {
     font-size: 18px;
     font-weight: bold;
 
+    @media (max-width: 1024px) {
+        width: 63px;
+        height: 63px;
+        font-size: 16px;
+    }
+}
+
+.draggable-list__step-button__wrapper{
+    width: 70px;
+    height: 70px;
+    
     @media (max-width: 1024px) {
         width: 63px;
         height: 63px;
@@ -825,6 +960,16 @@ onMounted(async () => {
 
 }
 
+.draggable-list__syllable__wrapper{
+    width: 70px;
+    height: 70px;
+
+    @media (max-width: 1024px) {
+        width: 63px;
+        height: 63px;
+    }
+}
+
 .draggable-list__right-wrapper-answer {
     display: flex;
     align-items: center;
@@ -889,6 +1034,15 @@ onMounted(async () => {
 
 .none {
     display: none;
+}
+
+.standrart_cursor{
+    cursor: default !important;
+}
+
+.block {
+    display: block !important;
+    opacity: 100% !important;
 }
 
 </style>

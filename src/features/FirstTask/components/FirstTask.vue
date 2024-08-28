@@ -221,6 +221,23 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 
 </script>
 <style lang="scss" scoped>
@@ -231,6 +248,11 @@ const allowDrop = (event) => {
 .end-modal {
     width: 1200px;
     height: 600px;
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .draggable-list {
@@ -277,6 +299,8 @@ const allowDrop = (event) => {
         padding: 30px 60px 67px 60px;
         position: relative;
         height: 600px;
+
+        align-items: center;
 
         @media (max-width: 1024px) {
             padding: 30px 20px 43px 20px;

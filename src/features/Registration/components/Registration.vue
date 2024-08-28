@@ -78,12 +78,12 @@
                         v-model="form.data_processing_agreement"
                     />
                     <div class="regCheck_text">
-                        даю согласие на обработку персональных данных
-                        и ознакомлен с <router-link
+                        даю согласие на обработку <router-link class="form-question-link" to="/policy-page" target="_blank">персональных данных</router-link>
+                        и ознакомлен с <a
                             class="form-question-link"
-                            to="/policy-page"
+                            href="https://docs.google.com/document/d/1yrwy13in-UhEW80KpYaCUWKI6q3KdXutEhfkLx8p3j0/edit"
                             target="_blank"
-                            >политикой конфиденциальности</router-link
+                            >политикой конфиденциальности</a
                         >
                     </div>
                 </div>

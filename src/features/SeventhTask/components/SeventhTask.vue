@@ -830,6 +830,11 @@ onMounted(() => {
 .end-modal {
     width: 1200px;
     height: 600px;
+    
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 .canvas_draw {
     // border: 1px solid black;

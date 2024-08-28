@@ -85,7 +85,7 @@
             </template>
             <TaskResultBanner :bg="getImageUrl('moa.gif')" text="Друзья заметили, что письменная б (БЭ), которая звучит,
             как [б] или [б'] похожа на белку с поднятым хвостом. В слове «белка» звучит [б']. А письменная д, которая звучит, как [д] или [д'], похожа на дятла,
-            у которого хвостик вниз. В слове «дятел» звучит [д']." v-else @next="next()" @hide="hide()">
+            у которого хвостик вниз. В слове «дятел» звучит [д']." v-else @next="next()" @hide="hide()" class="end-modal">
             </TaskResultBanner>
         </div>
     </div>
@@ -248,11 +248,40 @@ const playAudio = (audioPath) => {
         audio.value.play();
     }
 }
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 
 <style lang="scss" scoped>
 * {
     user-select: none;
+}
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
+
+    
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .FourteenthTask {

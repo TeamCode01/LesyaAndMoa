@@ -48,6 +48,7 @@
 
             <p
                 class="news-page__list"
+                :class="{ 'current-page': page === currentPage }"
                 v-for="page in pages"
                 :key="page"
                 @click="setCurrentPage(page)"
@@ -60,7 +61,7 @@
                 :disabled="currentPage * itemsPerPage >= totalItems"
             >
                 <img
-                    class="news-arrows"
+                    class="news-arrows arrow-news"
                     src="@app/assets/icons/arrows.svg"
                     alt=""
                 />
@@ -213,6 +214,10 @@ onMounted(() => {
 
 .news-arrow {
     transform: scale(-1, 1);
+    margin-right: 10px;
+}
+.arrow-news {
+    margin-left: 10px;
 }
 
 .news-pagination {
@@ -223,6 +228,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 .news-page__list {
     padding-bottom: 5px;
@@ -247,5 +253,8 @@ onMounted(() => {
 .news-list__data {
     font-size: 14px;
     color: #818181;
+}
+.current-page {
+    color: #0d47aa;
 }
 </style>
