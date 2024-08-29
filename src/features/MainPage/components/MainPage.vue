@@ -287,36 +287,13 @@
 
             <div class="arrows">
                 <img
-                    v-if="currentSlideAuthor > 0 && windowWidth < 768"
+                    v-if="currentSlideAuthor > 0"
                     @click="prev('carousel_authors')"
                     src="@app/assets/icons/arrow-left.svg"
                     alt="left"
                 />
                 <img
-                    v-if="
-                        currentSlideAuthor <
-                            slideAuthors.length - authorsToShow &&
-                        windowWidth < 768
-                    "
-                    @click="next('carousel_authors')"
-                    src="@app/assets/icons/icon-pink.svg"
-                    alt="right"
-                />
-            </div>
-
-            <div class="arrows">
-                <img
-                    v-if="currentSlideAuthor > 0 && windowWidth < 768"
-                    @click="prev('carousel_authors')"
-                    src="@app/assets/icons/arrow-left.svg"
-                    alt="left"
-                />
-                <img
-                    v-if="
-                        currentSlideAuthor <
-                            slideAuthors.length - authorsToShow &&
-                        windowWidth < 768
-                    "
+                    v-if="currentSlideAuthor < slideAuthors.length - authorsToShow"
                     @click="next('carousel_authors')"
                     src="@app/assets/icons/icon-pink.svg"
                     alt="right"
@@ -393,18 +370,15 @@
             alt="right"
         />
 
-        <div class="arrows">
+        <div class="arrows" v-if="windowWidth < 768">
             <img
-                v-if="currentSlide > 0 && windowWidth < 768"
+                v-if="currentSlide > 0"
                 @click="prev()"
                 src="@app/assets/icons/arrow-left.svg"
                 alt="left"
             />
             <img
-                v-if="
-                    currentSlide < slideItems.length - itemsToShow &&
-                    windowWidth < 768
-                "
+                v-if="currentSlide < slideItems.length - itemsToShow"
                 @click="next()"
                 src="@app/assets/icons/icon-pink.svg"
                 alt="right"
@@ -487,6 +461,7 @@ const prev = (carousel_name) => {
     if (carousel_name == 'carousel_authors') {
         carousel_authors.value.prev();
     } else {
+        carousel.value.prev(); 
     }
 };
 const cur_date = new Date();

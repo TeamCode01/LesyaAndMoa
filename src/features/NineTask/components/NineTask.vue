@@ -76,7 +76,7 @@
         text="Восхитительно!" @next="next()" v-else @hide="hide"></TaskResultBanner>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
@@ -273,6 +273,7 @@ onMounted(() => {
         '--scroll-position',
         `${scrollY}px`,
     );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
     console.log('game mount')
@@ -280,6 +281,7 @@ onMounted(() => {
 
 
 onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
     console.log('game unmount')
 });

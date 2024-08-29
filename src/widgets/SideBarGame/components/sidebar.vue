@@ -131,12 +131,12 @@ const tasks = ref([
     { id: 9, name: 'Задание 9', disabled: true, done: false, open: false, time: 30, end: false, img: 'task9.jpg', audio: 'Task9/299.9.mp3', startAudio: 'Task9/298.9.mp3' },
     { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 30, end: false, img: 'task10.jpg', audio: 'Task10/317.10.mp3', startAudio: 'Task10/316.10.mp3' },
     { id: 11, name: 'Задание 11', disabled: true, done: false, open: false, time: 35, end: false, img: 'task11.jpg', audio: 'Task11/330.11.mp3', startAudio: 'Task11/329.11.mp3' },
-    { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 35, end: false, img: 'task12.jpg', startAudio: 'Task12/349.12.mp3' },
+    { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 35, end: false, img: 'task12.jpg', audio: 'Task12/348.12.mp3', startAudio: 'Task12/349.12.mp3' },
     { id: 13, name: 'Задание 13', disabled: true, done: false, open: false, time: 30, end: false, img: 'task13.jpg', audio: 'Task13/370.13.mp3', startAudio: 'Task13/369.13.mp3' },
     { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false, img: 'task14.jpg', audio: 'Task14/379.14.mp3', startAudio: 'Task14/378.14_.mp3' },
     { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: 'task15.jpg', audio: 'Task15/390.15.mp3', startAudio: 'Task15/389.15.mp3' },
-    { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 60, end: false, img: 'task16.jpg', startAudio: 'Task16/427.16_.mp3' },
-    { id: 17, name: 'Задание 17', disabled: false, done: false, open: false, time: 30, end: false, img: 'task17.jpg', audio: 'Task17/454.17.mp3', startAudio: 'Task17/453.17.mp3' },
+    { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 60, end: false, img: 'task16.jpg', audio: 'Task16/428.16.mp3', startAudio: 'Task16/427.16_.mp3' },
+    { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: 'task17.jpg', audio: 'Task17/454.17.mp3', startAudio: 'Task17/453.17.mp3' },
     { id: 18, name: 'Задание 18', disabled: true, done: false, open: false, time: 120, end: false, img: 'task18.jpg', audio: 'Task18/471.18.mp3', startAudio: 'Task18/470.18_.mp3' },
 ])
 
@@ -332,7 +332,11 @@ onMounted(async () => {
     max-width: 280px;
     height: auto;
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1025px) {
+        max-width: 300px
+    }
+
+    @media (max-width: 1023px) {
         height: 387px;
         max-width: 212px;
     }
@@ -393,7 +397,7 @@ onMounted(async () => {
         padding: 8px 0;
         overflow-y: scroll;
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1023px) {
             height: 185px;
             padding: 0px;
         }

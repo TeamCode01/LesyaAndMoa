@@ -11,7 +11,9 @@
                         Верно соотнеси слово, его толкование и картинку.
                     </p>
                 </div>
-                <canvas @mousedown="engage" @mouseup="disengage" @mousemove="draw" @touchstart="engage" @touchend="disengage" @touchmove="draw" @click="voiceActing" ref="canvasRef"
+                <canvas @mousedown="engage" @mouseup="disengage" @mousemove="draw" 
+                        @touchstart="engage" @touchend="disengage" @touchmove="draw" 
+                        @click="voiceActing" ref="canvasRef"
                     class="canvas_draw"></canvas>
                 <div class="draggable-list">
                     <div class="draggable-list__words">
@@ -93,12 +95,14 @@ onMounted(() => {
         '--scroll-position',
         `${scrollY}px`,
     );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
     
     console.log('Компонент создан')
 })
 
 onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
     console.log('Компонент уничтожен')
 })
@@ -258,7 +262,7 @@ const sentences = ref({
         },
         4: {
             sentence: 'то же, что лошадь, вьючное животное',
-            audio: '/assets/audio/ask7/269.7.mp3',
+            audio: '/assets/audio/Task7/269.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -405,6 +409,8 @@ const voiceActing = () => {
             }
         }
     }
+
+    
     if (onBlock) {
         if (clickOnColumn == 1) {
 
@@ -522,6 +528,7 @@ const engage = (event) => {
     const pos = getCursorPosition(event);
     startIds = checkRowsAndColumnsIds(pos)
     const done = isDone(startIds.column, startIds.row);
+
     if (startIds.column && startIds.row && !done) {
         isDrawing.value = true;
         startCords.value.x = centralCords.value[startIds.column][startIds.row - 1].x;
@@ -617,6 +624,8 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             return false;
         }
     }
+
+    return true
 }
 
 const redrawCorrectRows = () => {
@@ -656,8 +665,8 @@ const disengage = (event) => {
         const pos = getCursorPosition(event);
         endIds = checkRowsAndColumnsIds(pos);
         if (endIds.column && endIds.row && endIds.column !== startIds.column) {
-            const correct = correctAnswer(startIds.column, startIds.row, endIds.column, endIds.row);
-            if (correct) {
+            const correctAns = correctAnswer(startIds.column, startIds.row, endIds.column, endIds.row);
+            if (correctAns) {
                 countAnswers.value++;
 
                 playAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
@@ -759,7 +768,10 @@ const redraw = () => {
 const resizeCanvas = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    redraw();
+    setTimeout(() => {
+        getCenterCords();
+        redraw(); 
+    }, 100);
 }
 
 const getCenterCords = () => {
@@ -811,14 +823,18 @@ const getCenterCords = () => {
 onMounted(() => {
     option.value = Math.floor(Math.random() * 2) + 1;
     canvas = canvasRef.value;
-    getCenterCords();
     ctx = canvas.getContext('2d');
     resizeCanvas();
     // redrawCorrectRows();
     window.addEventListener('resize', resizeCanvas);
-    const correct = getCorrectAnswer(7, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    try {
+        const correct = getCorrectAnswer(7, props.childId);
+        corrValue.value = correct.correctId;
+        is_correct.value = correct.is_correct;
+    }
+    catch (error) {
+        console.log(error);
+    }
 })
 </script>
 

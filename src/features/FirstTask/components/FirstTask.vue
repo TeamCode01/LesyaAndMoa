@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { HTTP } from '@app/http';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
@@ -228,6 +228,7 @@ onMounted(() => {
         `${scrollY}px`,
     );
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
 
     console.log('game mount')
 });
@@ -235,6 +236,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     console.log('game unmount')
 });
 

@@ -128,7 +128,7 @@
 
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, onBeforeUnmount } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
@@ -146,9 +146,14 @@ const corrValue = ref(0)
 const is_correct = ref(null)
 
 onMounted(async () => {
-    const correct = await getCorrectAnswer(8, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    try {
+        const correct = await getCorrectAnswer(8, props.childId);
+        corrValue.value = correct.correctId;
+        is_correct.value = correct.is_correct;
+    }
+    catch (error) {
+        console.log(error);
+    }
 })
 
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
@@ -307,7 +312,7 @@ const dropLetter = (event, id, isActive) => {
                         emit('correct');
                         emit('open');
                     }
-                    startGame.value = false;
+                    //startGame.value = false;
 
                     let audioPath_4 = new URL('/assets/audio/Task12/з.12 полн.текст Веселые ребята наши друзья.mp3', import.meta.url).href;
                     let audio = new Audio(audioPath_4);
@@ -385,6 +390,7 @@ onMounted(() => {
         '--scroll-position',
         `${scrollY}px`,
     );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
     console.log('game mount')
@@ -392,6 +398,7 @@ onMounted(() => {
 
 
 onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
     console.log('game unmount')
 });

@@ -91,13 +91,14 @@ onMounted(() => {
         `${scrollY}px`,
     );
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
-
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
 
     console.log('banner mount')
 });
 
 
 onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
     console.log('banner unmount')
 });

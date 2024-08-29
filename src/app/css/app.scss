@@ -214,7 +214,15 @@ title {
     &__close {
         right: 20px;
         top: 20px;
+        z-index: 1000;
         position: absolute;
         cursor: pointer;
     }
+}
+
+.no-scroll {
+    position: fixed;
+    top: var(--st, 0);
+    inline-size: 100%;
+    overflow-y: scroll;
 }
