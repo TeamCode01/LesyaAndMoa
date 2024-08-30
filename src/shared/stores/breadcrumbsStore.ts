@@ -61,7 +61,6 @@ export const useBreadcrumbsStore = defineStore('breadcrumbs', () => {
     watch(
         isHidden,
         (newIsHidden) => {
-            console.log('jid', isHidden.value);
             if (!newIsHidden) registerWatchForPageStore();
             else stopWatchForPageStore();
         },

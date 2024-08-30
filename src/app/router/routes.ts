@@ -12,6 +12,28 @@ const routes: RouteRecordRaw[] = [
 
         children: [
             {
+                path: '/game',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
+                children: [
+                    {
+                        path: ':idChildOrGroup',
+                        children: [
+                            {
+                                path: '',
+                                name: 'Game',
+                                component: () =>
+                                    import(
+                                        '@pages/StartGamePage/components/StartGamePage.vue'
+                                    ),
+                            }
+                        ]
+                    },
+                ]
+
+            },
+            {
                 path: '/about-project',
                 name: 'about-project',
                 component: () =>
@@ -121,6 +143,9 @@ const routes: RouteRecordRaw[] = [
             {
                 path: ':catchAll(.*)*',
                 name: '404',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
                 component: () =>
                     import('@pages/404Page/components/404Page.vue'),
             },
@@ -138,28 +163,8 @@ const routes: RouteRecordRaw[] = [
         ]
 
     },
-    {
-        path: '/game',
-        meta: {
-            hiddenBreadcrumbs: true,
-        },
-        children: [
-            {
-                path: ':idChildOrGroup',
-                children: [
-                    {
-                        path: '',
-                        name: 'Game',
-                        component: () =>
-                            import(
-                                '@pages/StartGamePage/components/StartGamePage.vue'
-                            ),
-                    }
-                ]
-            },
-        ]
 
-    },
+
 ];
 
 export default routes;

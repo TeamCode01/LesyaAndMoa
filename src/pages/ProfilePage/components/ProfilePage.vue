@@ -56,12 +56,12 @@
                         </template>
                     </v-progress-linear>
                 </div>
-                <RouterLink :to="{
+                <router-link :to="{
                     name: 'Game',
                     params: { idChildOrGroup: block.id },
                 }" class="router-link">
                     <Button label="Перейти к обучению" class="profile__btn"></Button>
-                </RouterLink>
+                </router-link>
             </div>
         </div>
         <modalWindow v-if="userStore.currentUser.tasks_type === 'индивидуальный'" label="Добавить ребёнка">
@@ -92,7 +92,7 @@
                                 :sorts-boolean="false" @update:value="changeOption" v-bind="props" />
                             <span v-if="isError.sex" class="error-message">{{
                                 isError.sex[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Возраст</label>
@@ -102,7 +102,7 @@
                             }" v-model:value="form.age"></Input>
                             <span v-if="isError.age" class="error-message">{{
                                 isError.age[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Регион</label>
@@ -112,7 +112,7 @@
                                 :sorts-boolean="false" @update:value="changeOption" />
                             <span v-if="isError.region" class="error-message">{{
                                 isError.region[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Школа</label>
@@ -122,7 +122,7 @@
                             }" v-model:value="form.school"></Input>
                             <span v-if="isError.school" class="error-message">{{
                                 isError.school[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Класс</label>
@@ -132,7 +132,7 @@
                             }" v-model:value="form.grade"></Input>
                             <span v-if="isError.grade" class="error-message">{{
                                 isError.grade[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="regCheck">
                             <input type="checkbox" v-model="form.attended_speech_therapist" />
@@ -228,7 +228,7 @@
                             }" v-model:value="formGroup.name" @blur="V$.name.$touch()"></Input>
                             <span v-if="isError.name" class="error-message">{{
                                 isError.name[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Количество учеников в группе</label>
@@ -255,7 +255,7 @@
                                 variant="outlined" :sorts-boolean="false" @update:value="changeOption" />
                             <span v-if="isError.region" class="error-message">{{
                                 isError.region[0]
-                                }}</span>
+                            }}</span>
                         </div>
                         <div class="form-input">
                             <label>Школа</label>
@@ -265,7 +265,7 @@
                             }" v-model:value="formGroup.school"></Input>
                             <span v-if="isError.school" class="error-message">{{
                                 isError.school[0]
-                                }}</span>
+                            }}</span>
                         </div>
                     </v-card-text>
 
