@@ -87,7 +87,7 @@
                         </template>
                     </v-progress-linear>
                 </div>
-                <RouterLink
+                <router-link
                     :to="{
                         name: 'Game',
                         params: { idChildOrGroup: block.id },
@@ -98,7 +98,7 @@
                         label="Перейти к обучению"
                         class="profile__btn"
                     ></Button>
-                </RouterLink>
+                </router-link>
             </div>
         </div>
         <modalWindow
