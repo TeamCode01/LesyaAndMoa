@@ -76,6 +76,7 @@ import { onActivated, ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useBreadcrumbsStore, usePageStore } from '@shared/index';
 import { storeToRefs } from 'pinia';
+import { onBeforeRouteLeave } from 'vue-router';
 
 const { toggleHideBreadcrumbs, setHideBreadcrumbs } = useBreadcrumbsStore();
 
@@ -177,8 +178,13 @@ onActivated(() => {
     toggleHideBreadcrumbs(true);
     setHideBreadcrumbs(false);
 });
+
+onBeforeRouteLeave(() => {
+    pages.value = [];
+    GetNews(currentPage === 1);
+});
 </script>
-<style scoped>
+<style scoped lang="scss">
 .news-h {
     margin-top: 80px;
     margin-bottom: 50px;
@@ -208,15 +214,22 @@ onActivated(() => {
 
 .news-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(380px, 380px));
     column-gap: 20px;
     row-gap: 40px;
     margin-bottom: 60px;
+    justify-content: center;
+    @media (max-width: 1024px) {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 300px));
+    }
 }
 
 .news-list__card {
     width: 387px;
     height: 100%;
+    @media (max-width: 1024px) {
+        width: 301px;
+    }
 }
 
 .news-list__card-img {

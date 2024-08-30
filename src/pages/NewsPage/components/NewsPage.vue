@@ -7,7 +7,7 @@
                     <p>{{ news.description }}</p>
                     <span class="news-data">{{
                         formatDate(news.created_at)
-                        }}</span>
+                    }}</span>
                 </div>
                 <div class="news-banner__img">
                     <img :src="news.image" alt="" />
@@ -17,7 +17,9 @@
                 <p>{{ news.description }}</p>
             </div>
             <div class="to-news-list">
-                <router-link class="to-news" :to="{ name: 'news' }">Смотреть все новости</router-link>
+                <router-link class="to-news" :to="{ name: 'news' }"
+                    >Смотреть все новости</router-link
+                >
             </div>
         </div>
     </div>
@@ -29,6 +31,7 @@ import { useRoute } from 'vue-router';
 import { usePage } from '@shared';
 import { useBreadcrumbsStore, usePageStore } from '@shared/index';
 import { storeToRefs } from 'pinia';
+import { onBeforeRouteLeave } from 'vue-router';
 
 const { toggleHideBreadcrumbs, setHideBreadcrumbs } = useBreadcrumbsStore();
 
@@ -78,28 +81,30 @@ watch(route.path, () => {
     console.log('route');
     toggleHideBreadcrumbs(true);
     setHideBreadcrumbs(false);
-})
-
+});
 
 onMounted(() => {
     toggleHideBreadcrumbs(true);
     setHideBreadcrumbs(false);
+});
 
-})
-
-const { hidden } = storeToRefs(useBreadcrumbsStore)
+const { hidden } = storeToRefs(useBreadcrumbsStore);
 
 watch(hidden, (newValue) => {
     if (!newValue) {
         toggleHideBreadcrumbs(true);
         setHideBreadcrumbs(false);
     }
-})
+});
 
 onActivated(() => {
     toggleHideBreadcrumbs(true);
     setHideBreadcrumbs(false);
-})
+});
+onBeforeRouteLeave(() => {
+    news.value = [];
+    GetNews();
+});
 </script>
 <style scoped>
 .news-banner {
