@@ -19,8 +19,8 @@
                         :group="{ name: 'letters', pull: 'clone', put: false }" :sort="false"
                         @choose="drag($event, item.name, item.id, index)">
                             <div class="list-group-item item" :id="item.id"
-                                @mouseover="playAudio(item.audio)"
-                                @mouseout="stopAudio(item.audio)" 
+                                @mouseenter="playAudio(item.audio)"
+                                @mouseout="stopAudio(item.audio)"
                                 @touchstart="playAudio(item.audio)"
                                 @touchcancel="stopAudio(item.audio)"
 
@@ -34,7 +34,7 @@
 
                         <div class="big-letters">
 
-                            <VueDraggableNext :group="{ name: 'big-letters', pull: false, put: true }" 
+                            <VueDraggableNext :group="{ name: 'big-letters', pull: false, put: true }"
                             :sort="false" v-for="i in 7" :key="i" @add="drop($event, 1, i)" ghost-class="none">
                                 <input type="text" class="input-item" />
                             </VueDraggableNext>
@@ -43,7 +43,7 @@
 
                         <div class="middle-letters">
 
-                            <VueDraggableNext :group="{ name: 'middle-letters', pull: false, put: true }" 
+                            <VueDraggableNext :group="{ name: 'middle-letters', pull: false, put: true }"
                             :sort="false" v-for="i in 6" :key="i" @add="drop($event, 2, i)" ghost-class="none">
                                 <input type="text" class="input-item" />
                             </VueDraggableNext>
@@ -52,7 +52,7 @@
 
                         <div class="pre-middle-letters">
 
-                            <VueDraggableNext :group="{ name: 'pre-middle-letters', pull: false, put: true }" 
+                            <VueDraggableNext :group="{ name: 'pre-middle-letters', pull: false, put: true }"
                             :sort="false" v-for="i in 5" :key="i" @add="drop($event, 3, i)" ghost-class="none">
                                 <input type="text" class="input-item" />
                             </VueDraggableNext>
@@ -61,7 +61,7 @@
 
                         <div class="small-letters">
 
-                            <VueDraggableNext :group="{ name: 'small-letters', pull: false, put: true }" 
+                            <VueDraggableNext :group="{ name: 'small-letters', pull: false, put: true }"
                             :sort="false" v-for="i in 3" :key="i" @add="drop($event, 4, i)" ghost-class="none">
                                 <input type="text" class="input-item" />
                             </VueDraggableNext>
@@ -76,7 +76,7 @@
         text="Восхитительно!" @next="next()" v-else @hide="hide"></TaskResultBanner>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
@@ -117,7 +117,7 @@ const getImageUrl = (path) => {
 };
 
 const audio = ref(new Audio());
-const is_correct = ref(null);
+const is_correct = ref(false);
 
 const playAudio = async (audioPath) => {
     audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
@@ -135,7 +135,7 @@ const playEndAudio = (audioPath) => {
 
 const stopAudio = (audioPath) => {
     if (audio.value.paused) {
-        playAudio(audioPath);
+        //playAudio(audioPath);
     } else {
         audio.value.pause();
     }
@@ -240,7 +240,8 @@ const drop = (event, word, letter) => {
                     emit('open')
                 }
                 endGame.value = true;
-            }, 1500)
+                playAudio('Task9/315.9_.mp3')
+            }, 1000)
         }
     } else {
         elem.classList.add('red');
@@ -256,11 +257,36 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(() => {
-    const correct = getCorrectAnswer(9, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+onMounted(async() => {
+    try {
+        const correct = await getCorrectAnswer(9, props.childId);
+        corrValue.value = correct.correctId;
+        is_correct.value = correct.is_correct;
+    }
+    catch (error) {
+        console.log(error);
+    }
 })
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 <style lang="scss" scoped>
 * {
@@ -270,6 +296,11 @@ onMounted(() => {
 .end-modal {
     width: 1200px;
     height: 600px;
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .input {
@@ -287,11 +318,13 @@ onMounted(() => {
     &-group {
         display: flex;
         flex-wrap: wrap;
+        position: fixed;
         max-width: 348px;
-
         justify-content: center;
         margin: 0px auto;
-
+        top: 60%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         column-gap: 2px;
         row-gap: 20px;
     }
@@ -336,6 +369,8 @@ onMounted(() => {
     justify-content: center;
     column-gap: 2px;
     margin-bottom: 50px;
+
+    height: 50px;
 }
 
 .item {
@@ -690,7 +725,7 @@ onMounted(() => {
     line-height: 25px;
 }
 
-.hidden {  
+.hidden {
     opacity: 0%;
 }
 

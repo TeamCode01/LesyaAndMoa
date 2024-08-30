@@ -45,16 +45,16 @@
                                 v-for="word in row" :key="word.id">
 
                                 <div
-                                    @mouseenter="() => {if (word.isActive) { playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)}}" 
-                                    :ref="(el) => { refPuzzles[word.id - 1] = el}" 
+                                    @mouseenter="() => {if (word.isActive) { playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)}}"
+                                    :ref="(el) => { refPuzzles[word.id - 1] = el}"
                                     draggable="false">
-                                    <img :src="word.error == 0 ? word.src : word.error == 1 ? word.srcRight : word.srcError" :alt="word.class"  draggable="false" 
+                                    <img :src="word.error == 0 ? word.src : word.error == 1 ? word.srcRight : word.srcError" :alt="word.class"  draggable="false"
                                     :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" />
                                 </div>
 
 
                             </VueDraggableNext>
-                            
+
                         </div>
                     </div>
 
@@ -86,7 +86,7 @@
                 </div>
             </template>
             <TaskResultBanner :img="getImageUrl('Cup.png')" :bg="getImageUrl('lesya.gif')" text="Потрясающе!"
-                v-if="!startGame" @next="next()" @hide="hide()"></TaskResultBanner>
+                v-if="!startGame" @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -103,8 +103,6 @@ import {
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-
-import DragndropComponent from './DragndropComponent.vue';
 
 import { dataFirstTask, dataSecondTask } from './task.js';
 import audioMap from './audioMap'
@@ -139,7 +137,7 @@ const next = () => {
 const dragIdPuzzle = ref()
 
 const audio = ref(new Audio());
-const is_correct = ref(null);
+const is_correct = ref(false);
 const is_started = ref(null);
 const corrValue = ref(0);
 const playAudio = (audioPath) => {
@@ -183,13 +181,16 @@ const drag = (event, word) => {
 }
 
 const drop = (event, word) => {
-    
+
     console.log('drop', event)
     let dragElem = event.item
     event.to.removeChild(event.item)
 
     if (event.to.dataset['isActive'] == 'false') {
-        console.log(event.from)
+        console.log('event')
+        console.log(event.to)
+        console.log(event.to.dataset)
+        event.from.dataset['isActive'] = 'true'
         event.from.appendChild(dragElem)
         return
     }
@@ -247,6 +248,9 @@ const drop = (event, word) => {
 
         event.from.children[0].children[0].src = dragSrcError;
         event.to.children[0].children[0].src = word.srcError
+
+        event.to.dataset['isActive'] = 'true'
+        event.from.dataset['isActive'] = 'true'
 
         setTimeout(()=>{
             event.from.children[0].children[0].src = dragSrc;
@@ -631,9 +635,14 @@ const finalDraw = () => {
 
 onMounted(async () => {
     canvas = canvasRef.value;
-    const correct = getCorrectAnswer(17, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    try {
+        const correct = await getCorrectAnswer(17, props.childId);
+        corrValue.value = correct.correctId;
+        is_correct.value = correct.is_correct;
+    }
+    catch (error) {
+        console.log(error);
+    }
     ctx = canvas.getContext('2d');
     await resizeCanvas();
     console.log('компонент создан')
@@ -651,12 +660,44 @@ onBeforeUnmount(() => {
 watch(endFirstTask, () => {
     canvas.removeAttribute('style');
 });
+
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 
 
 <style lang="scss" scoped>
 * {
     user-select: none;
+}
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
+
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .SeventeenthTask {

@@ -14,7 +14,7 @@
                 <div class="draggable-list">
                     <div class="draggable-list__items">
                         <div class="draggable-list__item" v-for="row in taskData" :key="row">
-                            <VueDraggableNext v-for="word in row" :key="word.text" 
+                            <VueDraggableNext v-for="word in row" :key="word.text"
                             :group="(word.x == 0 || word.y == 0) ? { name: 'words', pull: false, put: false } : { name: 'words', pull: 'clone', put: false }" :sort="false"
                             @choose="($event)=>{drag($event, word)}" ghost-class="block" :drag-class="`${(word.x == 0 || word.y == 0) ? 'hidden' : 'block'}`" data-is-active='true'>
                                 <div class="draggable-list__button" :class="{
@@ -39,13 +39,13 @@
                                 <VueDraggableNext v-for="letter in word.data" :key="letter" :group="{ name: 'speakers', pull: false, put: true }" :sort="false"
                                 @add = "dropLetter($event, letter)" :ghost-class="'none'" >
 
-                                    <div class="task_block__letter" 
+                                    <div class="task_block__letter"
                                     :class="{ task_block__letter_active: letter.isActive}">
                                     {{ letter.text }}
                                 </div>
 
                                 </VueDraggableNext>
-                                
+
                                 <img class="comma" src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="
                                     [18].includes(word.data.slice(-1)[0].id) &&
                                     word.data.slice(-1)[0].isActive
@@ -63,13 +63,13 @@
                 </div>
             </template>
             <TaskResultBanner :img="getImageUrl('king.png')" :bg="getImageUrl('lesya.gif')" text="Блестяще!"
-                v-if="answersCounter == 26" @next="next()" @hide="hide()"></TaskResultBanner>
+                v-if="answersCounter == 26" @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
@@ -78,18 +78,15 @@ import { tasksData } from './tasks.js';
 import audioMap from './dict.js'
 
 import gameActions from '@mixins/gameAction';
+import { tr } from 'vuetify/lib/locale/index.mjs';
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 
-onMounted(() => {
-    const correct = getCorrectAnswer(15, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-});
+
 
 const corrValue = ref(0)
-const is_correct = ref(null)
+const is_correct = ref(false)
 
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
@@ -199,7 +196,9 @@ const dropLetter = (event, letter) => {
             );
 
             answersCounter.value += 1;
-            event.target.classList.add('task_block__letter_right');
+            setTimeout(() => {
+                event.target.children[0].classList.add('task_block__letter_right');
+            }, 1)
             let reactionAudioSrc = new URL(
                 `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
             let reactionAudio = new Audio(
@@ -208,7 +207,7 @@ const dropLetter = (event, letter) => {
             reactionAudio.play();
 
             setTimeout(() => {
-                event.target.classList.remove('task_block__letter_right');
+                event.target.children[0].classList.remove('task_block__letter_right');
 
                 if (answersCounter.value == 26) {
                     setTimeout(() => {
@@ -225,7 +224,7 @@ const dropLetter = (event, letter) => {
 
             }, 2000);
         } else {
-            event.target.classList.add('task_block__letter_wrong');
+            event.target.children[0].classList.add('task_block__letter_wrong');
 
             let reactionAudioSrc = new URL(
                 `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
@@ -235,15 +234,57 @@ const dropLetter = (event, letter) => {
             reactionAudio.play();
 
             setTimeout(() => {
-                event.target.classList.remove('task_block__letter_wrong');
+                event.target.children[0].classList.remove('task_block__letter_wrong');
             }, 2000);
         }
     }
 };
+
+onMounted(async() => {
+    try {
+        const correct = await getCorrectAnswer(15, props.childId);
+        corrValue.value = correct.correctId;
+        is_correct.value = correct.is_correct;
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 <style lang="scss" scoped>
 * {
     user-select: none;
+}
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
+
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .draggable-list {

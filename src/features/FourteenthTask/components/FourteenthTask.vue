@@ -18,29 +18,29 @@
 
                             <VueDraggableNext  v-for="word in Task[0]" :key="word.id" :group="{ name: 'words', pull: 'clone', put: false }" :sort="false"
                             @choose="($event)=>{if (blockIsActive($event.from)) drag($event, word)}" ghost-class="hidden" :drag-class="'block'" data-is-active='true'>
-                                
+
                                 <div class="draggable-list__word"
                                 :class="{ 'item_right': word.error == 1, 'item_wrong': word.error == -1 }"
                                 :id="`draggable-list__word${word.id}`"
                                 data-answer="true"
-                                @mouseenter="($event)=>{if (blockIsActive($event.target.parentElement)) checkAndPlayAudio(word.audio)}" 
+                                @mouseenter="($event)=>{if (blockIsActive($event.target.parentElement)) checkAndPlayAudio(word.audio)}"
                                 @touchstart="($event)=>{if (blockIsActive($event.target.parentElement)) checkAndPlayAudio(word.audio)}">
                                 {{ word.text }}
                             </div>
 
                             </VueDraggableNext>
 
-                            
+
                         </div>
                         <div class="draggable-list__speakers">
-                            
+
                             <VueDraggableNext v-for="sound in Task[1]" :key="sound.id" :group="{ name: 'speakers', pull: 'clone', put: false }" :sort="false"
                             @choose="($event)=>{if (blockIsActive($event.from)) drag($event, sound)}" :ghost-class="'hidden'" :drag-class="'block'" data-is-active='true'>
                                 <div class="draggable-list__speaker"
                                 :class="{ 'item_right': sound.error == 1, 'item_wrong': sound.error == -1 }"
-                                @mouseenter="($event)=>{if (blockIsActive($event.target.parentElement)) checkAndPlayAudio(sound.audio)}" 
+                                @mouseenter="($event)=>{if (blockIsActive($event.target.parentElement)) checkAndPlayAudio(sound.audio)}"
                                 @touchstart="($event)=>{if (blockIsActive($event.target.parentElement)) checkAndPlayAudio(sound.audio)}">
-                        
+
                                 <img src="/assets/icons/speaker-violet.svg" alt="speaker" class="speaker"
                                         :draggable="sound.isActive" />
                                 </div>
@@ -52,13 +52,13 @@
                         <div class="draggable-list__answer" v-for="answer in Answer" :key="answer">
                             <img :src="getPictureUrl(answer.img)" alt="lesyaandmoa" class="lesyaandmoa" />
                             <div class="draggable-list__subanswer">
-                                
+
                                 <VueDraggableNext :group="{ name: 'word', pull: false, put: true }" :sort="false"
                                 @add = "drop($event, 'word', answer.id)" :ghost-class="'none'">
 
                                     <div class="draggable-list__word"
                                     :class="{ 'item_right': answer.word.error == 1, 'item_wrong': answer.word.error == -1 }"
-                                    :id="`${answer.id == 1 ? 'draggable-list__word1' : 'draggable-list__word5'}`" 
+                                    :id="`${answer.id == 1 ? 'draggable-list__word1' : 'draggable-list__word5'}`"
                                     :data-id="answer.id" :data-type="answer.type">
                                     {{ answer.word.isActive ? answer.word.text : "" }}
 
@@ -67,7 +67,7 @@
                                 </VueDraggableNext>
 
                                 <VueDraggableNext :group="{ name: 'speakers', pull: false, put: true }" :sort="false"
-                                @add = "drop($event, 'sound', answer.id)" :ghost-class="'none'" 
+                                @add = "drop($event, 'sound', answer.id)" :ghost-class="'none'"
                                 >
 
                                     <div class="draggable-list__speaker"
@@ -85,18 +85,17 @@
             </template>
             <TaskResultBanner :bg="getImageUrl('moa.gif')" text="Друзья заметили, что письменная б (БЭ), которая звучит,
             как [б] или [б'] похожа на белку с поднятым хвостом. В слове «белка» звучит [б']. А письменная д, которая звучит, как [д] или [д'], похожа на дятла,
-            у которого хвостик вниз. В слове «дятел» звучит [д']." v-else @next="next()" @hide="hide()">
+            у которого хвостик вниз. В слове «дятел» звучит [д']." v-else @next="next()" @hide="hide()" class="end-modal">
             </TaskResultBanner>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
-import DragndropComponent from './DragndropComponent.vue';
 
 import { dataTask, dataAnswer } from './task';
 import draggable from 'vuedraggable';
@@ -106,14 +105,10 @@ import gameActions from '@mixins/gameAction';
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 
-onMounted(() => {
-    const correct = getCorrectAnswer(14, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-});
+
 
 const corrValue = ref(0)
-const is_correct = ref(null)
+const is_correct = ref(false)
 
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
@@ -185,7 +180,7 @@ const drop = (event, type, id) => {
 
     console.log(elem, type, id)
 
-    if (elem.type != type) return 
+    if (elem.type != type) return
 
     if (elem.answer == id){
         if (elem.type == 'word') event.to.children[0].innerHTML = elem.text
@@ -198,7 +193,7 @@ const drop = (event, type, id) => {
         let reactionAudio_path = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
         let reactionAudio = new Audio(reactionAudio_path);
         reactionAudio.play();
-        
+
         setTimeout(() => {
             event.to.children[0].classList.remove('item_right')
             answersCounter.value += 1
@@ -223,18 +218,17 @@ const drop = (event, type, id) => {
         let reactionAudio_path = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
         let reactionAudio = new Audio(reactionAudio_path);
         reactionAudio.play();
-        
+
         setTimeout(() => {
             event.from.children[0].classList.remove('item_wrong')
-        }, 2000)    
+        }, 2000)
     }
 
 
-    
+
 }
 
 const blockIsActive = (block) => {
-    console.log(block)
     return block.dataset['isActive'] == 'true'
 }
 
@@ -249,11 +243,48 @@ const playAudio = (audioPath) => {
         audio.value.play();
     }
 }
+
+onMounted(async() => {
+    const correct = await getCorrectAnswer(14, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+});
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 
 <style lang="scss" scoped>
 * {
     user-select: none;
+}
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
+
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .FourteenthTask {

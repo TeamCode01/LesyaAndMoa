@@ -19,7 +19,7 @@
                             <div class="draggable-list__letters" :id="'letters-' + wordid"
                                 v-for="{ wordid, word } in string" :key="wordid">
 
-                                <VueDraggableNext v-for="letter in word" :key="letter.id" class="letter_wrapper" 
+                                <VueDraggableNext v-for="letter in word" :key="letter.id" class="letter_wrapper"
                                 :group="{ name: 'words', pull: 'clone', put: false }" :sort="false"
                                 @choose="dragLetter($event, wordid, letter.id)" :ghost-class="'hidden'" :drag-class="'block'">
 
@@ -56,13 +56,13 @@
                     class="task_block__wrapper_answer" />
             </template>
             <TaskResultBanner :img="getImageUrl('Diamond.png')" :bg="getImageUrl('moa.gif')" text="Изумительно!"
-                v-if="answersCounter >= 55" @hide="hide()" @next="next()"></TaskResultBanner>
+                v-if="answersCounter >= 55" @hide="hide()" @next="next()" class="end-modal"></TaskResultBanner>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch, onBeforeUnmount } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
@@ -96,7 +96,7 @@ const next = () => {
 }
 
 const isActive = true;
-const is_correct = ref(null);
+const is_correct = ref(false);
 const is_started = ref(null);
 const corrValue = ref(0);
 
@@ -242,16 +242,47 @@ const resetTask = () => {
     answersCounter.value = 0;
 };
 
-onMounted(() => {
-    const correct = getCorrectAnswer(16, props.childId);
+onMounted(async() => {
+    const correct = await getCorrectAnswer(16, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 });
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 
 <style lang="scss" scoped>
 * {
     user-select: none;
+}
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
+
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .SixteenthTask {

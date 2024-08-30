@@ -14,12 +14,12 @@
 
                 <div class="draggable-list__wrapper">
                     <div class="draggable-list">
-                        <VueDraggableNext tag="div" :group="{ name: 'words', pull: 'clone', put: false }" :sort="false" v-for="(item, index) in words" :key="item.id" 
+                        <VueDraggableNext tag="div" :group="{ name: 'words', pull: 'clone', put: false }" :sort="false" v-for="(item, index) in words" :key="item.id"
                             @mouseenter="playAudio(item.audio)"
-                            @mouseout="stopAudio(item.audio)" 
+                            @mouseout="stopAudio(item.audio)"
                             @touchstart="playAudio(item.audio)"
                             @touchcancel="stopAudio(item.audio)"
-                            
+
 
                             @choose="()=>{ drag( item.name, item.id, index)}"
                             >
@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { HTTP } from '@app/http';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
@@ -67,7 +67,7 @@ const props = defineProps({
     }
 });
 const endGame = ref(false);
-const is_correct = ref(null);
+const is_correct = ref(false);
 const hide = () => {
     emit('close');
     endGame.value = true;
@@ -205,14 +205,16 @@ const drop = (event) => {
                 emit('open');
             }
             endGame.value = true;
-        }, 2000)
+            playAudio('Task1/23.1_.mp3');
+        }, 1000)
     }
 
-   
+
 };
 
-onMounted(() => {
-    const correct = getCorrectAnswer(1, props.childId);
+onMounted(async() => {
+    const correct = await getCorrectAnswer(1, props.childId);
+    console.log(correct);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
@@ -220,6 +222,25 @@ onMounted(() => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    console.log('game unmount')
+});
 
 
 </script>
@@ -231,6 +252,11 @@ const allowDrop = (event) => {
 .end-modal {
     width: 1200px;
     height: 600px;
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .draggable-list {
@@ -277,6 +303,8 @@ const allowDrop = (event) => {
         padding: 30px 60px 67px 60px;
         position: relative;
         height: 600px;
+
+        align-items: center;
 
         @media (max-width: 1024px) {
             padding: 30px 20px 43px 20px;

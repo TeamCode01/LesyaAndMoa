@@ -15,46 +15,48 @@
                 </div>
                 <div class="draggable-list">
                     <div class="list-group ThirdTask__wrapper_block">
-                        <VueDraggableNext v-for="(item, index) in letters" :key="index"  @choose="drag($event, item.name, item.id, index) "
+                        <VueDraggableNext v-for="(item, index) in letters" :key="index"
+                            @choose="drag($event, item.name, item.id, index)"
                             :group="{ name: 'words', pull: 'clone', put: false }" :sort="false"
-                            @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)" 
+                            @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
                             @touchstart="playAudio(item.audio)" @touchcancel="stopAudio(item.audio)">
-                            <div :id="item.id + '_elem'"
-                                class="list-group-item item" 
-                                :value="item.name">
-                                    {{ item.name }}
+                            <div :id="item.id + '_elem'" class="list-group-item item" :value="item.name">
+                                {{ item.name }}
                             </div>
                         </VueDraggableNext>
                     </div>
                 </div>
                 <div class="ThirdTask__answer">
-                    <VueDraggableNext class="box" id="box" @mouseenter="playAudio('Task3/32.3_слово.mp3')" @add="drop($event, 0)"
-                        :group="{ name: 'box', pull: false, put: true }" :sort="false" ghost-class="none" draggable="false">
+                    <VueDraggableNext class="box" id="box" @mouseenter="playAudio('Task3/32.3_слово.mp3')"
+                        @add="drop($event, 0)" :group="{ name: 'box', pull: false, put: true }" :sort="false"
+                        ghost-class="none" draggable="false">
                         <div class="letter__item" v-for="item in array">
                             {{ item }}
                         </div>
                     </VueDraggableNext>
-                    <VueDraggableNext class="box2" id="box2" @mouseover="playAudio('Task3/32.3_вариант.mp3')" @add="drop($event, 1)"
-                        :group="{ name: 'box2', pull: false, put: true }" :sort="false" ghost-class="none" draggable="false">
+                    <VueDraggableNext class="box2" id="box2" @mouseover="playAudio('Task3/32.3_вариант.mp3')"
+                        @add="drop($event, 1)" :group="{ name: 'box2', pull: false, put: true }" :sort="false"
+                        ghost-class="none" draggable="false">
                         <div class="letter__item" v-for="item in array_two">
                             {{ item }}
                         </div>
                     </VueDraggableNext>
-                    <VueDraggableNext class="box3" id="box3" @mouseover="playAudio('Task3/33.3.mp3')" @add="drop($event, 2)"
-                        :group="{ name: 'box3', pull: false, put: true }" :sort="false" ghost-class="none" draggable="false">
+                    <VueDraggableNext class="box3" id="box3" @mouseover="playAudio('Task3/33.3.mp3')"
+                        @add="drop($event, 2)" :group="{ name: 'box3', pull: false, put: true }" :sort="false"
+                        ghost-class="none" draggable="false">
                         <div class="letter__item" v-for="item in array_three">
                             {{ item }}
                         </div>
                     </VueDraggableNext>
                 </div>
             </template>
-            <TaskResultBanner :img="getImageUrl('king.png')" :bg="getImageUrl('lesya.gif')"
-                text="Великолепно!" v-else @next="next()" @hide="hide" class="end-modal"></TaskResultBanner>
+            <TaskResultBanner :img="getImageUrl('king.png')" :bg="getImageUrl('lesya.gif')" text="Великолепно!" v-else
+                @next="next()" @hide="hide" class="end-modal"></TaskResultBanner>
         </div>
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 import { VueDraggableNext } from 'vue-draggable-next';
 
@@ -92,11 +94,10 @@ const props = defineProps({
 });
 
 
-const is_correct = ref(null);
-const is_started = ref(null);
+const is_correct = ref(false);
 
 const getImageUrl = (path) => {
-  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
 
@@ -175,10 +176,10 @@ const drop = (event, index) => {
 
 
         Array.from(event.from.children).forEach(element => {
-            if (element.id == id+'_elem') event.from.removeChild(element)
+            if (element.id == id + '_elem') event.from.removeChild(element)
         })
 
-        
+
 
     } else if (array_two_result.value.find((item) => item.name === letter) && index === 1) {
         // elem.classList.add('green');
@@ -190,7 +191,7 @@ const drop = (event, index) => {
 
 
         Array.from(event.from.children).forEach(element => {
-            if (element.id == id+'_elem') event.from.removeChild(element)
+            if (element.id == id + '_elem') event.from.removeChild(element)
         })
 
 
@@ -205,7 +206,7 @@ const drop = (event, index) => {
         //letters.value.splice(dropIndex.value, 1)
 
         Array.from(event.from.children).forEach(element => {
-            if (element.id == id+'_elem') event.from.removeChild(element)
+            if (element.id == id + '_elem') event.from.removeChild(element)
         })
 
 
@@ -223,33 +224,48 @@ const drop = (event, index) => {
         return false;
     }
 
-
-    
-
     if (array.value.length === array_result.value.length && array_two.value.length === array_two_result.value.length && array_three.value.length === array_three_result.value.length) {
-
-        if (is_correct.value === false) {
-            endGameRequest(props.childId, corrValue.value);
-            emit('correct');
-            emit('open');
-        }
         setTimeout(() => {
+            if (is_correct.value === false) {
+                endGameRequest(props.childId, corrValue.value);
+                emit('correct');
+                emit('open');
+            }
             endGame.value = true;
-        }, 1500)
+            playAudio('Task3/43.3_.mp3');
+        }, 1000)
     }
-
-
 };
 
 const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(() => {
-    const correct = getCorrectAnswer(3, props.childId);
+onMounted(async () => {
+    const correct = await getCorrectAnswer(3, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 <style lang="scss" scoped>
 * {
@@ -259,6 +275,11 @@ onMounted(() => {
 .end-modal {
     width: 1200px;
     height: 600px;
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .box {
@@ -276,6 +297,7 @@ onMounted(() => {
         height: 186px;
     }
 }
+
 
 .box2 {
     background-image: url('@app/assets/creatures/box2.png');
@@ -314,6 +336,11 @@ onMounted(() => {
         display: flex;
         justify-content: center;
         column-gap: 50px;
+        padding-top: 88px;
+        position: fixed;
+        bottom: 70px;
+        left: 50%;
+        transform: translate(-50%);
 
         @media (max-width: 1024px) {
             column-gap: 25px;
@@ -333,15 +360,19 @@ onMounted(() => {
             justify-content: center;
             column-gap: 40px;
             margin-top: 60px;
-            margin-bottom: 88px;
+
 
             @media (max-width: 1024px) {
                 margin-top: 32px;
-                margin-bottom: 64px;
+                // margin-bottom: 64px;
             }
         }
     }
 }
+
+// .draggable-list {
+//     margin-bottom: 88px;
+// }
 
 .item {
     background-color: $lightPink;
@@ -354,6 +385,7 @@ onMounted(() => {
     border-radius: 6px;
     border: none;
     cursor: pointer;
+    max-height: 54px;
 
 }
 

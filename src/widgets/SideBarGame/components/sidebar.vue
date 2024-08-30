@@ -15,64 +15,57 @@
             </div>
             <div class="modal_background" v-if="SeeTask">
                 <FirstTask :childId="props.childId" :finish="finish" :end="endTime" @close="close()"
-                    @correct="checkCorrect(1)" @open="checkOpen(2)"
-                    @next-modal="next(2, '../assets/audio/Task2/25.2.mp3')" v-if="taskId === 1">
+                    @correct="checkCorrect(1)" @open="checkOpen(2)" @next-modal="next(2, 'Task2/25.2.mp3')"
+                    v-if="taskId === 1">
                 </FirstTask>
                 <SecondTask @correct="checkCorrect(2)" :childId="props.childId" :finish="finish" :end="endTime"
-                    @close="close()" @open="checkOpen(3)" @next-modal="next(3, '../assets/audio/Task3/31.3.mp3')"
-                    v-if="taskId === 2">
+                    @close="close()" @open="checkOpen(3)" @next-modal="next(3, 'Task3/31.3.mp3')" v-if="taskId === 2">
                 </SecondTask>
                 <ThirdTask @correct="checkCorrect(3)" :childId="props.childId" :finish="finish" :end="endTime"
-                    @close="close()" @open="checkOpen(4)" @next-modal="next(4, '../assets/audio/Task4/45.4.mp3')"
-                    v-if="taskId === 3">
+                    @close="close()" @open="checkOpen(4)" @next-modal="next(4, 'Task4/45.4.mp3')" v-if="taskId === 3">
                 </ThirdTask>
                 <FourthTask @correct="checkCorrect(4)" @open="checkOpen(5)" :end="endTime" :childId="props.childId"
-                    @close="close()" @next-modal="next(5, '../assets/audio/Task5/62.5.mp3')" v-if="taskId === 4">
+                    @close="close()" @next-modal="next(5, 'Task5/62.5.mp3')" v-if="taskId === 4">
                 </FourthTask>
                 <FifthTask @correct="checkCorrect(5)" @open="checkOpen(6)" :end="endTime" :childId="props.childId"
-                    @close="close()" @next-modal="next(6, '../assets/audio/Task6/79.6.mp3')" v-if="taskId === 5">
+                    @close="close()" @next-modal="next(6, 'Task6/79.6.mp3')" v-if="taskId === 5">
                 </FifthTask>
                 <SixTask @correct="checkCorrect(6)" @open="checkOpen(7)" :end="endTime" :childId="props.childId"
-                    @close="close()" @next-modal="next(7, '../assets/audio/Task7/261.7_.mp3')" v-if="taskId === 6">
+                    @close="close()" @next-modal="next(7, 'Task7/261.7_.mp3')" v-if="taskId === 6">
                 </SixTask>
                 <SeventhTask @correct="checkCorrect(7)" @open="checkOpen(8)" :childId="props.childId" :end="endTime"
-                    @close="close()" @next-modal="next(8, '../assets/audio/Task8/280.8.mp3')" v-if="taskId === 7">
+                    @close="close()" @next-modal="next(8, 'Task8/280.8.mp3')" v-if="taskId === 7">
                 </SeventhTask>
                 <EighthTask @correct="checkCorrect(8)" @open="checkOpen(9)" :childId="props.childId" :end="endTime"
-                    @close="close()" @next-modal="next(9, '../assets/audio/Task9/299.9.mp3')" v-if="taskId === 8">
+                    @close="close()" @next-modal="next(9, 'Task9/299.9.mp3')" v-if="taskId === 8">
                 </EighthTask>
                 <NineTask @correct="checkCorrect(9)" @open="checkOpen(10)" :childId="props.childId" :finish="finish"
-                    :end="endTime" @close="close()" @next-modal="next(10, '../assets/audio/Task10/317.10.mp3')"
-                    v-if="taskId === 9">
+                    :end="endTime" @close="close()" @next-modal="next(10, 'Task10/317.10.mp3')" v-if="taskId === 9">
                 </NineTask>
                 <TenthTask @correct="checkCorrect(10)" @open="checkOpen(11)" :childId="props.childId" :finish="finish"
-                    :end="endTime" @close="close()" @next-modal="next(11, '../assets/audio/Task11/330.11.mp3')"
-                    v-if="taskId === 10">
+                    :end="endTime" @close="close()" @next-modal="next(11, 'Task11/330.11.mp3')" v-if="taskId === 10">
                 </TenthTask>
                 <ElevenTask @correct="checkCorrect(11)" @open="checkOpen(12)" :childId="props.childId" :finish="finish"
-                    :end="endTime" @close="close()" @next-modal="next(12, '../assets/audio/Task12/349.12.mp3')"
-                    v-if="taskId === 11">
+                    :end="endTime" @close="close()" @next-modal="next(12, 'Task12/349.12.mp3')" v-if="taskId === 11">
                 </ElevenTask>
                 <TwelfthTask @correct="checkCorrect(12)" @open="checkOpen(13)" :childId="props.childId" :end="endTime"
-                    @close="close()" @next-modal="next(13, '../assets/audio/Task13/370.13.mp3')" v-if="taskId === 12">
+                    @close="close()" @next-modal="next(13, 'Task13/370.13.mp3')" v-if="taskId === 12">
                 </TwelfthTask>
                 <ThirteenthTask @correct="checkCorrect(13)" @open="checkOpen(14)" :childId="props.childId"
-                    :finish="finish" :end="endTime" @close="close()"
-                    @next-modal="next(14, '../assets/audio/Task14/379.14.mp3')" v-if="taskId === 13">
+                    :finish="finish" :end="endTime" @close="close()" @next-modal="next(14, 'Task14/379.14.mp3')"
+                    v-if="taskId === 13">
                 </ThirteenthTask>
                 <FourteenthTask @correct="checkCorrect(14)" @open="checkOpen(15)" :childId="props.childId"
-                    :end="endTime" @close="close()" @next-modal="next(15, '../assets/audio/Task15/390.15.mp3')"
-                    v-if="taskId === 14">
+                    :end="endTime" @close="close()" @next-modal="next(15, 'Task15/390.15.mp3')" v-if="taskId === 14">
                 </FourteenthTask>
                 <FifteenTask @correct="checkCorrect(15)" @open="checkOpen(16)" :childId="props.childId" :end="endTime"
-                    @close="close()" @next-modal="next(16, '../assets/audio/Task16/427.16_.mp3')" v-if="taskId === 15">
+                    @close="close()" @next-modal="next(16, 'Task16/427.16_.mp3')" v-if="taskId === 15">
                 </FifteenTask>
                 <SixteenthTask @correct="checkCorrect(16)" @open="checkOpen(17)" :childId="props.childId" :end="endTime"
-                    @close="close()" @next-modal="next(17, '../assets/audio/Task17/454.17.mp3')" v-if="taskId === 16">
+                    @close="close()" @next-modal="next(17, 'Task17/454.17.mp3')" v-if="taskId === 16">
                 </SixteenthTask>
                 <SeventeenthTask @correct="checkCorrect(17)" @open="checkOpen(18)" :childId="props.childId"
-                    :end="endTime" @close="close()" @next-modal="next(18, '../assets/audio/Task18/471.18.mp3')"
-                    v-if="taskId === 17">
+                    :end="endTime" @close="close()" @next-modal="next(18, 'Task18/471.18.mp3')" v-if="taskId === 17">
                 </SeventeenthTask>
                 <EighteenTask @correct="checkCorrect(18)" :childId="props.childId" :end="endTime" @close="close()"
                     v-if="taskId === 18">
@@ -108,6 +101,7 @@ import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 import { TwelfthTask } from '@features/TwelfthTask';
 import { useAnswerStore } from '@layouts/stores/answers';
+import { useRoute } from 'vue-router';
 
 const emit = defineEmits(['sendImg', 'sendAudio', 'sendId', 'show', 'startTask', 'hand']);
 const props = defineProps({
@@ -125,25 +119,27 @@ const props = defineProps({
 })
 
 const audio = ref(props.audioObj);
+
+const route = useRoute();
 const answerStore = useAnswerStore();
 const tasks = ref([
     { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 22, end: false, img: 'animals.jpg', audio: 'Task1/12.1.mp3', startAudio: 'Task1/11.1_.mp3' },
     { id: 2, name: 'Задание 2', disabled: true, done: false, open: false, time: 17, end: false, img: 'task2.jpg', audio: 'Task2/25.2.mp3', startAudio: 'Task2/24.2_.mp3' },
-    { id: 3, name: 'Задание 3', disabled: false, done: false, open: false, time: 15, end: false, img: 'task3.jpg', audio: 'Task3/31.3.mp3', startAudio: 'Task3/30.3_.mp3' },
+    { id: 3, name: 'Задание 3', disabled: true, done: false, open: false, time: 15, end: false, img: 'task3.jpg', audio: 'Task3/31.3.mp3', startAudio: 'Task3/30.3_.mp3' },
     { id: 4, name: 'Задание 4', disabled: true, done: false, open: false, time: 15, end: false, img: 'task4.jpg', audio: 'Task4/45.4.mp3', startAudio: 'Task4/61.5_.mp3' },
     { id: 5, name: 'Задание 5', disabled: true, done: false, open: false, time: 15, end: false, img: 'task5.jpg', audio: 'Task5/62.5.mp3', startAudio: 'Task5/61.5_.mp3' },
     { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 20, end: false, img: 'task6.jpg', audio: 'Task6/79.6.mp3', startAudio: 'Task6/78.6_.mp3' },
-    { id: 7, name: 'Задание 7', disabled: false, done: false, open: false, time: 20, end: false, img: 'task7.jpg', audio: 'Task7/261.7_.mp3', startAudio: 'Task7/260.7_.mp3' },
-    { id: 8, name: 'Задание 8', disabled: false, done: false, open: false, time: 30, end: false, img: 'task8.jpg', audio: 'Task8/280.8.mp3', startAudio: 'Task8/279.8_.mp3' },
-    { id: 9, name: 'Задание 9', disabled: false, done: false, open: false, time: 30, end: false, img: 'task9.jpg', audio: 'Task9/299.9.mp3', startAudio: 'Task9/298.9.mp3' },
-    { id: 10, name: 'Задание 10', disabled: false, done: false, open: false, time: 30, end: false, img: 'task10.jpg', audio: 'Task10/317.10.mp3', startAudio: 'Task10/316.10.mp3' },
-    { id: 11, name: 'Задание 11', disabled: false, done: false, open: false, time: 35, end: false, img: 'task11.jpg', audio: 'Task11/330.11.mp3', startAudio: 'Task11/329.11.mp3' },
-    { id: 12, name: 'Задание 12', disabled: false, done: false, open: false, time: 35, end: false, img: 'task12.jpg', startAudio: 'Task12/349.12.mp3' },
-    { id: 13, name: 'Задание 13', disabled: false, done: false, open: false, time: 30, end: false, img: 'task13.jpg', audio: 'Task13/370.13.mp3', startAudio: 'Task13/369.13.mp3' },
-    { id: 14, name: 'Задание 14', disabled: false, done: false, open: false, time: 30, end: false, img: 'task14.jpg', audio: 'Task14/379.14.mp3', startAudio: 'Task14/378.14_.mp3' },
-    { id: 15, name: 'Задание 15', disabled: false, done: false, open: false, time: 60, end: false, img: 'task15.jpg', audio: 'Task15/390.15.mp3', startAudio: 'Task15/389.15.mp3' },
-    { id: 16, name: 'Задание 16', disabled: false, done: false, open: false, time: 60, end: false, img: 'task16.jpg', startAudio: 'Task16/427.16_.mp3' },
-    { id: 17, name: 'Задание 17', disabled: false, done: false, open: false, time: 30, end: false, img: 'task17.jpg', audio: 'Task17/454.17.mp3', startAudio: 'Task17/453.17.mp3' },
+    { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false, img: 'task7.jpg', audio: 'Task7/261.7_.mp3', startAudio: 'Task7/260.7_.mp3' },
+    { id: 8, name: 'Задание 8', disabled: true, done: false, open: false, time: 30, end: false, img: 'task8.jpg', audio: 'Task8/280.8.mp3', startAudio: 'Task8/279.8_.mp3' },
+    { id: 9, name: 'Задание 9', disabled: true, done: false, open: false, time: 30, end: false, img: 'task9.jpg', audio: 'Task9/299.9.mp3', startAudio: 'Task9/298.9.mp3' },
+    { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 30, end: false, img: 'task10.jpg', audio: 'Task10/317.10.mp3', startAudio: 'Task10/316.10.mp3' },
+    { id: 11, name: 'Задание 11', disabled: true, done: false, open: false, time: 35, end: false, img: 'task11.jpg', audio: 'Task11/330.11.mp3', startAudio: 'Task11/329.11.mp3' },
+    { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 35, end: false, img: 'task12.jpg', audio: 'Task12/348.12.mp3', startAudio: 'Task12/349.12.mp3' },
+    { id: 13, name: 'Задание 13', disabled: true, done: false, open: false, time: 30, end: false, img: 'task13.jpg', audio: 'Task13/370.13.mp3', startAudio: 'Task13/369.13.mp3' },
+    { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false, img: 'task14.jpg', audio: 'Task14/379.14.mp3', startAudio: 'Task14/378.14_.mp3' },
+    { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: 'task15.jpg', audio: 'Task15/390.15.mp3', startAudio: 'Task15/389.15.mp3' },
+    { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 60, end: false, img: 'task16.jpg', audio: 'Task16/428.16.mp3', startAudio: 'Task16/427.16_.mp3' },
+    { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: 'task17.jpg', audio: 'Task17/454.17.mp3', startAudio: 'Task17/453.17.mp3' },
     { id: 18, name: 'Задание 18', disabled: true, done: false, open: false, time: 120, end: false, img: 'task18.jpg', audio: 'Task18/471.18.mp3', startAudio: 'Task18/470.18_.mp3' },
 ])
 
@@ -155,7 +151,6 @@ const timeVal = ref(15);
 const taskAudio = ref('Task1/12.1.mp3');
 const startAudio = ref('Task1/11.1_.mp3');
 const endTime = ref(false);
-const tasks_server = ref([]);
 const answers = ref([]);
 const show_hand = ref(false);
 const show = ref(props.show);
@@ -173,14 +168,19 @@ const close = () => {
     emit('show', show.value);
 };
 
+const playStartAudio = (audioPath) => {
+    let startAudio = new Audio();
+    startAudio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
+    startAudio.play();
+    startAudio.addEventListener('ended', () => {
+        finish.value = true;
+    });
+}
 
 
 const playAudio = (audioPath) => {
     audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     audio.value.play();
-    audio.value.addEventListener('ended', () => {
-        finish.value = true;
-    })
 }
 
 const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
@@ -197,8 +197,10 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
         if (ids.value.includes(taskId.value)) {
             playAudio('Music/звук 1_.mp3');
             audio.value.addEventListener('ended', () => {
-                show_hand.value = true;
-                emit('hand', show_hand.value)
+                if (taskId.value !== 1 || taskId.value !== 16 || taskId.value !== 18) {
+                    show_hand.value = true;
+                    emit('hand', show_hand.value)
+                }
             })
             if (audio_ids_music.value.includes(taskId.value)) {
                 audio.value.addEventListener('ended', () => {
@@ -212,6 +214,7 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
             }
         } else {
             playAudio(startAudioV)
+            show_hand.value = false;
             props.audioObj = audio.value;
         }
         emit('sendImg', img);
@@ -247,15 +250,13 @@ const checkOpen = (id) => {
 const openTask = (taskId) => {
     SeeTask.value = true;
     finish.value = false;
-    playAudio(taskAudio.value);
+    playStartAudio(taskAudio.value);
     setTimeout(() => {
         endTime.value = true;
     }, timeVal.value * 1000);
 
 
 };
-
-console.log('see', SeeTask.value);
 
 const next = (id, audio_task) => {
     SeeTask.value = false;
@@ -277,11 +278,20 @@ watch(
     }
 );
 
-onMounted(async () => {
-    await answerStore.getAnswers(props.childId);
+watch(() => props.childId, (newId) => {
+    props.childId = newId
+    answerStore.getAnswers(props.childId);
 
+}, {
+    immediate: true,
+    deep: true,
+})
+
+watch(() => answerStore.answers, (newAns) => {
+
+    answerStore.answers = newAns
     tasks.value.forEach((task, index) => {
-        answerStore.answers.forEach((answer) => {
+        newAns.forEach((answer) => {
             if (answer.task?.id === task.id) {
                 task.done = answer.is_correct;
                 task.disabled = false;
@@ -294,7 +304,28 @@ onMounted(async () => {
         console.log('arrId', nextElId, tasks.value[nextElId]);
         tasks.value[nextElId].disabled = false;
     }
-});
+}, {
+    immediate: true,
+    deep: true,
+})
+// onMounted(async () => {
+//     await answerStore.getAnswers(props.childId);
+
+//     tasks.value.forEach((task, index) => {
+//         answerStore.answers.forEach((answer) => {
+//             if (answer.task?.id === task.id) {
+//                 task.done = answer.is_correct;
+//                 task.disabled = false;
+//             }
+//         })
+//     })
+//     const taskFindArr = tasks.value.filter((task) => task.done === true);
+//     if (taskFindArr.length > 0) {
+//         let nextElId = taskFindArr.at(-1).id;
+//         console.log('arrId', nextElId, tasks.value[nextElId]);
+//         tasks.value[nextElId].disabled = false;
+//     }
+// });
 </script>
 <style lang="scss" scoped>
 .modal_background {
@@ -333,7 +364,11 @@ onMounted(async () => {
     max-width: 280px;
     height: auto;
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1025px) {
+        max-width: 300px
+    }
+
+    @media (max-width: 1023px) {
         height: 387px;
         max-width: 212px;
     }
@@ -394,7 +429,7 @@ onMounted(async () => {
         padding: 8px 0;
         overflow-y: scroll;
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1023px) {
             height: 185px;
             padding: 0px;
         }

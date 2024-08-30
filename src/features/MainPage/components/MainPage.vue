@@ -287,36 +287,13 @@
 
             <div class="arrows">
                 <img
-                    v-if="currentSlideAuthor > 0 && windowWidth < 768"
+                    v-if="currentSlideAuthor > 0"
                     @click="prev('carousel_authors')"
                     src="@app/assets/icons/arrow-left.svg"
                     alt="left"
                 />
                 <img
-                    v-if="
-                        currentSlideAuthor <
-                            slideAuthors.length - authorsToShow &&
-                        windowWidth < 768
-                    "
-                    @click="next('carousel_authors')"
-                    src="@app/assets/icons/icon-pink.svg"
-                    alt="right"
-                />
-            </div>
-
-            <div class="arrows">
-                <img
-                    v-if="currentSlideAuthor > 0 && windowWidth < 768"
-                    @click="prev('carousel_authors')"
-                    src="@app/assets/icons/arrow-left.svg"
-                    alt="left"
-                />
-                <img
-                    v-if="
-                        currentSlideAuthor <
-                            slideAuthors.length - authorsToShow &&
-                        windowWidth < 768
-                    "
+                    v-if="currentSlideAuthor < slideAuthors.length - authorsToShow"
                     @click="next('carousel_authors')"
                     src="@app/assets/icons/icon-pink.svg"
                     alt="right"
@@ -393,18 +370,15 @@
             alt="right"
         />
 
-        <div class="arrows">
+        <div class="arrows" v-if="windowWidth < 768">
             <img
-                v-if="currentSlide > 0 && windowWidth < 768"
+                v-if="currentSlide > 0"
                 @click="prev()"
                 src="@app/assets/icons/arrow-left.svg"
                 alt="left"
             />
             <img
-                v-if="
-                    currentSlide < slideItems.length - itemsToShow &&
-                    windowWidth < 768
-                "
+                v-if="currentSlide < slideItems.length - itemsToShow"
                 @click="next()"
                 src="@app/assets/icons/icon-pink.svg"
                 alt="right"
@@ -487,6 +461,7 @@ const prev = (carousel_name) => {
     if (carousel_name == 'carousel_authors') {
         carousel_authors.value.prev();
     } else {
+        carousel.value.prev(); 
     }
 };
 const cur_date = new Date();
@@ -510,41 +485,7 @@ const acceptCookie = (name, value, days) => {
 };
 
 const slideItems = ref([
-    // {
-    //     img: news,
-    //     name: ' Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2023',
-    // },
-    // {
-    //     img: news,
-    //     name: ' Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2024',
-    // },
-    // {
-    //     img: news,
-    //     name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2025',
-    // },
-    // {
-    //     img: news,
-    //     name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2026',
-    // },
-    // {
-    //     img: news,
-    //     name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2027',
-    // },
-    // {
-    //     img: news,
-    //     name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2028',
-    // },
-    // {
-    //     img: news,
-    //     name: 'Наши игры предлагают интерактивные задания и увлекательные сценарии, которые помогают развивать ключевые навыки чтения и письма',
-    //     date: '22.12.2028',
-    // },
+
 ]);
 
 const slideAuthors = ref([
@@ -617,10 +558,10 @@ function handleScroll(e) {
         });
         if (posTop + test.offsetHeight < 0) {
             audio.value.pause();
-            console.log('pause');
+
         } else {
             audio.value.play();
-            console.log('play');
+
         }
 
         // document.removeEventListener('scroll', handleScroll);
@@ -652,15 +593,10 @@ const GetNews = async () => {
                 limit: 6,
                 offset: 0,
             },
-            headers: {
-                'Content-Type': 'application/json',
-            },
         });
 
         slideItems.value = response.data.results;
-        console.log(response.data);
     } catch (error) {
-        console.log('errr', error);
         isError.value = error.response.data;
         console.error('There was an error!', error);
     }
@@ -672,9 +608,7 @@ onMounted(() => {
     } else {
         showCookie.value = true;
     }
-    console.log('Audio', audio.value, audio.value.paused);
     document.addEventListener('scroll', handleScroll);
-
     windowWidth.value = window.innerWidth;
     itemsToShow.value = windowWidth.value >= 660 ? 2 : 1;
     authorsToShow.value = windowWidth.value >= 650 ? 2 : 1;

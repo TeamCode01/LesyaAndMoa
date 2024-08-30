@@ -10,22 +10,28 @@
 </template>
 
 <script setup>
+import { onMounted, watch } from "vue";
 import { useUserStore } from "@layouts/stores/user";
 import { AppBreadcrumbs, useBreadcrumbsStore } from '@shared/index';
-const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
 import { storeToRefs } from 'pinia';
-import { onMounted, watch } from "vue";
+const { breadcrumbs, hidden } = storeToRefs(useBreadcrumbsStore());
+const { toggleHideBreadcrumbs, setHideBreadcrumbs } = useBreadcrumbsStore();
+
 const userStore = useUserStore();
 
 watch(
   () => userStore.currentUser,
   (newId) => {
-    if (localStorage.getItem("type") === "групповой") {
+    if (localStorage.getItem("type") !== "групповой" && localStorage.getItem("Token") !== null) {
+      userStore.getChildren();
+    } else {
       return false;
     }
-    userStore.getChildren();
+
   }
 );
+
+
 onMounted(async () => {
   if (localStorage.getItem("Token") !== null) {
     await userStore.getUser();

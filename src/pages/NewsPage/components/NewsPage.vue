@@ -7,7 +7,7 @@
                     <p>{{ news.description }}</p>
                     <span class="news-data">{{
                         formatDate(news.created_at)
-                    }}</span>
+                        }}</span>
                 </div>
                 <div class="news-banner__img">
                     <img :src="news.image" alt="" />
@@ -17,20 +17,23 @@
                 <p>{{ news.description }}</p>
             </div>
             <div class="to-news-list">
-                <router-link class="to-news" :to="{ name: 'news' }"
-                    >Смотреть все новости</router-link
-                >
+                <router-link class="to-news" :to="{ name: 'news' }">Смотреть все новости</router-link>
             </div>
         </div>
     </div>
 </template>
 <script setup>
 import { HTTP } from '@app/http';
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted, onActivated } from 'vue';
 import { useRoute } from 'vue-router';
 import { usePage } from '@shared';
-const news = ref({});
+import { useBreadcrumbsStore, usePageStore } from '@shared/index';
+import { storeToRefs } from 'pinia';
+
+const { toggleHideBreadcrumbs, setHideBreadcrumbs } = useBreadcrumbsStore();
+
 const route = useRoute();
+const news = ref({});
 const error = ref([]);
 let id = route.params.id;
 
@@ -70,6 +73,33 @@ watch(
         immediate: true,
     },
 );
+
+watch(route.path, () => {
+    console.log('route');
+    toggleHideBreadcrumbs(true);
+    setHideBreadcrumbs(false);
+})
+
+
+onMounted(() => {
+    toggleHideBreadcrumbs(true);
+    setHideBreadcrumbs(false);
+
+})
+
+const { hidden } = storeToRefs(useBreadcrumbsStore)
+
+watch(hidden, (newValue) => {
+    if (!newValue) {
+        toggleHideBreadcrumbs(true);
+        setHideBreadcrumbs(false);
+    }
+})
+
+onActivated(() => {
+    toggleHideBreadcrumbs(true);
+    setHideBreadcrumbs(false);
+})
 </script>
 <style scoped>
 .news-banner {
@@ -77,6 +107,7 @@ watch(
     column-gap: 20px;
     margin-bottom: 60px;
 }
+
 .news-banner__img img {
     width: 590px;
     height: 420px;
@@ -84,6 +115,7 @@ watch(
     overflow: hidden;
     border-radius: 20px;
 }
+
 .news-banner__text {
     font-family: 'Nunito', sans-serif;
     color: #313131;
@@ -95,27 +127,33 @@ watch(
     align-self: center;
     position: relative;
 }
+
 .news-banner__text h3 {
     font-weight: 400;
     font-size: 32px;
     width: 590px;
 }
+
 .news-banner__text p {
     font-weight: 400;
     font-size: 16px;
 }
+
 .news-data {
     color: #818181;
     position: absolute;
     bottom: 0;
 }
+
 .news-description {
     margin-bottom: 60px;
     color: #313131;
 }
+
 .to-news-list {
     margin-bottom: 100px;
 }
+
 .to-news {
     color: #313131;
 }

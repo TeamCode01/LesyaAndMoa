@@ -15,17 +15,17 @@
                     <div class="draggable-list__words">
                         <div class="draggable-list__set-words" v-for="(line, index_line) in prepositions"
                             :key="index_line">
-                            <VueDraggableNext v-for="(item, index) in line" :key="item.id" 
+                            <VueDraggableNext v-for="(item, index) in line" :key="item.id"
                             :group="{ name: 'letters', pull: 'clone', put: false }" :sort="false"
                             @choose="drag($event, item, index)"
-                            
+
                             @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
                             @touchstart="playAudio(item.audio)"
                             >
 
                                 <div :id="item.id + '_elem'"
                                     :class="{ 'draggable-list__word': true, correct_select: item.correct, not_correct_select: item.correct === false }"
-                                    
+
                                     :value="item.text">
                                     {{ item.text }}
                                 </div>
@@ -49,7 +49,7 @@
                                 <VueDraggableNext class="draggable-list__quastion-block" v-if="!givenAnswer[2]"
                                     :group="{ name: 'letters', pull: false, put: true }" :sort="false"
                                     @add="drop($event, 2)" ghost-class="none">
-                                    
+
                                     <input class="answer" readonly @focus="($event)=>{$event.target.blur()}"/>
 
                                 </VueDraggableNext>
@@ -62,13 +62,13 @@
                 </div>
             </template>
             <TaskResultBanner :img="getImageUrl('Diamond.png')" :bg="getImageUrl('moa.gif')"
-                text="Замечательно!" v-else @hide="hide()" @next="next()"></TaskResultBanner>
+                text="Замечательно!" v-else @hide="hide()" @next="next()" class="end-modal"></TaskResultBanner>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
@@ -95,7 +95,7 @@ const givenAnswer = ref({
     1: false,
     2: false,
 });
-const is_correct = ref(null);
+const is_correct = ref(false);
 const corrValue = ref(0);
 const currStage = ref(1);
 const questions = ref({
@@ -288,11 +288,42 @@ onMounted(async () => {
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 
 <style lang="scss" scoped>
 *{
     user-select: none;
+}
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
+
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .answer{

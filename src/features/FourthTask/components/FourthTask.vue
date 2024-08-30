@@ -40,13 +40,13 @@
                     class="task_block__wrapper_answer" />
             </template>
             <TaskResultBanner :img="getImageUrl('flowers.png')" :bg="getImageUrl('moa.gif')" text="Здорово!" v-else
-                @next="next()" @hide="hide()"></TaskResultBanner>
+                @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
@@ -70,7 +70,7 @@ const props = defineProps({
 });
 
 const countAnswers = ref(0);
-const is_correct = ref(null);
+const is_correct = ref(false);
 const audio = ref(new Audio());
 
 
@@ -176,20 +176,41 @@ onMounted(async () => {
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 <style lang="scss" scoped>
 * {
     user-select: none;
 }
 
-.correct_select {
-    border: 2px solid;
-    border-color: #5CCF54;
-}
+.end-modal {
+    width: 1200px;
+    height: 600px;
 
-.not_correct_select {
-    border: 2px solid;
-    border-color: #DB0000;
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .draggable-list {
@@ -239,6 +260,10 @@ onMounted(async () => {
 }
 
 .draggable-list__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     text-align: center;
     width: 60px;
     height: 40px;
@@ -288,5 +313,15 @@ onMounted(async () => {
     border-radius: 6px;
     border: none;
     cursor: pointer;
+}
+
+.correct_select {
+    border: 2px solid;
+    border-color: #5CCF54;
+}
+
+.not_correct_select {
+    border: 2px solid;
+    border-color: #DB0000;
 }
 </style>

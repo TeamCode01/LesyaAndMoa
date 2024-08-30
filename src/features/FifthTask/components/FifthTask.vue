@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
@@ -84,7 +84,7 @@ const syllables = ref({
 })
 
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
-const is_correct = ref(null);
+const is_correct = ref(false);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -117,8 +117,10 @@ const onSelection = (firstIndex, id) => {
         countAnswers.value++;
         playAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
     } else if (!firstListen.value) {
-        syllables.value[firstIndex][id].correct = false;
-        setTimeout(() => syllables.value[firstIndex][temp].correct = null, 2000)
+        if (syllables.value[firstIndex][id].correct != true) {
+            syllables.value[firstIndex][id].correct = false;
+            setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)
+        }
         playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     }
     if (countAnswers.value == 14) {
@@ -173,6 +175,26 @@ onMounted(async () => {
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 
 <style lang="scss" scoped>
@@ -183,16 +205,11 @@ onMounted(async () => {
 .end-modal {
     width: 1200px;
     height: 600px;
-}
 
-.correct_select {
-    border: 2px solid;
-    border-color: #5CCF54;
-}
-
-.not_correct_select {
-    border: 2px solid;
-    border-color: #DB0000;
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .draggable-list {
@@ -297,5 +314,17 @@ onMounted(async () => {
     border-radius: 6px;
     border: none;
     cursor: pointer;
+}
+
+.correct_select {
+    padding: 6px 14px;
+    border: 2px solid;
+    border-color: #5CCF54;
+}
+
+.not_correct_select {
+    padding: 6px 14px;
+    border: 2px solid;
+    border-color: #DB0000;
 }
 </style>

@@ -23,7 +23,7 @@
         @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { HTTP } from '@app/http';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
@@ -59,7 +59,7 @@ const next = () => {
 
 }
 
-const is_correct = ref(null);
+const is_correct = ref(false);
 const alphabets = ref([{ id: 1, src: 'english.png', isCorrect: false, audio: 'Task2/27.2.mp3' }, { id: 2, src: 'russian.png', isCorrect: true, audio: 'Task2/26.2.mp3' }, { id: 3, src: 'arabic.png', isCorrect: false, audio: 'Task2/28.2.mp3' }])
 const endGame = ref(false);
 
@@ -105,7 +105,8 @@ const chooseTask = (event, status) => {
             }
             endGame.value = true;
             event.target.classList.remove('green');
-        }, 2000);
+            playAudio('Task2/29.2_.mp3');
+        }, 1000);
 
     } else {
         event.target.value = status;
@@ -117,11 +118,32 @@ const chooseTask = (event, status) => {
     }
 }
 
-onMounted( () => {
-    const correct = getCorrectAnswer(2, props.childId);
+onMounted(async() => {
+    const correct = await getCorrectAnswer(2, props.childId);
+    console.log(correct);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 <style lang="scss" scoped>
 * {
@@ -131,6 +153,11 @@ onMounted( () => {
 .end-modal {
     width: 1200px;
     height: 600px;
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .SecondTask {

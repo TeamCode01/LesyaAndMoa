@@ -61,7 +61,6 @@
                 :disabled="currentPage * itemsPerPage >= totalItems"
             >
                 <img
-                    v-if="!(currentPage * itemsPerPage >= totalItems)"
                     class="news-arrows arrow-news"
                     src="@app/assets/icons/arrows.svg"
                     alt=""
@@ -72,8 +71,14 @@
 </template>
 <script setup>
 import { HTTP } from '@app/http';
-import { ref, onMounted, computed } from 'vue';
+import { onActivated, ref, onMounted, computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useBreadcrumbsStore, usePageStore } from '@shared/index';
+import { storeToRefs } from 'pinia';
 
+const { toggleHideBreadcrumbs, setHideBreadcrumbs } = useBreadcrumbsStore();
+
+const route = useRoute();
 const news = ref([]);
 const error = ref([]);
 let currentPage = 1;
@@ -146,8 +151,30 @@ const generatePages = () => {
     );
 };
 
+watch(route.path, () => {
+    console.log('route');
+    toggleHideBreadcrumbs(true);
+    setHideBreadcrumbs(false);
+});
+
 onMounted(() => {
     GetNews(currentPage);
+    toggleHideBreadcrumbs(true);
+    setHideBreadcrumbs(false);
+});
+
+const { hidden } = storeToRefs(useBreadcrumbsStore);
+
+watch(hidden, (newValue) => {
+    if (!newValue) {
+        toggleHideBreadcrumbs(true);
+        setHideBreadcrumbs(false);
+    }
+});
+
+onActivated(() => {
+    toggleHideBreadcrumbs(true);
+    setHideBreadcrumbs(false);
 });
 </script>
 <style scoped>
@@ -217,6 +244,7 @@ onMounted(() => {
     transform: scale(-1, 1);
     margin-right: 10px;
 }
+
 .arrow-news {
     margin-left: 10px;
 }
@@ -231,30 +259,37 @@ onMounted(() => {
     justify-content: center;
     cursor: pointer;
 }
+
 .news-page__list {
     padding-bottom: 5px;
 }
+
 .news-list__card-box {
     font-family: 'Nunito', sans-serif;
     font-weight: 400;
     text-decoration: none;
 }
+
 .router-news {
     text-decoration: none;
 }
+
 .news-list__title {
     font-size: 20px;
     color: #313131;
     font-weight: 400;
 }
+
 .news-list__desc {
     font-size: 16px;
     color: #313131;
 }
+
 .news-list__data {
     font-size: 14px;
     color: #818181;
 }
+
 .current-page {
     color: #0d47aa;
 }

@@ -51,13 +51,13 @@
                 </div>
             </template>
             <TaskResultBanner :img="getImageUrl('Diamond.png')" :bg="getImageUrl('moa.gif')" text="Блистательно!"
-                v-if="usedWord.length >= 15" @hide="hide()" @next="next()"></TaskResultBanner>
+                v-if="usedWord.length >= 15" @hide="hide()" @next="next()" class="end-modal"></TaskResultBanner>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
@@ -83,24 +83,21 @@ const props = defineProps({
 });
 const hide = () => {
     emit('close');
+    console.log('close')
 };
 
 const next = () => {
     emit('next-modal');
 };
 
-onMounted(() => {
-    const correct = getCorrectAnswer(6, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-});
+
 
 const getImageUrl = (path) => {
     return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
 const corrValue = ref(0)
-const is_correct = ref(null)
+const is_correct = ref(false)
 
 const dictKeys = Array.from(dict.keys()); // Массив разрешенных значений
 
@@ -149,7 +146,7 @@ const randomMusic = (first = false) => {
     let file = dict.get(`${item}`);
     let audioPath3 = new URL(`/assets/audio/Task6/${file}`, import.meta.url).href
     audio = new Audio(audioPath3);
-    audio.play();
+    //audio.play();
     usedWord.value.push(item);
 
     repeated.value = false;
@@ -208,12 +205,46 @@ const clickItem = (word) => {
     }, 2000);
 };
 
+onMounted(async () => {
+    const correct = await getCorrectAnswer(6, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+});
 
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
 
 </script>
 <style lang="scss" scoped>
 * {
     user-select: none;
+}
+
+.end-modal {
+    width: 1200px;
+    height: 600px;
+
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .draggable-list {
@@ -234,7 +265,6 @@ const clickItem = (word) => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 540px;
     gap: 4px;
 
     @media (max-width: 1024px) {

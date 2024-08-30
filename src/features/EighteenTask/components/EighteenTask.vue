@@ -24,7 +24,7 @@
     </TaskResultBanner>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
 import { Timer } from '@shared/components/timer';
@@ -51,10 +51,10 @@ const props = defineProps({
     },
 });
 const getImageUrl = (path) => {
-  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 const audio = ref(new Audio());
-const is_correct = ref(null);
+const is_correct = ref(false);
 const corrValue = ref(0);
 const playAudio = (audioPath) => {
     audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
@@ -70,16 +70,15 @@ const sendAnswer = () => {
         answer_input.classList.add('green');
         playAudio('Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
-            answer_input.classList.remove('green');
-            endGame.value = true;
+
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);
                 emit('correct');
             }
-
-        }, 2000)
-
-
+            endGame.value = true;
+            answer_input.classList.remove('green');
+            playAudio('Task18/472.18_.mp3')
+        }, 1000)
 
     } else {
         answer_input.classList.add('red');
@@ -90,20 +89,46 @@ const sendAnswer = () => {
     }
 }
 
-onMounted(() => {
-    const correct = getCorrectAnswer(18, props.childId);
+onMounted(async () => {
+    const correct = await getCorrectAnswer(18, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('game mount')
+});
+
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('game unmount')
+});
+
 </script>
 <style lang="scss" scoped>
-*{
+* {
     user-select: none;
 }
 
 .end-modal {
     width: 1200px;
     height: 600px;
+
+
+    @media (max-width: 1200px) {
+        width: 944px;
+        height: 500px;
+    }
 }
 
 .send {

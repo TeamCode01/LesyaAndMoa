@@ -1,6 +1,6 @@
 <template>
     <div class="carousel-item">
-        <RouterLink
+        <RouterLink v-if="corousel_type === 'news'"
             class="router-news"
             :to="{
                 name: 'page',
@@ -10,7 +10,6 @@
                 :src="item_data.image"
                 alt="img"
                 class="carousel-item__news-img"
-                v-if="corousel_type === 'news'"
         /></RouterLink>
         <img
             :src="item_data.img"

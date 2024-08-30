@@ -8,7 +8,8 @@
 
                     <p>
                         Наша методика ориентирована на ребят, которые тратят большие
-                        силы на процесс чтения, произнесения слов, ребят, которым понимание прочитанного даётся особенно нелегко.
+                        силы на процесс чтения, произнесения слов, ребят, которым понимание прочитанного даётся особенно
+                        нелегко.
                         С такими ребятами часто сталкиваются педагоги в процессе
                         своей работы: ребёнок допускает перестановку букв
                         и слогов при чтении, не понимает смысл прочитанного,
@@ -115,6 +116,46 @@
         </div>
     </div>
 </template>
+<script setup>
+
+import { onActivated, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useBreadcrumbsStore, usePageStore } from '@shared/index';
+import { storeToRefs } from 'pinia';
+
+const { toggleHideBreadcrumbs, setHideBreadcrumbs } = useBreadcrumbsStore();
+
+const route = useRoute();
+
+
+watch(route.path, () => {
+    console.log('route');
+    toggleHideBreadcrumbs(true);
+    setHideBreadcrumbs(false);
+})
+
+
+onMounted(() => {
+    toggleHideBreadcrumbs(true);
+    setHideBreadcrumbs(false);
+
+})
+
+const { hidden } = storeToRefs(useBreadcrumbsStore)
+
+watch(hidden, (newValue) => {
+    if (!newValue) {
+        toggleHideBreadcrumbs(true);
+        setHideBreadcrumbs(false);
+    }
+})
+
+onActivated(() => {
+    toggleHideBreadcrumbs(true);
+    setHideBreadcrumbs(false);
+})
+
+</script>
 <style lang="scss" scoped>
 .container {
     margin: 0 auto;
@@ -333,16 +374,3 @@ h4 {
     font-family: Nunito;
 }
 </style>
-
-<script setup>
-import { ref, watch } from 'vue';
-
-// watch(() => breadcrumbs,
-//     (newBread) => {
-//         if (!newBread) {
-//             return
-//         }
-//         hidden = false;
-//     })
-
-</script>
