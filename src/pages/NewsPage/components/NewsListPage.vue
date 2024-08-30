@@ -61,6 +61,7 @@
                 :disabled="currentPage * itemsPerPage >= totalItems"
             >
                 <img
+                    v-if="!(currentPage * itemsPerPage >= totalItems)"
                     class="news-arrows arrow-news"
                     src="@app/assets/icons/arrows.svg"
                     alt=""
