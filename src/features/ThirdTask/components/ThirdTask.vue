@@ -94,8 +94,7 @@ const props = defineProps({
 });
 
 
-const is_correct = ref(null);
-const is_started = ref(null);
+const is_correct = ref(false);
 
 const getImageUrl = (path) => {
     return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
@@ -225,30 +224,25 @@ const drop = (event, index) => {
         return false;
     }
 
-
-
-
     if (array.value.length === array_result.value.length && array_two.value.length === array_two_result.value.length && array_three.value.length === array_three_result.value.length) {
-
-        if (is_correct.value === false) {
-            endGameRequest(props.childId, corrValue.value);
-            emit('correct');
-            emit('open');
-        }
         setTimeout(() => {
+            if (is_correct.value === false) {
+                endGameRequest(props.childId, corrValue.value);
+                emit('correct');
+                emit('open');
+            }
             endGame.value = true;
-        }, 1500)
+            playAudio('Task3/43.3_.mp3');
+        }, 1000)
     }
-
-
 };
 
 const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(() => {
-    const correct = getCorrectAnswer(3, props.childId);
+onMounted(async () => {
+    const correct = await getCorrectAnswer(3, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
@@ -281,7 +275,7 @@ onBeforeUnmount(() => {
 .end-modal {
     width: 1200px;
     height: 600px;
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;

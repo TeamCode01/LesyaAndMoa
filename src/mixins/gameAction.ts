@@ -7,9 +7,9 @@ import type { Answer } from './../layouts/stores/answers';
 const answerStore = useAnswerStore();
 const gameActions = {
     methods: {
-        startGameRequest(childId: number, id: number) {
+        async startGameRequest(childId: number, id: number) {
             // const route = useRoute();
-            HTTP.post(`/answers/${childId}/`, {
+            await HTTP.post(`/answers/${childId}/`, {
                 task: id,
             })
         },
@@ -19,9 +19,9 @@ const gameActions = {
                 is_correct: true
             })
         },
-        getCorrectAnswer(id: number, childId: number) {
-            answerStore.getAnswers(childId);
-            gameActions.methods.startGameRequest(childId, id);
+        async getCorrectAnswer(id: number, childId: number) {
+            await gameActions.methods.startGameRequest(childId, id);
+            await answerStore.getAnswers(childId);
             let correctAnswer: Answer = answerStore.answers.filter((item: Answer) => item.task.id === id)[0];
             let correctId = correctAnswer.id;
             let is_correct = correctAnswer.is_correct;

@@ -84,7 +84,7 @@ const syllables = ref({
 })
 
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
-const is_correct = ref(null);
+const is_correct = ref(false);
 const props = defineProps({
     end: {
         type: Boolean,
@@ -119,7 +119,7 @@ const onSelection = (firstIndex, id) => {
     } else if (!firstListen.value) {
         if (syllables.value[firstIndex][id].correct != true) {
             syllables.value[firstIndex][id].correct = false;
-            setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)    
+            setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)
         }
         playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     }
@@ -205,7 +205,7 @@ onBeforeUnmount(() => {
 .end-modal {
     width: 1200px;
     height: 600px;
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;

@@ -15,17 +15,17 @@
                     <div class="draggable-list__words">
                         <div class="draggable-list__set-words" v-for="(line, index_line) in prepositions"
                             :key="index_line">
-                            <VueDraggableNext v-for="(item, index) in line" :key="item.id" 
+                            <VueDraggableNext v-for="(item, index) in line" :key="item.id"
                             :group="{ name: 'letters', pull: 'clone', put: false }" :sort="false"
                             @choose="drag($event, item, index)"
-                            
+
                             @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
                             @touchstart="playAudio(item.audio)"
                             >
 
                                 <div :id="item.id + '_elem'"
                                     :class="{ 'draggable-list__word': true, correct_select: item.correct, not_correct_select: item.correct === false }"
-                                    
+
                                     :value="item.text">
                                     {{ item.text }}
                                 </div>
@@ -49,7 +49,7 @@
                                 <VueDraggableNext class="draggable-list__quastion-block" v-if="!givenAnswer[2]"
                                     :group="{ name: 'letters', pull: false, put: true }" :sort="false"
                                     @add="drop($event, 2)" ghost-class="none">
-                                    
+
                                     <input class="answer" readonly @focus="($event)=>{$event.target.blur()}"/>
 
                                 </VueDraggableNext>
@@ -95,7 +95,7 @@ const givenAnswer = ref({
     1: false,
     2: false,
 });
-const is_correct = ref(null);
+const is_correct = ref(false);
 const corrValue = ref(0);
 const currStage = ref(1);
 const questions = ref({
@@ -319,7 +319,7 @@ onBeforeUnmount(() => {
     width: 1200px;
     height: 600px;
 
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;

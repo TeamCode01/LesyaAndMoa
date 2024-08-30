@@ -101,6 +101,7 @@ import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 import { TwelfthTask } from '@features/TwelfthTask';
 import { useAnswerStore } from '@layouts/stores/answers';
+import { useRoute } from 'vue-router';
 
 const emit = defineEmits(['sendImg', 'sendAudio', 'sendId', 'show', 'startTask', 'hand']);
 const props = defineProps({
@@ -118,6 +119,8 @@ const props = defineProps({
 })
 
 const audio = ref(props.audioObj);
+
+const route = useRoute();
 const answerStore = useAnswerStore();
 const tasks = ref([
     { id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 22, end: false, img: 'animals.jpg', audio: 'Task1/12.1.mp3', startAudio: 'Task1/11.1_.mp3' },
@@ -208,7 +211,7 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
                         audio.value.pause();
                     })
                 })
-            } 
+            }
         } else {
             playAudio(startAudioV)
             show_hand.value = false;
@@ -275,12 +278,20 @@ watch(
     }
 );
 
+watch(() => props.childId, (newId) => {
+    props.childId = newId
+    answerStore.getAnswers(props.childId);
 
-onMounted(async () => {
-    await answerStore.getAnswers(props.childId);
+}, {
+    immediate: true,
+    deep: true,
+})
 
+watch(() => answerStore.answers, (newAns) => {
+
+    answerStore.answers = newAns
     tasks.value.forEach((task, index) => {
-        answerStore.answers.forEach((answer) => {
+        newAns.forEach((answer) => {
             if (answer.task?.id === task.id) {
                 task.done = answer.is_correct;
                 task.disabled = false;
@@ -293,7 +304,28 @@ onMounted(async () => {
         console.log('arrId', nextElId, tasks.value[nextElId]);
         tasks.value[nextElId].disabled = false;
     }
-});
+}, {
+    immediate: true,
+    deep: true,
+})
+// onMounted(async () => {
+//     await answerStore.getAnswers(props.childId);
+
+//     tasks.value.forEach((task, index) => {
+//         answerStore.answers.forEach((answer) => {
+//             if (answer.task?.id === task.id) {
+//                 task.done = answer.is_correct;
+//                 task.disabled = false;
+//             }
+//         })
+//     })
+//     const taskFindArr = tasks.value.filter((task) => task.done === true);
+//     if (taskFindArr.length > 0) {
+//         let nextElId = taskFindArr.at(-1).id;
+//         console.log('arrId', nextElId, tasks.value[nextElId]);
+//         tasks.value[nextElId].disabled = false;
+//     }
+// });
 </script>
 <style lang="scss" scoped>
 .modal_background {

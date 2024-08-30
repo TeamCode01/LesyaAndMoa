@@ -90,23 +90,14 @@ const next = () => {
     emit('next-modal');
 };
 
-onMounted(() => {
-    try {
-        const correct = getCorrectAnswer(6, props.childId);
-        corrValue.value = correct.correctId;
-        is_correct.value = correct.is_correct;
-    }
-    catch { 
-        console.log('error');
-    }
-});
+
 
 const getImageUrl = (path) => {
     return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
 const corrValue = ref(0)
-const is_correct = ref(null)
+const is_correct = ref(false)
 
 const dictKeys = Array.from(dict.keys()); // Массив разрешенных значений
 
@@ -214,6 +205,12 @@ const clickItem = (word) => {
     }, 2000);
 };
 
+onMounted(async () => {
+    const correct = await getCorrectAnswer(6, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
+});
+
 onMounted(() => {
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
@@ -243,7 +240,7 @@ onBeforeUnmount(() => {
     width: 1200px;
     height: 600px;
 
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;

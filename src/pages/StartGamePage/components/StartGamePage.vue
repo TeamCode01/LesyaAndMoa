@@ -125,11 +125,8 @@ const playSound = () => {
 }
 
 watch(
-  () => route.params.id,
+  () => route.params.idChildOrGroup,
   (newId) => {
-    if (!newId) {
-      return;
-    }
     childId = newId;
   }
 );

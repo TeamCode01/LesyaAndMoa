@@ -252,7 +252,7 @@ const syllables = ref({
 
 const countAnswers = ref(0);
 const corrValue = ref(0);
-const is_correct = ref(null);
+const is_correct = ref(false);
 const correctAnswers = ref([{}, {}, {}, {}, {}, {}, {}, {}])
 
 const dragClasses = ref({
@@ -360,12 +360,12 @@ const drag = (event, syllable, fromPlace) => {
         return
     }
 
-    
+
     checkDragAndDrop.value = true;
     dataTransfer.value.id = syllable.id;
     dataTransfer.value.fromPlace = fromPlace
 
-    
+
 
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
     }
@@ -403,7 +403,7 @@ const drop = (event, place) => {
     const fromPlace = dataTransfer.value.fromPlace;
 
 
-    
+
 
     if (fromPlace == place) {
         if (place == 1) {
@@ -421,7 +421,7 @@ const drop = (event, place) => {
             squareFrom.classList.add('none')
             squareFrom.setAttribute('ghost-class', 'none')
             squareFrom.setAttribute('drag-class', 'none')
-            
+
             squareFrom.dataset['isactive'] = 'false'
             squareFrom.children[0].classList.add('standrart_cursor')
 
@@ -447,7 +447,7 @@ const drop = (event, place) => {
             //circleFrom.setAttribute('drag-class', 'none')
             circleFrom.dataset['isactive'] = 'false'
             circleFrom.children[0].classList.add('standrart_cursor')
-            
+
 
             if (id < 5) {
                 syllables.value[fromPlace][1][id - 1].drag_class = true
@@ -533,7 +533,7 @@ const drop = (event, place) => {
 
                 squareFrom.children[0].classList.remove('correct_select')
                 circleFrom.children[0].classList.remove('correct_select')
-                
+
                 squareFrom.removeChild(squareFrom.children[0])
                 circleFrom.removeChild(circleFrom.children[0])
 
@@ -609,7 +609,7 @@ onBeforeUnmount(() => {
 .end-modal {
     width: 1200px;
     height: 600px;
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;
@@ -774,7 +774,7 @@ onBeforeUnmount(() => {
 .draggable-list__step-button__wrapper{
     width: 70px;
     height: 70px;
-    
+
     @media (max-width: 1024px) {
         width: 63px;
         height: 63px;

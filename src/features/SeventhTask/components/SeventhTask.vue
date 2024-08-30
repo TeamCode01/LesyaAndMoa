@@ -11,9 +11,8 @@
                         Верно соотнеси слово, его толкование и картинку.
                     </p>
                 </div>
-                <canvas @mousedown="engage" @mouseup="disengage" @mousemove="draw" 
-                        @touchstart="engage" @touchend="disengage" @touchmove="draw" 
-                        @click="voiceActing" ref="canvasRef"
+                <canvas @mousedown="engage" @mouseup="disengage" @mousemove="draw" @touchstart="engage"
+                    @touchend="disengage" @touchmove="draw" @click="voiceActing" ref="canvasRef"
                     class="canvas_draw"></canvas>
                 <div class="draggable-list">
                     <div class="draggable-list__words">
@@ -23,35 +22,35 @@
                                 :class="{ 'draggable-list__word': true, correct_select: word.correct, not_correct_select: word.correct === false }">
                                 {{ word.word }}</div>
                             <img :ref="el => refColumns[1][word_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
-                                draggable="false" />
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                class="draggable-list__circle" draggable="false" />
                         </div>
                     </div>
                     <div class="draggable-list__sentences" v-if="!showCorrectRow">
                         <div class="draggable-list__sentence-container"
                             v-for="(sentence, sentence_index) in sentences[option]" :key="sentence_index">
                             <img :ref="el => refColumns[2][sentence_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
-                                draggable="false" />
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                class="draggable-list__circle" draggable="false" />
                             <div :ref="el => refBlockSound[2][sentence_index - 1] = el"
                                 :class="{ 'draggable-list__sentence': true, correct_select: sentence.correct, not_correct_select: sentence.correct === false }">
                                 {{ sentence.sentence }}</div>
                             <img :ref="el => refColumns[3][sentence_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
-                                draggable="false" />
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                class="draggable-list__circle" draggable="false" />
                         </div>
                     </div>
                     <div class="draggable-list__sentences" v-else>
                         <div class="draggable-list__sentence-container"
                             v-for="(rowId, rowId_index) in correctRowId[option][2]" :key="rowId_index">
                             <img :ref="el => refColumns[2][rowId_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
-                                draggable="false" />
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                class="draggable-list__circle" draggable="false" />
                             <div :ref="el => refBlockSound[2][rowId_index - 1] = el" class="draggable-list__sentence">{{
                                 sentences[option][rowId].sentence }}</div>
                             <img :ref="el => refColumns[3][rowId_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
-                                draggable="false" />
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                class="draggable-list__circle" draggable="false" />
                         </div>
                     </div>
 
@@ -59,8 +58,8 @@
                         <div class="draggable-list__picture-container" v-for="(img, img_index) in images[option]"
                             :key="img_index">
                             <img :ref="el => refColumns[4][img_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
-                                draggable="false" />
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                class="draggable-list__circle" draggable="false" />
                             <img :src="img.url" class="draggable-list__image">
                         </div>
                     </div>
@@ -68,8 +67,8 @@
                         <div class="draggable-list__picture-container"
                             v-for="(rowId, rowId_index) in correctRowId[option][3]" :key="rowId_index">
                             <img :ref="el => refColumns[4][rowId_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')" class="draggable-list__circle"
-                                draggable="false" />
+                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                class="draggable-list__circle" draggable="false" />
                             <img :src="images[option][rowId].url" class="draggable-list__image">
                         </div>
                     </div>
@@ -97,7 +96,7 @@ onMounted(() => {
     );
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
-    
+
     console.log('Компонент создан')
 })
 
@@ -115,7 +114,7 @@ const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const startGame = ref(true);
 const isDrawing = ref(false);
 const option = ref(2);
-const is_correct = ref(null);
+const is_correct = ref(false);
 const corrValue = ref(0);
 const lines = ref([]);
 const refBlockSound = ref({
@@ -410,7 +409,7 @@ const voiceActing = () => {
         }
     }
 
-    
+
     if (onBlock) {
         if (clickOnColumn == 1) {
 
@@ -423,11 +422,11 @@ const voiceActing = () => {
 
 
 const getSrcUrl = (path) => {
- return new URL(path, import.meta.url).href;
+    return new URL(path, import.meta.url).href;
 };
 
 const getImageUrl = (path) => {
-  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
 
@@ -460,7 +459,7 @@ const getCursorPosition = (event) => {
     }
 
 
-    
+
     return {
         x: event.clientX - rect.left,
         y: event.clientY - rect.top
@@ -770,7 +769,7 @@ const resizeCanvas = () => {
     canvas.height = window.innerHeight;
     setTimeout(() => {
         getCenterCords();
-        redraw(); 
+        redraw();
     }, 100);
 }
 
@@ -820,38 +819,33 @@ const getCenterCords = () => {
     }
 }
 
-onMounted(() => {
+onMounted(async () => {
+    const correct = await getCorrectAnswer(7, props.childId);
+    corrValue.value = correct.correctId;
+    is_correct.value = correct.is_correct;
     option.value = Math.floor(Math.random() * 2) + 1;
     canvas = canvasRef.value;
     ctx = canvas.getContext('2d');
     resizeCanvas();
-    // redrawCorrectRows();
     window.addEventListener('resize', resizeCanvas);
-    try {
-        const correct = getCorrectAnswer(7, props.childId);
-        corrValue.value = correct.correctId;
-        is_correct.value = correct.is_correct;
-    }
-    catch (error) {
-        console.log(error);
-    }
 })
 </script>
 
 <style lang="scss" scoped>
-*{
+* {
     user-select: none;
 }
 
 .end-modal {
     width: 1200px;
     height: 600px;
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;
     }
 }
+
 .canvas_draw {
     // border: 1px solid black;
     position: absolute;

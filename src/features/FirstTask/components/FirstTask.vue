@@ -14,12 +14,12 @@
 
                 <div class="draggable-list__wrapper">
                     <div class="draggable-list">
-                        <VueDraggableNext tag="div" :group="{ name: 'words', pull: 'clone', put: false }" :sort="false" v-for="(item, index) in words" :key="item.id" 
+                        <VueDraggableNext tag="div" :group="{ name: 'words', pull: 'clone', put: false }" :sort="false" v-for="(item, index) in words" :key="item.id"
                             @mouseenter="playAudio(item.audio)"
-                            @mouseout="stopAudio(item.audio)" 
+                            @mouseout="stopAudio(item.audio)"
                             @touchstart="playAudio(item.audio)"
                             @touchcancel="stopAudio(item.audio)"
-                            
+
 
                             @choose="()=>{ drag( item.name, item.id, index)}"
                             >
@@ -67,7 +67,7 @@ const props = defineProps({
     }
 });
 const endGame = ref(false);
-const is_correct = ref(null);
+const is_correct = ref(false);
 const hide = () => {
     emit('close');
     endGame.value = true;
@@ -205,14 +205,16 @@ const drop = (event) => {
                 emit('open');
             }
             endGame.value = true;
-        }, 2000)
+            playAudio('Task1/23.1_.mp3');
+        }, 1000)
     }
 
-   
+
 };
 
-onMounted(() => {
-    const correct = getCorrectAnswer(1, props.childId);
+onMounted(async() => {
+    const correct = await getCorrectAnswer(1, props.childId);
+    console.log(correct);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })

@@ -20,7 +20,7 @@
                         @choose="drag($event, item.name, item.id, index)">
                             <div class="list-group-item item" :id="item.id"
                                 @mouseenter="playAudio(item.audio)"
-                                @mouseout="stopAudio(item.audio)" 
+                                @mouseout="stopAudio(item.audio)"
                                 @touchstart="playAudio(item.audio)"
                                 @touchcancel="stopAudio(item.audio)"
 
@@ -117,7 +117,7 @@ const getImageUrl = (path) => {
 };
 
 const audio = ref(new Audio());
-const is_correct = ref(null);
+const is_correct = ref(false);
 
 const playAudio = async (audioPath) => {
     audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
@@ -240,7 +240,8 @@ const drop = (event, word, letter) => {
                     emit('open')
                 }
                 endGame.value = true;
-            }, 1500)
+                playAudio('Task9/315.9_.mp3')
+            }, 1000)
         }
     } else {
         elem.classList.add('red');
@@ -256,9 +257,9 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(() => {
+onMounted(async() => {
     try {
-        const correct = getCorrectAnswer(9, props.childId);
+        const correct = await getCorrectAnswer(9, props.childId);
         corrValue.value = correct.correctId;
         is_correct.value = correct.is_correct;
     }
@@ -295,7 +296,7 @@ onBeforeUnmount(() => {
 .end-modal {
     width: 1200px;
     height: 600px;
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;
@@ -368,7 +369,7 @@ onBeforeUnmount(() => {
     justify-content: center;
     column-gap: 2px;
     margin-bottom: 50px;
-    
+
     height: 50px;
 }
 

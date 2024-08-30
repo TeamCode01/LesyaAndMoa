@@ -9,6 +9,7 @@ const routes: RouteRecordRaw[] = [
             label: 'Главная',
             redirectTo: 'main-page',
         },
+
         children: [
             {
                 path: '/about-project',
@@ -132,31 +133,33 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                     import('@pages/PolicyPage/components/PolicyPage.vue'),
             },
-            {
-                path: '/game',
-                meta: {
-                    hiddenBreadcrumbs: true,
-                },
-                children: [
-                    {
-                        path: ':idChildOrGroup',
-                        children: [
-                            {
-                                path: '',
-                                name: 'Game',
-                                component: () =>
-                                    import(
-                                        '@pages/StartGamePage/components/StartGamePage.vue'
-                                    ),
-                            }
-                        ]
-                    },
-                ]
 
-            },
 
         ]
-    }
+
+    },
+    {
+        path: '/game',
+        meta: {
+            hiddenBreadcrumbs: true,
+        },
+        children: [
+            {
+                path: ':idChildOrGroup',
+                children: [
+                    {
+                        path: '',
+                        name: 'Game',
+                        component: () =>
+                            import(
+                                '@pages/StartGamePage/components/StartGamePage.vue'
+                            ),
+                    }
+                ]
+            },
+        ]
+
+    },
 ];
 
 export default routes;

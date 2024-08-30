@@ -51,10 +51,10 @@ const props = defineProps({
     },
 });
 const getImageUrl = (path) => {
-  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 const audio = ref(new Audio());
-const is_correct = ref(null);
+const is_correct = ref(false);
 const corrValue = ref(0);
 const playAudio = (audioPath) => {
     audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
@@ -70,16 +70,15 @@ const sendAnswer = () => {
         answer_input.classList.add('green');
         playAudio('Other/1. общее для разных заданий.mp3');
         setTimeout(() => {
-            answer_input.classList.remove('green');
-            endGame.value = true;
+
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);
                 emit('correct');
             }
-
-        }, 2000)
-
-
+            endGame.value = true;
+            answer_input.classList.remove('green');
+            playAudio('Task18/472.18_.mp3')
+        }, 1000)
 
     } else {
         answer_input.classList.add('red');
@@ -90,8 +89,8 @@ const sendAnswer = () => {
     }
 }
 
-onMounted(() => {
-    const correct = getCorrectAnswer(18, props.childId);
+onMounted(async () => {
+    const correct = await getCorrectAnswer(18, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
@@ -117,7 +116,7 @@ onBeforeUnmount(() => {
 
 </script>
 <style lang="scss" scoped>
-*{
+* {
     user-select: none;
 }
 
@@ -125,7 +124,7 @@ onBeforeUnmount(() => {
     width: 1200px;
     height: 600px;
 
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;

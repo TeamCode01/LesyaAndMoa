@@ -25,8 +25,8 @@
                     <div class="draggable-list">
                         <VueDraggableNext class="list-group-item item" v-for="(item, index) in syllables" :key="item.id"
                         :group="{ name: 'syllables', pull: 'clone', put: false }" :sort="false"
-                        @mouseover="playAudio(item.audio)" 
-                        @mouseout="stopAudio(item.audio)" 
+                        @mouseover="playAudio(item.audio)"
+                        @mouseout="stopAudio(item.audio)"
                         @touchstart="playAudio(item.audio)"
                         @choose="drag($event, item.name, item.id, index)">
                             <div :value="item">
@@ -167,7 +167,7 @@ const next = () => {
     endGame.value = true;
 }
 
-const is_correct = ref(null);
+const is_correct = ref(false);
 const corrValue = ref(0);
 
 
@@ -193,7 +193,7 @@ const drag = (event, syllable, id, index) => {
     // event.dataTransfer.setData('id', id);
 
     dataTransfer.value.syllable = syllable;
-    dataTransfer.value.id = id; 
+    dataTransfer.value.id = id;
     dropIndex.value = index;
 };
 const finish_answers = ref([]);
@@ -280,7 +280,6 @@ const chooseFairyTail = (event, status) => {
         );
 
         setTimeout(() => {
-
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);;
                 emit('correct');
@@ -288,7 +287,8 @@ const chooseFairyTail = (event, status) => {
             }
             endGame.value = true;
             event.target.classList.remove('green');
-        }, 2000);
+            playAudio('Task11/348.11_.mp3')
+        }, 1000);
     } else {
         event.target.value = status;
         playEndAudio('Common/2.1.mp3');
@@ -303,8 +303,8 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(() => {
-    const correct = getCorrectAnswer(11, props.childId);
+onMounted(async() => {
+    const correct = await getCorrectAnswer(11, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 })
@@ -336,7 +336,7 @@ onBeforeUnmount(() => {
 .end-modal {
     width: 1200px;
     height: 600px;
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;

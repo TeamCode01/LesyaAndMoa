@@ -14,7 +14,7 @@
                 <div class="draggable-list">
                     <div class="draggable-list__items">
                         <div class="draggable-list__item" v-for="row in taskData" :key="row">
-                            <VueDraggableNext v-for="word in row" :key="word.text" 
+                            <VueDraggableNext v-for="word in row" :key="word.text"
                             :group="(word.x == 0 || word.y == 0) ? { name: 'words', pull: false, put: false } : { name: 'words', pull: 'clone', put: false }" :sort="false"
                             @choose="($event)=>{drag($event, word)}" ghost-class="block" :drag-class="`${(word.x == 0 || word.y == 0) ? 'hidden' : 'block'}`" data-is-active='true'>
                                 <div class="draggable-list__button" :class="{
@@ -39,13 +39,13 @@
                                 <VueDraggableNext v-for="letter in word.data" :key="letter" :group="{ name: 'speakers', pull: false, put: true }" :sort="false"
                                 @add = "dropLetter($event, letter)" :ghost-class="'none'" >
 
-                                    <div class="task_block__letter" 
+                                    <div class="task_block__letter"
                                     :class="{ task_block__letter_active: letter.isActive}">
                                     {{ letter.text }}
                                 </div>
 
                                 </VueDraggableNext>
-                                
+
                                 <img class="comma" src="/assets/icons/comma-blue.svg" alt="comma-blue" v-if="
                                     [18].includes(word.data.slice(-1)[0].id) &&
                                     word.data.slice(-1)[0].isActive
@@ -83,19 +83,10 @@ import { tr } from 'vuetify/lib/locale/index.mjs';
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 
-onMounted(() => {
-    try {
-        const correct = getCorrectAnswer(15, props.childId);
-        corrValue.value = correct.correctId;
-        is_correct.value = correct.is_correct;
-    }
-    catch (error) {
-        console.log(error);
-    }  
-});
+
 
 const corrValue = ref(0)
-const is_correct = ref(null)
+const is_correct = ref(false)
 
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
@@ -249,6 +240,17 @@ const dropLetter = (event, letter) => {
     }
 };
 
+onMounted(async() => {
+    try {
+        const correct = await getCorrectAnswer(15, props.childId);
+        corrValue.value = correct.correctId;
+        is_correct.value = correct.is_correct;
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+
 onMounted(() => {
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
@@ -278,7 +280,7 @@ onBeforeUnmount(() => {
     width: 1200px;
     height: 600px;
 
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;

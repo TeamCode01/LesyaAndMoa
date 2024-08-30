@@ -609,7 +609,6 @@ onMounted(() => {
         showCookie.value = true;
     }
     document.addEventListener('scroll', handleScroll);
-
     windowWidth.value = window.innerWidth;
     itemsToShow.value = windowWidth.value >= 660 ? 2 : 1;
     authorsToShow.value = windowWidth.value >= 650 ? 2 : 1;

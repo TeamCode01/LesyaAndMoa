@@ -202,18 +202,18 @@
                 </p>
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
-                    <v-progress-linear v-model="skill.progress" height="30" class="scale">
+                    <v-progress-linear v-model="skill[block.id].progress" height="30" class="scale">
                         <template v-slot:default="{ value }">
                             <strong>{{ Math.ceil(value) }}%</strong>
                         </template>
                     </v-progress-linear>
                 </div>
-                <RouterLink :to="{
+                <router-link :to="{
                     name: 'Game',
                     params: { idChildOrGroup: block.id },
                 }" class="router-link">
                     <Button label="Перейти к обучению" class="profile__btn"></Button>
-                </RouterLink>
+                </router-link>
             </div>
         </div>
         <modalWindow label="Добавить группу">
@@ -287,7 +287,7 @@
 import { Button } from '@shared/components/buttons';
 import { modalWindow, modalConfirm } from '@shared/components/modals';
 import { HTTP } from '@app/http';
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { SelectSort } from '@shared/components/selects';
 import { useRoute } from 'vue-router';
@@ -298,8 +298,6 @@ import { watchEffect } from 'vue';
 
 const error = ref([]);
 const route = useRoute();
-let childId = ref(0);
-
 
 const userStore = useUserStore();
 const dialog = ref(false);
@@ -497,7 +495,6 @@ const GetSkill = async (id, index) => {
             },
         });
         skill.value[id] = response.data;
-        console.log('skill', skill.value.progress, id, index);
 
     } catch (error) {
         console.log('errr', error);
@@ -507,23 +504,16 @@ const GetSkill = async (id, index) => {
 const fetchSkills = () => {
     for (let i = 0; i < userStore.children.length; i++) {
         const id = userStore.children[i].id;
-        // childId.value = id
-        // console.log('id', id, 'i', i, skill.value);
         GetSkill(id, i);
     }
 };
-
-
-const progress = computed(() => {
-})
-
 
 watch(
     () => userStore.children,
 
     (newSkill) => {
         if (!newSkill) {
-            console.log(skill.value, 'here');
+            console.log('here');
         }
         fetchSkills();
     },

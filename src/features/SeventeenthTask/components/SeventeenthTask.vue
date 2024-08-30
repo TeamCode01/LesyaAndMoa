@@ -45,16 +45,16 @@
                                 v-for="word in row" :key="word.id">
 
                                 <div
-                                    @mouseenter="() => {if (word.isActive) { playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)}}" 
-                                    :ref="(el) => { refPuzzles[word.id - 1] = el}" 
+                                    @mouseenter="() => {if (word.isActive) { playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)}}"
+                                    :ref="(el) => { refPuzzles[word.id - 1] = el}"
                                     draggable="false">
-                                    <img :src="word.error == 0 ? word.src : word.error == 1 ? word.srcRight : word.srcError" :alt="word.class"  draggable="false" 
+                                    <img :src="word.error == 0 ? word.src : word.error == 1 ? word.srcRight : word.srcError" :alt="word.class"  draggable="false"
                                     :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" />
                                 </div>
 
 
                             </VueDraggableNext>
-                            
+
                         </div>
                     </div>
 
@@ -137,7 +137,7 @@ const next = () => {
 const dragIdPuzzle = ref()
 
 const audio = ref(new Audio());
-const is_correct = ref(null);
+const is_correct = ref(false);
 const is_started = ref(null);
 const corrValue = ref(0);
 const playAudio = (audioPath) => {
@@ -181,7 +181,7 @@ const drag = (event, word) => {
 }
 
 const drop = (event, word) => {
-    
+
     console.log('drop', event)
     let dragElem = event.item
     event.to.removeChild(event.item)
@@ -636,7 +636,7 @@ const finalDraw = () => {
 onMounted(async () => {
     canvas = canvasRef.value;
     try {
-        const correct = getCorrectAnswer(17, props.childId);
+        const correct = await getCorrectAnswer(17, props.childId);
         corrValue.value = correct.correctId;
         is_correct.value = correct.is_correct;
     }
@@ -693,7 +693,7 @@ onBeforeUnmount(() => {
     width: 1200px;
     height: 600px;
 
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;

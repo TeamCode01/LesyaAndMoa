@@ -70,7 +70,7 @@ const props = defineProps({
 });
 
 const countAnswers = ref(0);
-const is_correct = ref(null);
+const is_correct = ref(false);
 const audio = ref(new Audio());
 
 
@@ -206,7 +206,7 @@ onBeforeUnmount(() => {
     width: 1200px;
     height: 600px;
 
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;

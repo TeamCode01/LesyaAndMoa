@@ -19,7 +19,7 @@
                             <div class="draggable-list__letters" :id="'letters-' + wordid"
                                 v-for="{ wordid, word } in string" :key="wordid">
 
-                                <VueDraggableNext v-for="letter in word" :key="letter.id" class="letter_wrapper" 
+                                <VueDraggableNext v-for="letter in word" :key="letter.id" class="letter_wrapper"
                                 :group="{ name: 'words', pull: 'clone', put: false }" :sort="false"
                                 @choose="dragLetter($event, wordid, letter.id)" :ghost-class="'hidden'" :drag-class="'block'">
 
@@ -96,7 +96,7 @@ const next = () => {
 }
 
 const isActive = true;
-const is_correct = ref(null);
+const is_correct = ref(false);
 const is_started = ref(null);
 const corrValue = ref(0);
 
@@ -242,8 +242,8 @@ const resetTask = () => {
     answersCounter.value = 0;
 };
 
-onMounted(() => {
-    const correct = getCorrectAnswer(16, props.childId);
+onMounted(async() => {
+    const correct = await getCorrectAnswer(16, props.childId);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
 });
@@ -256,7 +256,7 @@ onMounted(() => {
     );
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
-    
+
     console.log('game mount')
 });
 
@@ -278,7 +278,7 @@ onBeforeUnmount(() => {
     width: 1200px;
     height: 600px;
 
-    
+
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;
