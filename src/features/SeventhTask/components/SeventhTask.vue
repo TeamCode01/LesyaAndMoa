@@ -22,7 +22,7 @@
                                 :class="{ 'draggable-list__word': true, correct_select: word.correct, not_correct_select: word.correct === false }">
                                 {{ word.word }}</div>
                             <img :ref="el => refColumns[1][word_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
                                 class="draggable-list__circle" draggable="false" />
                         </div>
                     </div>
@@ -30,13 +30,13 @@
                         <div class="draggable-list__sentence-container"
                             v-for="(sentence, sentence_index) in sentences[option]" :key="sentence_index">
                             <img :ref="el => refColumns[2][sentence_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
                                 class="draggable-list__circle" draggable="false" />
                             <div :ref="el => refBlockSound[2][sentence_index - 1] = el"
                                 :class="{ 'draggable-list__sentence': true, correct_select: sentence.correct, not_correct_select: sentence.correct === false }">
                                 {{ sentence.sentence }}</div>
                             <img :ref="el => refColumns[3][sentence_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
                                 class="draggable-list__circle" draggable="false" />
                         </div>
                     </div>
@@ -44,12 +44,12 @@
                         <div class="draggable-list__sentence-container"
                             v-for="(rowId, rowId_index) in correctRowId[option][2]" :key="rowId_index">
                             <img :ref="el => refColumns[2][rowId_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
                                 class="draggable-list__circle" draggable="false" />
                             <div :ref="el => refBlockSound[2][rowId_index - 1] = el" class="draggable-list__sentence">{{
                                 sentences[option][rowId].sentence }}</div>
                             <img :ref="el => refColumns[3][rowId_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
                                 class="draggable-list__circle" draggable="false" />
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                         <div class="draggable-list__picture-container" v-for="(img, img_index) in images[option]"
                             :key="img_index">
                             <img :ref="el => refColumns[4][img_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
                                 class="draggable-list__circle" draggable="false" />
                             <img :src="img.url" class="draggable-list__image">
                         </div>
@@ -67,7 +67,7 @@
                         <div class="draggable-list__picture-container"
                             v-for="(rowId, rowId_index) in correctRowId[option][3]" :key="rowId_index">
                             <img :ref="el => refColumns[4][rowId_index - 1] = el" alt="green-circle"
-                                :src="getSrcUrl('/assets/creatures/SeventeenthTask/green-circle.svg')"
+                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
                                 class="draggable-list__circle" draggable="false" />
                             <img :src="images[option][rowId].url" class="draggable-list__image">
                         </div>
@@ -421,7 +421,7 @@ const voiceActing = () => {
 }
 
 
-const getSrcUrl = (path) => {
+const getSrcUrl = (path) => {    
     return new URL(path, import.meta.url).href;
 };
 
@@ -817,16 +817,27 @@ const getCenterCords = () => {
             }
         }
     }
+    
+    console.log('centralCords', centralCords.value);
 }
 
 onMounted(async () => {
-    const correct = await getCorrectAnswer(7, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    
+    try {
+        const correct = await getCorrectAnswer(7, props.childId);
+        corrValue.value = correct.correctId;
+        is_correct.value = correct.is_correct;
+    }
+    catch (error) {
+        console.log(error);
+    }
+
     option.value = Math.floor(Math.random() * 2) + 1;
+
     canvas = canvasRef.value;
     ctx = canvas.getContext('2d');
     resizeCanvas();
+
     window.addEventListener('resize', resizeCanvas);
 })
 </script>
