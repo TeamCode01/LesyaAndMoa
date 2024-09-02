@@ -1,7 +1,7 @@
 <template>
     <div
         class="profile__wrapper"
-        v-if="!(userStore.children.length || groups.length)"
+        v-if="!(userStore.children.length || userStore.groups.length)"
     >
         <p class="text text__profile">Спасибо за регистрацию!</p>
         <p
@@ -172,6 +172,7 @@
                         <div class="form-input">
                             <label>Возраст</label>
                             <Input
+                                type="number"
                                 @blur="v$.age.$touch()"
                                 name="login"
                                 :class="{
@@ -223,6 +224,7 @@
                         <div class="form-input">
                             <label>Класс</label>
                             <Input
+                                type="number"
                                 @blur="v$.grade.$touch()"
                                 name="login"
                                 :class="{
@@ -284,7 +286,7 @@
             alt=""
         />
     </div>
-     <div
+    <div
         class="profile-child"
         v-if="userStore.currentUser.tasks_type === 'групповой'"
     >
@@ -340,7 +342,7 @@
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
                     <v-progress-linear
-                        v-model="skill[block.id].progress"
+                        v-model="skill.progress"
                         height="30"
                         class="scale"
                     >
@@ -389,6 +391,7 @@
                         <div class="form-input">
                             <label>Количество учеников в группе</label>
                             <Input
+                                type="number"
                                 @blur="V$.number_of_students.$touch()"
                                 name="login"
                                 :class="{
@@ -406,6 +409,7 @@
                         <div class="form-input">
                             <label>Средний возраст учеников группы</label>
                             <Input
+                                type="number"
                                 @blur="V$.average_age.$touch()"
                                 name="login"
                                 :class="{
@@ -645,7 +649,7 @@ const deleteGroup = async (id, index) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        groups.splice(index, 1);
+        userStore.groups.splice(index, 1);
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -677,7 +681,7 @@ const AddGroup = async () => {
             },
         });
         formGroup.value = response.data;
-        await GetGroup();
+        await userStore.getGroup();
         fetchSkills();
     } catch (error) {
         console.log('errr', error);
