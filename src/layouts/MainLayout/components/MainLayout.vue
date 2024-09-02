@@ -35,20 +35,14 @@ watch(
         ) {
             userStore.getGroups();
             console.log('ggg');
-        } else {
+        }
+         else {
             return false;
         }
     },
 );
 
 onMounted(async () => {
-    if (
-        localStorage.getItem('type') === 'групповой' &&
-        localStorage.getItem('Token') !== null
-    ) {
-        await userStore.getGroups();
-        console.log('ggg');
-    }
     if (localStorage.getItem('Token') !== null) {
         await userStore.getUser();
     }

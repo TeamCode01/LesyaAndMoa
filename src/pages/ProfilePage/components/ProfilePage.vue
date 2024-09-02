@@ -284,13 +284,13 @@
             alt=""
         />
     </div>
-    <div
+     <div
         class="profile-child"
         v-if="userStore.currentUser.tasks_type === 'групповой'"
     >
         <div
             class="profile-child__wrapper"
-            v-for="(block, index) in userStore?.groups"
+            v-for="(block, index) in userStore.groups"
             :key="index"
         >
             <div class="delete-profile">
@@ -503,6 +503,7 @@ import { watchEffect } from 'vue';
 
 const error = ref([]);
 const route = useRoute();
+const groups = [];
 
 const userStore = useUserStore();
 const dialog = ref(false);
@@ -729,7 +730,6 @@ const fetchSkills = () => {
 
 watch(
     () => userStore.children,
-    () => userStore.groups,
 
     (newSkill) => {
         if (!newSkill) {
@@ -742,7 +742,6 @@ watch(
 
 onMounted(() => {
     fetchSkills();
-    userStore.getGroups();
 });
 </script>
 <style lang="scss" scoped>
