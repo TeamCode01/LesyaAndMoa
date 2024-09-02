@@ -6,6 +6,8 @@ export const useUserStore = defineStore('user', {
         user: {},
         currentChild: {},
         children: [],
+        groups: [],
+        currentGroup: {},
         users: [],
         currentUser: {},
         isLoading: false,
@@ -31,6 +33,23 @@ export const useUserStore = defineStore('user', {
             try {
                 const responseChildren = await HTTP.get('children/');
                 this.children = responseChildren.data;
+            } catch (error) {
+                console.log('an error occured ' + error);
+            }
+        },
+
+        async getGroups() {
+            try {
+                const responseGroups = await HTTP.get('groups/');
+                this.groups = responseGroups.data;
+            } catch (error) {
+                console.log('an error occured ' + error);
+            }
+        },
+        async getGroup(id: Number) {
+            try {
+                const responseGroup = await HTTP.get(`groups/${id}/`);
+                this.currentGroup = responseGroup.data;
             } catch (error) {
                 console.log('an error occured ' + error);
             }

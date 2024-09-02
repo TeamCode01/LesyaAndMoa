@@ -290,7 +290,7 @@
     >
         <div
             class="profile-child__wrapper"
-            v-for="(block, index) in groups"
+            v-for="(block, index) in userStore?.groups"
             :key="index"
         >
             <div class="delete-profile">
@@ -475,13 +475,13 @@
             </template>
         </modalWindow>
         <img
-            v-if="!groups.length"
+            v-if="!userStore?.groups.length"
             class="profile-child__img"
             src="@app/assets/img/Profile/Moa.svg"
             alt=""
         />
         <img
-            v-if="groups.length"
+            v-if="userStore?.groups.length"
             class="profile-child__img"
             src="@app/assets/img/Profile/lesyaProfileGroup.svg"
             alt=""
@@ -530,7 +530,6 @@ const formGroup = ref({
     region: null,
     school: '',
 });
-const groups = ref([]);
 
 const skill = ref({});
 const rules = {
@@ -684,20 +683,6 @@ const AddGroup = async () => {
         isError.value = error.response.data;
     }
 };
-const GetGroup = async () => {
-    try {
-        const response = await HTTP.get('/groups/', groups.value, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
-        groups.value = response.data;
-    } catch (error) {
-        console.log('errr', error);
-        isError.value = error.response.data;
-    }
-};
 
 const GetRegion = async () => {
     try {
@@ -735,8 +720,8 @@ const fetchSkills = () => {
         }
     }
     if (userStore.currentUser.tasks_type === 'групповой') {
-        for (let i = 0; i < groups.length; i++) {
-            const id = groups[i].id;
+        for (let i = 0; i < userStore.groups.length; i++) {
+            const id = userStore.groups[i].id;
             GetSkill(id, i);
         }
     }
@@ -744,6 +729,7 @@ const fetchSkills = () => {
 
 watch(
     () => userStore.children,
+    () => userStore.groups,
 
     (newSkill) => {
         if (!newSkill) {
@@ -755,10 +741,8 @@ watch(
 );
 
 onMounted(() => {
-    if (localStorage.getItem('type') === 'групповой') {
-        GetGroup();
-    }
     fetchSkills();
+    userStore.getGroups();
 });
 </script>
 <style lang="scss" scoped>
