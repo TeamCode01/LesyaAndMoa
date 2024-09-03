@@ -101,7 +101,7 @@ import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 import { TwelfthTask } from '@features/TwelfthTask';
 import { useAnswerStore } from '@layouts/stores/answers';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 
 const emit = defineEmits(['sendImg', 'sendAudio', 'sendId', 'show', 'startTask', 'hand']);
 const props = defineProps({
@@ -123,9 +123,7 @@ const audio = ref(props.audioObj);
 const route = useRoute();
 const answerStore = useAnswerStore();
 const tasks = ref([
-
 ])
-
 const SeeTask = ref(false);
 const taskId = ref(null);
 const finish = ref(false);
@@ -261,9 +259,9 @@ watch(
     }
 );
 
-watch(() => props.childId, (newId) => {
+watch(() => props.childId, async (newId) => {
     props.childId = newId;
-    answerStore.getAnswers(props.childId);
+    await answerStore.getAnswers(props.childId);
     tasks.value.forEach((task, index) => {
         answerStore.answers.forEach((answer) => {
             if (answer.task?.id === task.id) {
@@ -278,24 +276,31 @@ watch(() => props.childId, (newId) => {
         tasks.value[nextElId].disabled = false;
     }
 
+}, {
+    immediate: true,
+    deep: true,
 })
 
 
-watch(() => answerStore.answers, (newAns) => {
-    answerStore.answers = newAns
-    tasks.value.forEach((task, index) => {
-        answerStore.answers.forEach((answer) => {
-            if (answer.task?.id === task.id) {
-                task.done = answer.is_correct;
-                task.disabled = false;
-            }
-        })
-    })
-    const taskFindArr = tasks.value.filter((task) => task.done === true);
-    if (taskFindArr.length > 0) {
-        let nextElId = taskFindArr.at(-1).id;
-        tasks.value[nextElId].disabled = false;
-    }
+onBeforeRouteLeave(() => {
+    tasks.value = [{ id: 1, name: 'Задание 1', disabled: false, done: false, open: false, time: 22, end: false, img: 'animals.jpg', audio: 'Task1/12.1.mp3', startAudio: 'Task1/11.1_.mp3' },
+    { id: 2, name: 'Задание 2', disabled: true, done: false, open: false, time: 17, end: false, img: 'task2.jpg', audio: 'Task2/25.2.mp3', startAudio: 'Task2/24.2_.mp3' },
+    { id: 3, name: 'Задание 3', disabled: true, done: false, open: false, time: 15, end: false, img: 'task3.jpg', audio: 'Task3/31.3.mp3', startAudio: 'Task3/30.3_.mp3' },
+    { id: 4, name: 'Задание 4', disabled: true, done: false, open: false, time: 15, end: false, img: 'task4.jpg', audio: 'Task4/45.4.mp3', startAudio: 'Task4/61.5_.mp3' },
+    { id: 5, name: 'Задание 5', disabled: true, done: false, open: false, time: 15, end: false, img: 'task5.jpg', audio: 'Task5/62.5.mp3', startAudio: 'Task5/61.5_.mp3' },
+    { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 20, end: false, img: 'task6.jpg', audio: 'Task6/79.6.mp3', startAudio: 'Task6/78.6_.mp3' },
+    { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false, img: 'task7.jpg', audio: 'Task7/261.7_.mp3', startAudio: 'Task7/260.7_.mp3' },
+    { id: 8, name: 'Задание 8', disabled: true, done: false, open: false, time: 30, end: false, img: 'task8.jpg', audio: 'Task8/280.8.mp3', startAudio: 'Task8/279.8_.mp3' },
+    { id: 9, name: 'Задание 9', disabled: true, done: false, open: false, time: 30, end: false, img: 'task9.jpg', audio: 'Task9/299.9.mp3', startAudio: 'Task9/298.9.mp3' },
+    { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 30, end: false, img: 'task10.jpg', audio: 'Task10/317.10.mp3', startAudio: 'Task10/316.10.mp3' },
+    { id: 11, name: 'Задание 11', disabled: true, done: false, open: false, time: 35, end: false, img: 'task11.jpg', audio: 'Task11/330.11.mp3', startAudio: 'Task11/329.11.mp3' },
+    { id: 12, name: 'Задание 12', disabled: true, done: false, open: false, time: 35, end: false, img: 'task12.jpg', audio: 'Task12/348.12.mp3', startAudio: 'Task12/349.12.mp3' },
+    { id: 13, name: 'Задание 13', disabled: true, done: false, open: false, time: 30, end: false, img: 'task13.jpg', audio: 'Task13/370.13.mp3', startAudio: 'Task13/369.13.mp3' },
+    { id: 14, name: 'Задание 14', disabled: true, done: false, open: false, time: 30, end: false, img: 'task14.jpg', audio: 'Task14/379.14.mp3', startAudio: 'Task14/378.14_.mp3' },
+    { id: 15, name: 'Задание 15', disabled: true, done: false, open: false, time: 60, end: false, img: 'task15.jpg', audio: 'Task15/390.15.mp3', startAudio: 'Task15/389.15.mp3' },
+    { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 60, end: false, img: 'task16.jpg', audio: 'Task16/428.16.mp3', startAudio: 'Task16/427.16_.mp3' },
+    { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: 'task17.jpg', audio: 'Task17/454.17.mp3', startAudio: 'Task17/453.17.mp3' },
+    { id: 18, name: 'Задание 18', disabled: true, done: false, open: false, time: 120, end: false, img: 'task18.jpg', audio: 'Task18/471.18.mp3', startAudio: 'Task18/470.18_.mp3' },];
 })
 
 onBeforeMount(() => {
@@ -317,26 +322,8 @@ onBeforeMount(() => {
     { id: 16, name: 'Задание 16', disabled: true, done: false, open: false, time: 60, end: false, img: 'task16.jpg', audio: 'Task16/428.16.mp3', startAudio: 'Task16/427.16_.mp3' },
     { id: 17, name: 'Задание 17', disabled: true, done: false, open: false, time: 30, end: false, img: 'task17.jpg', audio: 'Task17/454.17.mp3', startAudio: 'Task17/453.17.mp3' },
     { id: 18, name: 'Задание 18', disabled: true, done: false, open: false, time: 120, end: false, img: 'task18.jpg', audio: 'Task18/471.18.mp3', startAudio: 'Task18/470.18_.mp3' },];
-
 })
 
-onMounted(async () => {
-    await answerStore.getAnswers(props.childId);
-    tasks.value.forEach((task, index) => {
-        answerStore.answers.forEach((answer) => {
-            if (answer.task?.id === task.id) {
-                task.done = answer.is_correct;
-                task.disabled = false;
-            }
-        })
-    })
-    const taskFindArr = tasks.value.filter((task) => task.done === true);
-    if (taskFindArr.length > 0) {
-        let nextElId = taskFindArr.at(-1).id;
-        tasks.value[nextElId].disabled = false;
-    }
-
-})
 </script>
 <style lang="scss" scoped>
 .modal_background {

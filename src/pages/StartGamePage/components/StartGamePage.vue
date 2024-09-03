@@ -61,7 +61,7 @@ const showBtn = ref(false);
 const route = useRoute();
 const show_hand = ref(false);
 const task_id = ref(0);
-let childId = route.params.idChildOrGroup;
+let childId = route.params.id;
 const startAudio = ref(new Audio());
 const isPlaying = ref(false);
 const isMuted = ref(false);
@@ -125,10 +125,17 @@ const playSound = () => {
 }
 
 watch(
-  () => route.params.idChildOrGroup,
+  () => route.params.id,
   (newId) => {
+    if(!newId) {
+      return
+    }
     childId = newId;
-  }
+  },
+  {
+    immediate: true,
+    deep: true,
+}
 );
 
 onMounted(() => {

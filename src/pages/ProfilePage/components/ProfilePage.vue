@@ -90,7 +90,7 @@
                 <router-link
                     :to="{
                         name: 'Game',
-                        params: { idChildOrGroup: block.id },
+                        params: { id: block.id },
                     }"
                     class="router-link"
                 >
@@ -354,7 +354,7 @@
                 <router-link
                     :to="{
                         name: 'Game',
-                        params: { idChildOrGroup: block.id },
+                        params: { id: block.id },
                     }"
                     class="router-link"
                 >
