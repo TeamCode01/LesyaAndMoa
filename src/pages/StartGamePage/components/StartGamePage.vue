@@ -1,6 +1,6 @@
 <template>
   <div class="container-game" v-show="windowWidth >= 1024">
-    <div class="game">
+    <div class="game" id="game">
       <Sidebar :audio-obj="startAudio" :childId="childId" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio"
         @show="showButton" @hand="showHand" @send-id="getId" />
       <div class="game_icons_wrap">

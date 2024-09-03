@@ -90,6 +90,7 @@
                 <router-link
                     :to="{
                         name: 'Game',
+                        hash: '#game',
                         params: { id: block.id },
                     }"
                     class="router-link"

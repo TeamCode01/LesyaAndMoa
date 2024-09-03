@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useUserStore } from '@layouts/stores/user';
 import router from './router';
-
 export const HTTP = axios.create({
     // baseURL: 'http://31.129.98.70/api/v1/',,
     baseURL: 'https://xn----8sbnxhms6i.xn--p1ai/api/v1/',
