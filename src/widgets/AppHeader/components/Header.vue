@@ -188,6 +188,10 @@ document.addEventListener('click', (event) => {
     }
 });
 
+window.addEventListener('popstate', (event) => {
+    closeMenu();
+});
+
 </script>
 <style lang="scss">
 .link-small {

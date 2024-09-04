@@ -43,7 +43,13 @@ HTTP.interceptors.response.use(
                     console.log(originalRequest.url);
                     if (
                         localStorage.getItem('Token')
+
                     ) {
+                        userStore.logOut();
+                        localStorage.removeItem('Token');
+                        localStorage.removeItem('user');
+                        localStorage.removeItem('type');
+                        router.push({ name: 'Login' });
                         console.log('here token yes');
                     } else {
                         console.log('here token no');
