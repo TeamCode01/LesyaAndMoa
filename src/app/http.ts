@@ -6,18 +6,29 @@ export const HTTP = axios.create({
     baseURL: 'https://xn----8sbnxhms6i.xn--p1ai/api/v1/',
 });
 
+const urls = [
+    '/token/login/',
+    '/users/',
+    '/news/',
+    '/reset_password_confirm/',
+]
+
+const post_urls = [
+    '/reset_password/',
+]
+
+
 HTTP.interceptors.request.use(
     (config) => {
-        if (
-            config.url == '/token/login/' ||
-            (config.url == '/users/' && config.method == 'post') ||
-            config.url == '/reset_password/' || config.url == '/news/' ||
-            config.url == '/reset_password_confirm/'
-        ) {
+        const configUrl = config.url?.split('?').shift();
+        if (urls.some((item) => item === configUrl) || post_urls.some((item) => item === configUrl) && config.method === 'post') {
             delete config.headers.Authorization;
         } else {
             config.headers.Authorization =
                 'Token ' + localStorage.getItem('Token');
+        }
+        if (/\/news\//.test('/news/') && !/\d/.test('/news/')) {
+            delete config.headers.Authorization;
         }
         return config;
     },
