@@ -27,9 +27,9 @@ HTTP.interceptors.request.use(
             config.headers.Authorization =
                 'Token ' + localStorage.getItem('Token');
         }
-        if (/\/news\//.test('/news/') && !/\d/.test('/news/')) {
-            delete config.headers.Authorization;
-        }
+        // if (/\/news\//.test('/news/') && !/\d/.test('/news/')) {
+        //     delete config.headers.Authorization;
+        // }
         return config;
     },
     function (error) {

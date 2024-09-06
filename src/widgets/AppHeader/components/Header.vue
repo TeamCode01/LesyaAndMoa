@@ -16,7 +16,7 @@
                     </li>
                     <li>
                         <router-link class="link-small"
-                            :to="{ name: 'main-page', hash: '#news' }">Контакты</router-link>
+                            :to="{ name: 'main-page', hash: '#footer' }">Контакты</router-link>
                     </li>
 
                     <li>
