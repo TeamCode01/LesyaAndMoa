@@ -213,7 +213,6 @@ onMounted(() => {
   }
 
   &_mobile {
-    min-width: 360px;
     width: 100%;
     height: 100%;
     padding: 60px 26px;

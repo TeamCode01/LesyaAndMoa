@@ -214,8 +214,10 @@ const drop = (event, index) => {
 
     } else {
         elem.classList.add('red');
+        elem.classList.add('item-active');
         setTimeout(() => {
             elem.classList.remove('red');
+            elem.classList.remove('item-active');
         }, 2000);
         playEndAudio('Other/2. общее для разных заданий.mp3');
 
@@ -387,6 +389,11 @@ onBeforeUnmount(() => {
     cursor: pointer;
     max-height: 54px;
 
+}
+
+
+.item-active {
+    padding: 7px 15px;
 }
 
 .letter__item {

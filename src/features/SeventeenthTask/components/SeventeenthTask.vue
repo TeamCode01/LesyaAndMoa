@@ -48,7 +48,7 @@
                                     @mouseenter="() => {if (word.isActive) { playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)}}"
                                     :ref="(el) => { refPuzzles[word.id - 1] = el}"
                                     draggable="false">
-                                    <img :src="word.error == 0 ? word.src : word.error == 1 ? word.srcRight : word.srcError" :alt="word.class"  draggable="false"
+                                    <img :src="word.error == 0 ? getSrcUrl(word.src) : word.error == 1 ? getSrcUrl(word.srcRight) : getSrcUrl(word.srcError)" :alt="word.class"  draggable="false"
                                     :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" />
                                 </div>
 
@@ -71,7 +71,7 @@
                     <transition name="fade-pictures">
                         <div class="draggable-list__pictures" v-if="endFirstTask">
                             <div class="draggable-list__picture" v-for="picture in secondTask[1]" :key="picture.id">
-                                <img height="16px" src="/assets/creatures/SeventeenthTask/green-circle.svg"
+                                <img height="16px" src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
                                     alt="green-circle" class="draggable-list__word-top-circle" :ref="(el) => {
                                             refPoints[2][picture.id - 1] = el;
                                         }
@@ -129,6 +129,11 @@ const hide = () => {
 const next = () => {
     emit('next-modal');
 };
+
+const getSrcUrl = (path) => {    
+    return new URL(path, import.meta.url).href;
+};
+
 
 //
 // ПЕРВЫЙ ЭТАП ЗАДАНИЯ
