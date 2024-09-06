@@ -52,11 +52,9 @@ const formatDate = (dateString) => {
 const { replaceTargetObjects } = usePage();
 const GetNews = async (id) => {
     try {
-        const response = await HTTP.get(`/news/${id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await HTTP.get(`/news/${id}`, {transformRequest: (headers) => {
+            delete HTTP.defaults.headers.common['Authorization'];
+        }});
         news.value = response.data;
     } catch (error) {
         console.log('errr', error);

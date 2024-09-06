@@ -24,6 +24,7 @@ router.beforeEach((to, _from, next) => {
     to.name !== 'policy-page' &&
     to.name !== 'main-page' &&
     to.name !== 'news'&&
+    to.name !== 'page' &&
 
     localStorage.getItem('Token') === null
   )

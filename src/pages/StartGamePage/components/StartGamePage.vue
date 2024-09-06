@@ -1,6 +1,6 @@
 <template>
   <div class="container-game" v-show="windowWidth >= 1024">
-    <div class="game">
+    <div class="game" id="game">
       <Sidebar :audio-obj="startAudio" :childId="childId" :show="showBtn" @send-img="sendImg" @send-audio="sendAudio"
         @show="showButton" @hand="showHand" @send-id="getId" />
       <div class="game_icons_wrap">
@@ -61,7 +61,7 @@ const showBtn = ref(false);
 const route = useRoute();
 const show_hand = ref(false);
 const task_id = ref(0);
-let childId = route.params.idChildOrGroup;
+let childId = route.params.id;
 const startAudio = ref(new Audio());
 const isPlaying = ref(false);
 const isMuted = ref(false);
@@ -125,10 +125,17 @@ const playSound = () => {
 }
 
 watch(
-  () => route.params.idChildOrGroup,
+  () => route.params.id,
   (newId) => {
+    if(!newId) {
+      return
+    }
     childId = newId;
-  }
+  },
+  {
+    immediate: true,
+    deep: true,
+}
 );
 
 onMounted(() => {

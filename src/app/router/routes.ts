@@ -18,7 +18,7 @@ const routes: RouteRecordRaw[] = [
                 },
                 children: [
                     {
-                        path: ':idChildOrGroup',
+                        path: ':id',
                         children: [
                             {
                                 path: '',
