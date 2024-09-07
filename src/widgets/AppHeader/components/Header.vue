@@ -34,7 +34,7 @@
                     </div>
                     <Button class="btn_info" id="btn-mini" v-else label="Войти" @click="Login"></Button>
 
-                    <div class="header__wrapper_burger" @click="showBurger()">
+                    <div class="header__wrapper_burger" @click="showProfile()">
                         <img id="burger" src="@app/assets/icons/burger.png" alt="Бургер меню" />
                     </div>
                 </div>
@@ -108,8 +108,34 @@
                 <li v-if="Object.keys(userStore.currentUser).length">
                     <router-link to="/profile-page" class="link-small">Мой профиль</router-link>
                 </li>
-                <li><a href="#" class="link-small">Удалить профиль</a></li>
+                <li class="link-small" @click="showDeleteModal()">Удалить профиль</li>
             </ul>
+        </div>
+    </div>
+    <div class="overlay" v-show="showDelete"></div>
+    <div class="delete-profile__wrapper" v-show="showDelete">
+        <h3 class="delete-profile__title">
+            Удаление профиля пользователя
+        </h3>
+        <div>
+            <div class="delete-profile_content">
+                <p>
+                    Все данные
+                    будут удалены.
+                </p>
+                <div class="regCheck delete-check">
+                    <input type="checkbox" v-model="check" />
+                    <div>
+                        &nbsp;Да, я хочу удалить профиль
+                    </div>
+                </div>
+            </div>
+            <div class="delete-profile_btn">
+                <Button class="delete-btn" :disabled="!check" label="Удалить" @click="
+                    deleteUser();
+                "></Button>
+                <Button label="Отмена" class="delete-btn" @click="showDelete = !showDelete"></Button>
+            </div>
         </div>
     </div>
 </template>
@@ -119,13 +145,53 @@ import { ref } from 'vue';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@layouts/stores/user';
+import { useVuelidate } from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import { modalWindow, modalConfirm } from '@shared/components/modals';
 
 const showModal = ref(false);
 const showModalMini = ref(false);
+const showDelete = ref(false);
+
+const check = ref(false);
 
 const router = useRouter();
 const userStore = useUserStore();
 
+
+
+const showDeleteModal = () => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    if (showDelete.value === false) {
+        showModalMini.value = false;
+        showDelete.value = true;
+    } else {
+        showDelete.value = false;
+        document.body.classList.remove('no-scroll');
+    }
+};
+
+const showProfile = () => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    if (showModal.value === false) {
+        showModal.value = true;
+    } else {
+        showModal.value = false;
+        document.body.classList.remove('no-scroll');
+    }
+};
 const showBurger = () => {
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
@@ -134,20 +200,15 @@ const showBurger = () => {
     );
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
-
-    if (showModal.value === false) {
-        showModal.value = true;
-    } else {
-        showModal.value = false;
-        document.body.classList.remove('no-scroll');
-    }
     if (showModalMini.value === false) {
         showModalMini.value = true;
     } else {
         showModalMini.value = false;
         document.body.classList.remove('no-scroll');
     }
-};
+
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+}
 
 const closeMenu = () => {
     showModalMini.value = false;
@@ -176,9 +237,25 @@ const Login = () => {
     router.push({ name: 'Login' });
 };
 
+const deleteUser = async () => {
+    try {
+        if (check.value === false) {
+            return false;
+        }
+        const response = await HTTP.delete(`/users/me/`);
+        showDelete.value = false;
+        localStorage.removeItem('Token');
+        localStorage.removeItem('type');
+        userStore.logOut();
+        router.push({ name: 'Login' });
+    } catch (error) {
+        console.log('errr', error);
+    }
+};
+
 
 document.addEventListener('click', (event) => {
-    if (event.target.id !== 'modal-mini' && !event.target.matches('.modal__wrapper_mini')) {
+    if ((event.target.id !== 'delete-modal' && event.target.matches('.delete-profile__wrapper')) || (event.target.id !== 'modal-mini' && !event.target.matches('.modal__wrapper_mini'))) {
         showModalMini.value = false;
         document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
     }
@@ -198,6 +275,27 @@ window.addEventListener('popstate', (event) => {
     cursor: pointer;
 }
 
+.regCheck {
+    margin-top: 8px;
+    display: flex;
+    margin-bottom: 20px;
+
+    input {
+        width: 20px;
+        height: 20px;
+        border: 1px solid black;
+    }
+
+    &_text {
+        max-width: 320px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 14px;
+        color: #35383f;
+        font-weight: 500;
+        margin-left: 8px;
+    }
+}
+
 .no-scroll {
     overflow-y: scroll;
     /* Разрешает видимость полосы прокрутки */
@@ -207,6 +305,93 @@ window.addEventListener('popstate', (event) => {
     /* Фиксирует ширину страницы */
     top: calc(-1 * var(--scroll-position));
     /* Запоминает место прокрутки */
+}
+
+.delete-profile_user {
+    display: flex;
+    align-self: flex-start;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 98;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-profile__wrapper {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 10px;
+    max-width: 464px;
+    min-height: 326px;
+}
+
+.delete-profile__title {
+    font-size: 28px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #313131;
+}
+
+.delete-profile_content {
+    padding-left: 5px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.delete-profile_content p {
+    color: #313131;
+    font-size: 20px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.delete-profile_btn {
+    display: flex;
+    justify-content: space-between;
+}
+
+.delete-btn {
+    width: 182px;
+}
+
+
+.delete-check {
+    margin-top: 15px;
+}
+
+.delete-check input {
+    margin-top: 5px;
+    font-size: 20px;
+    color: #313131;
+}
+
+.delete-check div {
+    color: #313131;
+    font-size: 20px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.error-message {
+    font-family: 'Nunito', sans-serif;
+    color: #ff535c;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21.82px;
 }
 
 .header {
