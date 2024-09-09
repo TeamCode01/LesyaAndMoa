@@ -4,98 +4,176 @@
             <div class="header__wrapper">
                 <div class="header__logo">
                     <router-link to="/">
-                        <img class="header__logo_main" src="@app/assets/icons/LogoLesya.png"
-                            alt="Логотип сайта Леся и Моа" /></router-link>
+                        <img
+                            class="header__logo_main"
+                            src="@app/assets/icons/LogoLesya.png"
+                            alt="Логотип сайта Леся и Моа"
+                    /></router-link>
                 </div>
                 <ul class="header__wrapper_links">
                     <li>
-                        <router-link class="link-small" :to="'/about-project'">О проекте</router-link>
+                        <router-link class="link-small" :to="'/about-project'"
+                            >О проекте</router-link
+                        >
                     </li>
                     <li>
-                        <router-link class="link-small" :to="'/news-page'">Новости</router-link>
+                        <router-link class="link-small" :to="'/news-page'"
+                            >Новости</router-link
+                        >
                     </li>
                     <li>
-                        <router-link class="link-small"
-                            :to="{ name: 'main-page', hash: '#footer' }">Контакты</router-link>
+                        <router-link
+                            class="link-small"
+                            :to="{ name: 'main-page', hash: '#footer' }"
+                            >Контакты</router-link
+                        >
                     </li>
 
                     <li>
-                        <router-link class="link-small" :to="{ name: 'about-project', hash: '#support' }">Поддержать
-                            проект</router-link>
+                        <router-link
+                            class="link-small"
+                            :to="{ name: 'about-project', hash: '#support' }"
+                            >Поддержать проект</router-link
+                        >
                     </li>
                 </ul>
                 <div class="header__wrapper_adaptive">
-                    <div v-if="Object.keys(userStore.currentUser).length" class="header__wrapper_avatar">
-                        <img src="@app/assets/icons/avatar.png" alt="Аватарка" />
+                    <div
+                        v-if="Object.keys(userStore.currentUser).length"
+                        class="header__wrapper_avatar"
+                    >
+                        <img
+                            src="@app/assets/icons/avatar.png"
+                            alt="Аватарка"
+                        />
                         <div id="open-modal" @click="showBurger()">
-                            <img id="modal-mini" class="header__wrapper_avatar_arrow"
-                                src="@app/assets/icons/icons-chevron.svg" alt="arrow" />
+                            <img
+                                id="modal-mini"
+                                class="header__wrapper_avatar_arrow"
+                                src="@app/assets/icons/icons-chevron.svg"
+                                alt="arrow"
+                            />
                         </div>
                     </div>
-                    <Button class="btn_info" id="btn-mini" v-else label="Войти" @click="Login"></Button>
+                    <Button
+                        class="btn_info"
+                        id="btn-mini"
+                        v-else
+                        label="Войти"
+                        @click="Login"
+                    ></Button>
 
                     <div class="header__wrapper_burger" @click="showProfile()">
-                        <img id="burger" src="@app/assets/icons/burger.png" alt="Бургер меню" />
+                        <img
+                            id="burger"
+                            src="@app/assets/icons/burger.png"
+                            alt="Бургер меню"
+                        />
                     </div>
                 </div>
                 <div class="header__wrapper_other">
                     <div class="header__logo">
                         <a href="/">
-                            <img class="header__logo_yt" src="@app/assets/icons/YouTube.svg" alt="Ютуб" />
+                            <img
+                                class="header__logo_yt"
+                                src="@app/assets/icons/YouTube.svg"
+                                alt="Ютуб"
+                            />
                         </a>
                     </div>
 
                     <!-- <Button class="btn_info" v-if="user !== null" label="Выйти" @click="logOut"></Button> -->
-                    <div v-if="Object.keys(userStore.currentUser).length" class="header__wrapper_avatar">
-                        <img src="@app/assets/icons/avatar.png" alt="Аватарка" />
+                    <div
+                        v-if="Object.keys(userStore.currentUser).length"
+                        class="header__wrapper_avatar"
+                    >
+                        <img
+                            src="@app/assets/icons/avatar.png"
+                            alt="Аватарка"
+                        />
                         <div id="open-modal" @click="showBurger()">
-                            <img id="modal-mini" class="header__wrapper_avatar_arrow"
-                                src="@app/assets/icons/icons-chevron.svg" alt="arrow" />
+                            <img
+                                id="modal-mini"
+                                class="header__wrapper_avatar_arrow"
+                                src="@app/assets/icons/icons-chevron.svg"
+                                alt="arrow"
+                            />
                         </div>
                     </div>
 
-                    <Button class="btn_info" v-else label="Войти" @click="Login"></Button>
+                    <Button
+                        class="btn_info"
+                        v-else
+                        label="Войти"
+                        @click="Login"
+                    ></Button>
                 </div>
             </div>
         </div>
     </header>
     <div class="modal" v-if="showModal">
         <div class="close" @click="closeMenu()">
-            <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+            <img
+                class="close-icon"
+                src="@app/assets/icons/icon-close.svg"
+                alt="крест"
+            />
         </div>
         <div class="modal__wrapper">
             <div class="header__logo">
                 <a href="#" target="_blank">
-                    <img class="header__logo_modal" src="@app/assets/icons/LogoLesya.png"
-                        alt="Логотип сайта Леся и Моа" />
+                    <img
+                        class="header__logo_modal"
+                        src="@app/assets/icons/LogoLesya.png"
+                        alt="Логотип сайта Леся и Моа"
+                    />
                 </a>
             </div>
             <ul class="header__wrapper_links modal__menu">
                 <li>
-                    <router-link class="link-small" to="/about-project">О проекте</router-link>
+                    <router-link class="link-small" to="/about-project"
+                        >О проекте</router-link
+                    >
                 </li>
                 <li>
-                    <router-link class="link-small" to="/news-page">Новости</router-link>
+                    <router-link class="link-small" to="/news-page"
+                        >Новости</router-link
+                    >
                 </li>
                 <li>
-                    <router-link class="link-small" :to="{ name: 'main-page', hash: '#news' }">Контакты</router-link>
+                    <router-link
+                        class="link-small"
+                        :to="{ name: 'main-page', hash: '#news' }"
+                        >Контакты</router-link
+                    >
                 </li>
 
                 <li>
-                    <router-link class="link-small" :to="{ name: 'about-project', hash: '#support' }">Поддержать
-                        проект</router-link>
+                    <router-link
+                        class="link-small"
+                        :to="{ name: 'about-project', hash: '#support' }"
+                        >Поддержать проект</router-link
+                    >
                 </li>
             </ul>
             <div class="header__logo">
                 <a href="#" target="_blank">
-                    <img class="header__logo_yt" src="@app/assets/icons/YouTube.svg" alt="Ютуб" />
+                    <img
+                        class="header__logo_yt"
+                        src="@app/assets/icons/YouTube.svg"
+                        alt="Ютуб"
+                    />
                 </a>
             </div>
         </div>
     </div>
     <div class="modal-mini" v-if="showModalMini">
         <div class="close" @click="closeMenu()">
-            <img class="close-icon" src="@app/assets/icons/icon-close.svg" alt="крест" />
+            <img
+                class="close-icon"
+                src="@app/assets/icons/icon-close.svg"
+                alt="крест"
+            />
         </div>
         <div class="modal__wrapper_mini">
             <div class="modal__wrapper_mini_info">
@@ -106,9 +184,13 @@
             <ul class="header__wrapper_links modal__menu_mini">
                 <div class="link-small" @click="logOut">Выйти</div>
                 <li v-if="Object.keys(userStore.currentUser).length">
-                    <router-link to="/profile-page" class="link-small">Мой профиль</router-link>
+                    <router-link to="/profile-page" class="link-small"
+                        >Мой профиль</router-link
+                    >
                 </li>
-                <li class="link-small" @click="showDeleteModal()">Удалить профиль</li>
+                <li class="link-small" @click="showDeleteModal()">
+                    Удалить профиль
+                </li>
             </ul>
         </div>
     </div>
@@ -180,8 +262,6 @@ const check = ref(false);
 const router = useRouter();
 const userStore = useUserStore();
 
-
-
 const showDeleteModal = () => {
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
@@ -230,13 +310,15 @@ const showBurger = () => {
     }
 
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
-}
+};
 
 const closeMenu = () => {
     showModalMini.value = false;
     if (showModal.value == true) {
         showModal.value = false;
-        document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+        document.body.classList.remove(
+            'no-scroll',
+        ); /* Прокрутка возвращается */
     }
 
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
@@ -277,26 +359,40 @@ const deleteUser = async () => {
     }
 };
 
-
 document.addEventListener('click', (event) => {
-    if ((event.target.id !== 'delete-modal' && event.target.matches('.delete-profile__wrapper')) || (event.target.id !== 'modal-mini' && !event.target.matches('.modal__wrapper_mini'))) {
+    if (
+        (event.target.id !== 'delete-modal' &&
+            event.target.matches('.delete-profile__wrapper')) ||
+        (event.target.id !== 'modal-mini' &&
+            !event.target.matches('.modal__wrapper_mini'))
+    ) {
         showModalMini.value = false;
-        document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+        document.body.classList.remove(
+            'no-scroll',
+        ); /* Прокрутка возвращается */
     }
-    if (event.target.id !== 'burger' && !event.target.matches('.modal__wrapper')) {
+    if (
+        event.target.id !== 'burger' &&
+        !event.target.matches('.modal__wrapper')
+    ) {
         showModal.value = false;
-        document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+        document.body.classList.remove(
+            'no-scroll',
+        ); /* Прокрутка возвращается */
     }
 });
 
 window.addEventListener('popstate', (event) => {
     closeMenu();
 });
-
 </script>
 <style lang="scss">
 .link-small {
     cursor: pointer;
+}
+
+.correct_password {
+    width: 100%;
 }
 
 .regCheck {
@@ -360,6 +456,17 @@ window.addEventListener('popstate', (event) => {
     border-radius: 10px;
     max-width: 464px;
     min-height: 326px;
+
+    @media (max-width: 768px) {
+        padding: 30px;
+        max-width: 400px;
+        height: auto;
+    }
+    @media (max-width: 580px) {
+        padding: 20px;
+        max-width: 350px;
+        width: 100%;
+    }
 }
 
 .delete-profile__title {
@@ -369,6 +476,9 @@ window.addEventListener('popstate', (event) => {
     text-align: center;
     margin-bottom: 20px;
     color: #313131;
+    @media (max-width: 768px) {
+        font-size: 24px;
+    }
 }
 
 .delete-profile_content {
@@ -378,24 +488,27 @@ window.addEventListener('popstate', (event) => {
     flex-direction: column;
 }
 
+.current-password {
+    border: 1px solid black !important;
+}
+
 .delete-profile_content p {
     color: #313131;
     font-size: 20px;
     font-family: 'Nunito', sans-serif;
+    margin-bottom: 10px;
 }
 
 .delete-profile_btn {
     display: flex;
     justify-content: space-between;
+    @media (max-width: 768px) {
+        column-gap: 15px;
+    }
 }
 
 .delete-btn {
     width: 182px;
-}
-
-
-.delete-check {
-    margin-top: 15px;
 }
 
 .delete-check input {
@@ -465,7 +578,6 @@ window.addEventListener('popstate', (event) => {
         }
 
         @media (max-width: 568px) {
-
             &_adaptive {
                 display: flex;
                 justify-content: space-between;
