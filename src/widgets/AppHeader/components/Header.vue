@@ -114,27 +114,47 @@
     </div>
     <div class="overlay" v-show="showDelete"></div>
     <div class="delete-profile__wrapper" v-show="showDelete">
-        <h3 class="delete-profile__title">
-            Удаление профиля пользователя
-        </h3>
+        <h3 class="delete-profile__title">Удаление профиля пользователя</h3>
+
         <div>
             <div class="delete-profile_content">
-                <p>
-                    Все данные
-                    будут удалены.
-                </p>
+                <p>Все данные будут удалены.</p>
+                <div class="correct_password">
+                    <InputPass
+                        placeholder="Введите свой текущий пароль"
+                        name="password"
+                        class="form-input current-password"
+                        :class="{
+                            'form-input': true,
+                            red: isError.current_password,
+                        }"
+                        type="password"
+                        v-model:value="current_password"
+                    ></InputPass>
+                    <span
+                        v-if="isError.current_password"
+                        class="error-message"
+                        >{{ isError.current_password[0] }}</span
+                    >
+                </div>
                 <div class="regCheck delete-check">
                     <input type="checkbox" v-model="check" />
-                    <div>
-                        &nbsp;Да, я хочу удалить профиль
-                    </div>
+                    <div>&nbsp;Да, я хочу удалить профиль</div>
                 </div>
             </div>
+
             <div class="delete-profile_btn">
-                <Button class="delete-btn" :disabled="!check" label="Удалить" @click="
-                    deleteUser();
-                "></Button>
-                <Button label="Отмена" class="delete-btn" @click="showDelete = !showDelete"></Button>
+                <Button
+                    class="delete-btn"
+                    :disabled="!check || !current_password"
+                    label="Удалить"
+                    @click="deleteUser()"
+                ></Button>
+                <Button
+                    label="Отмена"
+                    class="delete-btn"
+                    @click="showDelete = !showDelete"
+                ></Button>
             </div>
         </div>
     </div>
@@ -145,6 +165,7 @@ import { ref } from 'vue';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@layouts/stores/user';
+import { InputPass } from '@shared/components/inputs';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import { modalWindow, modalConfirm } from '@shared/components/modals';
@@ -152,7 +173,8 @@ import { modalWindow, modalConfirm } from '@shared/components/modals';
 const showModal = ref(false);
 const showModalMini = ref(false);
 const showDelete = ref(false);
-
+const current_password = ref('');
+const isError = ref({});
 const check = ref(false);
 
 const router = useRouter();
@@ -239,17 +261,19 @@ const Login = () => {
 
 const deleteUser = async () => {
     try {
-        if (check.value === false) {
-            return false;
-        }
-        const response = await HTTP.delete(`/users/me/`);
+        const response = await HTTP.delete(`/users/me/`, {
+            data: {
+                current_password: current_password.value,
+            },
+        });
         showDelete.value = false;
         localStorage.removeItem('Token');
         localStorage.removeItem('type');
         userStore.logOut();
         router.push({ name: 'Login' });
     } catch (error) {
-        console.log('errr', error);
+        isError.value = error.response.data;
+        console.log('error', error, isError);
     }
 };
 
