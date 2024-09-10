@@ -214,10 +214,10 @@ onMounted(() => {
     max-width: 1200px;
   }
 
-  @media (max-width: 1024px) {
-    height: 470px;
-    max-width: 100%;
-  }
+  //@media (max-width: 1024px) {
+  //  height: 470px;
+  //  max-width: 100%;
+  //}
 
   &_mobile {
     width: 100%;
