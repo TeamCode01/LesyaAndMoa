@@ -157,15 +157,6 @@ onActivated(() => {
 
 </script>
 <style lang="scss" scoped>
-.container {
-    margin: 0 auto;
-    max-width: 1440px;
-
-    @media (max-width: 1350px) {
-        padding: 0 40px;
-    }
-}
-
 h1 {
     font-family: Nunito;
     font-size: 50px;
