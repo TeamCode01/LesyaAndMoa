@@ -5,8 +5,8 @@
                 <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
             </div>
             <div class="left-result">
-                <div class="left-result__greetings">
-                    <h4 class="left-result__title-h4">{{ props.text }}</h4>
+                <div class="left-result__greetings"  :class="{'test-result': props.is_test === true}">
+                    <h4 class="left-result__title-h4  text-center">{{ props.text }}</h4>
                     <img v-if="props.is_test === false && props.img" :src="props.img" class="left-result__flowers" id="result-banner" />
                 </div>
                 <div v-if="props.is_test === false">
@@ -16,7 +16,7 @@
                     </button>
                 </div>
                 <div v-else>
-                    <button @click="hide" class="left-result__button left-result__text">
+                    <button @click="goToGames" class="left-result__button left-result__text">
                         <span class="left-result__text">К обучению</span>
                         <img src="@app\assets\icons\vector.svg" alt="vector" />
                     </button>
@@ -71,8 +71,16 @@ const props = defineProps({
 })
 
 const goToGames = () => {
-    router.push({ name: 'Game' })
-}
+    if (localStorage.getItem('Token') !== null) {
+        router.push({
+            name: 'Game',
+            hash: '#game',
+            params: { id: localStorage.getItem('user') },
+        });
+    } else {
+        router.push({ name: 'Login' });
+    }
+};
 const next = () => {
     emit('next');
 }
@@ -120,6 +128,11 @@ onBeforeUnmount(() => {
     border-radius: 100px;
     width: 48px;
     height: 48px;
+}
+
+.test-result {
+    width: 100% !important;
+    padding: 0px 40px;
 }
 
 .result-banner {
@@ -235,11 +248,11 @@ onBeforeUnmount(() => {
 
 .right-result__img-moa {
     width: 100%;
-    height: 407px;
+    height: auto;
+    max-width: 405px;
 
     @media (max-width: 1024px) {
-        height: 327px;
-        width: 320px;
+        max-width: 320px;
     }
 }
 
