@@ -58,7 +58,7 @@ export type IconName =
     | 'icons-chevron'
     | 'link_copy_icon'
     | 'logos--telegram'
-    | 'logos--whatsapp-icon'
+    | 'logos--whatsapp'
     | 'muted'
     | 'play'
     | 'playGame'
@@ -72,6 +72,7 @@ export type IconName =
     | 'TimerIcon'
     | 'vector'
     | 'YouTube'
+    | "green-circle"
     ;
 
 
@@ -251,6 +252,9 @@ export const defaultIconSizes: IconsRecord = {
 
 
     // Здесь начилаются иконки для Леси и Моа
+
+
+
     '1TCLUB': {
         width: 185,
         height: 19,
@@ -354,12 +358,12 @@ export const defaultIconSizes: IconsRecord = {
     'logos--telegram': {
         width: 16,
         height: 16,
-        color: '#FFFFFF',
+        color: '#229ED9',
     },
-    'logos--whatsapp-icon': {
+    'logos--whatsapp': {
         width: 16,
         height: 16,
-        color: '#FFFFFF',
+        color: '#F9F9F9',
     },
     'muted': {
         width: 40,
@@ -426,4 +430,11 @@ export const defaultIconSizes: IconsRecord = {
         height: 33,
         color: '#E237A7',
     },
+
+    "green-circle": {
+        width: 16,
+        height: 16,
+        color: '#5CCF54',
+    },
+
 };

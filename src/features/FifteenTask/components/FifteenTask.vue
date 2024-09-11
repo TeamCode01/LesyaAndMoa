@@ -79,6 +79,7 @@ import audioMap from './dict.js'
 
 import gameActions from '@mixins/gameAction';
 import { tr } from 'vuetify/lib/locale/index.mjs';
+import { SvgIcon } from '@shared/components/svgIcon';
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;

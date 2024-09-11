@@ -138,6 +138,7 @@ import { dataTask, dataAnswer } from './task.js'
 import audioMap from './audioMap.js'
 
 import gameActions from '@mixins/gameAction';
+import { SvgIcon } from '@shared/components/svgIcon';
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;

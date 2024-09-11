@@ -101,18 +101,17 @@ title {
 }
 
 .container {
-    margin: 0 auto;
-    padding: 0 120px; // !important
-    max-width: 1440px;
+    margin: 0px auto;
+    width: 100%;
+    padding: 0 120px;
 
-    @media (max-width: 1440px) {
-        padding: 0 120px;
-        max-width: 1200px;
-    }
+    // @media (max-width: 1440px) {
+    //     padding: 0 120px;
+    //     max-width: 1200px;
+    // }
 
     @media (max-width: 1024px) {
         padding: 0 40px;
-        max-width: 944px;
     }
 }
 

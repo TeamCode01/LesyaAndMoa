@@ -573,7 +573,7 @@ window.addEventListener('popstate', (event) => {
         align-items: center;
         padding: 0 120px;
 
-        @media (max-width: 1440px) {
+        @media (max-width: 1024px) {
             padding: 0 40px;
         }
 

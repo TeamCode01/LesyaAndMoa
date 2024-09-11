@@ -101,6 +101,7 @@ import { dataTask, dataAnswer } from './task';
 import draggable from 'vuedraggable';
 
 import gameActions from '@mixins/gameAction';
+import { SvgIcon } from '@shared/components/svgIcon';
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;

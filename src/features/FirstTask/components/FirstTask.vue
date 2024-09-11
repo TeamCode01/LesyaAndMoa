@@ -49,6 +49,9 @@ import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import SmallDisplayBanner from '@features/SmallDisplayBanner/components/SmallDisplayBanner.vue';
 import gameActions from '@mixins/gameAction';
+
+import { SvgIcon } from '@shared/components/svgIcon';
+
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);

@@ -3,7 +3,7 @@
         <div class="task_block__wrapper">
             <template v-if="startGame">
                 <div class="task_block__close" @click="hide">
-                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                    <svgIcon icon-name="close-icon" class="close-icon" alt="крест"></svgIcon>
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
@@ -21,54 +21,69 @@
                             <div :ref="el => refBlockSound[1][word_index - 1] = el"
                                 :class="{ 'draggable-list__word': true, correct_select: word.correct, not_correct_select: word.correct === false }">
                                 {{ word.word }}</div>
-                            <img :ref="el => refColumns[1][word_index - 1] = el" alt="green-circle"
-                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
-                                class="draggable-list__circle" draggable="false" />
+
+                            <div :ref="(el) => { refColumns[1][word_index - 1] = el }" style="display: flex">
+                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
+                                </SvgIcon>    
+                            </div>
                         </div>
                     </div>
                     <div class="draggable-list__sentences" v-if="!showCorrectRow">
                         <div class="draggable-list__sentence-container"
                             v-for="(sentence, sentence_index) in sentences[option]" :key="sentence_index">
-                            <img :ref="el => refColumns[2][sentence_index - 1] = el" alt="green-circle"
-                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
-                                class="draggable-list__circle" draggable="false" />
+
+                            <div :ref="(el) => { refColumns[2][sentence_index - 1] = el }" style="display: flex">
+                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
+                                </SvgIcon>    
+                            </div>
+
                             <div :ref="el => refBlockSound[2][sentence_index - 1] = el"
                                 :class="{ 'draggable-list__sentence': true, correct_select: sentence.correct, not_correct_select: sentence.correct === false }">
                                 {{ sentence.sentence }}</div>
-                            <img :ref="el => refColumns[3][sentence_index - 1] = el" alt="green-circle"
-                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
-                                class="draggable-list__circle" draggable="false" />
+
+                            <div :ref="(el) => { refColumns[3][sentence_index - 1] = el }" style="display: flex">
+                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
+                                </SvgIcon>    
+                            </div>
                         </div>
                     </div>
                     <div class="draggable-list__sentences" v-else>
                         <div class="draggable-list__sentence-container"
                             v-for="(rowId, rowId_index) in correctRowId[option][2]" :key="rowId_index">
-                            <img :ref="el => refColumns[2][rowId_index - 1] = el" alt="green-circle"
-                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
-                                class="draggable-list__circle" draggable="false" />
+                            <div :ref="(el) => { refColumns[2][rowId_index - 1] = el }" style="display: flex">
+                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
+                                </SvgIcon>    
+                            </div>
+
                             <div :ref="el => refBlockSound[2][rowId_index - 1] = el" class="draggable-list__sentence">{{
                                 sentences[option][rowId].sentence }}</div>
-                            <img :ref="el => refColumns[3][rowId_index - 1] = el" alt="green-circle"
-                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
-                                class="draggable-list__circle" draggable="false" />
+
+                            <div :ref="(el) => { refColumns[3][rowId_index - 1] = el }" style="display: flex">
+                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
+                                </SvgIcon>    
+                            </div>
                         </div>
                     </div>
 
                     <div class="draggable-list__pictures" v-if="!showCorrectRow">
                         <div class="draggable-list__picture-container" v-for="(img, img_index) in images[option]"
                             :key="img_index">
-                            <img :ref="el => refColumns[4][img_index - 1] = el" alt="green-circle"
-                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
-                                class="draggable-list__circle" draggable="false" />
+                            <div :ref="(el) => { refColumns[4][img_index - 1] = el }" style="display: flex">
+                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
+                                </SvgIcon>    
+                            </div>
                             <img :src="img.url" class="draggable-list__image">
                         </div>
                     </div>
                     <div class="draggable-list__pictures" v-else>
                         <div class="draggable-list__picture-container"
                             v-for="(rowId, rowId_index) in correctRowId[option][3]" :key="rowId_index">
-                            <img :ref="el => refColumns[4][rowId_index - 1] = el" alt="green-circle"
-                                src="@app/assets/creatures/SeventeenthTask/green-circle.svg"
-                                class="draggable-list__circle" draggable="false" />
+
+                            <div :ref="(el) => { refColumns[4][rowId_index - 1] = el }" style="display: flex">
+                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
+                                </SvgIcon>    
+                            </div>
+
                             <img :src="images[option][rowId].url" class="draggable-list__image">
                         </div>
                     </div>
@@ -86,6 +101,8 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import gameActions from '@mixins/gameAction';
+
+import { SvgIcon } from '@shared/components/svgIcon';
 
 onMounted(() => {
 

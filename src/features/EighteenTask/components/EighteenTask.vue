@@ -30,6 +30,9 @@ import arrow from '@app/assets/icons/Arrow.svg';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import gameActions from '@mixins/gameAction';
+
+import { SvgIcon } from '@shared/components/svgIcon';
+
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'correct']);

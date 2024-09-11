@@ -293,7 +293,9 @@
                     alt="left"
                 />
                 <img
-                    v-if="currentSlideAuthor < slideAuthors.length - authorsToShow"
+                    v-if="
+                        currentSlideAuthor < slideAuthors.length - authorsToShow
+                    "
                     @click="next('carousel_authors')"
                     src="@app/assets/icons/icon-pink.svg"
                     alt="right"
@@ -387,7 +389,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, computed, onUnmounted } from 'vue';
+import { ref, onMounted, computed, onUnmounted, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
 import news from '@app/assets/backgrounds/news.png';
@@ -402,6 +404,7 @@ import { TestTask } from '@features/TestTask';
 import { useUserStore } from '@layouts/stores/user';
 import { cookieModal } from '@shared/components/modals';
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
+import { SvgIcon } from '@shared/components/svgIcon';
 
 const windowWidth = ref(window.innerWidth);
 const userStore = useUserStore();
@@ -461,7 +464,7 @@ const prev = (carousel_name) => {
     if (carousel_name == 'carousel_authors') {
         carousel_authors.value.prev();
     } else {
-        carousel.value.prev(); 
+        carousel.value.prev();
     }
 };
 const cur_date = new Date();
@@ -484,9 +487,7 @@ const acceptCookie = (name, value, days) => {
     setCookieOnce();
 };
 
-const slideItems = ref([
-
-]);
+const slideItems = ref([]);
 
 const slideAuthors = ref([
     {
@@ -538,11 +539,12 @@ const playAudio = (audioPath) => {
 };
 
 const playTestAudio = (audioPath) => {
-    audio.value.src = new URL(
+    const test_audio = new Audio();
+    test_audio.src = new URL(
         `/assets/audio/TestTask/${audioPath}`,
         import.meta.url,
     ).href;
-    audio.value.play();
+    test_audio.play();
 };
 
 function handleScroll(e) {
@@ -558,10 +560,8 @@ function handleScroll(e) {
         });
         if (posTop + test.offsetHeight < 0) {
             audio.value.pause();
-
         } else {
             audio.value.play();
-
         }
 
         // document.removeEventListener('scroll', handleScroll);
@@ -636,6 +636,19 @@ onBeforeRouteUpdate(() => {
         audio.value.pause();
     }
 });
+
+watch(
+    () => isOpen.value,
+    (newOpen) => {
+        if (isOpen.value === true) {
+            console.log('open');
+            audio.value.pause();
+        } else {
+            console.log('close');
+            audio.value.play();
+        }
+    },
+);
 </script>
 <style lang="scss" scoped>
 .networks {
