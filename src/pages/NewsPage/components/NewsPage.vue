@@ -52,9 +52,11 @@ const formatDate = (dateString) => {
 const { replaceTargetObjects } = usePage();
 const GetNews = async (id) => {
     try {
-        const response = await HTTP.get(`/news/${id}`, {transformRequest: (headers) => {
-            delete HTTP.defaults.headers.common['Authorization'];
-        }});
+        const response = await HTTP.get(`/news/${id}`, {
+            transformRequest: (headers) => {
+                delete HTTP.defaults.headers.common['Authorization'];
+            },
+        });
         news.value = response.data;
     } catch (error) {
         console.log('errr', error);
@@ -104,19 +106,30 @@ onBeforeRouteLeave(() => {
     GetNews();
 });
 </script>
-<style scoped>
+<style lang="scss" scoped>
+.news-page__container {
+    margin: 0 auto;
+}
 .news-banner {
     display: flex;
-    column-gap: 20px;
+    column-gap: 40px;
     margin-bottom: 60px;
+    @media (max-width: 800px) {
+        flex-direction: column;
+        justify-content: center;
+    }
 }
 
 .news-banner__img img {
-    width: 590px;
+    max-width: 590px;
     height: 420px;
     object-fit: cover;
     overflow: hidden;
     border-radius: 20px;
+    @media (max-width: 1100px) {
+        max-width: 460px;
+        height: 328px;
+    }
 }
 
 .news-banner__text {
@@ -129,12 +142,16 @@ onBeforeRouteLeave(() => {
     height: 420px;
     align-self: center;
     position: relative;
+    @media (max-width: 1100px) {
+        max-width: 460px;
+        height: 328px;
+    }
 }
 
 .news-banner__text h3 {
     font-weight: 400;
     font-size: 32px;
-    width: 590px;
+    max-width: 590px;
 }
 
 .news-banner__text p {
