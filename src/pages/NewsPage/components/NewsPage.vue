@@ -52,9 +52,11 @@ const formatDate = (dateString) => {
 const { replaceTargetObjects } = usePage();
 const GetNews = async (id) => {
     try {
-        const response = await HTTP.get(`/news/${id}`, {transformRequest: (headers) => {
-            delete HTTP.defaults.headers.common['Authorization'];
-        }});
+        const response = await HTTP.get(`/news/${id}`, {
+            transformRequest: (headers) => {
+                delete HTTP.defaults.headers.common['Authorization'];
+            },
+        });
         news.value = response.data;
     } catch (error) {
         console.log('errr', error);
@@ -105,6 +107,9 @@ onBeforeRouteLeave(() => {
 });
 </script>
 <style scoped>
+.news-page__container {
+    margin: 0 auto;
+}
 .news-banner {
     display: flex;
     column-gap: 20px;
@@ -112,7 +117,7 @@ onBeforeRouteLeave(() => {
 }
 
 .news-banner__img img {
-    width: 590px;
+    max-width: 590px;
     height: 420px;
     object-fit: cover;
     overflow: hidden;
@@ -134,7 +139,7 @@ onBeforeRouteLeave(() => {
 .news-banner__text h3 {
     font-weight: 400;
     font-size: 32px;
-    width: 590px;
+    max-width: 590px;
 }
 
 .news-banner__text p {
