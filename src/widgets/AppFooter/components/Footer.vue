@@ -1,5 +1,5 @@
 <template>
-    <footer class="footer">
+    <footer class="footer" id="footer">
         <div class="container">
             <div class="footer__wrapper">
                 <div class="footer__wrapper_info">
@@ -19,8 +19,13 @@
                 <div class="footer__wrapper_info">
                     <div class="footer__wrapper_phone">8 (900) 123-45-45</div>
                     <div class="footer__wrapper_links">
-                        <router-link class="link-small" to="/policy-page">Политика конфиденциональности</router-link>
-                        <router-link class="link-small" to="/policy-page">Пользовательское соглашение</router-link>
+                        <a
+                            class="link-small"
+                            href="https://docs.google.com/document/d/1yrwy13in-UhEW80KpYaCUWKI6q3KdXutEhfkLx8p3j0/edit"
+                            target="_blank"
+                            >Политика конфиденциальности</a
+                        >
+                        <router-link class="link-small" to="/policy-page"  target="_blank">Пользовательское соглашение</router-link>
                     </div>
                 </div>
                 <div class="footer__wrapper_info creator">

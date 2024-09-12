@@ -6,16 +6,27 @@ export const HTTP = axios.create({
     baseURL: 'https://xn----8sbnxhms6i.xn--p1ai/api/v1/',
 });
 
+const urls = [
+    '/token/login/',
+    '/users/',
+    '/news/',
+    '/reset_password_confirm/',
+]
+
+const post_urls = [
+    '/reset_password/',
+]
+
+
+
 HTTP.interceptors.request.use(
     (config) => {
-        if (
-            config.url == '/token/login/' ||
-            (config.url == '/users/' && config.method == 'post') ||
-            config.url == '/reset_password/' || config.url == '/news/' ||
-            config.url == '/reset_password_confirm/'
-        ) {
+        const configUrl = config.url?.split('?').shift();
+        if (urls.some((item) => item === configUrl) || post_urls.some((item) => item === configUrl) && config.method === 'post' || configUrl?.includes('news') || (configUrl?.includes('news') && /\d/.test(configUrl))) {
+            console.log(configUrl)
             delete config.headers.Authorization;
         } else {
+            console.log(configUrl)
             config.headers.Authorization =
                 'Token ' + localStorage.getItem('Token');
         }
@@ -43,7 +54,13 @@ HTTP.interceptors.response.use(
                     console.log(originalRequest.url);
                     if (
                         localStorage.getItem('Token')
+
                     ) {
+                        userStore.logOut();
+                        localStorage.removeItem('Token');
+                        localStorage.removeItem('user');
+                        localStorage.removeItem('type');
+                        router.push({ name: 'Login' });
                         console.log('here token yes');
                     } else {
                         console.log('here token no');

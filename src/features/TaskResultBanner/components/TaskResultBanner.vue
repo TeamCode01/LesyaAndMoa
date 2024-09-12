@@ -2,23 +2,53 @@
     <div class="result-banner">
         <div v-if="props.is_end === false" class="result-banner__wrapper">
             <div class="close" @click="hide">
-                <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                <img
+                    class="close-icon"
+                    src="@app/assets/icons/close-icon.svg"
+                    alt="крест"
+                />
             </div>
             <div class="left-result">
-                <div class="left-result__greetings">
-                    <h4 class="left-result__title-h4">{{ props.text }}</h4>
-                    <img v-if="props.is_test === false && props.img" :src="props.img" class="left-result__flowers" id="result-banner" />
+                <div
+                    class="left-result__greetings"
+                    :class="{ 'test-result': props.is_test === true }"
+                >
+                    <h4 class="left-result__title-h4 text-center">
+                        {{ props.text }}
+                    </h4>
+                    <img
+                        v-if="props.is_test === false && props.img"
+                        :src="props.img"
+                        class="left-result__flowers"
+                        id="result-banner"
+                    />
                 </div>
                 <div v-if="props.is_test === false">
-                    <button @click="next" class="left-result__button left-result__text">
-                        <span class="left-result__text">Далее</span>
-                        <img src="@app\assets\icons\vector.svg" alt="vector" />
+                    <button
+                        @click="next"
+                        class="left-result__button left-result__text"
+                    >
+                        <div class="left-result__wrap">
+                            <span class="left-result__text">Далее</span>
+                            <img
+                                src="@app\assets\icons\vector.svg"
+                                alt="vector"
+                            />
+                        </div>
                     </button>
                 </div>
                 <div v-else>
-                    <button @click="hide" class="left-result__button left-result__text">
-                        <span class="left-result__text">К обучению</span>
-                        <img src="@app\assets\icons\vector.svg" alt="vector" />
+                    <button
+                        @click="goToGames"
+                        class="left-result__button left-result__text"
+                    >
+                        <div class="left-result__wrap">
+                            <span class="left-result__text">К обучению</span>
+                            <img
+                                src="@app\assets\icons\vector.svg"
+                                alt="vector"
+                            />
+                        </div>
                     </button>
                 </div>
             </div>
@@ -28,15 +58,20 @@
         </div>
         <div v-else class="result-banner__wrapper">
             <div class="close" @click="hide">
-                <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                <img
+                    class="close-icon"
+                    src="@app/assets/icons/close-icon.svg"
+                    alt="крест"
+                />
             </div>
             <div class="end">
                 <div class="end_wrapper">
-                    <h4 class="left-result__title-h4 end_title">Друг, спасибо за помощь! До новых встреч!</h4>
+                    <h4 class="left-result__title-h4 end_title">
+                        Друг, спасибо за помощь! До новых встреч!
+                    </h4>
                     <img class="end_img" id="result-bg" />
                 </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -67,23 +102,30 @@ const props = defineProps({
     is_end: {
         type: Boolean,
         default: false,
-    }
-})
+    },
+});
 
 const goToGames = () => {
-    router.push({ name: 'Game' })
-}
+    if (localStorage.getItem('Token') !== null) {
+        // router.push({
+        //     name: 'Game',
+        //     hash: '#game',
+        //     params: { id: localStorage.getItem('user') },
+        // });
+        router.push({ name: 'profile-page' });
+    } else {
+        router.push({ name: 'Login' });
+    }
+};
 const next = () => {
     emit('next');
-}
+};
 
 onMounted(() => {
-    if (props.is_test === false & props.is_end === false & props.img) {
+    if ((props.is_test === false) & (props.is_end === false) & props.img) {
         document.getElementById('result-banner').src = props.img;
     }
     document.getElementById('result-bg').src = props.bg;
-
-
 
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
@@ -93,17 +135,14 @@ onMounted(() => {
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
 
-    console.log('banner mount')
+    console.log('banner mount');
 });
-
 
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
-    console.log('banner unmount')
+    console.log('banner unmount');
 });
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -120,6 +159,11 @@ onBeforeUnmount(() => {
     border-radius: 100px;
     width: 48px;
     height: 48px;
+}
+
+.test-result {
+    width: 100% !important;
+    padding: 0px 40px;
 }
 
 .result-banner {
@@ -158,6 +202,12 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     gap: 48px;
+}
+
+.left-result__wrap {
+    display: flex;
+    justify-content: center;
+    column-gap: 20px;
 }
 
 .left-result__greetings {
@@ -210,7 +260,7 @@ onBeforeUnmount(() => {
 }
 
 .left-result__text {
-    padding-right: 20px;
+    // padding-right: 20px;
     font-family: 'Nunito', sans-serif;
     font-size: 20px;
     font-weight: 500;
@@ -235,11 +285,11 @@ onBeforeUnmount(() => {
 
 .right-result__img-moa {
     width: 100%;
-    height: 407px;
+    height: auto;
+    max-width: 405px;
 
     @media (max-width: 1024px) {
-        height: 327px;
-        width: 320px;
+        max-width: 320px;
     }
 }
 
@@ -258,9 +308,9 @@ onBeforeUnmount(() => {
     }
 }
 
-
 // При планшетном варианте ломает адаптив
 // #result-bg {
 //     width: 403px;
 //     height: 407px;
-// }</style>
+// }
+</style>
