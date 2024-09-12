@@ -106,14 +106,18 @@ onBeforeRouteLeave(() => {
     GetNews();
 });
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .news-page__container {
     margin: 0 auto;
 }
 .news-banner {
     display: flex;
-    column-gap: 20px;
+    column-gap: 40px;
     margin-bottom: 60px;
+    @media (max-width: 800px) {
+        flex-direction: column;
+        justify-content: center;
+    }
 }
 
 .news-banner__img img {
@@ -122,6 +126,10 @@ onBeforeRouteLeave(() => {
     object-fit: cover;
     overflow: hidden;
     border-radius: 20px;
+    @media (max-width: 1100px) {
+        max-width: 460px;
+        height: 328px;
+    }
 }
 
 .news-banner__text {
@@ -134,6 +142,10 @@ onBeforeRouteLeave(() => {
     height: 420px;
     align-self: center;
     position: relative;
+    @media (max-width: 1100px) {
+        max-width: 460px;
+        height: 328px;
+    }
 }
 
 .news-banner__text h3 {
