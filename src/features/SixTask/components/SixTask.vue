@@ -66,6 +66,7 @@ import { tasksData } from './tasks.js';
 import dict from './dict.js';
 
 import gameActions from '@mixins/gameAction';
+import { SvgIcon } from '@shared/components/svgIcon';
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;

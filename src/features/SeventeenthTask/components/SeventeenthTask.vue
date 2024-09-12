@@ -3,14 +3,15 @@
         <div class="task_block__wrapper">
             <template v-if="startGame">
                 <div class="task_block__close" @click="hide()">
-                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                    <svgIcon icon-name="close-icon" class="close-icon" alt="крест"></svgIcon>
                 </div>
-                <div class="task_block__time">
+                <div class="task_block__time" @click="console.log(refPoints)">
                     <Timer :end="end"></Timer>
                     <p class="title-h4 task_block__title SeventeenthTask__title">
                         Собери слова из двух частей. <br />
                         Соедини полученные слова с картинками.
                     </p>
+
                 </div>
                 <canvas class="canvas_draw" ref="canvasRef"
                     @mousedown="engage" @mouseup="disengage" @mousemove="draw"
@@ -24,11 +25,10 @@
                                 <div class="draggable-list__word">
                                     {{ word.text }}
                                 </div>
-                                <img height="16px" src="/assets/creatures/SeventeenthTask/green-circle.svg"
-                                    alt="green-circle" class="draggable-list__word-top-circle" :ref="(el) => {
-                                            refPoints[1][word.id - 1] = el;
-                                        }
-                                        " />
+                                <div :ref="(el) => { refPoints[1][word.id - 1] = el; }" style="display: flex">
+                                    <SvgIcon icon-name="green-circle" class="draggable-list__word-top-circle" >
+                                    </SvgIcon>    
+                                </div>
                             </div>
                         </div>
                     </transition>
@@ -36,6 +36,8 @@
                     <div class="draggable-list__syllables" v-if="!endFirstTask">
                         <div class="draggable-list__set-syllables" v-for="row in firstTask[0]" :key="row"
                             draggable="false">
+
+
 
                             <VueDraggableNext :group="`${ (word.id == dragIdPuzzle) ? { name: 'word', pull: 'clone', put: false } : { name: 'word', pull: 'clone', put: true } }`"
                                 :sort="false" @add = "drop($event, word)" :class="[word.class]"
@@ -48,7 +50,7 @@
                                     @mouseenter="() => {if (word.isActive) { playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)}}"
                                     :ref="(el) => { refPuzzles[word.id - 1] = el}"
                                     draggable="false">
-                                    <img :src="word.error == 0 ? word.src : word.error == 1 ? word.srcRight : word.srcError" :alt="word.class"  draggable="false"
+                                    <img :src="word.error == 0 ? getSrcUrl(word.src) : word.error == 1 ? getSrcUrl(word.srcRight) : getSrcUrl(word.srcError)" :alt="word.class"  draggable="false"
                                     :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" />
                                 </div>
 
@@ -71,11 +73,12 @@
                     <transition name="fade-pictures">
                         <div class="draggable-list__pictures" v-if="endFirstTask">
                             <div class="draggable-list__picture" v-for="picture in secondTask[1]" :key="picture.id">
-                                <img height="16px" src="/assets/creatures/SeventeenthTask/green-circle.svg"
-                                    alt="green-circle" class="draggable-list__word-top-circle" :ref="(el) => {
-                                            refPoints[2][picture.id - 1] = el;
-                                        }
-                                        " />
+
+
+                                <div :ref="(el) => { refPoints[2][picture.id - 1] = el; }" style="display: flex">
+                                    <SvgIcon icon-name="green-circle" class="draggable-list__word-top-circle" >
+                                    </SvgIcon>    
+                                </div>
                                 <img :src="picture.src" :alt="picture.alt" class="draggable-list__lesyaandmoa"
                                     v-if="!endSecondTask" />
                                 <img :src="picture.endsrc" :alt="picture.endalt" class="draggable-list__lesyaandmoa"
@@ -103,6 +106,7 @@ import {
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+import { SvgIcon } from '@shared/components/svgIcon';
 
 import { dataFirstTask, dataSecondTask } from './task.js';
 import audioMap from './audioMap'
@@ -129,6 +133,11 @@ const hide = () => {
 const next = () => {
     emit('next-modal');
 };
+
+const getSrcUrl = (path) => {    
+    return new URL(path, import.meta.url).href;
+};
+
 
 //
 // ПЕРВЫЙ ЭТАП ЗАДАНИЯ
@@ -253,8 +262,15 @@ const drop = (event, word) => {
         event.from.dataset['isActive'] = 'true'
 
         setTimeout(()=>{
-            event.from.children[0].children[0].src = dragSrc;
-            event.to.children[0].children[0].src = word.src
+            try {
+                event.from.children[0].children[0].src = dragSrc;
+            }
+            catch {}
+            
+            try {
+                event.to.children[0].children[0].src = word.src
+            }
+            catch {}
         }, 2000)
     }
 }
@@ -272,6 +288,8 @@ const refPoints = ref({
     1: [],
     2: [],
 });
+
+
 const centralCords = ref({
     1: [
         { x: 0, y: 0 },
@@ -349,6 +367,7 @@ const getCenterCords = () => {
         for (const pointId in refPoints.value[rowId]) {
             const point = refPoints.value[rowId][pointId];
             if (point) {
+                console.log(point);
                 const rect = point.getBoundingClientRect();
                 const canvasRect = canvas.getBoundingClientRect();
 

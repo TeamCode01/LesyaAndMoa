@@ -111,6 +111,8 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 
 import { VueDraggableNext } from 'vue-draggable-next';
 import gameActions from '@mixins/gameAction';
+import { SvgIcon } from '@shared/components/svgIcon';
+
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);

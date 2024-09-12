@@ -1,5 +1,5 @@
 <template>
-    <ul class="breadcrumb__list container">
+    <ul class="breadcrumb__list">
         <app-breadcrumb
             v-for="(breadcrumb, index) in breadcrumbs"
             :key="breadcrumb.path"
@@ -31,9 +31,14 @@ defineProps<BreadcrumbsProps>();
     line-height: 19.1px;
     font-weight: 400;
     list-style: none;
-    color: #A3A3A3;
+    color: #a3a3a3;
+    margin: 0px auto;
+    width: 100%;
+    padding: 0 120px;
     padding-top: 40px !important;
-
+    @media (max-width: 1024px) {
+        padding: 0 40px;
+    }
     @media (max-width: 360px) {
         margin-bottom: 20px;
     }

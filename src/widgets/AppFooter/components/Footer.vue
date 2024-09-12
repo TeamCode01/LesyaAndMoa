@@ -143,7 +143,7 @@
         }
 
         @media (max-width: 720px) {
-            width: 320px;
+            //width: 320px;
             flex-direction: column;
             align-items: flex-start;
             align-self: center;

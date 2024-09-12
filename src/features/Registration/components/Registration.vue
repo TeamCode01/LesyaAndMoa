@@ -78,7 +78,13 @@
                         v-model="form.data_processing_agreement"
                     />
                     <div class="regCheck_text">
-                        даю согласие на обработку <router-link class="form-question-link" to="/policy-page" target="_blank">персональных данных</router-link>
+                        даю согласие на обработку
+                        <router-link
+                            class="form-question-link"
+                            to="/policy-page"
+                            target="_blank"
+                            >персональных данных</router-link
+                        >
                         и ознакомлен с <a
                             class="form-question-link"
                             href="https://docs.google.com/document/d/1yrwy13in-UhEW80KpYaCUWKI6q3KdXutEhfkLx8p3j0/edit"
@@ -90,7 +96,13 @@
                 <Button
                     label="Зарегистрироваться"
                     class="form-btn"
-                    @click="RegisterUser"
+                    :disabled="!isFormValid"
+                    @click="
+                        if (isFormValid) {
+                            RegisterUser();
+                            close();
+                        }
+                    "
                 ></Button>
                 <div class="form-question">
                     Уже есть аккаунт?&nbsp;<router-link
@@ -105,7 +117,7 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
@@ -157,6 +169,15 @@ watchEffect(() => {
             isError.value.tasks_type = ['Поле должно быть заполнено'];
         }
     }
+});
+const isFormValid = computed(() => {
+    return (
+        form.value.email !== '' &&
+        form.value.password !== '' &&
+        form.value.re_password !== '' &&
+        form.value.tasks_type !== '' &&
+        form.value.data_processing_agreement !== ''
+    );
 });
 
 const RegisterUser = async () => {

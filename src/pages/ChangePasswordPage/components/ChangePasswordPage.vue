@@ -12,29 +12,59 @@
                         </p>
                         <div class="login-input">
                             <label>Электронная почта</label>
-                            <Input placeholder="Введите email" name="email" class="form-input"
-                                v-model:value="data.email"></Input>
+                            <Input
+                                placeholder="Введите email"
+                                name="email"
+                                :class="{
+                                    'form-input': true,
+                                    red: isError.email,
+                                }"
+                                v-model:value="data.email"
+                                @blur="v$.email.$touch()"
+                            ></Input>
+                            <span v-if="isError.email" class="error-message">{{
+                                isError.email[0]
+                            }}</span>
                         </div>
                         <Button class="form-btn">Воccтановить пароль</Button>
                     </form>
                 </div>
-                <img class="img-auth" src="@app/assets/img/auth/Moa.png" alt="" />
+                <img
+                    class="img-auth"
+                    src="@app/assets/img/auth/Moa.png"
+                    alt=""
+                />
             </div>
         </div>
     </div>
 </template>
 <script setup>
 import { Input } from '@shared/components/inputs';
-import { ref, inject } from 'vue';
+import { ref } from 'vue';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import { watchEffect } from 'vue';
 
-
-const swal = inject('$swal');
-const isError = ref([]);
+const isError = ref({});
 const data = ref({
-    email: ''
-})
+    email: '',
+});
+
+const rules = {
+    email: { required },
+};
+const v$ = useVuelidate(rules, data);
+
+watchEffect(() => {
+    isError.value = {};
+    if (v$.value.$invalid) {
+        if (v$.value.email.$error) {
+            isError.value.email = ['Неверный e-mail'];
+        }
+    }
+});
 
 const changePass = async () => {
     try {
@@ -42,30 +72,12 @@ const changePass = async () => {
             return;
         }
         const response = await HTTP.post('/reset_password/', data.value);
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'успешно',
-            showConfirmButton: false,
-            timer: 1500,
-        });
-        data.value = ''
-    } catch(error) {
+        data.value = '';
+    } catch (error) {
         isError.value = error.response.data;
         console.error('There was an error!', error);
-        if (isError.value) {
-            swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: `ошибка`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-        }
     }
-
-}
-
+};
 </script>
 <style lang="scss" scoped>
 .AuthWrapper {
@@ -179,11 +191,19 @@ const changePass = async () => {
     align-self: center;
 }
 
+.error-message {
+    font-family: 'Nunito', sans-serif;
+    color: #ff535c;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21.82px;
+}
+
 .img-auth {
     position: absolute;
     right: -100px;
     top: 100px;
-    
+
     @media (max-width: 1200px) {
         width: 213px;
         height: 403px;
