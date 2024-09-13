@@ -73,6 +73,7 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import gameActions from '@mixins/gameAction';
+
 import { SvgIcon } from '@shared/components/svgIcon';
 
 const { methods } = gameActions;
