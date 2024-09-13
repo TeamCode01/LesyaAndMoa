@@ -56,8 +56,7 @@
 <script setup></script>
 <style lang="scss" scoped>
 .container {
-    padding: 0px;
-
+    
     @media (max-width: 720px) {
         display: flex;
         justify-content: center;
@@ -136,10 +135,8 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        padding: 0 120px;
 
         @media (max-width: 1440px) {
-            padding: 0 40px;
         }
 
         @media (max-width: 720px) {
