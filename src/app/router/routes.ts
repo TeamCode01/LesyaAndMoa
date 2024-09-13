@@ -110,7 +110,7 @@ const routes: RouteRecordRaw[] = [
                     ),
             },
             {
-                path: '/create-password',
+                path: '/reset-password/:uid/:token',
                 name: 'CreatePassword',
                 meta: {
                     hiddenBreadcrumbs: true,
