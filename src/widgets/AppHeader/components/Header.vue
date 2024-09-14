@@ -555,19 +555,13 @@ body {
         }
     }
 
-    .container {
-        padding: 0px;
-    }
-
     &__wrapper {
         position: relative;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 120px;
 
         @media (max-width: 1024px) {
-            padding: 0 40px;
         }
 
         @media (max-width: 568px) {
