@@ -92,6 +92,8 @@ const clickOnButton = () => {
     &_info {
         background: $layout;
         color: $black;
+        font-family: 'Nunito', sans-serif;
+        line-height: 27.28px;
         font-size: 20px;
         font-weight: 600;
         padding: 8px 24px;

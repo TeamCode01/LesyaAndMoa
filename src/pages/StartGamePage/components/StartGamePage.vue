@@ -199,7 +199,7 @@ onMounted(() => {
       column-gap: 8px;
       align-items: center;
       position: absolute;
-      top: 15px;
+      top: 25px;
       right: 16px;
     }
   }

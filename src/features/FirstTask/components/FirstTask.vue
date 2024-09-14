@@ -69,6 +69,7 @@ const props = defineProps({
         required: false,
     }
 });
+const audio = ref(new Audio());
 const endGame = ref(false);
 const is_correct = ref(false);
 const hide = () => {
@@ -83,8 +84,6 @@ const next = () => {
 const getImageUrl = (path) => {
  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
-
-const audio = ref(new Audio());
 
 const playAudio = async (audioPath) => {
     audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;

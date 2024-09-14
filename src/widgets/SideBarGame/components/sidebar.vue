@@ -31,7 +31,7 @@
                     @close="close()" @next-modal="next(6, 'Task6/79.6.mp3')" v-if="taskId === 5">
                 </FifthTask>
                 <SixTask @correct="checkCorrect(6)" @open="checkOpen(7)" :end="endTime" :childId="props.childId"
-                    @close="close()" @next-modal="next(7, 'Task7/261.7_.mp3')" v-if="taskId === 6">
+                    @close="close()" @next-modal="next(7, 'Task7/261.7.mp3')" v-if="taskId === 6">
                 </SixTask>
                 <SeventhTask @correct="checkCorrect(7)" @open="checkOpen(8)" :childId="props.childId" :end="endTime"
                     @close="close()" @next-modal="next(8, 'Task8/280.8.mp3')" v-if="taskId === 7">
@@ -139,21 +139,21 @@ const correct = ref(false);
 const started = ref(null);
 const ids = ref([1, 2, 3, 4, 5, 6, 7, 8, 16, 18]);
 const audio_ids_music = ref([1, 16, 18]);
-
+const startedAudio = ref(new Audio());
 
 const close = () => {
     SeeTask.value = false;
     endTime.value = false;
-    audio.value.src = '';
+    startedAudio.value.pause();
     show.value = false;
     emit('show', show.value);
 };
 
 const playStartAudio = (audioPath) => {
-    let startAudio = new Audio();
-    startAudio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
-    startAudio.play();
-    startAudio.addEventListener('ended', () => {
+  
+    startedAudio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
+    startedAudio.value.play();
+    startedAudio.value.addEventListener('ended', () => {
         finish.value = true;
     });
 }
@@ -289,7 +289,7 @@ onBeforeRouteLeave(() => {
     { id: 4, name: 'Задание 4', disabled: true, done: false, open: false, time: 15, end: false, img: 'task4.jpg', audio: 'Task4/45.4.mp3', startAudio: 'Task4/61.5_.mp3' },
     { id: 5, name: 'Задание 5', disabled: true, done: false, open: false, time: 15, end: false, img: 'task5.jpg', audio: 'Task5/62.5.mp3', startAudio: 'Task5/61.5_.mp3' },
     { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 20, end: false, img: 'task6.jpg', audio: 'Task6/79.6.mp3', startAudio: 'Task6/78.6_.mp3' },
-    { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false, img: 'task7.jpg', audio: 'Task7/261.7_.mp3', startAudio: 'Task7/260.7_.mp3' },
+    { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false, img: 'task7.jpg', audio: 'Task7/261.7.mp3', startAudio: 'Task7/260.7_.mp3' },
     { id: 8, name: 'Задание 8', disabled: true, done: false, open: false, time: 30, end: false, img: 'task8.jpg', audio: 'Task8/280.8.mp3', startAudio: 'Task8/279.8_.mp3' },
     { id: 9, name: 'Задание 9', disabled: true, done: false, open: false, time: 30, end: false, img: 'task9.jpg', audio: 'Task9/299.9.mp3', startAudio: 'Task9/298.9.mp3' },
     { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 30, end: false, img: 'task10.jpg', audio: 'Task10/317.10.mp3', startAudio: 'Task10/316.10.mp3' },
@@ -310,7 +310,7 @@ onBeforeMount(() => {
     { id: 4, name: 'Задание 4', disabled: true, done: false, open: false, time: 15, end: false, img: 'task4.jpg', audio: 'Task4/45.4.mp3', startAudio: 'Task4/61.5_.mp3' },
     { id: 5, name: 'Задание 5', disabled: true, done: false, open: false, time: 15, end: false, img: 'task5.jpg', audio: 'Task5/62.5.mp3', startAudio: 'Task5/61.5_.mp3' },
     { id: 6, name: 'Задание 6', disabled: true, done: false, open: false, time: 20, end: false, img: 'task6.jpg', audio: 'Task6/79.6.mp3', startAudio: 'Task6/78.6_.mp3' },
-    { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false, img: 'task7.jpg', audio: 'Task7/261.7_.mp3', startAudio: 'Task7/260.7_.mp3' },
+    { id: 7, name: 'Задание 7', disabled: true, done: false, open: false, time: 20, end: false, img: 'task7.jpg', audio: 'Task7/261.7.mp3', startAudio: 'Task7/260.7_.mp3' },
     { id: 8, name: 'Задание 8', disabled: true, done: false, open: false, time: 30, end: false, img: 'task8.jpg', audio: 'Task8/280.8.mp3', startAudio: 'Task8/279.8_.mp3' },
     { id: 9, name: 'Задание 9', disabled: true, done: false, open: false, time: 30, end: false, img: 'task9.jpg', audio: 'Task9/299.9.mp3', startAudio: 'Task9/298.9.mp3' },
     { id: 10, name: 'Задание 10', disabled: true, done: false, open: false, time: 30, end: false, img: 'task10.jpg', audio: 'Task10/317.10.mp3', startAudio: 'Task10/316.10.mp3' },

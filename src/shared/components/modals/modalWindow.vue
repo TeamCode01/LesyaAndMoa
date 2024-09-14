@@ -5,9 +5,9 @@
                 <v-btn
                     class="text-none font-weight-regular"
                     prepend-icon="mdi-account"
-                    variant="tonal"
+                    variant="outlined"
                     v-bind="activatorProps"
-                    ><span>{{ label }}</span></v-btn
+                    >{{ label }}</v-btn
                 >
             </template>
             <div class="close icon-close">
@@ -39,10 +39,13 @@ const closeDialog = () => {
     dialog.value = false;
 };
 </script>
-<style>
+<style >
 .v-dialog .v-overlay__content {
     scrollbar-width: none;
     scrollbar-color: #fae6f2 #fae6f2;
+}
+.v-btn.v-btn--density-default:not(.v-btn--active):not(.v-btn--disabled):hover::before {
+    opacity: 0;
 }
 .v-dialog .v-overlay__content .v-card {
     border-radius: 20px;
@@ -59,12 +62,27 @@ const closeDialog = () => {
     font-size: 32px;
     font-family: 'Nunito', sans-serif;
 }
+.v-btn__prepend {
+    display: none !important;
+}
 .v-btn.v-btn--density-default {
-    height: 58px;
-    width: 390px;
+    height: 51px !important;
+    width: 405px;
     border: 3px solid #4d65e5;
-    background-color: white;
+    background-color: white !important;
     border-radius: 30px;
+    font-size: 20px;
+    font-family: 'Nunito';
+    font-weight: 600;
+    line-height: 27.28px;
+}
+.v-btn.v-btn--density-default:hover::before {
+    background-color: #fff !important;
+}
+
+.v-btn.v-btn--density-default:not(.v-btn--active):not(.v-btn--disabled):hover::before {
+    /* opacity: 0; */
+    background-color: #fff !important;
 }
 .v-btn--variant-tonal .v-btn__underlay {
     background: white;

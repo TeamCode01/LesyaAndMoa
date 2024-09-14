@@ -976,7 +976,7 @@ watch(
             align-items: center;
             position: absolute;
             top: 10px;
-            right: 50px;
+            right: 10px;
 
             @media (max-width: 1200px) {
                 left: 800px;

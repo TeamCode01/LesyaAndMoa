@@ -235,7 +235,7 @@
                 <Button
                     label="Отмена"
                     class="delete-btn"
-                    @click="showDelete = !showDelete"
+                    @click="closeDelete()"
                 ></Button>
             </div>
         </div>
@@ -263,63 +263,49 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const showDeleteModal = () => {
-    const scrollY = window.scrollY || document.documentElement.scrollTop;
-    document.documentElement.style.setProperty(
-        '--scroll-position',
-        `${scrollY}px`,
-    );
-    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
-
     if (showDelete.value === false) {
         showModalMini.value = false;
         showDelete.value = true;
     } else {
         showDelete.value = false;
-        document.body.classList.remove('no-scroll');
+        document.body.classList.remove('no-scroll'); 
     }
+};
+
+const closeDelete = () => {
+    showDelete.value = false;
+    document.body.classList.remove('no-scroll'); // Disable scrolling
 };
 
 const showProfile = () => {
-    const scrollY = window.scrollY || document.documentElement.scrollTop;
-    document.documentElement.style.setProperty(
-        '--scroll-position',
-        `${scrollY}px`,
-    );
-    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
-
+    
     if (showModal.value === false) {
+        document.body.classList.add('no-scroll'); // Disable scrolling
         showModal.value = true;
     } else {
         showModal.value = false;
-        document.body.classList.remove('no-scroll');
+          document.body.classList.remove('no-scroll'); // Disable
     }
 };
 const showBurger = () => {
-    const scrollY = window.scrollY || document.documentElement.scrollTop;
-    document.documentElement.style.setProperty(
-        '--scroll-position',
-        `${scrollY}px`,
-    );
-    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
-
+    
     if (showModalMini.value === false) {
+        document.body.classList.add('no-scroll'); // Disable scrolling
         showModalMini.value = true;
     } else {
         showModalMini.value = false;
-        document.body.classList.remove('no-scroll');
+        document.body.classList.remove('no-scroll'); 
     }
-
-    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
 };
 
 const closeMenu = () => {
     showModalMini.value = false;
-    if (showModal.value == true) {
-        showModal.value = false;
-        document.body.classList.remove(
-            'no-scroll',
-        ); /* Прокрутка возвращается */
-    }
+    // if (showModal.value == true) {
+    //     showModal.value = false;
+    //     // document.body.classList.remove(
+    //     //     'no-scroll',
+    //     // ); /* Прокрутка возвращается */
+    // }
 
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
 };
@@ -349,6 +335,7 @@ const deleteUser = async () => {
             },
         });
         showDelete.value = false;
+        document.body.classList.remove('no-scroll');
         localStorage.removeItem('Token');
         localStorage.removeItem('type');
         userStore.logOut();
@@ -367,28 +354,34 @@ document.addEventListener('click', (event) => {
             !event.target.matches('.modal__wrapper_mini'))
     ) {
         showModalMini.value = false;
-        document.body.classList.remove(
-            'no-scroll',
-        ); /* Прокрутка возвращается */
+        // document.body.classList.remove(
+        //     'no-scroll',
+        // ); /* Прокрутка возвращается */
     }
     if (
         event.target.id !== 'burger' &&
         !event.target.matches('.modal__wrapper')
     ) {
         showModal.value = false;
-        document.body.classList.remove(
-            'no-scroll',
-        ); /* Прокрутка возвращается */
+        // document.body.classList.remove(
+        //     'no-scroll',
+        // ); /* Прокрутка возвращается */
     }
 });
 
 window.addEventListener('popstate', (event) => {
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
     closeMenu();
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .link-small {
     cursor: pointer;
+}
+body {
+    &.no-scroll {
+        overflow-y: hidden;
+    }
 }
 
 .correct_password {
@@ -446,10 +439,10 @@ window.addEventListener('popstate', (event) => {
 }
 
 .delete-profile__wrapper {
-    position: absolute;
-    top: 30%;
+    position: fixed;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     z-index: 99;
     padding: 40px;
     background-color: #fff;
@@ -718,6 +711,17 @@ window.addEventListener('popstate', (event) => {
         }
     }
 }
+
+// .btn_info {
+//     padding: 10px 20px;
+//     font-size: 20px;
+//     font-family: 'Nunito', sans-serif;
+//     cursor: pointer;
+//     text-decoration: none;
+//     line-height: 27.28px;
+//     font-weight: 600;
+//     font-family: 'Nunito';
+// }
 
 .close {
     &-icon {

@@ -1,26 +1,43 @@
 <template>
     <template v-if="endGame === false">
         <div class="SecondTask task_block">
-
             <div class="SecondTask__wrapper">
                 <div class="task_block__close" @click="hide">
-                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                    <img
+                        class="close-icon"
+                        src="@app/assets/icons/close-icon.svg"
+                        alt="крест"
+                    />
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
-                    <p class="title-h4 SecondTask__title">Выбери нужный АЛФАВИТ.</p>
+                    <p class="SecondTask__title">Выбери нужный АЛФАВИТ.</p>
                 </div>
                 <div class="SecondTask__wrapper_block">
-                    <img @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
-                        @click="chooseTask($event, item.isCorrect)" v-for="item in alphabets" :key="item.id"
-                        :src="getImageUrl(item.src)" alt="alphabet" class="SecondTask__wrapper_block_item">
+                    <img
+                        @mouseover="playAudio(item.audio)"
+                        @mouseout="stopAudio(item.audio)"
+                        @click="chooseTask($event, item.isCorrect)"
+                        v-for="item in alphabets"
+                        :key="item.id"
+                        :src="getImageUrl(item.src)"
+                        alt="alphabet"
+                        class="SecondTask__wrapper_block_item"
+                    />
                 </div>
             </div>
         </div>
     </template>
 
-    <TaskResultBanner :img="getImageUrl('Diamond.png')" :bg="getImageUrl('moa.gif')" text="Так держать!" v-else
-        @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
+    <TaskResultBanner
+        :img="getImageUrl('Diamond.png')"
+        :bg="getImageUrl('moa.gif')"
+        text="Так держать!"
+        v-else
+        @next="next()"
+        @hide="hide()"
+        class="end-modal"
+    ></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
@@ -45,7 +62,7 @@ const props = defineProps({
     childId: {
         type: Number,
         required: false,
-    }
+    },
 });
 const audio = ref(new Audio());
 const hide = () => {
@@ -58,29 +75,35 @@ const corrValue = ref(0);
 const next = () => {
     emit('next-modal');
     endGame.value = true;
-
-}
+};
 
 const is_correct = ref(false);
-const alphabets = ref([{ id: 1, src: 'english.png', isCorrect: false, audio: 'Task2/27.2.mp3' }, { id: 2, src: 'russian.png', isCorrect: true, audio: 'Task2/26.2.mp3' }, { id: 3, src: 'arabic.png', isCorrect: false, audio: 'Task2/28.2.mp3' }])
+const alphabets = ref([
+    { id: 1, src: 'english.png', isCorrect: false, audio: 'Task2/27.2.mp3' },
+    { id: 2, src: 'russian.png', isCorrect: true, audio: 'Task2/26.2.mp3' },
+    { id: 3, src: 'arabic.png', isCorrect: false, audio: 'Task2/28.2.mp3' },
+]);
 const endGame = ref(false);
 
 const getImageUrl = (path) => {
- return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
 const playAudio = async (audioPath) => {
-    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
+    audio.value.src = new URL(
+        `/assets/audio/${audioPath}`,
+        import.meta.url,
+    ).href;
     if (props.finish === true) {
         await audio.value.play();
     }
-}
+};
 
 const playEndAudio = (audioPath) => {
     const end_audio = new Audio();
-    end_audio.src =  new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
+    end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
-}
+};
 
 const stopAudio = (audioPath) => {
     if (audio.value.paused) {
@@ -88,7 +111,7 @@ const stopAudio = (audioPath) => {
     } else {
         audio.value.pause();
     }
-}
+};
 
 const chooseTask = (event, status) => {
     if (status === true) {
@@ -109,7 +132,6 @@ const chooseTask = (event, status) => {
             event.target.classList.remove('green');
             playAudio('Task2/29.2_.mp3');
         }, 1000);
-
     } else {
         event.target.value = status;
         playEndAudio('Common/2.1.mp3');
@@ -118,14 +140,14 @@ const chooseTask = (event, status) => {
             event.target.classList.remove('red');
         }, 2000);
     }
-}
+};
 
-onMounted(async() => {
+onMounted(async () => {
     const correct = await getCorrectAnswer(2, props.childId);
     console.log(correct);
     corrValue.value = correct.correctId;
     is_correct.value = correct.is_correct;
-})
+});
 
 onMounted(() => {
     const scrollY = window.scrollY || document.documentElement.scrollTop;
@@ -136,16 +158,14 @@ onMounted(() => {
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
-    console.log('game mount')
+    console.log('game mount');
 });
-
 
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
-    console.log('game unmount')
+    console.log('game unmount');
 });
-
 </script>
 <style lang="scss" scoped>
 * {
@@ -163,6 +183,16 @@ onBeforeUnmount(() => {
 }
 
 .SecondTask {
+    &__title {
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 32.74px;
+        font-family: 'Nunito';
+        @media (max-width: 1024px) {
+            font-size: 20px;
+            line-height: 26.67px;
+        }
+    }
     &__wrapper {
         padding: 30px 100px;
         position: relative;
