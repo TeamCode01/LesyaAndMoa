@@ -29,9 +29,9 @@
                         </VueDraggableNext>
                     </div>
                     <VueDraggableNext tag="div" :group="{ name: 'answers', pull: false, put: true }" :sort="false" @add="($event)=>{drop($event)}" :ghost-class="'none'">
-                        <input v-model="answer"
+                        <textarea v-model="answer"
 
-                        class="FirstTask__wrapper_answer" />
+                        class="FirstTask__wrapper_answer" style="display: flex; align-items: center;" />
                     </VueDraggableNext>
                 </div>
             </div>
@@ -208,7 +208,7 @@ const drop = (event) => {
             }
             endGame.value = true;
             playAudio('Task1/23.1_.mp3');
-        }, 1000)
+        }, 1500)
     }
 
 
@@ -337,13 +337,12 @@ onBeforeUnmount(() => {
             font-weight: 700;
             font-family: 'Nunito', sans-serif;
             border-radius: 20px;
-            // margin-top: 20px;
             border: none;
             text-shadow: 0 0 0 black;
             outline: none;
             resize: none;
             overflow-y: hidden;
-            height: 100px;
+            // min-height: 100px;
 
             @media (max-width: 1200px) {
                 font-size: 20px;
@@ -354,8 +353,7 @@ onBeforeUnmount(() => {
             }
 
             @media(max-width:1024px) {
-                min-height: 80px;
-
+                // min-height: 80px;
             }
         }
     }

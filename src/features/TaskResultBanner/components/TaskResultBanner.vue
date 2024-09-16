@@ -82,7 +82,6 @@ import Button from '@shared/components/buttons/button.vue';
 import { onBeforeUnmount, onMounted } from 'vue';
 import { SvgIcon } from '@shared/components/svgIcon';
 
-
 const emit = defineEmits(['hide', 'next']);
 const hide = () => {
     emit('hide');
@@ -121,6 +120,11 @@ const goToGames = () => {
     }
 };
 const next = () => {
+    // router.push({
+    //     name: 'Game',
+    //     hash: '#game',
+    //     params: { id: localStorage.getItem('user') },
+    // });
     emit('next');
 };
 

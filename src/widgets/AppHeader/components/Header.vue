@@ -245,7 +245,7 @@
 import { Button } from '@shared/components/buttons';
 import { ref } from 'vue';
 import { HTTP } from '@app/http';
-import { useRouter } from 'vue-router';
+import { onBeforeRouteLeave, useRouter } from 'vue-router';
 import { useUserStore } from '@layouts/stores/user';
 import { InputPass } from '@shared/components/inputs';
 import { useVuelidate } from '@vuelidate/core';
@@ -368,6 +368,8 @@ document.addEventListener('click', (event) => {
         // ); /* Прокрутка возвращается */
     }
 });
+
+
 
 window.addEventListener('popstate', (event) => {
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */

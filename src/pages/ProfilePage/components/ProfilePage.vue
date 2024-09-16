@@ -754,9 +754,7 @@ watch(
     },
     { immediate: true, deep: true },
 );
-
-// onMounted(async () => {  fetchSkills();
-// });
+document.body.classList.remove('no-scroll');
 </script>
 <style lang="scss" scoped>
 .profile {
