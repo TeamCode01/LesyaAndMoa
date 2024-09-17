@@ -81,15 +81,16 @@
                         даю согласие на обработку
                         <router-link
                             class="form-question-link"
-                            to="/policy-page"
+                            to="/politika"
                             target="_blank"
                             >персональных данных</router-link
                         >
-                        и ознакомлен с <a
+                        и ознакомлен с 
+                        <router-link
                             class="form-question-link"
-                            href="https://docs.google.com/document/d/1yrwy13in-UhEW80KpYaCUWKI6q3KdXutEhfkLx8p3j0/edit"
+                            to="/policy"
                             target="_blank"
-                            >политикой конфиденциальности</a
+                            >политикой конфиденциальности</router-link
                         >
                     </div>
                 </div>

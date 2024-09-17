@@ -199,7 +199,7 @@ onMounted(() => {
       column-gap: 8px;
       align-items: center;
       position: absolute;
-      top: 15px;
+      top: 25px;
       right: 16px;
     }
   }
@@ -214,13 +214,12 @@ onMounted(() => {
     max-width: 1200px;
   }
 
-  @media (max-width: 1024px) {
-    height: 470px;
-    max-width: 100%;
-  }
+  //@media (max-width: 1024px) {
+  //  height: 470px;
+  //  max-width: 100%;
+  //}
 
   &_mobile {
-    min-width: 360px;
     width: 100%;
     height: 100%;
     padding: 60px 26px;

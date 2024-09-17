@@ -4,11 +4,18 @@
             <div class="footer__wrapper">
                 <div class="footer__wrapper_info">
                     <div class="footer__logo">
-                        <router-link to="/"> <img class="footer__logo_main" src="@app/assets/icons/LogoLesya.png"
-                                alt="Логотип сайта Леся и Моа" /></router-link>
+                        <router-link to="/">
+                            <img
+                                class="footer__logo_main"
+                                src="@app/assets/icons/LogoLesya.png"
+                                alt="Логотип сайта Леся и Моа"
+                        /></router-link>
                         <a href="https://grant.obr.so/" target="_blank">
-                            <img class="footer__logo_sot footer__logo_sot-small" src="@app/assets/icons/SOT.png"
-                                alt="Логотип СОТ" />
+                            <img
+                                class="footer__logo_sot footer__logo_sot-small"
+                                src="@app/assets/icons/SOT.png"
+                                alt="Логотип СОТ"
+                            />
                         </a>
                     </div>
                     <div class="footer__wrapper_text" id="footer__wrapper_text">
@@ -19,34 +26,54 @@
                 <div class="footer__wrapper_info">
                     <div class="footer__wrapper_phone">8 (900) 123-45-45</div>
                     <div class="footer__wrapper_links">
-                        <a
+                        <router-link
                             class="link-small"
-                            href="https://docs.google.com/document/d/1yrwy13in-UhEW80KpYaCUWKI6q3KdXutEhfkLx8p3j0/edit"
+                            to="/policy"
                             target="_blank"
-                            >Политика конфиденциальности</a
+                            >Политика конфиденциальности</router-link
                         >
-                        <router-link class="link-small" to="/policy-page"  target="_blank">Пользовательское соглашение</router-link>
+                        <router-link
+                            class="link-small"
+                            to="/politika"
+                            target="_blank"
+                            >Пользовательское соглашение</router-link
+                        >
                     </div>
                 </div>
                 <div class="footer__wrapper_info creator">
                     <div class="footer__logo">
                         <a href="https://grant.obr.so/" target="_blank">
-                            <img class="footer__logo_sot" src="@app/assets/icons/SOT.png" alt="Логотип СОТ" />
+                            <img
+                                class="footer__logo_sot"
+                                src="@app/assets/icons/SOT.png"
+                                alt="Логотип СОТ"
+                            />
                         </a>
                     </div>
-                    <div class="footer__wrapper_text" id="footer__wrapper_text-design">
+                    <div
+                        class="footer__wrapper_text"
+                        id="footer__wrapper_text-design"
+                    >
                         <p>Дизайн и разработка</p>
                         <div class="footer__logo">
                             <a href="https://союз.рф/" target="_blank">
-                                <img class="footer__logo_club" src="@app/assets/icons/1TCLUB.svg"
-                                    alt="Логотип Союза РФ и TeamCode" />
+                                <img
+                                    class="footer__logo_club"
+                                    src="@app/assets/icons/1TCLUB.svg"
+                                    alt="Логотип Союза РФ и TeamCode"
+                                />
                             </a>
                         </div>
-                        <div class="footer__wrapper_text" id="footer__wrapper_text-568">
+                        <div
+                            class="footer__wrapper_text"
+                            id="footer__wrapper_text-568"
+                        >
                             <p>© 2024 Организация</p>
                             <p>Все права защищены</p>
                         </div>
-                        <a href="https://ru.freepik.com/" class="Freepik">Изображения от Freepik</a>
+                        <a href="https://ru.freepik.com/" class="Freepik"
+                            >Изображения от Freepik</a
+                        >
                     </div>
                 </div>
             </div>
@@ -56,8 +83,7 @@
 <script setup></script>
 <style lang="scss" scoped>
 .container {
-    padding: 0px;
-
+    
     @media (max-width: 720px) {
         display: flex;
         justify-content: center;
@@ -136,14 +162,12 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        padding: 0 120px;
 
         @media (max-width: 1440px) {
-            padding: 0 40px;
         }
 
         @media (max-width: 720px) {
-            width: 320px;
+            //width: 320px;
             flex-direction: column;
             align-items: flex-start;
             align-self: center;

@@ -22,6 +22,7 @@ router.beforeEach((to, _from, next) => {
     to.name !== 'CreatePassword' &&
     to.name !== 'about-project' &&
     to.name !== 'policy-page' &&
+    to.name !== 'policy' &&
     to.name !== 'main-page' &&
     to.name !== 'news'&&
     to.name !== 'page' &&

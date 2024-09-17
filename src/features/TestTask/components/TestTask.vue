@@ -46,6 +46,9 @@ import { ref } from 'vue';
 import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
+
+import { SvgIcon } from '@shared/components/svgIcon';
+
 const emit = defineEmits(['close']);
 
 const hide = () => {

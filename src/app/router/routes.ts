@@ -110,7 +110,7 @@ const routes: RouteRecordRaw[] = [
                     ),
             },
             {
-                path: '/create-password',
+                path: '/reset-password/:uid/:token',
                 name: 'CreatePassword',
                 meta: {
                     hiddenBreadcrumbs: true,
@@ -150,13 +150,22 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/404Page/components/404Page.vue'),
             },
             {
-                path: '/policy-page',
+                path: '/politika',
                 name: 'policy-page',
                 meta: {
                     hiddenBreadcrumbs: true,
                 },
                 component: () =>
                     import('@pages/PolicyPage/components/PolicyPage.vue'),
+            },
+            {
+                path: '/policy',
+                name: 'policy',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
+                component: () =>
+                    import('@pages/PoliticPage/components/PoliticPage.vue'),
             },
 
 

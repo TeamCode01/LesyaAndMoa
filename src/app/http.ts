@@ -23,10 +23,10 @@ HTTP.interceptors.request.use(
     (config) => {
         const configUrl = config.url?.split('?').shift();
         if (urls.some((item) => item === configUrl) || post_urls.some((item) => item === configUrl) && config.method === 'post' || configUrl?.includes('news') || (configUrl?.includes('news') && /\d/.test(configUrl))) {
-            console.log(configUrl)
+            // console.log(configUrl)
             delete config.headers.Authorization;
         } else {
-            console.log(configUrl)
+            // console.log(configUrl)
             config.headers.Authorization =
                 'Token ' + localStorage.getItem('Token');
         }

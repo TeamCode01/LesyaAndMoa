@@ -218,7 +218,7 @@
                         изъясняются устно.
                     </p>
                     <p class="text-small about__wrapper-item_second-text">
-                        Чтобы помочь, таким ребятам, наша команда создала этот
+                        Чтобы помочь таким ребятам, наша команда создала этот
                         обучающий курс. Дети смогут ощутить себя настоящими
                         помощниками друзей-инопланетян, не знающих нашего языка,
                         натренируют их в чтении слогов и различении звуков,
@@ -404,6 +404,7 @@ import { TestTask } from '@features/TestTask';
 import { useUserStore } from '@layouts/stores/user';
 import { cookieModal } from '@shared/components/modals';
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
+import { SvgIcon } from '@shared/components/svgIcon';
 
 const windowWidth = ref(window.innerWidth);
 const userStore = useUserStore();
@@ -975,7 +976,7 @@ watch(
             align-items: center;
             position: absolute;
             top: 10px;
-            right: 50px;
+            right: 10px;
 
             @media (max-width: 1200px) {
                 left: 800px;

@@ -29,9 +29,9 @@
                         </VueDraggableNext>
                     </div>
                     <VueDraggableNext tag="div" :group="{ name: 'answers', pull: false, put: true }" :sort="false" @add="($event)=>{drop($event)}" :ghost-class="'none'">
-                        <input v-model="answer"
+                        <textarea v-model="answer"
 
-                        class="FirstTask__wrapper_answer" />
+                        class="FirstTask__wrapper_answer" style="display: flex; align-items: center;" />
                     </VueDraggableNext>
                 </div>
             </div>
@@ -49,6 +49,9 @@ import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import SmallDisplayBanner from '@features/SmallDisplayBanner/components/SmallDisplayBanner.vue';
 import gameActions from '@mixins/gameAction';
+
+import { SvgIcon } from '@shared/components/svgIcon';
+
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
@@ -66,6 +69,7 @@ const props = defineProps({
         required: false,
     }
 });
+const audio = ref(new Audio());
 const endGame = ref(false);
 const is_correct = ref(false);
 const hide = () => {
@@ -80,8 +84,6 @@ const next = () => {
 const getImageUrl = (path) => {
  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
-
-const audio = ref(new Audio());
 
 const playAudio = async (audioPath) => {
     audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
@@ -206,7 +208,7 @@ const drop = (event) => {
             }
             endGame.value = true;
             playAudio('Task1/23.1_.mp3');
-        }, 1000)
+        }, 1500)
     }
 
 
@@ -335,13 +337,12 @@ onBeforeUnmount(() => {
             font-weight: 700;
             font-family: 'Nunito', sans-serif;
             border-radius: 20px;
-            // margin-top: 20px;
             border: none;
             text-shadow: 0 0 0 black;
             outline: none;
             resize: none;
             overflow-y: hidden;
-            height: 100px;
+            // min-height: 100px;
 
             @media (max-width: 1200px) {
                 font-size: 20px;
@@ -352,8 +353,7 @@ onBeforeUnmount(() => {
             }
 
             @media(max-width:1024px) {
-                min-height: 80px;
-
+                // min-height: 80px;
             }
         }
     }
