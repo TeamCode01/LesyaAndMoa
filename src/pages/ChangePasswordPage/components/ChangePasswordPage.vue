@@ -22,7 +22,6 @@
                                     red: isError.email,
                                 }"
                                 v-model:value="data.email"
-                                @blur="v$.email.$touch()"
                             ></Input>
                             <span v-if="isError.email" class="error-message">{{
                                 isError.email[0]
@@ -45,27 +44,10 @@ import { Input } from '@shared/components/inputs';
 import { ref } from 'vue';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
-import { useVuelidate } from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
-import { watchEffect } from 'vue';
 
 const isError = ref({});
 const data = ref({
     email: '',
-});
-
-const rules = {
-    email: { required },
-};
-const v$ = useVuelidate(rules, data);
-
-watchEffect(() => {
-    isError.value = {};
-    if (v$.value.$invalid) {
-        if (v$.value.email.$error) {
-            isError.value.email = ['Данное поле должно быть заполнено'];
-        }
-    }
 });
 
 const changePass = async () => {
@@ -75,7 +57,7 @@ const changePass = async () => {
         }
         const response = await HTTP.post('/reset_password/', data.value);
         data.value = '';
-        window.location.reload();
+        isError.value.email = '';
     } catch (error) {
         isError.value = error.response.data;
         isError.value.email = ['Введите правильный адрес электронной почты'];
