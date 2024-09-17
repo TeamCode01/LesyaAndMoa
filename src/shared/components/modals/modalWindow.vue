@@ -60,14 +60,14 @@ const closeDialog = () => {
     font-family: 'Nunito', sans-serif;
 }
 .v-btn.v-btn--density-default {
-    height: 58px;
+    height: 58px !important;
     width: 390px;
     border: 3px solid #4d65e5;
     background-color: white;
     border-radius: 30px;
 }
 .v-btn--variant-tonal .v-btn__underlay {
-    background: white;
+    background: white !important;
 }
 .v-btn__content {
     color: black;
@@ -77,10 +77,10 @@ const closeDialog = () => {
     letter-spacing: 0.3px;
 }
 .v-btn__prepend {
-    display: none;
+    display: none !important;
 }
 .v-dialog > .v-overlay__content > .v-card > .v-card-actions {
-    justify-content: center;
+    justify-content: center !important;
 }
 .icon-close {
     position: absolute;

@@ -11,7 +11,9 @@
                             восстановления пароля.
                         </p>
                         <div class="login-input">
-                            <label>Электронная почта</label>
+                            <label class="form-input__label"
+                                >Электронная почта</label
+                            >
                             <Input
                                 placeholder="Введите email"
                                 name="email"
@@ -61,7 +63,7 @@ watchEffect(() => {
     isError.value = {};
     if (v$.value.$invalid) {
         if (v$.value.email.$error) {
-            isError.value.email = ['Неверный e-mail'];
+            isError.value.email = ['Данное поле должно быть заполнено'];
         }
     }
 });
@@ -73,8 +75,10 @@ const changePass = async () => {
         }
         const response = await HTTP.post('/reset_password/', data.value);
         data.value = '';
+        window.location.reload();
     } catch (error) {
         isError.value = error.response.data;
+        isError.value.email = ['Введите правильный адрес электронной почты'];
         console.error('There was an error!', error);
     }
 };
@@ -197,6 +201,8 @@ const changePass = async () => {
     font-size: 16px;
     font-weight: 400;
     line-height: 21.82px;
+    position: relative;
+    bottom: 15px;
 }
 
 .img-auth {
@@ -216,5 +222,8 @@ const changePass = async () => {
     @media (max-width: 440px) {
         top: 570px;
     }
+}
+.form-input__label {
+    font-family: 'Nunito', sans-serif;
 }
 </style>

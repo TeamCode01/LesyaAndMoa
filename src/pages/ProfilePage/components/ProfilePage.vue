@@ -44,7 +44,7 @@
                                     <div class="regCheck delete-check">
                                         <input
                                             type="checkbox"
-                                            v-model="check"
+                                            v-model="del.check"
                                         />
                                         <div>
                                             &nbsp;Да, я хочу удалить профиль
@@ -55,9 +55,12 @@
                                     <Button
                                         class="delete-btn"
                                         label="Удалить"
+                                        :disabled="!isValidDelete"
                                         @click="
-                                            deleteChild(block.id, index);
-                                            close();
+                                            if (isValidDelete) {
+                                                deleteChild(block.id, index);
+                                                close();
+                                            }
                                         "
                                     ></Button>
                                     <Button
@@ -114,7 +117,7 @@
                 >
                     <v-card-text>
                         <div class="form-input">
-                            <label>Фамилия</label>
+                            <label class="form-input__label">Фамилия</label>
                             <Input
                                 placeholder="Фамилия"
                                 name="login"
@@ -132,7 +135,7 @@
                             >
                         </div>
                         <div class="form-input">
-                            <label>Имя</label>
+                            <label class="form-input__label">Имя</label>
                             <Input
                                 placeholder="Имя"
                                 name="login"
@@ -150,7 +153,7 @@
                             >
                         </div>
                         <div class="form-input">
-                            <label>Пол</label>
+                            <label class="form-input__label">Пол</label>
                             <SelectSort
                                 @blur="v$.sex.$touch()"
                                 v-model="form.sex"
@@ -171,7 +174,7 @@
                             }}</span>
                         </div>
                         <div class="form-input">
-                            <label>Возраст</label>
+                            <label class="form-input__label">Возраст</label>
                             <Input
                                 type="number"
                                 @blur="v$.age.$touch()"
@@ -187,7 +190,7 @@
                             }}</span>
                         </div>
                         <div class="form-input">
-                            <label>Регион</label>
+                            <label class="form-input__label">Регион</label>
                             <SelectSort
                                 @blur="v$.region.$touch()"
                                 @click="GetRegion"
@@ -208,7 +211,7 @@
                             }}</span>
                         </div>
                         <div class="form-input">
-                            <label>Школа</label>
+                            <label class="form-input__label">Школа</label>
                             <Input
                                 @blur="v$.school.$touch()"
                                 name="login"
@@ -223,7 +226,7 @@
                             }}</span>
                         </div>
                         <div class="form-input">
-                            <label>Класс</label>
+                            <label class="form-input__label">Класс</label>
                             <Input
                                 type="number"
                                 @blur="v$.grade.$touch()"
@@ -253,8 +256,14 @@
                                 v-model="form.data_processing_agreement"
                             />
                             <div class="regCheck_text">
-                                даю согласие на обработку персональных данных
-                                и ознакомлен с политикой конфиденциальности
+                                Даю согласие на<a href="/policy-page"
+                                    >обработку персональных данных</a
+                                >
+                                и ознакомлен с<a
+                                    class="regCheck-link"
+                                    href="https://docs.google.com/document/d/1yrwy13in-UhEW80KpYaCUWKI6q3KdXutEhfkLx8p3j0/edit"
+                                    >политикой конфиденциальности</a
+                                >
                             </div>
                         </div>
                     </v-card-text>
@@ -292,12 +301,12 @@
         v-if="userStore.currentUser.tasks_type === 'групповой'"
     >
         <div
-            class="profile-child__wrapper"
+            class="profile-child__wrapper group-wrapper"
             v-for="(block, index) in userStore.groups"
             :key="index"
         >
             <div class="delete-profile">
-                <modalConfirm label="Удалить профиль">
+                <modalConfirm label="Удалить группу">
                     <template #default="{ close }">
                         <div class="delete-profile__wrapper">
                             <h3 class="delete-profile__title">
@@ -375,7 +384,9 @@
                 >
                     <v-card-text>
                         <div class="form-input">
-                            <label>Название группы</label>
+                            <label class="form-input__label"
+                                >Название группы</label
+                            >
                             <Input
                                 name="login"
                                 :class="{
@@ -390,7 +401,9 @@
                             }}</span>
                         </div>
                         <div class="form-input">
-                            <label>Количество учеников в группе</label>
+                            <label class="form-input__label"
+                                >Количество учеников в группе</label
+                            >
                             <Input
                                 type="number"
                                 @blur="V$.number_of_students.$touch()"
@@ -408,7 +421,9 @@
                             >
                         </div>
                         <div class="form-input">
-                            <label>Средний возраст учеников группы</label>
+                            <label class="form-input__label"
+                                >Средний возраст учеников группы</label
+                            >
                             <Input
                                 type="number"
                                 @blur="V$.average_age.$touch()"
@@ -426,7 +441,7 @@
                             >
                         </div>
                         <div class="form-input">
-                            <label>Регион</label>
+                            <label class="form-input__label">Регион</label>
                             <SelectSort
                                 @blur="V$.region.$touch()"
                                 @click="GetRegion"
@@ -447,7 +462,7 @@
                             }}</span>
                         </div>
                         <div class="form-input">
-                            <label>Школа</label>
+                            <label class="form-input__label">Школа</label>
                             <Input
                                 @blur="V$.school.$touch()"
                                 name="login"
@@ -536,6 +551,9 @@ const formGroup = ref({
     region: null,
     school: '',
 });
+const del = ref({
+    check: false,
+});
 
 const skill = ref({});
 const rules = {
@@ -616,7 +634,6 @@ const isFormValidInd = computed(() => {
         form.value.region !== '' &&
         form.value.school !== '' &&
         form.value.grade !== '' &&
-        form.value.attended_speech_therapist &&
         form.value.data_processing_agreement
     );
 });
@@ -628,6 +645,9 @@ const isFormValidGrp = computed(() => {
         formGroup.value.school !== '' &&
         formGroup.value.average_age
     );
+});
+const isValidDelete = computed(() => {
+    return del.value.check !== false;
 });
 
 const deleteChild = async (id, index) => {
@@ -834,7 +854,10 @@ watch(
     position: relative;
     min-height: 640px;
     margin: 40px auto 0 auto;
-    max-width: 1200px;
+    padding: 0 120px;
+    @media (max-width: 1024px) {
+        padding: 0 40px;
+    }
 
     &__wrapper {
         display: flex;
@@ -852,7 +875,9 @@ watch(
         font-weight: normal;
     }
 }
-
+.group-wrapper {
+    background-color: #c8efc5;
+}
 .child__form {
     min-width: 100%;
     padding: 0 80px;
@@ -931,14 +956,18 @@ watch(
         border: 1px solid black;
     }
 
-    &_text {
+    &_text a {
         max-width: 320px;
         font-family: 'Nunito', sans-serif;
         font-size: 14px;
         color: #35383f;
         font-weight: 500;
         margin-left: 8px;
+        text-decoration: none;
     }
+}
+.regCheck-link {
+    text-decoration: underline !important;
 }
 
 .add-child-btn {
@@ -950,8 +979,10 @@ watch(
     padding: 40px;
     background-color: #fff;
     border-radius: 10px;
-    max-width: 464px;
+    max-width: 465px;
     min-height: 326px;
+    z-index: 0;
+    width: 100%;
 }
 
 .delete-profile__title {
@@ -1007,5 +1038,11 @@ watch(
     font-size: 16px;
     font-weight: 400;
     line-height: 21.82px;
+    position: relative;
+    bottom: 15px;
+}
+
+.form-input__label {
+    font-family: 'Nunito', sans-serif;
 }
 </style>
