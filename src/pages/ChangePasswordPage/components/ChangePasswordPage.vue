@@ -11,7 +11,9 @@
                             восстановления пароля.
                         </p>
                         <div class="login-input">
-                            <label>Электронная почта</label>
+                            <label class="form-input__label"
+                                >Электронная почта</label
+                            >
                             <Input
                                 placeholder="Введите email"
                                 name="email"
@@ -20,7 +22,6 @@
                                     red: isError.email,
                                 }"
                                 v-model:value="data.email"
-                                @blur="v$.email.$touch()"
                             ></Input>
                             <span v-if="isError.email" class="error-message">{{
                                 isError.email[0]
@@ -43,27 +44,10 @@ import { Input } from '@shared/components/inputs';
 import { ref } from 'vue';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
-import { useVuelidate } from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
-import { watchEffect } from 'vue';
 
 const isError = ref({});
 const data = ref({
     email: '',
-});
-
-const rules = {
-    email: { required },
-};
-const v$ = useVuelidate(rules, data);
-
-watchEffect(() => {
-    isError.value = {};
-    if (v$.value.$invalid) {
-        if (v$.value.email.$error) {
-            isError.value.email = ['Неверный e-mail'];
-        }
-    }
 });
 
 const changePass = async () => {
@@ -73,8 +57,10 @@ const changePass = async () => {
         }
         const response = await HTTP.post('/reset_password/', data.value);
         data.value = '';
+        isError.value.email = '';
     } catch (error) {
         isError.value = error.response.data;
+        isError.value.email = ['Введите правильный адрес электронной почты'];
         console.error('There was an error!', error);
     }
 };
@@ -197,6 +183,8 @@ const changePass = async () => {
     font-size: 16px;
     font-weight: 400;
     line-height: 21.82px;
+    position: relative;
+    bottom: 15px;
 }
 
 .img-auth {
@@ -216,5 +204,8 @@ const changePass = async () => {
     @media (max-width: 440px) {
         top: 570px;
     }
+}
+.form-input__label {
+    font-family: 'Nunito', sans-serif;
 }
 </style>

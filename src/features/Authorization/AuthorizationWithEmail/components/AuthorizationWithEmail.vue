@@ -11,7 +11,7 @@
                     ></Input>
                 </div>
                 <div class="login-input">
-                    <label>Логин</label>
+                    <label class="form-input__label">Логин</label>
                     <Input
                         @blur="v$.email.$touch()"
                         placeholder="Введите email"
@@ -27,7 +27,7 @@
                     }}</span>
                 </div>
                 <div class="login-input-pass">
-                    <label>Пароль</label>
+                    <label class="form-input__label">Пароль</label>
                     <InputPass
                         placeholder="Введите пароль"
                         name="password"
@@ -120,7 +120,7 @@ const LoginUser = async () => {
     margin: 50px 0 200px 0;
     display: flex;
     flex-direction: column;
-    max-width: 500px;
+    width: 500px;
     padding: 32px 60px 32px 60px;
     background-color: #fae6f2;
     border-radius: 20px;
@@ -216,8 +216,13 @@ const LoginUser = async () => {
     font-size: 16px;
     font-weight: 400;
     line-height: 21.82px;
+    position: relative;
+    bottom: 15px;
 }
 .red-error {
     border: 2px solid red !important;
+}
+.form-input__label {
+    font-family: 'Nunito', sans-serif;
 }
 </style>

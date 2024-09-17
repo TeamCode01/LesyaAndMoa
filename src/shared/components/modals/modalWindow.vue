@@ -39,12 +39,14 @@ const closeDialog = () => {
     dialog.value = false;
 };
 </script>
-<style >
+<style>
 .v-dialog .v-overlay__content {
     scrollbar-width: none;
     scrollbar-color: #fae6f2 #fae6f2;
 }
-.v-btn.v-btn--density-default:not(.v-btn--active):not(.v-btn--disabled):hover::before {
+.v-btn.v-btn--density-default:not(.v-btn--active):not(
+        .v-btn--disabled
+    ):hover::before {
     opacity: 0;
 }
 .v-dialog .v-overlay__content .v-card {
@@ -66,8 +68,8 @@ const closeDialog = () => {
     display: none !important;
 }
 .v-btn.v-btn--density-default {
-    height: 51px !important;
-    width: 405px;
+    height: 58px !important;
+    width: 390px;
     border: 3px solid #4d65e5;
     background-color: white !important;
     border-radius: 30px;
@@ -80,12 +82,14 @@ const closeDialog = () => {
     background-color: #fff !important;
 }
 
-.v-btn.v-btn--density-default:not(.v-btn--active):not(.v-btn--disabled):hover::before {
+.v-btn.v-btn--density-default:not(.v-btn--active):not(
+        .v-btn--disabled
+    ):hover::before {
     /* opacity: 0; */
     background-color: #fff !important;
 }
 .v-btn--variant-tonal .v-btn__underlay {
-    background: white;
+    background: white !important;
 }
 .v-btn__content {
     color: black;
@@ -95,10 +99,10 @@ const closeDialog = () => {
     letter-spacing: 0.3px;
 }
 .v-btn__prepend {
-    display: none;
+    display: none !important;
 }
 .v-dialog > .v-overlay__content > .v-card > .v-card-actions {
-    justify-content: center;
+    justify-content: center !important;
 }
 .icon-close {
     position: absolute;

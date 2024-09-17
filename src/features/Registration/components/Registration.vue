@@ -4,7 +4,7 @@
             <h2>Регистрация</h2>
             <div class="Form">
                 <div class="login-input-pass">
-                    <label>Логин</label>
+                    <label class="form-input__label">Логин</label>
                     <Input
                         @blur="v$.email.$touch()"
                         placeholder="Введите логин"
@@ -20,7 +20,7 @@
                     }}</span>
                 </div>
                 <div class="login-input-pass">
-                    <label>Введите пароль</label>
+                    <label class="form-input__label">Введите пароль</label>
                     <Input
                         @blur="v$.password.$touch()"
                         placeholder="Введите пароль"
@@ -37,7 +37,7 @@
                     }}</span>
                 </div>
                 <div class="login-input-pass">
-                    <label>Повторите пароль</label>
+                    <label class="form-input__label">Повторите пароль</label>
                     <Input
                         @blur="v$.re_password.$touch()"
                         placeholder="Введите пароль"
@@ -177,7 +177,7 @@ const isFormValid = computed(() => {
         form.value.password !== '' &&
         form.value.re_password !== '' &&
         form.value.tasks_type !== '' &&
-        form.value.data_processing_agreement !== ''
+        form.value.data_processing_agreement !== false
     );
 });
 
@@ -206,7 +206,7 @@ const RegisterUser = async () => {
     margin: 50px 0 200px 0;
     display: flex;
     flex-direction: column;
-    max-width: 500px;
+    width: 500px;
     padding: 32px 60px 32px 60px;
     background-color: #fae6f2;
     border-radius: 20px;
@@ -242,6 +242,7 @@ const RegisterUser = async () => {
     padding: 28px 0 0 0;
     display: flex;
     flex-direction: column;
+    width: 90%;
 }
 
 .Form p {
@@ -365,5 +366,10 @@ const RegisterUser = async () => {
     font-size: 16px;
     font-weight: 400;
     line-height: 21.82px;
+    position: relative;
+    bottom: 15px;
+}
+.form-input__label {
+    font-family: 'Nunito', sans-serif;
 }
 </style>

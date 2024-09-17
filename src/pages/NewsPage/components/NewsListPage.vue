@@ -204,42 +204,53 @@ onBeforeRouteLeave(() => {
     font-weight: 500;
     font-size: 50px;
     line-height: 50px;
+    @media (max-width: 700px) {
+        font-size: 40px;
+    }
+    @media (max-width: 500px) {
+        font-size: 30px;
+    }
 }
 
 .news-h__wrapper img {
     position: absolute;
     right: 10%;
     bottom: 2%;
+    @media (max-width: 990px) {
+        right: 1%;
+    }
+    @media (max-width: 700px) {
+        width: 40%;
+    }
 }
 
 .news-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 380px));
-    column-gap: 20px;
-    row-gap: 40px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     margin-bottom: 60px;
-    justify-content: center;
-    @media (max-width: 1024px) {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 300px));
+    justify-items: center;
+    row-gap: 20px;
+    @media (max-width: 990px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    @media (max-width: 680px) {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
     }
 }
 
 .news-list__card {
-    width: 387px;
+    // width: 387px;
+    width: 97%;
     height: 100%;
-    @media (max-width: 1024px) {
-        width: 301px;
-    }
 }
 
 .news-list__card-img {
     display: flex;
-    justify-content: center;
     margin-bottom: 12px;
 }
 
 .news-list__card-img img {
-    width: 387px;
+    width: 97%;
     height: 240px;
     border-radius: 20px;
     object-fit: cover;

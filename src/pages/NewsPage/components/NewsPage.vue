@@ -114,12 +114,21 @@ onBeforeRouteLeave(() => {
     display: flex;
     column-gap: 40px;
     margin-bottom: 60px;
+    width: 100%;
     @media (max-width: 800px) {
         flex-direction: column;
+        align-items: center;
+    }
+}
+.news-banner__img {
+    width: 50%;
+    display: flex;
+    justify-content: end;
+    @media (max-width: 800px) {
+        width: 100%;
         justify-content: center;
     }
 }
-
 .news-banner__img img {
     max-width: 590px;
     height: 420px;
