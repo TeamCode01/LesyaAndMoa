@@ -81,6 +81,7 @@
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
                     <v-progress-linear
+                        v-show="skill[block.id].progress"
                         v-model="skill[block.id].progress"
                         height="30"
                         class="scale"
@@ -512,17 +513,17 @@
 import { Button } from '@shared/components/buttons';
 import { modalWindow, modalConfirm } from '@shared/components/modals';
 import { HTTP } from '@app/http';
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, watch, computed, onBeforeMount } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { SelectSort } from '@shared/components/selects';
-import { useRoute } from 'vue-router';
+import { onBeforeRouteUpdate } from 'vue-router';
 import { useUserStore } from '@layouts/stores/user';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import { watchEffect } from 'vue';
 
 const error = ref([]);
-const route = useRoute();
+// const route = useRoute();
 const groups = [];
 
 const userStore = useUserStore();
@@ -732,48 +733,59 @@ const GetSkill = async (id, index) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+        console.log(skill.value[id], skill.value, id, response.data);
         skill.value[id] = response.data;
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
     }
 };
-const fetchSkills = () => {
+
+const fetchSkills = async () => {
     if (userStore.currentUser.tasks_type === 'индивидуальный') {
+        console.log('here');
         for (let i = 0; i < userStore.children.length; i++) {
             const id = userStore.children[i].id;
-            GetSkill(id, i);
+            await GetSkill(id, i);
         }
-    }
-    if (userStore.currentUser.tasks_type === 'групповой') {
+    } else if (userStore.currentUser.tasks_type === 'групповой') {
+        console.log('here2');
         for (let i = 0; i < userStore.groups.length; i++) {
             const id = userStore.groups[i].id;
-            GetSkill(id, i);
+            await GetSkill(id, i);
         }
     }
 };
 
 watch(
     () => userStore.children,
-    (newSkill) => {
+    async (newSkill) => {
         if (!newSkill) {
             console.log('here');
+            return false;
         }
-        fetchSkills();
+        await fetchSkills();
+        console.log('newSkill', newSkill);
     },
-    { immediate: true, deep: true },
+    { immediate: true },
 );
 
 watch(
     () => userStore.groups,
-    (newGroup) => {
-        if (!newGroup) {
+    async (newGroup) => {
+        if (!newGroup || newGroup.length === 0) {
             console.log('here');
+            return false;
         }
-        fetchSkills();
+        await fetchSkills();
+        console.log('newGroup', newGroup);
     },
-    { immediate: true, deep: true },
+    { immediate: true },
 );
+
+// onMounted(async() => {
+//     await GetSkill()
+// })
 document.body.classList.remove('no-scroll');
 </script>
 <style lang="scss" scoped>

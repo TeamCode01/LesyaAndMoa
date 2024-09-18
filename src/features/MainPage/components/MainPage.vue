@@ -578,6 +578,10 @@ const mute = () => {
 };
 
 const refresh = () => {
+    if(audio.value.paused) {
+        audio.value.currentTime = 0;
+        audio.value.play();
+    }
     audio.value.currentTime = 0;
 };
 
@@ -1017,21 +1021,21 @@ watch(
         width: 800px;
         height: 488px;
         border-radius: 20px;
-        right: 15px;
+        right: 40px;
         max-width: 100%;
-        margin-right: 10px;
+        // margin-right: 10px;
 
         @media (max-width: 1200px) {
             width: 636px;
             height: 387px;
-            right: 15px;
+            right: 30px;
         }
 
         @media (max-width: 940px) {
             width: 568px;
             height: 346px;
             top: 460px;
-            margin-right: -15px;
+            // margin-right: -15px;
             max-width: 100%;
         }
 
@@ -1110,10 +1114,10 @@ watch(
             align-items: flex-start;
             justify-content: space-between;
             width: 280px;
-            margin-left: 30px;
+            // margin-left: 30px;
 
             @media (max-width: 1200px) {
-                margin-left: 15px;
+                // margin-left: 15px;
                 width: 212px;
             }
 
@@ -1135,14 +1139,14 @@ watch(
             column-gap: 32px;
             z-index: 1;
             margin-bottom: 80px;
-            margin-left: 30px;
+            // margin-left: 30px;
 
             @media (max-width: 1200px) {
                 width: 212px;
                 height: 48px;
                 column-gap: 28px;
                 margin-bottom: 0px;
-                margin-left: 15px;
+                // margin-left: 15px;
             }
         }
     }

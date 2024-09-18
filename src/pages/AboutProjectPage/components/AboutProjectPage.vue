@@ -119,7 +119,7 @@
 <script setup>
 
 import { onActivated, onMounted, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import { useBreadcrumbsStore, usePageStore } from '@shared/index';
 import { storeToRefs } from 'pinia';
 
@@ -148,6 +148,11 @@ watch(hidden, (newValue) => {
         toggleHideBreadcrumbs(true);
         setHideBreadcrumbs(false);
     }
+})
+
+onBeforeRouteLeave(() => {
+    toggleHideBreadcrumbs(false);
+    setHideBreadcrumbs(true);
 })
 
 onActivated(() => {

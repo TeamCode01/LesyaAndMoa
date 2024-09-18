@@ -268,7 +268,7 @@ const showDeleteModal = () => {
         showDelete.value = true;
     } else {
         showDelete.value = false;
-        document.body.classList.remove('no-scroll'); 
+        document.body.classList.remove('no-scroll');
     }
 };
 
@@ -278,23 +278,21 @@ const closeDelete = () => {
 };
 
 const showProfile = () => {
-    
     if (showModal.value === false) {
         document.body.classList.add('no-scroll'); // Disable scrolling
         showModal.value = true;
     } else {
         showModal.value = false;
-          document.body.classList.remove('no-scroll'); // Disable
+        document.body.classList.remove('no-scroll'); // Disable
     }
 };
 const showBurger = () => {
-    
     if (showModalMini.value === false) {
         document.body.classList.add('no-scroll'); // Disable scrolling
         showModalMini.value = true;
     } else {
         showModalMini.value = false;
-        document.body.classList.remove('no-scroll'); 
+        document.body.classList.remove('no-scroll');
     }
 };
 
@@ -318,6 +316,7 @@ const logOut = async () => {
         showModalMini.value = false;
         userStore.logOut();
         router.push({ name: 'Login' });
+        document.body.classList.remove('no-scroll');
     } catch (error) {
         console.error(error);
     }
@@ -339,6 +338,7 @@ const deleteUser = async () => {
         localStorage.removeItem('Token');
         localStorage.removeItem('type');
         userStore.logOut();
+        document.body.classList.remove('no-scroll');
         router.push({ name: 'Login' });
     } catch (error) {
         isError.value = error.response.data;
@@ -368,8 +368,6 @@ document.addEventListener('click', (event) => {
         // ); /* Прокрутка возвращается */
     }
 });
-
-
 
 window.addEventListener('popstate', (event) => {
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */

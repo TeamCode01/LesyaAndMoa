@@ -32,8 +32,9 @@
                 </div>
             </div>
             <img
-                v-show="show_hand === true"
+                v-show="show_hand"
                 class="hand"
+                :id="'hand_' + task_id"
                 src="@app/assets/icons/hand.svg"
                 alt="hand"
             />
@@ -93,7 +94,7 @@
 </template>
 <script setup>
 import { Sidebar } from '@widgets/SideBarGame';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import { HTTP } from '@app/http';
 import gameActions from '@mixins/gameAction';
@@ -102,6 +103,7 @@ import { useAnswerStore } from '@layouts/stores/answers';
 const { methods } = gameActions;
 const { startGameRequest } = methods;
 const answerStore = useAnswerStore();
+
 let img = ref('animals.jpg');
 let audio = ref('../assets/audio/Task1/11.1_.mp3');
 const ids = ref([1, 2, 3, 4, 5, 6, 7, 8, 16, 18]);
@@ -191,16 +193,13 @@ const playSound = () => {
 
 watch(
     () => route.params.id,
-    (newId) => {
-        if (!newId) {
-            return;
+    async (newId) => {
+        if (newId) {
+            childId = newId;
+            console.log('newId', newId, childId);
         }
-        childId = newId;
     },
-    {
-        immediate: true,
-        deep: true,
-    },
+    { immediate: true },
 );
 
 onMounted(() => {
@@ -213,10 +212,66 @@ onMounted(() => {
 });
 </script>
 <style lang="scss" scoped>
-.hand {
+#hand_1 {
     position: absolute;
+    bottom: 25%;
+    right: 40%;
+    transform: translate(-50%, -50%);
+}
+#hand_2 {
+    position: absolute;
+    bottom: 28%;
+    right: 40%;
+    transform: translate(-50%, -50%);
+}
+#hand_3 {
+    position: absolute;
+    bottom: 38%;
     right: 50%;
-    bottom: 30%;
+    transform: translate(-50%, -50%);
+}
+#hand_4 {
+    position: absolute;
+    bottom: 35%;
+    right: 38%;
+    transform: translate(-50%, -50%);
+}
+#hand_5 {
+    position: absolute;
+    bottom: 40%;
+    right: 36%;
+    transform: translate(-50%, -50%);
+}
+#hand_6 {
+    position: absolute;
+    bottom: 38%;
+    right: 34%;
+    transform: translate(-50%, -50%);
+}
+#hand_7 {
+    position: absolute;
+    bottom: 40%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+}
+#hand_8 {
+    position: absolute;
+    bottom: 38%;
+    right: 34%;
+    transform: translate(-50%, -50%);
+}
+
+#hand_16 {
+    position: absolute;
+    bottom: 45%;
+    right: 22%;
+    transform: translate(-50%, -50%);
+}
+
+#hand_18 {
+    position: absolute;
+    bottom: 32%;
+    right: 22%;
     transform: translate(-50%, -50%);
 }
 
