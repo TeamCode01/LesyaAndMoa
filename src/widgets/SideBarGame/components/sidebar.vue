@@ -302,6 +302,7 @@ const taskAudio = ref('Task1/12.1.mp3');
 const startAudio = ref('Task1/11.1_.mp3');
 const endTime = ref(false);
 const answers = ref([]);
+const isPlaying = ref(false);
 const show_hand = ref(false);
 const show = ref(props.show);
 const correct = ref(false);
@@ -348,37 +349,61 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
         taskAudio.value = audio_task;
         endTime.value = false;
         taskImage.value = img;
+        emit('sendImg', img);
+        emit('sendId', taskId.value);
+        emit('sendAudio', startAudioV);
+        // console.log(
+        //     'id',
+        //     taskId.value,
+        //     audio_ids_music.value.includes(taskId.value),
+        // );
         if (ids.value.includes(taskId.value)) {
+            // console.log('1');
+            isPlaying.value = true;
+            emit('sendPreAudio', isPlaying.value);
             playAudio('Music/звук 1_.mp3');
-            audio.value.addEventListener('ended', () => {
-                if (
-                    taskId.value !== 1 ||
-                    taskId.value !== 16 ||
-                    taskId.value !== 18
-                ) {
-                    show_hand.value = true;
-                    emit('hand', show_hand.value);
-                }
-            });
             if (audio_ids_music.value.includes(taskId.value)) {
                 audio.value.addEventListener('ended', () => {
+                    // console.log('1.1');
+                    isPlaying.value = false;
+                    emit('sendPreAudio', isPlaying.value);
+                    isPlaying.value = true;
                     playAudio('Other/10.общее.mp3');
+                    emit('sendPreAudio', isPlaying.value);
                     audio.value.addEventListener('ended', () => {
                         show_hand.value = true;
+                        isPlaying.value = false;
+                        emit('sendPreAudio', isPlaying.value);
                         emit('hand', show_hand.value);
                         audio.value.pause();
                     });
                 });
+            } else {
+                audio.value.addEventListener('ended', () => {
+                    // console.log('1.2');
+                    isPlaying.value = false;
+                    show_hand.value = true;
+                    emit('sendPreAudio', isPlaying.value);
+                    emit('show', show.value);
+                    emit('hand', show_hand.value);
+                });
             }
         } else {
+            // console.log('2', show_hand.value);
+            isPlaying.value = false;
+            emit('sendPreAudio', isPlaying.value === false);
             playAudio(startAudioV);
-            show_hand.value = false;
             props.audioObj = audio.value;
+            audio.value.addEventListener('ended', () => {
+                // console.log('1.3');
+                emit('sendAudio', startAudioV);
+                show.value = true;
+                emit('show', show.value);
+                audio.value.pause();
+                show_hand.value = false;
+                emit('hand', show_hand.value);
+            });
         }
-        emit('sendImg', img);
-        emit('sendId', id);
-        emit('sendAudio', startAudioV);
-        emit('show', show.value);
     } else {
         console.log('Задание закрыто ');
     }
@@ -439,6 +464,8 @@ watch(
             return;
         }
         taskId.value = newId;
+        show.value = false;
+        emit('show', show.value);
     },
 );
 
