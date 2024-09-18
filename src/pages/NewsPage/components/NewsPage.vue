@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="news-description">
-                <p>{{ news.description }}</p>
+                <p>{{ news.text }}</p>
             </div>
             <div class="to-news-list">
                 <router-link class="to-news" :to="{ name: 'news' }"
