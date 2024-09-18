@@ -27,7 +27,10 @@
                                 isError.email[0]
                             }}</span>
                         </div>
-                        <Button class="form-btn">Воccтановить пароль</Button>
+                        <Button
+                            class="form-btn"
+                            label="Воccтановить пароль"
+                        ></Button>
                     </form>
                 </div>
                 <img
@@ -44,6 +47,7 @@ import { Input } from '@shared/components/inputs';
 import { ref } from 'vue';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
+import { Button } from '@shared/components/buttons';
 
 const isError = ref({});
 const data = ref({
@@ -57,7 +61,7 @@ const changePass = async () => {
         }
         const response = await HTTP.post('/reset_password/', data.value);
         data.value = '';
-        isError.value.email = '';
+        // window.location.reload();
     } catch (error) {
         isError.value = error.response.data;
         isError.value.email = ['Введите правильный адрес электронной почты'];
