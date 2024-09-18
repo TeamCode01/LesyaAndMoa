@@ -50,8 +50,21 @@
                                     @mouseenter="() => {if (word.isActive) { playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)}}"
                                     :ref="(el) => { refPuzzles[word.id - 1] = el}"
                                     draggable="false">
-                                    <img :src="word.error == 0 ? getSrcUrl(word.src) : word.error == 1 ? getSrcUrl(word.srcRight) : getSrcUrl(word.srcError)" :alt="word.class"  draggable="false"
+                                    
+                                    
+                                    <!--<img v-if="word.error == 0 " src="/public/SeventeenthTask/figure-in-ba.png" :alt="word.class"  draggable="false"
+                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" /> -->
+                                    
+
+                                    <img v-if="word.error == 0 " :src="wordsSrc[word.id - 1].src" :alt="word.class"  draggable="false"
                                     :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" />
+
+                                    <img v-else-if="word.error == 1" :src="wordsSrc[word.id - 1].srcRight" :alt="word.class"  draggable="false"
+                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" />
+
+                                    <img v-else :src="wordsSrc[word.id - 1].srcError" :alt="word.class"  draggable="false"
+                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" />
+
                                 </div>
 
 
@@ -98,6 +111,7 @@
 import {
     ref,
     onMounted,
+    computed,
     watch,
     onBeforeMount,
     onBeforeUnmount,
@@ -134,8 +148,9 @@ const next = () => {
     emit('next-modal');
 };
 
-const getSrcUrl = (path) => {    
-    return new URL(path, import.meta.url).href;
+const getSrcUrl = (path) => {  
+    //console.log(new URL(`./${path}`, import.meta.url).href);
+    return new URL(`/assets/creatures/SeventeenthTask/${path}`, import.meta.url).href;
 };
 
 
@@ -180,6 +195,25 @@ const startId = ref(0);
 firstTask.value = structuredClone(dataFirstTask);
 firstTask.value[1] = [];
 secondTask.value = structuredClone(dataSecondTask);
+
+const img = new URL(`/assets/creatures/SeventeenthTask/figure-in-ro.png`, import.meta.url).href
+
+const wordsSrc = [
+    { id: 1, src: getSrcUrl('figure-in-ro.png'),      srcError: getSrcUrl('wrong/figure-in-ro-wrong.png'),      srcRight: getSrcUrl('right/figure-in-ro-right.png') },
+    { id: 2, src: getSrcUrl('figure-out-laka.png'),   srcError: getSrcUrl('wrong/figure-out-laka-wrong.png'),   srcRight: getSrcUrl('right/figure-out-laka-right.png') },
+    { id: 3, src: getSrcUrl('figure-out-koro.png'),   srcError: getSrcUrl('wrong/figure-out-koro-wrong.png'),   srcRight: getSrcUrl('right/figure-out-koro-right.png') },
+    { id: 4, src: getSrcUrl('figure-in-vo.png'),      srcError: getSrcUrl('wrong/figure-in-vo-wrong.png'),      srcRight: getSrcUrl('right/figure-in-vo-right.png') },
+    { id: 5, src: getSrcUrl('figure-in-ka.png'),      srcError: getSrcUrl('wrong/figure-in-ka-wrong.png'),      srcRight: getSrcUrl('right/figure-in-ka-right.png') },
+    { id: 6, src: getSrcUrl('figure-in-va.png'),      srcError: getSrcUrl('wrong/figure-in-va-wrong.png'),      srcRight: getSrcUrl('right/figure-in-va-right.png') },
+    { id: 7, src: getSrcUrl('figure-out-so.png'),     srcError: getSrcUrl('wrong/figure-out-so-wrong.png'),     srcRight: getSrcUrl('right/figure-out-so-right.png') },
+    { id: 8, src: getSrcUrl('figure-out-re.png'),     srcError: getSrcUrl('wrong/figure-out-re-wrong.png'),     srcRight: getSrcUrl('right/figure-out-re-right.png') },
+    { id: 9, src: getSrcUrl('figure-in-ob.png'),      srcError: getSrcUrl('wrong/figure-in-ob-wrong.png'),      srcRight: getSrcUrl('right/figure-in-ob-right.png') },
+    { id: 10,src: getSrcUrl('figure-in-ba.png'),      srcError: getSrcUrl('wrong/figure-in-ba-wrong.png'),      srcRight: getSrcUrl('right/figure-in-ba-right.png') },
+    { id: 11,src: getSrcUrl('figure-out-dere.png'),   srcError: getSrcUrl('wrong/figure-out-dere-wrong.png'),   srcRight: getSrcUrl('right/figure-out-dere-right.png') },
+    { id: 12,src: getSrcUrl('figure-out-ta.png'),     srcError: getSrcUrl('wrong/figure-out-ta-wrong.png'),     srcRight: getSrcUrl('right/figure-out-ta-right.png')},
+    { id: 13,src: getSrcUrl('figure-in-mu.png'),      srcError: getSrcUrl('wrong/figure-in-mu-wrong.png'),      srcRight: getSrcUrl('right/figure-in-mu-right.png') },
+    { id: 14,src: getSrcUrl('figure-out-mashka.png'), srcError: getSrcUrl('wrong/figure-out-mashka-wrong.png'), srcRight: getSrcUrl('right/figure-out-mashka-right.png') }
+];
 
 const dataTransfer = ref({})
 const drag = (event, word) => {
