@@ -122,7 +122,7 @@ const onSelection = (firstIndex, id) => {
     if (currSyllable.value == id && !firstListen.value) {
         firstListen.value = true;
         syllables.value[firstIndex][id].correct = true;
-        setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)
+        // setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)
         // for(let i = 1; i<= 3; i++){
         //     for(const temp in syllables.value[i]){
         //         if(!syllables.value[i][temp].correct){
@@ -134,7 +134,7 @@ const onSelection = (firstIndex, id) => {
         playAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
     } else if (!firstListen.value) {
         syllables.value[firstIndex][id].correct = false;
-        setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)
+        // setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)
         playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     }
     if (countAnswers.value == 14) {
