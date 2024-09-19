@@ -133,7 +133,6 @@ const sendAudio = (music) => {
     audio.value = music;
 };
 const sendPreAudio = (pre) => {
-    // console.log('sendPreAudio', pre);
     isPlaying.value = pre;
 };
 

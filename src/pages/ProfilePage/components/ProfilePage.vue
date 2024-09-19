@@ -81,7 +81,7 @@
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
                     <v-progress-linear
-                        v-show="skill[block.id].progress"
+                        v-if="skill[block.id]"
                         v-model="skill[block.id].progress"
                         height="30"
                         class="scale"
@@ -353,6 +353,7 @@
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
                     <v-progress-linear
+                        v-if="skill[block.id]"
                         v-model="skill[block.id].progress"
                         height="30"
                         class="scale"
@@ -555,6 +556,7 @@ const formGroup = ref({
 const del = ref({
     check: false,
 });
+const childId = ref(0);
 
 const skill = ref({});
 const rules = {
@@ -733,7 +735,10 @@ const GetSkill = async (id, index) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
-        console.log(skill.value[id], skill.value, id, response.data);
+        if (!skill.value[id]) {
+            skill.value[id] = {};
+        }
+        // console.log(skill.value[id], skill.value, id, response.data);
         skill.value[id] = response.data;
     } catch (error) {
         console.log('errr', error);
@@ -760,12 +765,11 @@ const fetchSkills = async () => {
 watch(
     () => userStore.children,
     async (newSkill) => {
-        if (!newSkill) {
-            console.log('here');
+        if (!newSkill || newSkill.length === 0) {
+            console.log('here once');
             return false;
         }
         await fetchSkills();
-        console.log('newSkill', newSkill);
     },
     { immediate: true },
 );
@@ -774,18 +778,14 @@ watch(
     () => userStore.groups,
     async (newGroup) => {
         if (!newGroup || newGroup.length === 0) {
-            console.log('here');
+            console.log('here group');
             return false;
         }
         await fetchSkills();
-        console.log('newGroup', newGroup);
     },
     { immediate: true },
 );
 
-// onMounted(async() => {
-//     await GetSkill()
-// })
 document.body.classList.remove('no-scroll');
 </script>
 <style lang="scss" scoped>
