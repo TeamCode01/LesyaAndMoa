@@ -677,7 +677,7 @@ watch(
     }
 }
 
-&.no-scroll {
+.no-scroll {
     overflow-y: hidden;
 }
 
