@@ -199,7 +199,11 @@
         </div>
     </div>
     <div class="overlay" v-show="showDelete"></div>
-    <div class="delete-profile__wrapper" v-show="showDelete">
+    <div
+        class="delete-profile__wrapper"
+        id="delete-wrapper"
+        v-show="showDelete"
+    >
         <h3 class="delete-profile__title">Удаление профиля пользователя</h3>
 
         <div>
@@ -360,9 +364,11 @@ document.addEventListener('click', (event) => {
 
     if (
         event.target.id !== 'delete-modal' &&
-        !event.target.matches('.delete-profile__wrapper') && showDelete.value !== false
+        event.target.id !== 'delete-wrapper' &&
+        !event.target.matches('.delete-profile__wrapper') &&
+        showDelete.value !== false
     ) {
-        showDelete.value = false;
+        // showDelete.value = false;
         document.body.classList.remove(
             'no-scroll',
         ); /* Прокрутка возвращается */

@@ -514,10 +514,9 @@
 import { Button } from '@shared/components/buttons';
 import { modalWindow, modalConfirm } from '@shared/components/modals';
 import { HTTP } from '@app/http';
-import { ref, onMounted, watch, computed, onBeforeMount } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { SelectSort } from '@shared/components/selects';
-import { onBeforeRouteUpdate } from 'vue-router';
 import { useUserStore } from '@layouts/stores/user';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
@@ -786,7 +785,12 @@ watch(
     { immediate: true },
 );
 
-document.body.classList.remove('no-scroll');
+// onMounted(async () => {
+//     await userStore.getChildren();
+//     fetchSkills();
+// });
+
+// document.body.classList.remove('no-scroll');
 </script>
 <style lang="scss" scoped>
 .profile {
