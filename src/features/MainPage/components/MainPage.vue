@@ -578,7 +578,7 @@ const mute = () => {
 };
 
 const refresh = () => {
-    if(audio.value.paused) {
+    if (audio.value.paused) {
         audio.value.currentTime = 0;
         audio.value.play();
     }
@@ -677,6 +677,10 @@ watch(
     }
 }
 
+&.no-scroll {
+    overflow-y: hidden;
+}
+
 .link-share {
     display: flex;
     column-gap: 8px;
@@ -729,18 +733,6 @@ watch(
     text-align: center;
     z-index: 99;
 }
-
-.no-scroll {
-    overflow-y: scroll;
-    /* Разрешает видимость полосы прокрутки */
-    position: fixed;
-    /* Запрещает прокрутку страницы */
-    width: 100%;
-    /* Фиксирует ширину страницы */
-    top: calc(-1 * var(--scroll-position));
-    /* Запоминает место прокрутки */
-}
-
 .carousel {
     max-width: 800px;
     width: 100%;
