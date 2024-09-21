@@ -57,13 +57,13 @@
                                     
 
                                     <img v-if="word.error == 0 " :src="wordsSrc[word.id - 1].src" :alt="word.class"  draggable="false"
-                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" />
-
+                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" data-type='none'/>
+                                    
                                     <img v-else-if="word.error == 1" :src="wordsSrc[word.id - 1].srcRight" :alt="word.class"  draggable="false"
-                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" />
+                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" data-type='true'/>
 
                                     <img v-else :src="wordsSrc[word.id - 1].srcError" :alt="word.class"  draggable="false"
-                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" />
+                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" data-type='error' />
 
                                 </div>
 
@@ -92,9 +92,9 @@
                                     <SvgIcon icon-name="green-circle" class="draggable-list__word-top-circle" >
                                     </SvgIcon>    
                                 </div>
-                                <img :src="picture.src" :alt="picture.alt" class="draggable-list__lesyaandmoa"
+                                <img :src="getSrcUrl(picture.alt+'.png')" :alt="picture.alt" class="draggable-list__lesyaandmoa"
                                     v-if="!endSecondTask" />
-                                <img :src="picture.endsrc" :alt="picture.endalt" class="draggable-list__lesyaandmoa"
+                                <img :src="getSrcUrl(picture.alt+'.png')" :alt="picture.endalt" class="draggable-list__lesyaandmoa"
                                     v-else />
                             </div>
                         </div>
@@ -126,6 +126,8 @@ import { dataFirstTask, dataSecondTask } from './task.js';
 import audioMap from './audioMap'
 import gameActions from '@mixins/gameAction';
 
+import { wordsSrc as words } from '@app/assets/creatures/SeventeenthTask/images.js';
+
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
@@ -148,9 +150,11 @@ const next = () => {
     emit('next-modal');
 };
 
-const getSrcUrl = (path) => {  
+const getSrcUrl = (path) => { 
     //console.log(new URL(`./${path}`, import.meta.url).href);
+    //console.log(`@/assets/creatures/SeventeenthTask/${path}.png`, new URL(`@/assets/creatures/SeventeenthTask/${path}`, import.meta.url))
     return new URL(`/assets/creatures/SeventeenthTask/${path}`, import.meta.url).href;
+    //return new URL(`/assets/creatures/SeventeenthTask/${path}`, import.meta.url).href;
 };
 
 
@@ -196,23 +200,21 @@ firstTask.value = structuredClone(dataFirstTask);
 firstTask.value[1] = [];
 secondTask.value = structuredClone(dataSecondTask);
 
-const img = new URL(`/assets/creatures/SeventeenthTask/figure-in-ro.png`, import.meta.url).href
-
 const wordsSrc = [
-    { id: 1, src: getSrcUrl('figure-in-ro.png'),      srcError: getSrcUrl('wrong/figure-in-ro-wrong.png'),      srcRight: getSrcUrl('right/figure-in-ro-right.png') },
-    { id: 2, src: getSrcUrl('figure-out-laka.png'),   srcError: getSrcUrl('wrong/figure-out-laka-wrong.png'),   srcRight: getSrcUrl('right/figure-out-laka-right.png') },
-    { id: 3, src: getSrcUrl('figure-out-koro.png'),   srcError: getSrcUrl('wrong/figure-out-koro-wrong.png'),   srcRight: getSrcUrl('right/figure-out-koro-right.png') },
-    { id: 4, src: getSrcUrl('figure-in-vo.png'),      srcError: getSrcUrl('wrong/figure-in-vo-wrong.png'),      srcRight: getSrcUrl('right/figure-in-vo-right.png') },
-    { id: 5, src: getSrcUrl('figure-in-ka.png'),      srcError: getSrcUrl('wrong/figure-in-ka-wrong.png'),      srcRight: getSrcUrl('right/figure-in-ka-right.png') },
-    { id: 6, src: getSrcUrl('figure-in-va.png'),      srcError: getSrcUrl('wrong/figure-in-va-wrong.png'),      srcRight: getSrcUrl('right/figure-in-va-right.png') },
-    { id: 7, src: getSrcUrl('figure-out-so.png'),     srcError: getSrcUrl('wrong/figure-out-so-wrong.png'),     srcRight: getSrcUrl('right/figure-out-so-right.png') },
-    { id: 8, src: getSrcUrl('figure-out-re.png'),     srcError: getSrcUrl('wrong/figure-out-re-wrong.png'),     srcRight: getSrcUrl('right/figure-out-re-right.png') },
-    { id: 9, src: getSrcUrl('figure-in-ob.png'),      srcError: getSrcUrl('wrong/figure-in-ob-wrong.png'),      srcRight: getSrcUrl('right/figure-in-ob-right.png') },
-    { id: 10,src: getSrcUrl('figure-in-ba.png'),      srcError: getSrcUrl('wrong/figure-in-ba-wrong.png'),      srcRight: getSrcUrl('right/figure-in-ba-right.png') },
-    { id: 11,src: getSrcUrl('figure-out-dere.png'),   srcError: getSrcUrl('wrong/figure-out-dere-wrong.png'),   srcRight: getSrcUrl('right/figure-out-dere-right.png') },
-    { id: 12,src: getSrcUrl('figure-out-ta.png'),     srcError: getSrcUrl('wrong/figure-out-ta-wrong.png'),     srcRight: getSrcUrl('right/figure-out-ta-right.png')},
-    { id: 13,src: getSrcUrl('figure-in-mu.png'),      srcError: getSrcUrl('wrong/figure-in-mu-wrong.png'),      srcRight: getSrcUrl('right/figure-in-mu-right.png') },
-    { id: 14,src: getSrcUrl('figure-out-mashka.png'), srcError: getSrcUrl('wrong/figure-out-mashka-wrong.png'), srcRight: getSrcUrl('right/figure-out-mashka-right.png') }
+    { id: 1, src: getSrcUrl('figure-in-ro.png'),      srcError: getSrcUrl('figure-in-ro-wrong.png'),      srcRight: getSrcUrl('figure-in-ro-right.png') },
+    { id: 2, src: getSrcUrl('figure-out-laka.png'),   srcError: getSrcUrl('figure-out-laka-wrong.png'),   srcRight: getSrcUrl('figure-out-laka-right.png') },
+    { id: 3, src: getSrcUrl('figure-out-koro.png'),   srcError: getSrcUrl('figure-out-koro-wrong.png'),   srcRight: getSrcUrl('figure-out-koro-right.png') },
+    { id: 4, src: getSrcUrl('figure-in-vo.png'),      srcError: getSrcUrl('figure-in-vo-wrong.png'),      srcRight: getSrcUrl('figure-in-vo-right.png') },
+    { id: 5, src: getSrcUrl('figure-in-ka.png'),      srcError: getSrcUrl('figure-in-ka-wrong.png'),      srcRight: getSrcUrl('figure-in-ka-right.png') },
+    { id: 6, src: getSrcUrl('figure-in-va.png'),      srcError: getSrcUrl('figure-in-va-wrong.png'),      srcRight: getSrcUrl('figure-in-va-right.png') },
+    { id: 7, src: getSrcUrl('figure-out-so.png'),     srcError: getSrcUrl('figure-out-so-wrong.png'),     srcRight: getSrcUrl('figure-out-so-right.png') },
+    { id: 8, src: getSrcUrl('figure-out-re.png'),     srcError: getSrcUrl('figure-out-re-wrong.png'),     srcRight: getSrcUrl('figure-out-re-right.png') },
+    { id: 9, src: getSrcUrl('figure-in-ob.png'),      srcError: getSrcUrl('figure-in-ob-wrong.png'),      srcRight: getSrcUrl('figure-in-ob-right.png') },
+    { id: 10,src: getSrcUrl('figure-in-ba.png'),      srcError: getSrcUrl('figure-in-ba-wrong.png'),      srcRight: getSrcUrl('figure-in-ba-right.png') },
+    { id: 11,src: getSrcUrl('figure-out-dere.png'),   srcError: getSrcUrl('figure-out-dere-wrong.png'),   srcRight: getSrcUrl('figure-out-dere-right.png') },
+    { id: 12,src: getSrcUrl('figure-out-ta.png'),     srcError: getSrcUrl('figure-out-ta-wrong.png'),     srcRight: getSrcUrl('figure-out-ta-right.png')},
+    { id: 13,src: getSrcUrl('figure-in-mu.png'),      srcError: getSrcUrl('figure-in-mu-wrong.png'),      srcRight: getSrcUrl('figure-in-mu-right.png') },
+    { id: 14,src: getSrcUrl('figure-out-mashka.png'), srcError: getSrcUrl('figure-out-mashka-wrong.png'), srcRight: getSrcUrl('figure-out-mashka-right.png') }
 ];
 
 const dataTransfer = ref({})
@@ -239,8 +241,8 @@ const drop = (event, word) => {
     }
 
 
-    let dragSrcError = dataTransfer.value.srcError
-    let dragSrc = dataTransfer.value.src
+
+    let dragId = dataTransfer.value.id
 
     if (dataTransfer.value.answer == word.id){
 
@@ -289,20 +291,20 @@ const drop = (event, word) => {
         event.from.appendChild(dragElem)
         playAudio(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`)
 
-        event.from.children[0].children[0].src = dragSrcError;
-        event.to.children[0].children[0].src = word.srcError
+        event.from.children[0].children[0].src = wordsSrc[dragId - 1].srcError;
+        event.to.children[0].children[0].src = wordsSrc[word.id - 1].srcError;
 
         event.to.dataset['isActive'] = 'true'
         event.from.dataset['isActive'] = 'true'
 
         setTimeout(()=>{
             try {
-                event.from.children[0].children[0].src = dragSrc;
+                event.from.children[0].children[0].src = wordsSrc[dragId - 1].src;
             }
             catch {}
             
             try {
-                event.to.children[0].children[0].src = word.src
+                event.to.children[0].children[0].src = wordsSrc[word.id - 1].src
             }
             catch {}
         }, 2000)
