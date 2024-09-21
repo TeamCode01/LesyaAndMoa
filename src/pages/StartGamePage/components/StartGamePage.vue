@@ -94,7 +94,7 @@
 </template>
 <script setup>
 import { Sidebar } from '@widgets/SideBarGame';
-import { ref, onMounted, watch, onBeforeMount } from 'vue';
+import { ref, onMounted, watch} from 'vue';
 import { useRoute } from 'vue-router';
 import { HTTP } from '@app/http';
 import gameActions from '@mixins/gameAction';
@@ -133,7 +133,6 @@ const sendAudio = (music) => {
     audio.value = music;
 };
 const sendPreAudio = (pre) => {
-    // console.log('sendPreAudio', pre);
     isPlaying.value = pre;
 };
 
@@ -182,7 +181,7 @@ const playSound = () => {
             `/assets/audio/${audio.value}`,
             import.meta.url,
         ).href;
-        console.log('audio', startAudio.value.src);
+        // console.log('audio', startAudio.value.src);
         startAudio.value.play();
         startAudio.value.addEventListener('ended', () => {
             showBtn.value = true;
@@ -196,7 +195,7 @@ watch(
     async (newId) => {
         if (newId) {
             childId = newId;
-            console.log('newId', newId, childId);
+            // console.log('newId', newId, childId);
         }
     },
     { immediate: true },

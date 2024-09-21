@@ -36,8 +36,6 @@
                         </button>
                     </div>
                 </div>
-                <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
-                    class="task_block__wrapper_answer" />
             </template>
             <TaskResultBanner :img="getImageUrl('flowers.png')" :bg="getImageUrl('moa.gif')" text="Здорово!" v-else
                 @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
@@ -75,7 +73,7 @@ const props = defineProps({
 const countAnswers = ref(0);
 const is_correct = ref(false);
 const audio = ref(new Audio());
-
+const endGame = ref(false);
 
 const getImageUrl = (path) => {
     return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
@@ -122,7 +120,7 @@ const onSelection = (firstIndex, id) => {
     if (currSyllable.value == id && !firstListen.value) {
         firstListen.value = true;
         syllables.value[firstIndex][id].correct = true;
-        setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)
+        // setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)
         // for(let i = 1; i<= 3; i++){
         //     for(const temp in syllables.value[i]){
         //         if(!syllables.value[i][temp].correct){
@@ -134,10 +132,11 @@ const onSelection = (firstIndex, id) => {
         playAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
     } else if (!firstListen.value) {
         syllables.value[firstIndex][id].correct = false;
-        setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)
+        // setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)
         playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     }
     if (countAnswers.value == 14) {
+        endGame.value = true;
         setTimeout(() => {
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);
@@ -151,6 +150,7 @@ const onSelection = (firstIndex, id) => {
 }
 
 const listenTo = () => {
+    if(endGame.value) return
     if (firstListen.value) {
         firstListen.value = false;
         let exist = true;

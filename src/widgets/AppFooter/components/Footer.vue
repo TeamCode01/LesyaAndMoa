@@ -24,7 +24,8 @@
                     </div>
                 </div>
                 <div class="footer__wrapper_info">
-                    <div class="footer__wrapper_phone">8 (900) 123-45-45</div>
+                    <div class="footer__wrapper_phone"><a href="tel:89661655130">8 (966) 165-51-30</a></div>
+                    <div class="footer__wrapper_phone"><a href="mailto:Lesya-i-Moa@yandex.ru">Lesya-i-Moa@yandex.ru</a></div>
                     <div class="footer__wrapper_links">
                         <router-link
                             class="link-small"
@@ -207,6 +208,10 @@
             height: 40px;
             // padding-top: 7px;
             font-family: 'Nunito', sans-serif;
+            a {
+                color: $text-primary;
+                text-decoration: none;
+            }
 
             @media (max-width: 720px) {
                 display: flex;

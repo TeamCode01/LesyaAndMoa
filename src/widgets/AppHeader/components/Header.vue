@@ -112,7 +112,7 @@
         </div>
     </header>
     <div class="modal" v-if="showModal">
-        <div class="close" @click="closeMenu()">
+        <div class="close" @click="closeBurger()">
             <img
                 class="close-icon"
                 src="@app/assets/icons/icon-close.svg"
@@ -188,14 +188,22 @@
                         >Мой профиль</router-link
                     >
                 </li>
-                <li class="link-small" @click="showDeleteModal()">
+                <li
+                    class="link-small"
+                    id="delete-modal"
+                    @click="showDeleteModal()"
+                >
                     Удалить профиль
                 </li>
             </ul>
         </div>
     </div>
     <div class="overlay" v-show="showDelete"></div>
-    <div class="delete-profile__wrapper" v-show="showDelete">
+    <div
+        class="delete-profile__wrapper"
+        id="delete-wrapper"
+        v-show="showDelete"
+    >
         <h3 class="delete-profile__title">Удаление профиля пользователя</h3>
 
         <div>
@@ -298,14 +306,12 @@ const showBurger = () => {
 
 const closeMenu = () => {
     showModalMini.value = false;
-    // if (showModal.value == true) {
-    //     showModal.value = false;
-    //     // document.body.classList.remove(
-    //     //     'no-scroll',
-    //     // ); /* Прокрутка возвращается */
-    // }
+    document.body.classList.remove('no-scroll');
+};
 
-    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+const closeBurger = () => {
+    showModal.value = false;
+    document.body.classList.remove('no-scroll');
 };
 
 const logOut = async () => {
@@ -348,24 +354,33 @@ const deleteUser = async () => {
 
 document.addEventListener('click', (event) => {
     if (
-        (event.target.id !== 'delete-modal' &&
-            event.target.matches('.delete-profile__wrapper')) ||
-        (event.target.id !== 'modal-mini' &&
-            !event.target.matches('.modal__wrapper_mini'))
+        event.target.id !== 'modal-mini' &&
+        !event.target.matches('.modal__wrapper_mini') &&
+        showModalMini.value !== false
     ) {
         showModalMini.value = false;
-        // document.body.classList.remove(
-        //     'no-scroll',
-        // ); /* Прокрутка возвращается */
+        document.body.classList.remove('no-scroll');
     }
+
+    if (
+        event.target.id !== 'delete-modal' &&
+        event.target.id !== 'delete-wrapper' &&
+        !event.target.matches('.delete-profile__wrapper') &&
+        showDelete.value !== false
+    ) {
+        // showDelete.value = false;
+        document.body.classList.remove(
+            'no-scroll',
+        ); /* Прокрутка возвращается */
+    }
+
     if (
         event.target.id !== 'burger' &&
-        !event.target.matches('.modal__wrapper')
+        !event.target.matches('.modal__wrapper') &&
+        showModal.value !== false
     ) {
         showModal.value = false;
-        // document.body.classList.remove(
-        //     'no-scroll',
-        // ); /* Прокрутка возвращается */
+        document.body.classList.remove('no-scroll');
     }
 });
 
@@ -409,16 +424,16 @@ body {
     }
 }
 
-.no-scroll {
-    overflow-y: scroll;
-    /* Разрешает видимость полосы прокрутки */
-    position: fixed;
-    /* Запрещает прокрутку страницы */
-    width: 100%;
-    /* Фиксирует ширину страницы */
-    top: calc(-1 * var(--scroll-position));
-    /* Запоминает место прокрутки */
-}
+// .no-scroll {
+//     // overflow-y: scroll;
+//     /* Разрешает видимость полосы прокрутки */
+//     position: fixed;
+//     /* Запрещает прокрутку страницы */
+//     width: 100%;
+//     /* Фиксирует ширину страницы */
+//     top: calc(-1 * var(--scroll-position));
+//     /* Запоминает место прокрутки */
+// }
 
 .delete-profile_user {
     display: flex;
