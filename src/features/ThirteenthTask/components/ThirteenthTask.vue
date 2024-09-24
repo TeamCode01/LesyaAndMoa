@@ -52,6 +52,7 @@
                         :sort="false"
                         @add="drop($event)"
                         ghost-class="none"
+                        draggable="false"
                     >
                         <input
                             readonly

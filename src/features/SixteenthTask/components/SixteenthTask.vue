@@ -184,7 +184,21 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
 
                 setTimeout(() => {
                     answersCounter.value += 1;
+                    let audioPathSrc = new URL(`/assets/audio/Task16/${audioMap.get('Изумительно')}`, import.meta.url).href
+                    let audio = new Audio(audioPathSrc);
+                    audio.play();
+
+                    setTimeout(() => {
+                        if (is_correct.value === false) {
+                            endGameRequest(props.childId, corrValue.value);
+                            emit('correct');
+                            emit('open');
+                        };
+                    }, 1500)
+
                 }, 8000)
+
+
             }
             else {
                 answersCounter.value += 1;

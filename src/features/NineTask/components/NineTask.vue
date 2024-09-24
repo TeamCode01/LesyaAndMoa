@@ -35,8 +35,8 @@
                         <div class="big-letters">
 
                             <VueDraggableNext :group="{ name: 'big-letters', pull: false, put: true }"
-                            :sort="false" v-for="i in 7" :key="i" @add="drop($event, 1, i)" ghost-class="none">
-                                <input type="text" class="input-item" />
+                            :sort="false" v-for="i in 7" :key="i" @add="drop($event, 1, i)" ghost-class="none" draggable="false">
+                                <input type="text" class="input-item" readonly />
                             </VueDraggableNext>
 
                         </div>
@@ -44,8 +44,8 @@
                         <div class="middle-letters">
 
                             <VueDraggableNext :group="{ name: 'middle-letters', pull: false, put: true }"
-                            :sort="false" v-for="i in 6" :key="i" @add="drop($event, 2, i)" ghost-class="none">
-                                <input type="text" class="input-item" />
+                            :sort="false" v-for="i in 6" :key="i" @add="drop($event, 2, i)" ghost-class="none" draggable="false">
+                                <input type="text" class="input-item" readonly/>
                             </VueDraggableNext>
 
                         </div>
@@ -53,8 +53,8 @@
                         <div class="pre-middle-letters">
 
                             <VueDraggableNext :group="{ name: 'pre-middle-letters', pull: false, put: true }"
-                            :sort="false" v-for="i in 5" :key="i" @add="drop($event, 3, i)" ghost-class="none">
-                                <input type="text" class="input-item" />
+                            :sort="false" v-for="i in 5" :key="i" @add="drop($event, 3, i)" ghost-class="none" draggable="false">
+                                <input type="text" class="input-item" readonly/>
                             </VueDraggableNext>
 
                         </div>
@@ -62,8 +62,8 @@
                         <div class="small-letters">
 
                             <VueDraggableNext :group="{ name: 'small-letters', pull: false, put: true }"
-                            :sort="false" v-for="i in 3" :key="i" @add="drop($event, 4, i)" ghost-class="none">
-                                <input type="text" class="input-item" />
+                            :sort="false" v-for="i in 3" :key="i" @add="drop($event, 4, i)" ghost-class="none" draggable="false">
+                                <input type="text" class="input-item" readonly/>
                             </VueDraggableNext>
 
                         </div>

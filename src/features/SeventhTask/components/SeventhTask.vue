@@ -89,7 +89,7 @@
                     </div>
                 </div>
             </template>
-            <TaskResultBanner :img="getImageUrl('Cup.png')" :bg="getImageUrl('lesya.gif')" text="Далее!" v-else
+            <TaskResultBanner :bg="getImageUrl('lesya.gif')" text="Друзья поняли, что всего один знак (Ь — мягкий знак или Ъ — твёрдый знак) так различает значение слов!" v-else
                 @hide="hide()" class="end-modal" @next="next()"></TaskResultBanner>
         </div>
     </div>
@@ -188,28 +188,28 @@ const words = ref({
     1: {
         1: {
             word: 'КОНЬ',
-            audio: '/assets/audio/Task7/262.7.mp3',
+            audio: 'Task7/262.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 4,
         },
         2: {
             word: 'ТОПЬ',
-            audio: '/assets/audio/Task7/263.7.mp3',
+            audio: 'Task7/263.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 3,
         },
         3: {
             word: 'ТОП',
-            audio: '/assets/audio/Task7/264.7.mp3',
+            audio: 'Task7/264.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 2,
         },
         4: {
             word: 'КОН',
-            audio: '/assets/audio/Task7/265.7.mp3',
+            audio: 'Task7/265.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 1,
@@ -218,28 +218,28 @@ const words = ref({
     2: {
         1: {
             word: 'СЕЛ',
-            audio: '/assets/audio/Task7/270.7.mp3',
+            audio: 'Task7/270.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 2,
         },
         2: {
             word: 'СЪЕЛ',
-            audio: '/assets/audio/Task7/271.7.mp3',
+            audio: 'Task7/271.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 1,
         },
         3: {
             word: 'МЕЛ',
-            audio: '/assets/audio/Task7/272.7.mp3',
+            audio: 'Task7/272.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 4,
         },
         4: {
             word: 'МЕЛЬ',
-            audio: '/assets/audio/Task7/273.7.mp3',
+            audio: 'Task7/273.7.mp3',
             correct: null,
             correctRight: false,
             correctRightRow: 3,
@@ -251,7 +251,7 @@ const sentences = ref({
     1: {
         1: {
             sentence: 'одна партия какой-либо игры',
-            audio: '/assets/audio/Task7/266.7.mp3',
+            audio: 'Task7/266.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -260,7 +260,7 @@ const sentences = ref({
         },
         2: {
             sentence: 'легкая женская одежда для верхней половины тела',
-            audio: '/assets/audio/Task7/267.7.mp3',
+            audio: 'Task7/267.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -269,7 +269,7 @@ const sentences = ref({
         },
         3: {
             sentence: 'топкое, болотистое место',
-            audio: '/assets/audio/Task7/268.7.mp3',
+            audio: 'Task7/268.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -278,7 +278,7 @@ const sentences = ref({
         },
         4: {
             sentence: 'то же, что лошадь, вьючное животное',
-            audio: '/assets/audio/Task7/269.7.mp3',
+            audio: 'Task7/269.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -289,7 +289,7 @@ const sentences = ref({
     2: {
         1: {
             sentence: 'принял пищу, покушал',
-            audio: '/assets/audio/Task7/275.7.mp3',
+            audio: 'Task7/275.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -298,7 +298,7 @@ const sentences = ref({
         },
         2: {
             sentence: 'принял положение сидя',
-            audio: '/assets/audio/Task7/274.7.mp3',
+            audio: 'Task7/274.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -307,7 +307,7 @@ const sentences = ref({
         },
         3: {
             sentence: 'неглубокое место в реке, озере или в море',
-            audio: '/assets/audio/Task7/277.7.mp3',
+            audio: 'Task7/277.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -316,7 +316,7 @@ const sentences = ref({
         },
         4: {
             sentence: 'белый известняк для окраски, писания (на доске)',
-            audio: '/assets/audio/Task7/276.7.mp3',
+            audio: 'Task7/276.7.mp3',
             correct: null,
             correctLeft: false,
             correctRight: false,
@@ -447,8 +447,9 @@ const getImageUrl = (path) => {
 };
 
 
+
 const playAudio = (audioPath) => {
-    audio.value.src = new URL(audioPath, import.meta.url).href;
+    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     audio.value.play();
 }
 const stopAudio = (audioPath) => {
@@ -685,7 +686,7 @@ const disengage = (event) => {
             if (correctAns) {
                 countAnswers.value++;
 
-                playAudio(`/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
+                playAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`);
 
                 lines.value.push({
                     startX: startCords.value.x,
@@ -698,7 +699,7 @@ const disengage = (event) => {
                     if (isFirstPassing.value) {
                         setTimeout(() => {
                             showCorrectRow.value = true;
-                            playAudio(`/assets/audio/Task7/278.7.mp3`);
+                            playAudio(`Task7/278.7.mp3`);
                             redrawCorrectRows();
                         }, 1000);
                         setTimeout(() => {
@@ -730,7 +731,7 @@ const disengage = (event) => {
                         if (isFirstOptionCompleted.value && isSecondOptionCompleted.value) {
                             setTimeout(() => {
                                 showCorrectRow.value = true;
-                                playAudio(`/assets/audio/Task7/278.7.mp3`);
+                                playAudio(`Task7/278.7.mp3`);
                                 redrawCorrectRows();
                             }, 1000);
                             setTimeout(() => {
@@ -745,7 +746,7 @@ const disengage = (event) => {
                     }
                 }
             } else {
-                playAudio(`/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+                playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
             }
         }
         isDrawing.value = false;

@@ -42,12 +42,11 @@
                             <VueDraggableNext :group="`${ (word.id == dragIdPuzzle) ? { name: 'word', pull: 'clone', put: false } : { name: 'word', pull: 'clone', put: true } }`"
                                 :sort="false" @add = "drop($event, word)" :class="[word.class]"
                                 :ghost-class="word.id == dragIdPuzzle ? 'hidden' : 'none'" :drag-class="'block'"
-                                @choose="($event)=>{drag($event, word)}"
+                                @choose="($event)=>{drag($event, word); if (word.isActive) { playAudio(word.text)}}"
                                 :data-is-active="word.isActive"
                                 v-for="word in row" :key="word.id">
 
                                 <div
-                                    @mouseenter="() => {if (word.isActive) { playAudio(`/assets/audio/Task17/${audioMap.get(word.text)}`)}}"
                                     :ref="(el) => { refPuzzles[word.id - 1] = el}"
                                     draggable="false">
                                     
@@ -168,8 +167,15 @@ const audio = ref(new Audio());
 const is_correct = ref(false);
 const is_started = ref(null);
 const corrValue = ref(0);
-const playAudio = (audioPath) => {
-    audio.value.src = new URL(audioPath, import.meta.url).href;
+const playAudio = (audioPath, isInMap = true, isFromTaskSix = false) => {
+
+    if (isFromTaskSix) {
+        audio.value.src = new URL(`/assets/audio/Task6/${isInMap ? audioMap.get(audioPath) : audioPath}`, import.meta.url).href;
+        audio.value.play();
+        return
+    }
+
+    audio.value.src = new URL(`/assets/audio/Task17/${isInMap ? audioMap.get(audioPath) : audioPath}`, import.meta.url).href;
     audio.value.play();
 }
 
@@ -252,8 +258,7 @@ const drop = (event, word) => {
         event.to.classList.add('standart_cursor')
         event.from.classList.add('standart_cursor')
 
-        playAudio(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`);
-
+        playAudio(`right.${Math.ceil(Math.random() * 3)}.mp3`, false, true);
         let answer = {};
             if (dataTransfer.value.id == 1 || dataTransfer.value.id == 14) {
                 answer.id = 1;
@@ -277,8 +282,8 @@ const drop = (event, word) => {
 
             setTimeout(() => {
                 firstTaskAnswerCounter.value += 1;
-                let audio_word = new Audio(`/assets/audio/Task17/${audioMap.get('слово-' + answer.id)}`);
-                audio_word.play();
+
+                playAudio('слово-' + answer.id)
 
                 setTimeout(() => {
                     if (firstTaskAnswerCounter.value == 5) {
@@ -289,7 +294,8 @@ const drop = (event, word) => {
     }
     else{
         event.from.appendChild(dragElem)
-        playAudio(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`)
+        playAudio(`wrong.${Math.ceil(Math.random() * 3)}.mp3`, false, true)
+        console.log('false')
 
         event.from.children[0].children[0].src = wordsSrc[dragId - 1].srcError;
         event.to.children[0].children[0].src = wordsSrc[word.id - 1].srcError;
@@ -609,10 +615,7 @@ const disengage = (event) => {
                     startIds.column - 1
                 ].done = true;
                 centralCords.value[endIds.row][endIds.column - 1].done = true;
-                playAudio(
-                    `/assets/audio/Common/1.${Math.floor(Math.random() * 3) + 1
-                    }.mp3`
-                );
+                playAudio(`right.${Math.ceil(Math.random() * 3)}.mp3`, false, true);
 
                 lines.value.push({
                     startX: startCords.value.x,
@@ -628,10 +631,7 @@ const disengage = (event) => {
                     }, 2000);
                 }
             } else {
-                playAudio(
-                    `/assets/audio/Common/2.${Math.floor(Math.random() * 3) + 1
-                    }.mp3`
-                );
+                playAudio(`wrong.${Math.ceil(Math.random() * 3)}.mp3`, false, true);
             }
         }
         isDrawing.value = false;
@@ -678,12 +678,16 @@ const finalDraw = () => {
     }
 
     setTimeout(() => {
+        playAudio('469.17_.mp3', false);
+    }, 500)
+
+    setTimeout(() => {
         if (is_correct.value === false) {
             endGameRequest(props.childId, corrValue.value);
             emit('correct');
             emit('open');
         }
-        playAudio('/assets/audio/Task17/469.17_.mp3');
+        console.log('final')
         startGame.value = false;
     }, 4000);
 };
