@@ -117,7 +117,7 @@
                     </div>
                 </div>
             </template>
-            <TaskResultBanner img="/assets/backgrounds/flowers.png" bg="/assets/backgrounds/moa.gif" text="Превосходно!"
+            <TaskResultBanner :img="getImageUrl('flowers.png')" :bg="getImageUrl('moa.gif')" text="Превосходно!"
                 v-if="answersCounter == 11" @next="next" @hide="hide()" class="end-modal"></TaskResultBanner>
         </div>
     </div>
@@ -557,10 +557,12 @@ onBeforeUnmount(() => {
 }
 
 .item_right {
+    padding: 6px 14px 6px 14px;
     border: 2px solid #5ccf54;
 }
 
 .item_wrong {
+    padding: 6px 14px 6px 14px;
     border: 2px solid #db0000;
 }
 

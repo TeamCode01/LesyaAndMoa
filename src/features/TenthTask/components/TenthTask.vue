@@ -38,7 +38,7 @@
                             <p>{{ questions[currStage].first_part }}</p>
                             <VueDraggableNext class="draggable-list__quastion-block" v-if="!givenAnswer[1]"
                                 :group="{ name: 'letters', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 1)" ghost-class="none">
+                                @add="drop($event, 1)" ghost-class="none" draggable="false">
 
                                 <input class="answer" readonly @focus="($event)=>{$event.target.blur()}"/>
 
@@ -48,7 +48,7 @@
                             <template v-if="currStage > 2">
                                 <VueDraggableNext class="draggable-list__quastion-block" v-if="!givenAnswer[2]"
                                     :group="{ name: 'letters', pull: false, put: true }" :sort="false"
-                                    @add="drop($event, 2)" ghost-class="none">
+                                    @add="drop($event, 2)" ghost-class="none" draggable="false">
 
                                     <input class="answer" readonly @focus="($event)=>{$event.target.blur()}"/>
 
