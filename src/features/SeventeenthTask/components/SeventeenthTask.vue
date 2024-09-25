@@ -825,22 +825,22 @@ onBeforeUnmount(() => {
 
 .figure-in {
     cursor: pointer;
-    width: 100px;
+    min-width: 100px;
     height: 90px;
 
     @media (max-width: 1024px) {
-        width: 80px;
+        min-width: 80px;
         height: 72px;
     }
 }
 
 .figure-out {
     cursor: pointer;
-    width: 124px;
+    min-width: 124px;
     height: 90px;
 
     @media (max-width: 1024px) {
-        width: 100px;
+        min-width: 100px;
         height: 72px;
     }
 }
