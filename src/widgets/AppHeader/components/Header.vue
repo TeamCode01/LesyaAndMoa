@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="header__wrapper_other">
-                    <div class="header__logo">
+                    <!-- <div class="header__logo">
                         <a href="/">
                             <img
                                 class="header__logo_yt"
@@ -80,7 +80,7 @@
                                 alt="Ютуб"
                             />
                         </a>
-                    </div>
+                    </div> -->
 
                     <!-- <Button class="btn_info" v-if="user !== null" label="Выйти" @click="logOut"></Button> -->
                     <div

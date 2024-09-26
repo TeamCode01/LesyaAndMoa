@@ -49,7 +49,7 @@
                     @next-modal="next()"
                     @correct="checkCorrect(1)"
                     @open="checkOpen(2)"
-                    v-if="taskId === 1"
+                    v-if="taskId === 1 && SeeTask"
                 >
                 </FirstTask>
                 <SecondTask
@@ -60,7 +60,7 @@
                     @next-modal="next()"
                     @close="close()"
                     @open="checkOpen(3)"
-                    v-if="taskId === 2"
+                    v-if="taskId === 2 && SeeTask"
                 >
                 </SecondTask>
                 <ThirdTask
@@ -71,7 +71,7 @@
                     @next-modal="next()"
                     @close="close()"
                     @open="checkOpen(4)"
-                    v-if="taskId === 3"
+                    v-if="taskId === 3 && SeeTask"
                 >
                 </ThirdTask>
                 <FourthTask
@@ -245,11 +245,7 @@ import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
 import { useUserStore } from '@layouts/stores/user';
-import {
-    ref,
-    watch,
-    onActivated,
-} from 'vue';
+import { ref, watch, onActivated } from 'vue';
 import { FirstTask } from '@features/FirstTask/components';
 import { ThirdTask } from '@features/ThirdTask/components';
 import { FourthTask } from '@features/FourthTask/components';
@@ -269,7 +265,7 @@ import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 import { TwelfthTask } from '@features/TwelfthTask';
 import { useAnswerStore } from '@layouts/stores/answers';
-import { onBeforeRouteLeave} from 'vue-router';
+import { onBeforeRouteLeave } from 'vue-router';
 
 const emit = defineEmits([
     'sendImg',
@@ -347,7 +343,7 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
     const task = tasks.value.find((item) => item.id == id);
     if (task.disabled === false) {
         taskId.value = id;
-        SeeTask.value = openId;
+        SeeTask.value = false;
         startAudio.value = startAudioV;
         timeVal.value = time;
         show.value = false;
@@ -357,11 +353,6 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
         emit('sendImg', img);
         emit('sendId', taskId.value);
         emit('sendAudio', startAudioV);
-        // console.log(
-        //     'id',
-        //     taskId.value,
-        //     audio_ids_music.value.includes(taskId.value),
-        // );
         if (ids.value.includes(taskId.value)) {
             // console.log('1');
             isPlaying.value = true;
@@ -414,6 +405,27 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
     }
 };
 
+const next = () => {
+    SeeTask.value = false;
+    endTime.value = false;
+    show.value = false;
+    emit('show', show.value);
+    const taskFindArr = tasks.value.filter((task) => task.done === true);
+    // console.log('taskFindArr', taskFindArr);
+    if (taskFindArr.length > 0) {
+        let nextElId = taskFindArr.at(-1).id;
+        tasks.value[nextElId].disabled = false;
+        switchTask(
+            tasks.value[nextElId].id,
+            tasks.value[nextElId].open,
+            tasks.value[nextElId].time,
+            tasks.value[nextElId].img,
+            tasks.value[nextElId].audio,
+            tasks.value[nextElId].startAudio,
+        );
+    }
+};
+
 const checkCorrect = (id) => {
     tasks.value.forEach((task) => {
         if (task.id === id) {
@@ -441,33 +453,13 @@ const openTask = (taskId) => {
     }, timeVal.value * 1000);
 };
 
-const next = () => {
-    SeeTask.value = false;
-    endTime.value = false;
-    show.value = false;
-    emit('show', show.value);
-    const taskFindArr = tasks.value.filter((task) => task.done === true);
-    // console.log('taskFindArr', taskFindArr);
-    if (taskFindArr.length > 0) {
-        let nextElId = taskFindArr.at(-1).id;
-        tasks.value[nextElId].disabled = false;
-        switchTask(
-            tasks.value[nextElId].id,
-            tasks.value[nextElId].openId,
-            tasks.value[nextElId].time,
-            tasks.value[nextElId].img,
-            tasks.value[nextElId].audio,
-            tasks.value[nextElId].startAudio,
-        );
-    }
-};
-
 watch(
     () => taskId.value,
     (newId) => {
         if (!newId) {
             return;
         }
+        console.log('see', SeeTask.value);
         taskId.value = newId;
         show.value = false;
         emit('show', show.value);
@@ -510,7 +502,7 @@ watch(
             // console.log('id', tasks.value[nextElId].id);
             switchTask(
                 tasks.value[nextElId].id,
-                tasks.value[nextElId].openId,
+                tasks.value[nextElId].open,
                 tasks.value[nextElId].time,
                 tasks.value[nextElId].img,
                 tasks.value[nextElId].audio,

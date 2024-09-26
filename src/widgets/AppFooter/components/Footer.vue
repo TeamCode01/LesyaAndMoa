@@ -19,7 +19,7 @@
                         </a>
                     </div>
                     <div class="footer__wrapper_text" id="footer__wrapper_text">
-                        <p>© 2024 Организация</p>
+                        <p>© 2024 Полежаева Анастасия Николаевна</p>
                         <p>Все права защищены</p>
                     </div>
                 </div>
