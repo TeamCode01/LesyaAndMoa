@@ -109,22 +109,14 @@ const props = defineProps({
 
 const goToGames = () => {
     if (localStorage.getItem('Token') !== null) {
-        // router.push({
-        //     name: 'Game',
-        //     hash: '#game',
-        //     params: { id: localStorage.getItem('user') },
-        // });
         router.push({ name: 'profile-page' });
+        emit('hide');
     } else {
         router.push({ name: 'Login' });
+        emit('hide');
     }
 };
 const next = () => {
-    // router.push({
-    //     name: 'Game',
-    //     hash: '#game',
-    //     params: { id: localStorage.getItem('user') },
-    // });
     emit('next');
 };
 
