@@ -3,12 +3,10 @@
         <div class="Login">
             <h2>Вход в личный кабинет</h2>
             <div class="Form">
-                <div class="login-input" v-if="Error.value">
-                    <Input
-                        class="form-input red-error"
-                        placeholder="Указан неверный логин или пароль"
-                        name="email"
-                    ></Input>
+                <div class="login-input login-input--error" v-if="Error.value">
+                    <p class="form-input red-error" name="email">
+                        Указан неверный логин или пароль
+                    </p>
                 </div>
                 <div class="login-input">
                     <label class="form-input__label">Логин</label>
@@ -157,6 +155,10 @@ const LoginUser = async () => {
     row-gap: 5px;
     margin-bottom: 16px;
 }
+.login-input--error {
+    background-color: #fff;
+}
+
 .login-input-pass {
     display: flex;
     flex-direction: column;
