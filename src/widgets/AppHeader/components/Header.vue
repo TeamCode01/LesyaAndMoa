@@ -389,7 +389,7 @@ window.addEventListener('popstate', (event) => {
     closeMenu();
 });
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .link-small {
     cursor: pointer;
 }
