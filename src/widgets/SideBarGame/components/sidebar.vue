@@ -97,23 +97,13 @@
                 <SixTask
                     @next-modal="next()"
                     @correct="checkCorrect(6)"
-                    @open="checkOpen(7)"
+                    @open="checkOpen(8)"
                     :end="endTime"
                     :childId="props.childId"
                     @close="close()"
                     v-if="taskId === 6"
                 >
                 </SixTask>
-                <SeventhTask
-                    @next-modal="next()"
-                    @correct="checkCorrect(7)"
-                    @open="checkOpen(8)"
-                    :childId="props.childId"
-                    :end="endTime"
-                    @close="close()"
-                    v-if="taskId === 7"
-                >
-                </SeventhTask>
                 <EighthTask
                     @next-modal="next()"
                     @correct="checkCorrect(8)"
@@ -170,7 +160,7 @@
                 <ThirteenthTask
                     @next-modal="next()"
                     @correct="checkCorrect(13)"
-                    @open="checkOpen(14)"
+                    @open="checkOpen(7)"
                     :childId="props.childId"
                     :finish="finish"
                     :end="endTime"
@@ -178,6 +168,16 @@
                     v-if="taskId === 13"
                 >
                 </ThirteenthTask>
+                <SeventhTask
+                    @next-modal="next()"
+                    @correct="checkCorrect(7)"
+                    @open="checkOpen(14)"
+                    :childId="props.childId"
+                    :end="endTime"
+                    @close="close()"
+                    v-if="taskId === 7"
+                >
+                </SeventhTask>
                 <FourteenthTask
                     @next-modal="next()"
                     @correct="checkCorrect(14)"
@@ -667,18 +667,7 @@ onActivated(() => {
             audio: 'Task6/79.6.mp3',
             startAudio: 'Task6/78.6_.mp3',
         },
-        {
-            id: 7,
-            name: 'Задание 7',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 20,
-            end: false,
-            img: 'task7.jpg',
-            audio: 'Task7/261.7.mp3',
-            startAudio: 'Task7/260.7_.mp3',
-        },
+   
         {
             id: 8,
             name: 'Задание 8',
@@ -750,6 +739,18 @@ onActivated(() => {
             img: 'task13.jpg',
             audio: 'Task13/370.13.mp3',
             startAudio: 'Task13/369.13.mp3',
+        },
+        {
+            id: 7,
+            name: 'Задание 7',
+            disabled: true,
+            done: false,
+            open: false,
+            time: 20,
+            end: false,
+            img: 'task7.jpg',
+            audio: 'Task7/261.7.mp3',
+            startAudio: 'Task7/260.7_.mp3',
         },
         {
             id: 14,
