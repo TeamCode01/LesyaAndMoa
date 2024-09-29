@@ -326,7 +326,7 @@
                                         будут удалены.
                                     </p>
                                     <div class="regCheck delete-check">
-                                        <input type="checkbox" />
+                                        <input type="checkbox" v-model="del.check"/>
                                         <div>
                                             &nbsp;Да, я хочу удалить группу
                                         </div>
@@ -340,6 +340,7 @@
                                             deleteGroup(block.id, index);
                                             close();
                                         "
+                                        :disabled="!del.check"
                                     ></Button>
                                     <Button
                                         label="Отмена"
@@ -383,7 +384,7 @@
                 </router-link>
             </div>
         </div>
-        <modalWindow label="Добавить группу">
+        <modalWindow label="Добавить группу" @close="closeModal">
             <template #default="{ close }">
                 <v-card
                     prepend-icon="mdi-account"
@@ -577,9 +578,12 @@ const rules = {
     average_age: { required },
 };
 
+const checkDeleteGroup = ref(false);
+
 const v$ = useVuelidate(rules, form, formGroup);
 const V$ = useVuelidate(rules, formGroup);
 const isError = ref({});
+const cyrillicPattern = /[\u0400-\u04FF\-]+/;
 
 watchEffect(() => {
     console.log('watchEffect');
@@ -633,24 +637,41 @@ watchEffect(() => {
             isError.value.average_age = ['Разрешен ввод только цифр'];
         }
     }
+
+    if (userStore.currentUser.tasks_type === 'индивидуальный') {
+
+        if (form.value.first_name == form.value.first_name.replace(cyrillicPattern, '') && form.value.first_name !== '') {
+            isError.value.first_name = [
+                'Поле должно содержать только кириллицу и знак "-"',
+            ];
+        }
+
+        if (form.value.last_name == form.value.last_name.replace(cyrillicPattern, '' )  && form.value.last_name !== '') {
+            isError.value.last_name = [
+                'Поле должно содержать только кириллицу и знак "-"',
+            ];
+        }
+    }
 });
 const isFormValidInd = computed(() => {
     return (
         form.value.first_name !== '' &&
         form.value.last_name !== '' &&
-        form.value.sex !== '' &&
+        form.value.sex !== null &&
         form.value.age !== '' &&
-        form.value.region !== '' &&
+        form.value.region !== null &&
         form.value.school !== '' &&
         form.value.grade !== '' &&
-        form.value.data_processing_agreement
+        form.value.data_processing_agreement &&
+        form.value.first_name != form.value.first_name.replace(cyrillicPattern, '') &&
+        form.value.last_name != form.value.last_name.replace(cyrillicPattern, '')  
     );
 });
 const isFormValidGrp = computed(() => {
     return (
         formGroup.value.name !== '' &&
         formGroup.value.number_of_students !== '' &&
-        formGroup.value.region !== '' &&
+        formGroup.value.region !== null &&
         formGroup.value.school !== '' &&
         formGroup.value.average_age
     );
@@ -688,12 +709,15 @@ const deleteGroup = async (id, index) => {
 
 const AddChild = async () => {
     try {
+        console.log('form', form.value);
         const response = await HTTP.post('/children/', form.value, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+
+
         form.value = response.data;
         await userStore.getChildren();
         fetchSkills();
@@ -711,7 +735,7 @@ const AddGroup = async () => {
             },
         });
         formGroup.value = response.data;
-        await userStore.getGroup();
+        await userStore.getGroups();
         fetchSkills();
     } catch (error) {
         console.log('errr', error);
@@ -732,6 +756,9 @@ const GetRegion = async () => {
         error.value = error.response.data;
     }
 };
+
+GetRegion();
+
 
 const GetSkill = async (id, index) => {
     try {
@@ -766,7 +793,46 @@ const fetchSkills = async () => {
             await GetSkill(id, i);
         }
     }
+
+    resetForm();
 };
+
+const resetForm = () => {
+    if (userStore.currentUser.tasks_type === 'индивидуальный') {
+        form.value = {
+            first_name: '',
+            last_name: '',
+            age: '',
+            region: null,
+            school: '',
+            grade: '',
+            attended_speech_therapist: false,
+            sex: null,
+            data_processing_agreement: false,
+        };
+
+        del.value ={
+            check: false,
+        };
+
+        v$.value.$reset();
+
+    }  else if (userStore.currentUser.tasks_type === 'групповой') {
+        formGroup.value = {
+            name: '',
+            number_of_students: '',
+            average_age: '',
+            region: null,
+            school: '',
+        };
+
+        del.value ={
+            check: false,
+        };
+
+        V$.value.$reset();
+    }
+}
 
 watch(
     () => userStore.children,
@@ -796,34 +862,7 @@ const closeModal = () => {
 
     isError.value = {};
 
-    form.value = {
-        first_name: '',
-        last_name: '',
-        age: '',
-        region: null,
-        school: '',
-        grade: '',
-        attended_speech_therapist: false,
-        sex: null,
-        data_processing_agreement: false,
-    };
-
-    formGroup.value = {
-        name: '',
-        number_of_students: '',
-        average_age: '',
-        region: null,
-        school: '',
-    };
-    
-    del.value ={
-        check: false,
-    };
-
-    v$.value.$reset();
-    //V$.value.$reset();
-    
-
+    resetForm();
     
 }
 
@@ -946,6 +985,7 @@ const closeModal = () => {
 
 .delete-profile {
     align-self: flex-end;
+    cursor: pointer;
 }
 
 .child__name {
