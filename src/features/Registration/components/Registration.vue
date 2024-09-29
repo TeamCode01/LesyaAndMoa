@@ -31,6 +31,7 @@
                         }"
                         v-model:value="form.password"
                         type="password"
+                        maxLength="20"
                     ></Input>
                     <span v-if="isError.password" class="error-message">{{
                         isError.password[0]
@@ -48,6 +49,7 @@
                         }"
                         v-model:value="form.re_password"
                         type="password"
+                        maxLength="20"  
                     ></Input>
                     <span v-if="isError.re_password" class="error-message">{{
                         isError.re_password[0]
@@ -152,6 +154,8 @@ const rules = {
 const v$ = useVuelidate(rules, form);
 const isError = ref({});
 
+const cyrillicPattern = /[\u0400-\u04FF]+/;
+
 watchEffect(() => {
     isError.value = {};
     if (v$.value.$invalid) {
@@ -170,6 +174,15 @@ watchEffect(() => {
             isError.value.tasks_type = ['Поле должно быть заполнено'];
         }
     }
+
+
+    if (form.value?.password != form.value?.password?.replace(cyrillicPattern, '')) {
+        console.log('cyrillic');
+        isError.value.password = [
+            'Пароль не должен содержать кириллицу',
+        ];
+    }
+
 });
 const isFormValid = computed(() => {
     return (
@@ -339,7 +352,7 @@ const RegisterUser = async () => {
     &_text {
         max-width: 300px;
         font-family: 'Nunito', sans-serif;
-        font-size: 14px;
+        font-size: 16px;
         color: #35383f;
         font-weight: 500;
         margin-left: 8px;

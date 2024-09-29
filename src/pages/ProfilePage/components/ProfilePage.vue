@@ -109,6 +109,7 @@
         <modalWindow
             v-if="userStore.currentUser.tasks_type === 'индивидуальный'"
             label="Добавить ребёнка"
+            @close="closeModal"
         >
             <template #default="{ close }">
                 <v-card
@@ -128,6 +129,7 @@
                                 }"
                                 v-model:value="form.first_name"
                                 @blur="v$.first_name.$touch()"
+                                maxLength="50"
                             ></Input>
                             <span
                                 v-if="isError.first_name"
@@ -146,6 +148,7 @@
                                 }"
                                 v-model:value="form.last_name"
                                 @blur="v$.last_name.$touch()"
+                                maxLength="50"
                             ></Input>
                             <span
                                 v-if="isError.last_name"
@@ -257,14 +260,17 @@
                                 v-model="form.data_processing_agreement"
                             />
                             <div class="regCheck_text">
-                                Даю согласие на<a href="/policy-page"
-                                    >обработку персональных данных</a
+                                Даю согласие на <router-link to="/politika" target="_blank"
+                                    >обработку персональных данных</router-link
                                 >
-                                и ознакомлен с<a
+                                и ознакомлен с <router-link
                                     class="regCheck-link"
-                                    href="https://docs.google.com/document/d/1yrwy13in-UhEW80KpYaCUWKI6q3KdXutEhfkLx8p3j0/edit"
-                                    >политикой конфиденциальности</a
+                                    to="/policy"
+                                    target="_blank"
+                                    >политикой конфиденциальности</router-link
                                 >
+                                
+                                <!--href="https://docs.google.com/document/d/1yrwy13in-UhEW80KpYaCUWKI6q3KdXutEhfkLx8p3j0/edit" -->
                             </div>
                         </div>
                     </v-card-text>
@@ -470,7 +476,7 @@
                                 name="login"
                                 :class="{
                                     'form-input': true,
-                                    red: isError.school,
+                                    'red': isError.school,
                                 }"
                                 v-model:value="formGroup.school"
                             ></Input>
@@ -576,6 +582,7 @@ const V$ = useVuelidate(rules, formGroup);
 const isError = ref({});
 
 watchEffect(() => {
+    console.log('watchEffect');
     isError.value = {};
     if (v$.value.$invalid) {
         if (v$.value.first_name.$error) {
@@ -785,6 +792,41 @@ watch(
     { immediate: true },
 );
 
+const closeModal = () => {
+
+    isError.value = {};
+
+    form.value = {
+        first_name: '',
+        last_name: '',
+        age: '',
+        region: null,
+        school: '',
+        grade: '',
+        attended_speech_therapist: false,
+        sex: null,
+        data_processing_agreement: false,
+    };
+
+    formGroup.value = {
+        name: '',
+        number_of_students: '',
+        average_age: '',
+        region: null,
+        school: '',
+    };
+    
+    del.value ={
+        check: false,
+    };
+
+    v$.value.$reset();
+    //V$.value.$reset();
+    
+
+    
+}
+
 // onMounted(async () => {
 //     await userStore.getChildren();
 //     fetchSkills();
@@ -963,20 +1005,23 @@ watch(
     margin-top: 8px;
     display: flex;
     margin-bottom: 20px;
+    font-family: 'Nunito', sans-serif;
 
     input {
         width: 20px;
         height: 20px;
         border: 1px solid black;
+        flex: 0 1 0;
+        margin-right: 8px;
     }
 
     &_text a {
-        max-width: 320px;
-        font-family: 'Nunito', sans-serif;
-        font-size: 14px;
+        //max-width: 320px;
+        
+        font-size: 16px;
         color: #35383f;
         font-weight: 500;
-        margin-left: 8px;
+        //margin-left: 8px;
         text-decoration: none;
     }
 }

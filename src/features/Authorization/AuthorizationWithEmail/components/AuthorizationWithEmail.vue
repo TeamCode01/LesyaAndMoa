@@ -34,6 +34,7 @@
                         class="form-input"
                         type="password"
                         v-model:value="data.password"
+                        maxLength="20"
                     ></InputPass>
                 </div>
                 <router-link class="form-question-link" to="/change-password"

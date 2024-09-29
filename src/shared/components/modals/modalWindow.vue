@@ -34,8 +34,11 @@ const props = defineProps({
     },
 });
 
+const emits = defineEmits(['close']);
+
 const closeDialog = () => {
-    console.log(123);
+    console.log('close modal');
+    emits('close');
     dialog.value = false;
 };
 </script>
