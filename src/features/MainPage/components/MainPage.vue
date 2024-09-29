@@ -535,7 +535,11 @@ const playAudio = (audioPath) => {
         `/assets/audio/${audioPath}`,
         import.meta.url,
     ).href;
-    audio.value.play();
+    // audio.value.currentTime = localStorage.getItem('time') || 0;
+     audio.value.play();
+    // audio.value.addEventListener('abort', () => {
+    //     console.log('Audio playback was aborted by the user.');
+    // });
 };
 
 const playTestAudio = (audioPath) => {
@@ -552,20 +556,25 @@ function handleScroll(e) {
     const posTop = test.getBoundingClientRect().top;
     if (posTop + test.clientHeight <= window.innerHeight) {
         playAudio('Music/звук 1_.mp3');
+
         audio.value.addEventListener('ended', () => {
             playAudio('TestTask/3.тестовое задание.mp3');
             audio.value.addEventListener('ended', () => {
                 audio.value.pause();
             });
         });
+
         if (posTop + test.offsetHeight < 0) {
-            audio.value.pause();
-        } else {
-            audio.value.play();
-        }
+        // localStorage.setItem('time', audio.value.currentTime);
+        audio.value.pause();
+    } else {
+        // audio.value.currentTime = localStorage.getItem('time');
+        // audio.value.play();
+    }
 
         // document.removeEventListener('scroll', handleScroll);
     }
+  
 }
 
 const mute = () => {
@@ -612,6 +621,14 @@ onMounted(() => {
     } else {
         showCookie.value = true;
     }
+
+    window.addEventListener('click', () => {
+        audio.value.play().catch((error) => {
+            if (error.name === 'NotAllowedError') {
+                console.log('User interaction required to play audio');
+            }
+        });
+    });
     document.addEventListener('scroll', handleScroll);
     windowWidth.value = window.innerWidth;
     itemsToShow.value = windowWidth.value >= 660 ? 2 : 1;
@@ -653,6 +670,14 @@ watch(
         }
     },
 );
+
+// watch(
+//     () => audio.value.currentTime,
+//     (newTime) => {
+//       audio.value.currentTime = newTime;
+//       console.log('current', audio.value.currentTime, newTime)
+//     },
+// );
 </script>
 <style lang="scss" scoped>
 .networks {

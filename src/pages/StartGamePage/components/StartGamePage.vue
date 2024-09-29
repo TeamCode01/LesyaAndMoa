@@ -34,13 +34,14 @@
             <img
                 v-show="show_hand"
                 class="hand"
+                @click="playSound($event)"
                 :id="'hand_' + task_id"
                 src="@app/assets/icons/hand.svg"
                 alt="hand"
+                :class="{ game_img_disabled: isPlaying === true }"
             />
             <div
                 class="game_img"
-                @click="playSound($event)"
                 :class="{ game_img_disabled: isPlaying === true }"
             >
                 <img class="game_img_bg" id="background-banner" alt="game" />
@@ -94,7 +95,7 @@
 </template>
 <script setup>
 import { Sidebar } from '@widgets/SideBarGame';
-import { ref, onMounted, watch} from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { HTTP } from '@app/http';
 import gameActions from '@mixins/gameAction';
@@ -107,7 +108,7 @@ const answerStore = useAnswerStore();
 let img = ref('animals.jpg');
 let audio = ref('../assets/audio/Task1/11.1_.mp3');
 const ids = ref([1, 2, 3, 4, 5, 6, 7, 8, 16, 18]);
-const audio_ids_music = ref([1, 16, 18]);
+const audio_ids_music = ref([1]);
 const showBtn = ref(false);
 const route = useRoute();
 const show_hand = ref(false);
@@ -214,43 +215,43 @@ onMounted(() => {
 #hand_1 {
     position: absolute;
     bottom: 25%;
-    right: 40%;
+    right: 45%;
     transform: translate(-50%, -50%);
 }
 #hand_2 {
     position: absolute;
     bottom: 28%;
-    right: 40%;
+    right: 46%;
     transform: translate(-50%, -50%);
 }
 #hand_3 {
     position: absolute;
     bottom: 38%;
-    right: 50%;
+    right: 58%;
     transform: translate(-50%, -50%);
 }
 #hand_4 {
     position: absolute;
     bottom: 35%;
-    right: 38%;
+    right: 44%;
     transform: translate(-50%, -50%);
 }
 #hand_5 {
     position: absolute;
     bottom: 40%;
-    right: 36%;
+    right: 41%;
     transform: translate(-50%, -50%);
 }
 #hand_6 {
     position: absolute;
     bottom: 38%;
-    right: 34%;
+    right: 39%;
     transform: translate(-50%, -50%);
 }
 #hand_7 {
     position: absolute;
     bottom: 40%;
-    right: 50%;
+    right: 56%;
     transform: translate(-50%, -50%);
 }
 #hand_8 {
@@ -263,14 +264,14 @@ onMounted(() => {
 #hand_16 {
     position: absolute;
     bottom: 45%;
-    right: 22%;
+    right: 26%;
     transform: translate(-50%, -50%);
 }
 
 #hand_18 {
     position: absolute;
     bottom: 32%;
-    right: 22%;
+    right: 26%;
     transform: translate(-50%, -50%);
 }
 
@@ -327,18 +328,16 @@ onMounted(() => {
 }
 
 .container-game {
+    //margin: 0px auto;
+    //padding: 0 120px;
+    //max-width: 1440px;
     margin: 0px auto;
+    width: 100%;
     padding: 0 120px;
-    max-width: 1440px;
 
-    @media (max-width: 1440px) {
-        max-width: 1200px;
-    }
-
-    //@media (max-width: 1024px) {
-    //  height: 470px;
-    //  max-width: 100%;
-    //}
+    //@media (max-width: 1440px) {
+    // max-width: 1200px;
+    // }
 
     &_mobile {
         width: 100%;

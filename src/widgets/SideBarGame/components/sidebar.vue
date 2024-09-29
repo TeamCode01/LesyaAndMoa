@@ -97,23 +97,13 @@
                 <SixTask
                     @next-modal="next()"
                     @correct="checkCorrect(6)"
-                    @open="checkOpen(7)"
+                    @open="checkOpen(8)"
                     :end="endTime"
                     :childId="props.childId"
                     @close="close()"
                     v-if="taskId === 6"
                 >
                 </SixTask>
-                <SeventhTask
-                    @next-modal="next()"
-                    @correct="checkCorrect(7)"
-                    @open="checkOpen(8)"
-                    :childId="props.childId"
-                    :end="endTime"
-                    @close="close()"
-                    v-if="taskId === 7"
-                >
-                </SeventhTask>
                 <EighthTask
                     @next-modal="next()"
                     @correct="checkCorrect(8)"
@@ -170,7 +160,7 @@
                 <ThirteenthTask
                     @next-modal="next()"
                     @correct="checkCorrect(13)"
-                    @open="checkOpen(14)"
+                    @open="checkOpen(7)"
                     :childId="props.childId"
                     :finish="finish"
                     :end="endTime"
@@ -178,6 +168,16 @@
                     v-if="taskId === 13"
                 >
                 </ThirteenthTask>
+                <SeventhTask
+                    @next-modal="next()"
+                    @correct="checkCorrect(7)"
+                    @open="checkOpen(14)"
+                    :childId="props.childId"
+                    :end="endTime"
+                    @close="close()"
+                    v-if="taskId === 7"
+                >
+                </SeventhTask>
                 <FourteenthTask
                     @next-modal="next()"
                     @correct="checkCorrect(14)"
@@ -245,7 +245,7 @@ import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
 import { useUserStore } from '@layouts/stores/user';
-import { ref, watch, onActivated } from 'vue';
+import { ref, watch, onActivated, onMounted } from 'vue';
 import { FirstTask } from '@features/FirstTask/components';
 import { ThirdTask } from '@features/ThirdTask/components';
 import { FourthTask } from '@features/FourthTask/components';
@@ -265,7 +265,7 @@ import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 import { TwelfthTask } from '@features/TwelfthTask';
 import { useAnswerStore } from '@layouts/stores/answers';
-import { onBeforeRouteLeave } from 'vue-router';
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 
 const emit = defineEmits([
     'sendImg',
@@ -309,7 +309,7 @@ const show = ref(props.show);
 const correct = ref(false);
 const started = ref(null);
 const ids = ref([1, 2, 3, 4, 5, 6, 7, 8, 16, 18]);
-const audio_ids_music = ref([1, 16, 18]);
+const audio_ids_music = ref([1]);
 const startedAudio = ref(new Audio());
 
 const close = () => {
@@ -405,6 +405,14 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
     }
 };
 
+// window.addEventListener('popstate', (event) => {
+//     console.log('hoh');
+//     if (event.state && event.state.tasks) {
+//         console.log('hoh2');
+//         tasks.value = event.state.tasks;
+//     }
+// });
+
 const next = () => {
     SeeTask.value = false;
     endTime.value = false;
@@ -415,6 +423,7 @@ const next = () => {
     if (taskFindArr.length > 0) {
         let nextElId = taskFindArr.at(-1).id;
         tasks.value[nextElId].disabled = false;
+
         switchTask(
             tasks.value[nextElId].id,
             tasks.value[nextElId].open,
@@ -483,47 +492,93 @@ watch(
 
 watch(
     () => props.childId,
-    async (newId) => {
-        // console.log('childId', props.childId, newId);
-        props.childId = newId;
-        await answerStore.getAnswers(props.childId);
-        tasks.value.forEach((task, index) => {
-            answerStore.answers.forEach((answer) => {
-                if (answer.task?.id === task.id) {
-                    task.done = answer.is_correct;
-                    task.disabled = false;
-                }
+    async (newId, oldId) => {
+        console.log('childId', props.childId, newId);
+
+        if (newId !== oldId) {
+            props.childId = newId;
+            await answerStore.getAnswers(props.childId);
+            tasks.value.forEach((task, index) => {
+                answerStore.answers.forEach((answer) => {
+                    if (answer.task?.id === task.id) {
+                        task.done = answer.is_correct;
+                        task.disabled = false;
+                    }
+                });
             });
-        });
-        const taskFindArr = tasks.value.filter((task) => task.done === true);
-        if (taskFindArr.length > 0) {
-            let nextElId = taskFindArr.at(-1).id;
-            tasks.value[nextElId].disabled = false;
-            // console.log('id', tasks.value[nextElId].id);
-            switchTask(
-                tasks.value[nextElId].id,
-                tasks.value[nextElId].open,
-                tasks.value[nextElId].time,
-                tasks.value[nextElId].img,
-                tasks.value[nextElId].audio,
-                tasks.value[nextElId].startAudio,
+            const taskFindArr = tasks.value.filter(
+                (task) => task.done === true,
             );
-        } else {
-            switchTask(
-                1,
-                false,
-                22,
-                'animals.jpg',
-                'Task1/12.1.mp3',
-                'Task1/11.1_.mp3',
-            );
-        }
-        window.addEventListener('popstate', (event) => {
-            if (audio.value.paused) {
-                audio.value.play();
+            if (taskFindArr.length > 0) {
+                let nextElId = taskFindArr.at(-1).id;
+                tasks.value[nextElId].disabled = false;
+                // console.log('id', tasks.value[nextElId].id);
+                switchTask(
+                    tasks.value[nextElId].id,
+                    tasks.value[nextElId].open,
+                    tasks.value[nextElId].time,
+                    tasks.value[nextElId].img,
+                    tasks.value[nextElId].audio,
+                    tasks.value[nextElId].startAudio,
+                );
+            } else {
+                switchTask(
+                    1,
+                    false,
+                    22,
+                    'animals.jpg',
+                    'Task1/12.1.mp3',
+                    'Task1/11.1_.mp3',
+                );
             }
-            audio.value.pause();
-        });
+            window.addEventListener('popstate', (event) => {
+                if (audio.value.paused) {
+                    audio.value.play();
+                }
+                audio.value.pause();
+            });
+        } else {
+            await answerStore.getAnswers(props.childId);
+            tasks.value.forEach((task, index) => {
+                answerStore.answers.forEach((answer) => {
+                    if (answer.task?.id === task.id) {
+                        task.done = answer.is_correct;
+                        task.disabled = false;
+                    }
+                });
+            });
+            const taskFindArr = tasks.value.filter(
+                (task) => task.done === true,
+            );
+            if (taskFindArr.length > 0) {
+                let nextElId = taskFindArr.at(-1).id;
+                tasks.value[nextElId].disabled = false;
+                // console.log('id', tasks.value[nextElId].id);
+                switchTask(
+                    tasks.value[nextElId].id,
+                    tasks.value[nextElId].open,
+                    tasks.value[nextElId].time,
+                    tasks.value[nextElId].img,
+                    tasks.value[nextElId].audio,
+                    tasks.value[nextElId].startAudio,
+                );
+            } else {
+                switchTask(
+                    1,
+                    false,
+                    22,
+                    'animals.jpg',
+                    'Task1/12.1.mp3',
+                    'Task1/11.1_.mp3',
+                );
+            }
+            window.addEventListener('popstate', (event) => {
+                if (audio.value.paused) {
+                    audio.value.play();
+                }
+                audio.value.pause();
+            });
+        }
     },
     {
         immediate: true,
@@ -612,18 +667,7 @@ onActivated(() => {
             audio: 'Task6/79.6.mp3',
             startAudio: 'Task6/78.6_.mp3',
         },
-        {
-            id: 7,
-            name: 'Задание 7',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 20,
-            end: false,
-            img: 'task7.jpg',
-            audio: 'Task7/261.7.mp3',
-            startAudio: 'Task7/260.7_.mp3',
-        },
+   
         {
             id: 8,
             name: 'Задание 8',
@@ -695,6 +739,18 @@ onActivated(() => {
             img: 'task13.jpg',
             audio: 'Task13/370.13.mp3',
             startAudio: 'Task13/369.13.mp3',
+        },
+        {
+            id: 7,
+            name: 'Задание 7',
+            disabled: true,
+            done: false,
+            open: false,
+            time: 20,
+            end: false,
+            img: 'task7.jpg',
+            audio: 'Task7/261.7.mp3',
+            startAudio: 'Task7/260.7_.mp3',
         },
         {
             id: 14,

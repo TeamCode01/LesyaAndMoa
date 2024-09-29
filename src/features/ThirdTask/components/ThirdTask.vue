@@ -27,14 +27,14 @@
                     </div>
                 </div>
                 <div class="ThirdTask__answer">
-                    <VueDraggableNext class="box" id="box" @mouseenter="playAudio('Task3/32.3_слово.mp3')"
+                    <VueDraggableNext class="box" id="box" @mouseenter="playAudio('Task3/32.3.mp3')"
                         @add="drop($event, 0)" :group="{ name: 'box', pull: false, put: true }" :sort="false"
                         ghost-class="none" draggable="false">
                         <div class="letter__item" v-for="item in array">
                             {{ item }}
                         </div>
                     </VueDraggableNext>
-                    <VueDraggableNext class="box2" id="box2" @mouseover="playAudio('Task3/32.3_вариант.mp3')"
+                    <VueDraggableNext class="box2" id="box2" @mouseover="playAudio('Task3/mix_3.mp3')"
                         @add="drop($event, 1)" :group="{ name: 'box2', pull: false, put: true }" :sort="false"
                         ghost-class="none" draggable="false">
                         <div class="letter__item" v-for="item in array_two">
