@@ -19,16 +19,11 @@ const routes: RouteRecordRaw[] = [
                 children: [
                     {
                         path: ':id',
-                        children: [
-                            {
-                                path: '',
-                                name: 'Game',
-                                component: () =>
-                                    import(
-                                        '@pages/StartGamePage/components/StartGamePage.vue'
-                                    ),
-                            }
-                        ]
+                        name: 'Game',
+                        component: () =>
+                            import(
+                                '@pages/StartGamePage/components/StartGamePage.vue'
+                            ),
                     },
                 ]
 

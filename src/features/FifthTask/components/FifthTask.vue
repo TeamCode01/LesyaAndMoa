@@ -3,7 +3,11 @@
         <div class="task_block__wrapper">
             <template v-if="startGame">
                 <div class="task_block__close" @click="hide">
-                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                    <img
+                        class="close-icon"
+                        src="@app/assets/icons/close-icon.svg"
+                        alt="крест"
+                    />
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
@@ -13,34 +17,78 @@
                 </div>
                 <div class="draggable-list">
                     <div class="draggable-list__items">
-                        <div v-for="(line, line_index) in syllables" :key="line_index">
+                        <div
+                            v-for="(line, line_index) in syllables"
+                            :key="line_index"
+                        >
                             <div
-                                :class="{ 'draggable-list__item1': 1 == line_index, 'draggable-list__item2': 2 == line_index, 'draggable-list__item3': 3 == line_index }">
-                                <button v-for="(item, item_index) in line" :key="item_index"
+                                :class="{
+                                    'draggable-list__item1': 1 == line_index,
+                                    'draggable-list__item2': 2 == line_index,
+                                    'draggable-list__item3': 3 == line_index,
+                                }"
+                            >
+                                <button
+                                    v-for="(item, item_index) in line"
+                                    :key="item_index"
                                     @click="onSelection(line_index, item_index)"
-                                    :class="{ 'draggable-list__button': true, correct_select: item.correct, not_correct_select: item.correct === false }">
-                                    {{ item.name }}</button>
+                                    :class="{
+                                        'draggable-list__button': true,
+                                        correct_select: item.correct,
+                                        not_correct_select:
+                                            item.correct === false,
+                                    }"
+                                >
+                                    {{ item.name }}
+                                </button>
                             </div>
                         </div>
                     </div>
                     <div v-if="firstListen">
-                        <button @click="listenTo()" class="draggable-list__button_final">
-                            <span class="draggable-list__button-speaker">Прослушать</span>
-                            <img src="@app\assets\icons\speaker.svg" alt="speaker" />
+                        <button
+                            @click="listenTo()"
+                            class="draggable-list__button_final"
+                        >
+                            <span class="draggable-list__button-speaker"
+                                >Прослушать</span
+                            >
+                            <img
+                                src="@app\assets\icons\speaker.svg"
+                                alt="speaker"
+                            />
                         </button>
                     </div>
                     <div v-else>
-                        <button @click="listenTo()" class="draggable-list__button_final">
-                            <span class="draggable-list__button-repeat">Повторить</span>
-                            <img src="@app\assets\icons\repeat.svg" alt="repeat" />
+                        <button
+                            @click="listenTo()"
+                            class="draggable-list__button_final"
+                        >
+                            <span class="draggable-list__button-repeat"
+                                >Повторить</span
+                            >
+                            <img
+                                src="@app\assets\icons\repeat.svg"
+                                alt="repeat"
+                            />
                         </button>
                     </div>
                 </div>
-                <input @drop="drop($event)" @dragover="allowDrop($event)" v-model="answer"
-                    class="task_block__wrapper_answer" />
+                <input
+                    @drop="drop($event)"
+                    @dragover="allowDrop($event)"
+                    v-model="answer"
+                    class="task_block__wrapper_answer"
+                />
             </template>
-            <TaskResultBanner :img="getImageUrl('Cup.png')" :bg="getImageUrl('lesya.gif')" text="Прекрасно!"
-                class="end-modal" v-else @next="next()" @hide="hide()"></TaskResultBanner>
+            <TaskResultBanner
+                :img="getImageUrl('Cup.png')"
+                :bg="getImageUrl('lesya.gif')"
+                text="Прекрасно!"
+                class="end-modal"
+                v-else
+                @next="next()"
+                @hide="hide()"
+            ></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -61,30 +109,30 @@ const firstListen = ref(true);
 
 const countAnswers = ref(0);
 const currSyllable = ref();
-const played = ref([])
+const played = ref([]);
 
 const syllables = ref({
     1: {
-        1: { name: "РЕГ", audio: 'Task5/63.5.mp3', correct: null },
-        2: { name: "МОД", audio: 'Task5/64.5.mp3', correct: null },
-        3: { name: "ЛЁК", audio: 'Task5/65.5.mp3', correct: null },
-        4: { name: "ЗИН", audio: 'Task5/66.5.mp3', correct: null },
-        5: { name: "УПР", audio: 'Task5/67.5.mp3', correct: null },
+        1: { name: 'РЕГ', audio: 'Task5/63.5.mp3', correct: null },
+        2: { name: 'МОД', audio: 'Task5/64.5.mp3', correct: null },
+        3: { name: 'ЛЁК', audio: 'Task5/65.5.mp3', correct: null },
+        4: { name: 'ЗИН', audio: 'Task5/66.5.mp3', correct: null },
+        5: { name: 'УПР', audio: 'Task5/67.5.mp3', correct: null },
     },
     2: {
-        6: { name: "ИЗН", audio: 'Task5/68.5.mp3', correct: null },
-        7: { name: "НОК", audio: 'Task5/69.5.mp3', correct: null },
-        8: { name: "ВЕТ", audio: 'Task5/70.5.mp3', correct: null },
-        9: { name: "РИС", audio: 'Task5/71.5.mp3', correct: null },
+        6: { name: 'ИЗН', audio: 'Task5/68.5.mp3', correct: null },
+        7: { name: 'НОК', audio: 'Task5/69.5.mp3', correct: null },
+        8: { name: 'ВЕТ', audio: 'Task5/70.5.mp3', correct: null },
+        9: { name: 'РИС', audio: 'Task5/71.5.mp3', correct: null },
     },
     3: {
-        10: { name: "ЗАП", audio: 'Task5/72.5.mp3', correct: null },
-        11: { name: "МЫЙ", audio: 'Task5/73.5.mp3', correct: null },
-        12: { name: "БУК", audio: 'Task5/74.5.mp3', correct: null },
-        13: { name: "ОЛЬТ", audio: 'Task5/75.5.mp3', correct: null },
-        14: { name: "ВЕЦ", audio: 'Task5/76.5.mp3', correct: null },
-    }
-})
+        10: { name: 'ЗАП', audio: 'Task5/72.5.mp3', correct: null },
+        11: { name: 'МЫЙ', audio: 'Task5/73.5.mp3', correct: null },
+        12: { name: 'БУК', audio: 'Task5/74.5.mp3', correct: null },
+        13: { name: 'ОЛЬТ', audio: 'Task5/75.5.mp3', correct: null },
+        14: { name: 'ВЕЦ', audio: 'Task5/76.5.mp3', correct: null },
+    },
+});
 
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const is_correct = ref(false);
@@ -96,20 +144,22 @@ const props = defineProps({
     childId: {
         type: Number,
         required: false,
-    }
+    },
 });
 
 const getImageUrl = (path) => {
- return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
-
 
 const corrValue = ref(0);
 const onSelection = (firstIndex, id) => {
     if (currSyllable.value == id && !firstListen.value) {
         firstListen.value = true;
         syllables.value[firstIndex][id].correct = true;
-        setTimeout(() => syllables.value[firstIndex][temp].correct = null, 2000)
+        setTimeout(
+            () => (syllables.value[firstIndex][temp].correct = null),
+            2000,
+        );
         // for(let i = 1; i<= 3; i++){
         //     for(const temp in syllables.value[i]){
         //         if(!syllables.value[i][temp].correct){
@@ -122,7 +172,10 @@ const onSelection = (firstIndex, id) => {
     } else if (!firstListen.value) {
         if (syllables.value[firstIndex][id].correct != true) {
             syllables.value[firstIndex][id].correct = false;
-            setTimeout(() => syllables.value[firstIndex][id].correct = null, 2000)
+            setTimeout(
+                () => (syllables.value[firstIndex][id].correct = null),
+                2000,
+            );
         }
         playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     }
@@ -137,7 +190,7 @@ const onSelection = (firstIndex, id) => {
             playAudio('Task5/77.5_.mp3');
         }, 1000);
     }
-}
+};
 
 const listenTo = () => {
     if (firstListen.value) {
@@ -147,7 +200,7 @@ const listenTo = () => {
             currSyllable.value = Math.floor(Math.random() * 14 + 1);
             if (!played.value.includes(currSyllable.value)) exist = false;
         }
-        played.value.push(currSyllable.value)
+        played.value.push(currSyllable.value);
     }
 
     if ([1, 2, 3, 4, 5].includes(currSyllable.value)) {
@@ -157,13 +210,13 @@ const listenTo = () => {
     } else {
         playAudio(syllables.value[3][currSyllable.value].audio);
     }
-}
+};
 
 const playAudio = (audioPath) => {
     const audio = new Audio();
     audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     audio.play();
-}
+};
 
 const hide = () => {
     emit('close');
@@ -171,15 +224,20 @@ const hide = () => {
 
 const next = () => {
     emit('next-modal');
-}
+};
 
 onMounted(async () => {
-    const correct = await getCorrectAnswer(5, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-})
-
-onMounted(() => {
+    try {
+        const correct = await getCorrectAnswer(5, props.childId);
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
+    } catch (err) {
+        console.error('Error fetching correct answer:', err);
+    }
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
         '--scroll-position',
@@ -188,20 +246,18 @@ onMounted(() => {
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
-    console.log('game mount')
+    console.log('game mount');
 });
-
 
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
-    console.log('game unmount')
+    console.log('game unmount');
 });
-
 </script>
 
 <style lang="scss" scoped>
-*{
+* {
     user-select: none;
 }
 
@@ -254,7 +310,6 @@ onBeforeUnmount(() => {
 .draggable-list__item1 {
     width: 613px;
 }
-
 
 .draggable-list__item3 {
     width: 100%;
@@ -322,12 +377,12 @@ onBeforeUnmount(() => {
 .correct_select {
     padding: 6px 14px;
     border: 2px solid;
-    border-color: #5CCF54;
+    border-color: #5ccf54;
 }
 
 .not_correct_select {
     padding: 6px 14px;
     border: 2px solid;
-    border-color: #DB0000;
+    border-color: #db0000;
 }
 </style>

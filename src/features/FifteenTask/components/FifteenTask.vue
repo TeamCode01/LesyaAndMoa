@@ -244,11 +244,14 @@ const dropLetter = (event, letter) => {
 onMounted(async() => {
     try {
         const correct = await getCorrectAnswer(15, props.childId);
-        corrValue.value = correct.correctId;
-        is_correct.value = correct.is_correct;
-    }
-    catch (error) {
-        console.log(error);
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
+    } catch (err) {
+        console.error('Error fetching correct answer:', err);
     }
 });
 

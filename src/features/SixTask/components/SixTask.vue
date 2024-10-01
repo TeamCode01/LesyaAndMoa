@@ -1,7 +1,7 @@
 <template>
     <div class="SixTask task_block">
         <div class="task_block__wrapper">
-            <template v-if="usedWord.length < 15">
+            <template v-if="answersCounter < 15">
                 <div class="task_block__close" @click="hide">
                     <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
@@ -51,7 +51,7 @@
                 </div>
             </template>
             <TaskResultBanner :img="getImageUrl('Diamond.png')" :bg="getImageUrl('moa.gif')" text="Блистательно!"
-                v-if="usedWord.length >= 15" @hide="hide()" @next="next()" class="end-modal"></TaskResultBanner>
+                v-if="answersCounter >= 15" @hide="hide()" @next="next()" class="end-modal"></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -174,10 +174,15 @@ const clickItem = (word) => {
         );
         reactionAudio.play();
         blockButtons.value = true;
-        answersCounter.value += 1
-
+        
         setTimeout(() => {
+            answersCounter.value += 1
+
             if (answersCounter.value == 15) {
+                let audioPathSimple = new URL(`/assets/audio/Task6/259.6_.mp3`, import.meta.url).href;
+                let audio = new Audio(audioPathSimple);
+                audio.play();
+
                 setTimeout(() => {
                     if (is_correct.value === false) {
                         endGameRequest(props.childId, corrValue.value);
@@ -185,11 +190,12 @@ const clickItem = (word) => {
                         emit('open');
                     }
                 }, 1000)
-                let audioPathSimple = new URL(`/assets/audio/Task6/259.6_.mp3`, import.meta.url).href;
-                let audio = new Audio(audioPathSimple);
-                audio.play();
+
+                console.log('end game')
+
             }
-        }, 2000)
+        }, 1000)
+
     } else {
         let audioPath2 = new URL(`/assets/audio/Task6/wrong.1.mp3`, import.meta.url).href;
         let reactionAudio = new Audio(
@@ -206,13 +212,19 @@ const clickItem = (word) => {
     }, 2000);
 };
 
-onMounted(async () => {
-    const correct = await getCorrectAnswer(6, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-});
 
-onMounted(() => {
+onMounted(async () => {
+    try {
+        const correct = await getCorrectAnswer(6, props.childId);
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
+    } catch (err) {
+        console.error('Error fetching correct answer:', err);
+    }
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
         '--scroll-position',

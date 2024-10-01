@@ -54,7 +54,7 @@
                             <div class="draggable-list__subanswer">
 
                                 <VueDraggableNext :group="{ name: 'word', pull: false, put: true }" :sort="false"
-                                @add = "drop($event, 'word', answer.id)" :ghost-class="'none'">
+                                @add = "drop($event, 'word', answer.id)" :ghost-class="'none'" draggable="false">
 
                                     <div class="draggable-list__word"
                                     :class="{ 'item_right': answer.word.error == 1, 'item_wrong': answer.word.error == -1 }"
@@ -67,14 +67,13 @@
                                 </VueDraggableNext>
 
                                 <VueDraggableNext :group="{ name: 'speakers', pull: false, put: true }" :sort="false"
-                                @add = "drop($event, 'sound', answer.id)" :ghost-class="'none'"
-                                >
+                                @add = "drop($event, 'sound', answer.id)" :ghost-class="'none'" draggable="false">
 
                                     <div class="draggable-list__speaker"
                                     :class="{ 'item_right': answer.sound.error == 1, 'item_wrong': answer.sound.error == -1 }"
                                     :data-id="answer.id" :data-type="answer.type">
-                                    <img v-if="answer.sound.isActive" src="/assets/icons/speaker-violet.svg"
-                                        alt="speaker" class="speaker" />
+
+                                    <SvgIcon iconName="speaker" v-if="answer.sound.isActive" class="speaker"></SvgIcon>
                                     </div>
 
                                 </VueDraggableNext>
@@ -246,12 +245,18 @@ const playAudio = (audioPath) => {
 }
 
 onMounted(async() => {
-    const correct = await getCorrectAnswer(14, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-});
-
-onMounted(() => {
+    try {
+        const correct = await getCorrectAnswer(14, props.childId);
+        console.log(correct);
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
+    } catch (err) {
+        console.error('Error fetching correct answer:', err);
+    }
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
         '--scroll-position',

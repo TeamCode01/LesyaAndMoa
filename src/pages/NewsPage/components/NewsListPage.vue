@@ -182,6 +182,8 @@ onActivated(() => {
 onBeforeRouteLeave(() => {
     pages.value = [];
     GetNews(currentPage === 1);
+    toggleHideBreadcrumbs(false);
+    setHideBreadcrumbs(true);
 });
 </script>
 <style scoped lang="scss">

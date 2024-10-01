@@ -16,6 +16,7 @@
                     "
                     :class="{ disabled: item.disabled == true }"
                     class="task"
+                    :data-id="item.id"
                     v-for="item in tasks"
                     :key="item.id"
                 >
@@ -49,29 +50,29 @@
                     @next-modal="next()"
                     @correct="checkCorrect(1)"
                     @open="checkOpen(2)"
-                    v-if="taskId === 1"
+                    v-if="taskId === 1 && SeeTask"
                 >
                 </FirstTask>
                 <SecondTask
-                    @correct="checkCorrect(2)"
                     :childId="props.childId"
                     :finish="finish"
                     :end="endTime"
-                    @next-modal="next()"
                     @close="close()"
+                    @next-modal="next()"
+                    @correct="checkCorrect(2)"
                     @open="checkOpen(3)"
-                    v-if="taskId === 2"
+                    v-if="taskId === 2 && SeeTask"
                 >
                 </SecondTask>
                 <ThirdTask
-                    @correct="checkCorrect(3)"
                     :childId="props.childId"
                     :finish="finish"
                     :end="endTime"
-                    @next-modal="next()"
                     @close="close()"
+                    @next-modal="next()"
+                    @correct="checkCorrect(3)"
                     @open="checkOpen(4)"
-                    v-if="taskId === 3"
+                    v-if="taskId === 3 && SeeTask"
                 >
                 </ThirdTask>
                 <FourthTask
@@ -97,23 +98,13 @@
                 <SixTask
                     @next-modal="next()"
                     @correct="checkCorrect(6)"
-                    @open="checkOpen(7)"
+                    @open="checkOpen(8)"
                     :end="endTime"
                     :childId="props.childId"
                     @close="close()"
                     v-if="taskId === 6"
                 >
                 </SixTask>
-                <SeventhTask
-                    @next-modal="next()"
-                    @correct="checkCorrect(7)"
-                    @open="checkOpen(8)"
-                    :childId="props.childId"
-                    :end="endTime"
-                    @close="close()"
-                    v-if="taskId === 7"
-                >
-                </SeventhTask>
                 <EighthTask
                     @next-modal="next()"
                     @correct="checkCorrect(8)"
@@ -170,7 +161,7 @@
                 <ThirteenthTask
                     @next-modal="next()"
                     @correct="checkCorrect(13)"
-                    @open="checkOpen(14)"
+                    @open="checkOpen(7)"
                     :childId="props.childId"
                     :finish="finish"
                     :end="endTime"
@@ -178,6 +169,16 @@
                     v-if="taskId === 13"
                 >
                 </ThirteenthTask>
+                <SeventhTask
+                    @next-modal="next()"
+                    @correct="checkCorrect(7)"
+                    @open="checkOpen(14)"
+                    :childId="props.childId"
+                    :end="endTime"
+                    @close="close()"
+                    v-if="taskId === 7"
+                >
+                </SeventhTask>
                 <FourteenthTask
                     @next-modal="next()"
                     @correct="checkCorrect(14)"
@@ -244,7 +245,8 @@
 import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
-import { ref, watch, onMounted, computed, onBeforeMount } from 'vue';
+import { useUserStore } from '@layouts/stores/user';
+import { ref, watch, onActivated, onMounted, nextTick } from 'vue';
 import { FirstTask } from '@features/FirstTask/components';
 import { ThirdTask } from '@features/ThirdTask/components';
 import { FourthTask } from '@features/FourthTask/components';
@@ -264,7 +266,7 @@ import { NineTask } from '@features/NineTask';
 import { ElevenTask } from '@features/ElevenTask';
 import { TwelfthTask } from '@features/TwelfthTask';
 import { useAnswerStore } from '@layouts/stores/answers';
-import { useRoute, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 
 const emit = defineEmits([
     'sendImg',
@@ -273,6 +275,7 @@ const emit = defineEmits([
     'show',
     'startTask',
     'hand',
+    'sendPreAudio',
 ]);
 const props = defineProps({
     show: {
@@ -289,8 +292,7 @@ const props = defineProps({
 });
 
 const audio = ref(props.audioObj);
-
-const route = useRoute();
+const userStore = useUserStore();
 const answerStore = useAnswerStore();
 const tasks = ref([]);
 const SeeTask = ref(false);
@@ -307,8 +309,8 @@ const show_hand = ref(false);
 const show = ref(props.show);
 const correct = ref(false);
 const started = ref(null);
+
 const ids = ref([1, 2, 3, 4, 5, 6, 7, 8, 16, 18]);
-const audio_ids_music = ref([1, 16, 18]);
 const startedAudio = ref(new Audio());
 
 const close = () => {
@@ -337,12 +339,22 @@ const playAudio = (audioPath) => {
     ).href;
     audio.value.play();
 };
+const postAudio = () => {
+    audio.value.addEventListener('ended', () => {
+        isPlaying.value = false;
+        show_hand.value = true;
+        emit('sendPreAudio', isPlaying.value);
+        emit('show', show.value);
+        emit('hand', show_hand.value);
+        audio.value.pause();
+    });
+};
 
 const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
     const task = tasks.value.find((item) => item.id == id);
     if (task.disabled === false) {
         taskId.value = id;
-        SeeTask.value = openId;
+        SeeTask.value = false;
         startAudio.value = startAudioV;
         timeVal.value = time;
         show.value = false;
@@ -352,50 +364,61 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
         emit('sendImg', img);
         emit('sendId', taskId.value);
         emit('sendAudio', startAudioV);
-        // console.log(
-        //     'id',
-        //     taskId.value,
-        //     audio_ids_music.value.includes(taskId.value),
-        // );
         if (ids.value.includes(taskId.value)) {
-            // console.log('1');
             isPlaying.value = true;
             emit('sendPreAudio', isPlaying.value);
-            playAudio('Music/звук 1_.mp3');
-            if (audio_ids_music.value.includes(taskId.value)) {
-                audio.value.addEventListener('ended', () => {
-                    // console.log('1.1');
-                    isPlaying.value = false;
-                    emit('sendPreAudio', isPlaying.value);
-                    isPlaying.value = true;
-                    playAudio('Other/10.общее.mp3');
-                    emit('sendPreAudio', isPlaying.value);
+            switch (taskId.value) {
+                case 1:
+                    playAudio('Music/звук 1_.mp3');
                     audio.value.addEventListener('ended', () => {
-                        show_hand.value = true;
                         isPlaying.value = false;
                         emit('sendPreAudio', isPlaying.value);
-                        emit('hand', show_hand.value);
-                        audio.value.pause();
+                        isPlaying.value = true;
+                        playAudio('Other/10.общее.mp3');
+                        emit('sendPreAudio', isPlaying.value);
+                        postAudio();
                     });
-                });
-            } else {
-                audio.value.addEventListener('ended', () => {
-                    // console.log('1.2');
-                    isPlaying.value = false;
-                    show_hand.value = true;
-                    emit('sendPreAudio', isPlaying.value);
-                    emit('show', show.value);
-                    emit('hand', show_hand.value);
-                });
+                    break;
+                case 2:
+                    playAudio('Music/звук 2_.mp3');
+                    postAudio();
+                    break;
+                case 3:
+                    playAudio('Music/звук 3_.mp3');
+                    postAudio();
+                    break;
+                case 4:
+                    playAudio('Music/звук 4_.mp3');
+                    postAudio();
+                    break;
+                case 5:
+                    playAudio('Music/звук 5_.mp3');
+                    postAudio();
+                    break;
+                case 6:
+                    playAudio('Music/звук 6_.mp3');
+                    postAudio();
+                    break;
+
+                case 7:
+                    playAudio('Music/звук 7_.mp3');
+                    postAudio();
+                    break;
+
+                case 8:
+                    playAudio('Music/звук 8_.mp3');
+                    postAudio();
+                    break;
+
+                default:
+                    break;
             }
         } else {
-            // console.log('2', show_hand.value);
             isPlaying.value = false;
             emit('sendPreAudio', isPlaying.value === false);
             playAudio(startAudioV);
             props.audioObj = audio.value;
             audio.value.addEventListener('ended', () => {
-                // console.log('1.3');
                 emit('sendAudio', startAudioV);
                 show.value = true;
                 emit('show', show.value);
@@ -406,6 +429,27 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
         }
     } else {
         console.log('Задание закрыто ');
+    }
+};
+
+const next = () => {
+    SeeTask.value = false;
+    endTime.value = false;
+    show.value = false;
+    emit('show', show.value);
+    const taskFindArr = tasks.value.filter((task) => task.done === true);
+    if (taskFindArr.length > 0) {
+        let nextElId = taskFindArr.at(-1).id;
+        tasks.value[nextElId].disabled = false;
+
+        switchTask(
+            tasks.value[nextElId].id,
+            tasks.value[nextElId].open,
+            tasks.value[nextElId].time,
+            tasks.value[nextElId].img,
+            tasks.value[nextElId].audio,
+            tasks.value[nextElId].startAudio,
+        );
     }
 };
 
@@ -436,33 +480,13 @@ const openTask = (taskId) => {
     }, timeVal.value * 1000);
 };
 
-const next = () => {
-    SeeTask.value = false;
-    endTime.value = false;
-    show.value = false;
-    emit('show', show.value);
-    const taskFindArr = tasks.value.filter((task) => task.done === true);
-    console.log('taskFindArr', taskFindArr);
-    if (taskFindArr.length > 0) {
-        let nextElId = taskFindArr.at(-1).id;
-        tasks.value[nextElId].disabled = false;
-        switchTask(
-            tasks.value[nextElId].id,
-            tasks.value[nextElId].openId,
-            tasks.value[nextElId].time,
-            tasks.value[nextElId].img,
-            tasks.value[nextElId].audio,
-            tasks.value[nextElId].startAudio,
-        );
-    }
-};
-
 watch(
     () => taskId.value,
     (newId) => {
         if (!newId) {
             return;
         }
+        console.log('see', SeeTask.value);
         taskId.value = newId;
         show.value = false;
         emit('show', show.value);
@@ -470,48 +494,13 @@ watch(
 );
 
 watch(
-    () => props.childId,
-    async (newId) => {
-        console.log('childId', props.childId, newId);
-        props.childId = newId;
-        await answerStore.getAnswers(props.childId);
-        tasks.value.forEach((task, index) => {
-            answerStore.answers.forEach((answer) => {
-                if (answer.task?.id === task.id) {
-                    task.done = answer.is_correct;
-                    task.disabled = false;
-                }
+    () => userStore.currentUser,
+    () => {
+        if (localStorage.getItem('type') === 'групповой') {
+            tasks.value.forEach((task, index) => {
+                task.disabled = false;
             });
-        });
-        const taskFindArr = tasks.value.filter((task) => task.done === true);
-        if (taskFindArr.length > 0) {
-            let nextElId = taskFindArr.at(-1).id;
-            tasks.value[nextElId].disabled = false;
-            console.log('id', tasks.value[nextElId].id);
-            switchTask(
-                tasks.value[nextElId].id,
-                tasks.value[nextElId].openId,
-                tasks.value[nextElId].time,
-                tasks.value[nextElId].img,
-                tasks.value[nextElId].audio,
-                tasks.value[nextElId].startAudio,
-            );
-        } else {
-            switchTask(
-                1,
-                false,
-                22,
-                'animals.jpg',
-                'Task1/12.1.mp3',
-                'Task1/11.1_.mp3',
-            );
         }
-        window.addEventListener('popstate', (event) => {
-            if (audio.value.paused) {
-                audio.value.play();
-            }
-            audio.value.pause();
-        });
     },
     {
         immediate: true,
@@ -519,232 +508,78 @@ watch(
     },
 );
 
-onBeforeRouteLeave(() => {
+watch(
+    () => props.childId,
+    async (newId) => {
+        if (newId) {
+            props.childId = newId;
+            await answerStore.getAnswers(props.childId);
+            tasks.value.forEach((task, index) => {
+                answerStore.answers.forEach((answer) => {
+                    if (answer.task?.id === task.id) {
+                        task.done = answer.is_correct;
+                        task.disabled = false;
+                    }
+                });
+            });
+            const taskFindArr = tasks.value.filter(
+                (task) => task.done === true,
+            );
+            window.addEventListener('popstate', (event) => {
+                props.childId = null;
+                if (audio.value.paused) {
+                    audio.value.play();
+                }
+                audio.value.pause();
+            });
+            if (taskFindArr.length > 0) {
+                let nextElId = taskFindArr.at(-1).id;
+                tasks.value[nextElId].disabled = false;
+                // Get the sidebar element
+                const sidebar = document.querySelector('.sidebar__bg');
+
+                // Find the next task element
+                const nextTaskElement = sidebar.querySelector(
+                    `.task[data-id="${nextElId}"]`,
+                );
+                // Scroll to the next task element
+                nextTaskElement.scrollIntoView({ behavior: 'smooth' });
+                switchTask(
+                    tasks.value[nextElId].id,
+                    tasks.value[nextElId].open,
+                    tasks.value[nextElId].time,
+                    tasks.value[nextElId].img,
+                    tasks.value[nextElId].audio,
+                    tasks.value[nextElId].startAudio,
+                );
+            } else {
+                switchTask(
+                    1,
+                    false,
+                    22,
+                    'animals.jpg',
+                    'Task1/12.1.mp3',
+                    'Task1/11.1_.mp3',
+                );
+            }
+        } else {
+            props.childId = null;
+        }
+    },
+    {
+        immediate: true,
+    },
+);
+
+onBeforeRouteLeave((to, from) => {
+    props.childId = null;
     if (audio.value.paused) {
         audio.value.play();
     }
     audio.value.pause();
-    tasks.value = [
-        {
-            id: 1,
-            name: 'Задание 1',
-            disabled: false,
-            done: false,
-            open: false,
-            time: 22,
-            end: false,
-            img: 'animals.jpg',
-            audio: 'Task1/12.1.mp3',
-            startAudio: 'Task1/11.1_.mp3',
-        },
-        {
-            id: 2,
-            name: 'Задание 2',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 17,
-            end: false,
-            img: 'task2.jpg',
-            audio: 'Task2/25.2.mp3',
-            startAudio: 'Task2/24.2_.mp3',
-        },
-        {
-            id: 3,
-            name: 'Задание 3',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 15,
-            end: false,
-            img: 'task3.jpg',
-            audio: 'Task3/31.3.mp3',
-            startAudio: 'Task3/30.3_.mp3',
-        },
-        {
-            id: 4,
-            name: 'Задание 4',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 15,
-            end: false,
-            img: 'task4.jpg',
-            audio: 'Task4/45.4.mp3',
-            startAudio: 'Task4/61.5_.mp3',
-        },
-        {
-            id: 5,
-            name: 'Задание 5',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 15,
-            end: false,
-            img: 'task5.jpg',
-            audio: 'Task5/62.5.mp3',
-            startAudio: 'Task5/61.5_.mp3',
-        },
-        {
-            id: 6,
-            name: 'Задание 6',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 20,
-            end: false,
-            img: 'task6.jpg',
-            audio: 'Task6/79.6.mp3',
-            startAudio: 'Task6/78.6_.mp3',
-        },
-        {
-            id: 7,
-            name: 'Задание 7',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 20,
-            end: false,
-            img: 'task7.jpg',
-            audio: 'Task7/261.7.mp3',
-            startAudio: 'Task7/260.7_.mp3',
-        },
-        {
-            id: 8,
-            name: 'Задание 8',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 30,
-            end: false,
-            img: 'task8.jpg',
-            audio: 'Task8/280.8.mp3',
-            startAudio: 'Task8/279.8_.mp3',
-        },
-        {
-            id: 9,
-            name: 'Задание 9',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 30,
-            end: false,
-            img: 'task9.jpg',
-            audio: 'Task9/299.9.mp3',
-            startAudio: 'Task9/298.9.mp3',
-        },
-        {
-            id: 10,
-            name: 'Задание 10',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 30,
-            end: false,
-            img: 'task10.jpg',
-            audio: 'Task10/317.10.mp3',
-            startAudio: 'Task10/316.10.mp3',
-        },
-        {
-            id: 11,
-            name: 'Задание 11',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 35,
-            end: false,
-            img: 'task11.jpg',
-            audio: 'Task11/330.11.mp3',
-            startAudio: 'Task11/329.11.mp3',
-        },
-        {
-            id: 12,
-            name: 'Задание 12',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 35,
-            end: false,
-            img: 'task12.jpg',
-            audio: 'Task12/348.12.mp3',
-            startAudio: 'Task12/349.12.mp3',
-        },
-        {
-            id: 13,
-            name: 'Задание 13',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 30,
-            end: false,
-            img: 'task13.jpg',
-            audio: 'Task13/370.13.mp3',
-            startAudio: 'Task13/369.13.mp3',
-        },
-        {
-            id: 14,
-            name: 'Задание 14',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 30,
-            end: false,
-            img: 'task14.jpg',
-            audio: 'Task14/379.14.mp3',
-            startAudio: 'Task14/378.14_.mp3',
-        },
-        {
-            id: 15,
-            name: 'Задание 15',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 60,
-            end: false,
-            img: 'task15.jpg',
-            audio: 'Task15/390.15.mp3',
-            startAudio: 'Task15/389.15.mp3',
-        },
-        {
-            id: 16,
-            name: 'Задание 16',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 60,
-            end: false,
-            img: 'task16.jpg',
-            audio: 'Task16/428.16.mp3',
-            startAudio: 'Task16/427.16_.mp3',
-        },
-        {
-            id: 17,
-            name: 'Задание 17',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 30,
-            end: false,
-            img: 'task17.jpg',
-            audio: 'Task17/454.17.mp3',
-            startAudio: 'Task17/453.17.mp3',
-        },
-        {
-            id: 18,
-            name: 'Задание 18',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 120,
-            end: false,
-            img: 'task18.jpg',
-            audio: 'Task18/471.18.mp3',
-            startAudio: 'Task18/470.18_.mp3',
-        },
-    ];
 });
 
-onBeforeMount(() => {
+onActivated(() => {
     tasks.value = [
         {
             id: 1,
@@ -792,7 +627,7 @@ onBeforeMount(() => {
             end: false,
             img: 'task4.jpg',
             audio: 'Task4/45.4.mp3',
-            startAudio: 'Task4/61.5_.mp3',
+            startAudio: 'Task4/44.4_.mp3',
         },
         {
             id: 5,
@@ -818,18 +653,7 @@ onBeforeMount(() => {
             audio: 'Task6/79.6.mp3',
             startAudio: 'Task6/78.6_.mp3',
         },
-        {
-            id: 7,
-            name: 'Задание 7',
-            disabled: true,
-            done: false,
-            open: false,
-            time: 20,
-            end: false,
-            img: 'task7.jpg',
-            audio: 'Task7/261.7.mp3',
-            startAudio: 'Task7/260.7_.mp3',
-        },
+
         {
             id: 8,
             name: 'Задание 8',
@@ -903,6 +727,18 @@ onBeforeMount(() => {
             startAudio: 'Task13/369.13.mp3',
         },
         {
+            id: 7,
+            name: 'Задание 7',
+            disabled: true,
+            done: false,
+            open: false,
+            time: 20,
+            end: false,
+            img: 'task7.jpg',
+            audio: 'Task7/261.7.mp3',
+            startAudio: 'Task7/260.7_.mp3',
+        },
+        {
             id: 14,
             name: 'Задание 14',
             disabled: true,
@@ -963,6 +799,12 @@ onBeforeMount(() => {
             startAudio: 'Task18/470.18_.mp3',
         },
     ];
+    if (localStorage.getItem('type') === 'групповой') {
+        tasks.value.forEach((task, index) => {
+            task.disabled = false;
+        });
+        // console.log(tasks.value);
+    }
 });
 </script>
 <style lang="scss" scoped>
@@ -1066,6 +908,8 @@ onBeforeMount(() => {
         height: 300px;
         padding: 8px 0;
         overflow-y: scroll;
+        overflow-x: hidden;
+        // margin-right: 28px;
 
         @media (max-width: 1023px) {
             height: 185px;
@@ -1125,29 +969,32 @@ onBeforeMount(() => {
     color: #a5acb1;
     cursor: not-allowed;
 }
-
-.sidebar__bg::-webkit-scrollbar {
-    width: 8px;
-    max-height: 148px;
-}
-
-.sidebar__bg::-webkit-scrollbar-thumb {
-    background-color: #4d65e5;
-    border-radius: 7px;
-    cursor: pointer;
-    max-height: 148px;
-    width: 8px;
-
-    @media (max-width: 1024px) {
-        background: white;
-        border-radius: 0px;
-        cursor: pointer;
-        max-height: 0px;
-        width: 0px;
+@supports (scrollbar-color: auto) {
+    .sidebar__bg {
+        scrollbar-color: #4d65e5 #fff;
     }
 }
 
-.sidebar__bg::-webkit-scrollbar-thumb:hover {
-    background: white;
+@supports selector(::-webkit-scrollbar) {
+    .sidebar__bg::-webkit-scrollbar {
+        background: #4d65e5;
+        width: 8px;
+        cursor: pointer;
+        border-radius: 7px;
+        max-height: 148px;
+    }
+    .sidebar__bg::-webkit-scrollbar-thumb {
+        background: #fff;
+        max-height: 148px;
+        width: 8px;
+        @media (max-width: 1024px) {
+            background: white;
+            border-radius: 0px;
+            cursor: pointer;
+            max-height: 0px;
+            width: 0px;
+        }
+    }
 }
+
 </style>

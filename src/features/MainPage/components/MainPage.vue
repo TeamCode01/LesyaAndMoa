@@ -530,12 +530,47 @@ const close = () => {
     document.body.classList.remove('no-scroll');
 };
 
-const playAudio = (audioPath) => {
+const usedAudio = {
+    'Music/звук 1_.mp3': false,
+    'TestTask/3.тестовое задание.mp3': false,
+};
+const stateAudio = {
+    'Music/звук 1_.mp3': null,
+    'TestTask/3.тестовое задание.mp3': null,
+};
+
+const playAudio = (audioPath, forcePlay = false) => {
+    if (!forcePlay) {
+        if (
+            stateAudio[audioPath] === 'ended' ||
+            stateAudio[audioPath] === 'playing'
+        )
+            return;
+        if (stateAudio[audioPath] === 'paused') {
+            if (audio.value.paused) {
+                //console.log(usedAudio[audioPath], audioPath, audio.value.src);
+                audio.value.play();
+            }
+            return;
+        }
+    }
+
     audio.value.src = new URL(
         `/assets/audio/${audioPath}`,
         import.meta.url,
     ).href;
+
+    audio.value.onended = () => {
+        stateAudio[audioPath] = 'ended';
+        playAudio('TestTask/3.тестовое задание.mp3');
+    };
+
+    audio.value.dataset.audioPath = audioPath;
     audio.value.play();
+
+    stateAudio[audioPath] = 'playing';
+
+    console.log(stateAudio[audioPath], audioPath, audio.value.dataset);
 };
 
 const playTestAudio = (audioPath) => {
@@ -551,20 +586,29 @@ function handleScroll(e) {
     const test = document.getElementById('test');
     const posTop = test.getBoundingClientRect().top;
     if (posTop + test.clientHeight <= window.innerHeight) {
-        playAudio('Music/звук 1_.mp3');
-        audio.value.addEventListener('ended', () => {
+        if (stateAudio['Music/звук 1_.mp3'] !== 'ended')
+            playAudio('Music/звук 1_.mp3');
+        else if (stateAudio['TestTask/3.тестовое задание.mp3'] !== 'ended')
             playAudio('TestTask/3.тестовое задание.mp3');
-            audio.value.addEventListener('ended', () => {
-                audio.value.pause();
-            });
-        });
-        if (posTop + test.offsetHeight < 0) {
-            audio.value.pause();
-        } else {
-            audio.value.play();
-        }
+        //console.log(audio.value.dataset, usedAudio[audio.value.dataset.audioPath], audio.value.dataset.audioPath);
 
-        // document.removeEventListener('scroll', handleScroll);
+        // audio.value.addEventListener('ended', () => {
+        //console.log('first ended', audio.value.src)
+        //if (usedAudio['TestTask/3.тестовое задание.mp3']) return
+        //playAudio('TestTask/3.тестовое задание.mp3');
+
+        //audio.value.addEventListener('ended', () => {
+        //audio.value.pause();
+        //console.log('second ended', audio.value.src)
+        //});
+        //});
+
+        if (posTop + test.offsetHeight < 0) {
+            if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
+                stateAudio[audio.value.dataset.audioPath] = 'paused';
+                audio.value.pause();
+            }
+        }
     }
 }
 
@@ -578,11 +622,22 @@ const mute = () => {
 };
 
 const refresh = () => {
-    audio.value.currentTime = 0;
+    stateAudio['Music/звук 1_.mp3'] = null;
+    stateAudio['TestTask/3.тестовое задание.mp3'] = null;
+
+    playAudio('Music/звук 1_.mp3');
+
+    //if (audio.value.paused) {
+    //    audio.value.currentTime = 0;
+    //    audio.value.play();
+    //}
+    //audio.value.currentTime = 0;
 };
 
 const skip = () => {
     audio.value.src = '';
+    stateAudio['Music/звук 1_.mp3'] = 'ended';
+    stateAudio['TestTask/3.тестовое задание.mp3'] = 'ended';
     showBtn.value = true;
 };
 
@@ -608,6 +663,14 @@ onMounted(() => {
     } else {
         showCookie.value = true;
     }
+
+    window.addEventListener('click', () => {
+        audio.value.play().catch((error) => {
+            if (error.name === 'NotAllowedError') {
+                console.log('User interaction required to play audio');
+            }
+        });
+    });
     document.addEventListener('scroll', handleScroll);
     windowWidth.value = window.innerWidth;
     itemsToShow.value = windowWidth.value >= 660 ? 2 : 1;
@@ -622,17 +685,47 @@ onMounted(() => {
 });
 onUnmounted(() => {
     document.removeEventListener('scroll', handleScroll);
-    audio.value.pause();
+    if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
+        stateAudio[audio.value.dataset.audioPath] = 'paused';
+        audio.value.pause();
+    }
 });
 
 onBeforeRouteLeave(() => {
-    audio.value.pause();
+    // if (
+    //     stateAudio['Music/звук 1_.mp3'] === 'playing' ||
+    //     stateAudio['TestTask/3.тестовое задание.mp3'] === 'playing'
+    // ) {
+    //     if (audio.value.paused) {
+    //         audio.value.play();
+    //     } else {
+    //         audio.value.pause();
+    //     }
+    // }
+    if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
+        stateAudio[audio.value.dataset.audioPath] = 'paused';
+        audio.value.pause();
+    }
 });
 
 onBeforeRouteUpdate(() => {
-    if (audio.value.paused) {
-        audio.value.play();
-    } else {
+    // if (audio.value.paused) {
+    //     audio.value.play();
+    // } else {
+    //     audio.value.pause();
+    // }
+    // if (
+    //     stateAudio['Music/звук 1_.mp3'] === 'playing' ||
+    //     stateAudio['TestTask/3.тестовое задание.mp3'] === 'playing'
+    // ) {
+    //     if (audio.value.paused) {
+    //         audio.value.play();
+    //     } else {
+    //         audio.value.pause();
+    //     }
+    // }
+    if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
+        stateAudio[audio.value.dataset.audioPath] = 'paused';
         audio.value.pause();
     }
 });
@@ -671,6 +764,10 @@ watch(
         transform: scale(1.2);
         transition: all ease 0.25s;
     }
+}
+
+.no-scroll {
+    overflow-y: hidden;
 }
 
 .link-share {
@@ -725,18 +822,6 @@ watch(
     text-align: center;
     z-index: 99;
 }
-
-.no-scroll {
-    overflow-y: scroll;
-    /* Разрешает видимость полосы прокрутки */
-    position: fixed;
-    /* Запрещает прокрутку страницы */
-    width: 100%;
-    /* Фиксирует ширину страницы */
-    top: calc(-1 * var(--scroll-position));
-    /* Запоминает место прокрутки */
-}
-
 .carousel {
     max-width: 800px;
     width: 100%;
@@ -1017,21 +1102,21 @@ watch(
         width: 800px;
         height: 488px;
         border-radius: 20px;
-        right: 15px;
+        right: 40px;
         max-width: 100%;
-        margin-right: 10px;
+        // margin-right: 10px;
 
         @media (max-width: 1200px) {
             width: 636px;
             height: 387px;
-            right: 15px;
+            right: 30px;
         }
 
         @media (max-width: 940px) {
             width: 568px;
             height: 346px;
             top: 460px;
-            margin-right: -15px;
+            // margin-right: -15px;
             max-width: 100%;
         }
 
@@ -1110,10 +1195,10 @@ watch(
             align-items: flex-start;
             justify-content: space-between;
             width: 280px;
-            margin-left: 30px;
+            // margin-left: 30px;
 
             @media (max-width: 1200px) {
-                margin-left: 15px;
+                // margin-left: 15px;
                 width: 212px;
             }
 
@@ -1135,14 +1220,14 @@ watch(
             column-gap: 32px;
             z-index: 1;
             margin-bottom: 80px;
-            margin-left: 30px;
+            // margin-left: 30px;
 
             @media (max-width: 1200px) {
                 width: 212px;
                 height: 48px;
                 column-gap: 28px;
                 margin-bottom: 0px;
-                margin-left: 15px;
+                // margin-left: 15px;
             }
         }
     }

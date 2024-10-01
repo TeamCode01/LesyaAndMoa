@@ -45,7 +45,7 @@ import { HTTP } from '@app/http';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import gameActions from '@mixins/gameAction';
-
+import { useAnswerStore } from '@layouts/stores/answers.ts';
 import { SvgIcon } from '@shared/components/svgIcon';
 
 const { methods } = gameActions;
@@ -68,8 +68,9 @@ const audio = ref(new Audio());
 const hide = () => {
     emit('close');
     endGame.value = true;
+    audio.value.pause();
 };
-
+const answerStore = useAnswerStore();
 const corrValue = ref(0);
 
 const next = () => {
@@ -123,14 +124,17 @@ const chooseTask = (event, status) => {
         playEndAudio('Common/1.2.mp3');
 
         setTimeout(() => {
+            // const correct = await getCorrectAnswer(2, props.childId);
+            // corrValue.value = correct.correctId;
+            // is_correct.value = correct.is_correct;
+            endGame.value = true;
+            event.target.classList.remove('green');
+            playAudio('Task2/29.2_.mp3');
             if (is_correct.value === false) {
                 endGameRequest(props.childId, corrValue.value);
                 emit('correct');
                 emit('open');
             }
-            endGame.value = true;
-            event.target.classList.remove('green');
-            playAudio('Task2/29.2_.mp3');
         }, 1000);
     } else {
         event.target.value = status;
@@ -142,14 +146,18 @@ const chooseTask = (event, status) => {
     }
 };
 
-onMounted(async () => {
-    const correct = await getCorrectAnswer(2, props.childId);
-    console.log(correct);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-});
-
-onMounted(() => {
+onMounted(async() => {
+    try {
+        const correct = await getCorrectAnswer(2, props.childId);
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
+    } catch (err) {
+        console.error('Error fetching correct answer:', err);
+    }
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
         '--scroll-position',

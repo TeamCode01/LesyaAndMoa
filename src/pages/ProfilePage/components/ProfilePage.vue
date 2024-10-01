@@ -81,6 +81,7 @@
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
                     <v-progress-linear
+                        v-if="skill[block.id]"
                         v-model="skill[block.id].progress"
                         height="30"
                         class="scale"
@@ -108,6 +109,7 @@
         <modalWindow
             v-if="userStore.currentUser.tasks_type === 'индивидуальный'"
             label="Добавить ребёнка"
+            @close="closeModal"
         >
             <template #default="{ close }">
                 <v-card
@@ -127,6 +129,7 @@
                                 }"
                                 v-model:value="form.first_name"
                                 @blur="v$.first_name.$touch()"
+                                maxLength="50"
                             ></Input>
                             <span
                                 v-if="isError.first_name"
@@ -145,6 +148,7 @@
                                 }"
                                 v-model:value="form.last_name"
                                 @blur="v$.last_name.$touch()"
+                                maxLength="50"
                             ></Input>
                             <span
                                 v-if="isError.last_name"
@@ -256,14 +260,17 @@
                                 v-model="form.data_processing_agreement"
                             />
                             <div class="regCheck_text">
-                                Даю согласие на<a href="/policy-page"
-                                    >обработку персональных данных</a
+                                Даю согласие на <router-link to="/politika" target="_blank"
+                                    >обработку персональных данных</router-link
                                 >
-                                и ознакомлен с<a
+                                и ознакомлен с <router-link
                                     class="regCheck-link"
-                                    href="https://docs.google.com/document/d/1yrwy13in-UhEW80KpYaCUWKI6q3KdXutEhfkLx8p3j0/edit"
-                                    >политикой конфиденциальности</a
+                                    to="/policy"
+                                    target="_blank"
+                                    >политикой конфиденциальности</router-link
                                 >
+                                
+                                <!--href="https://docs.google.com/document/d/1yrwy13in-UhEW80KpYaCUWKI6q3KdXutEhfkLx8p3j0/edit" -->
                             </div>
                         </div>
                     </v-card-text>
@@ -319,7 +326,7 @@
                                         будут удалены.
                                     </p>
                                     <div class="regCheck delete-check">
-                                        <input type="checkbox" />
+                                        <input type="checkbox" v-model="del.check"/>
                                         <div>
                                             &nbsp;Да, я хочу удалить группу
                                         </div>
@@ -333,6 +340,7 @@
                                             deleteGroup(block.id, index);
                                             close();
                                         "
+                                        :disabled="!del.check"
                                     ></Button>
                                     <Button
                                         label="Отмена"
@@ -352,6 +360,7 @@
                 <p class="child__school">{{ block.school }}</p>
                 <div class="child__scale">
                     <v-progress-linear
+                        v-if="skill[block.id]"
                         v-model="skill[block.id].progress"
                         height="30"
                         class="scale"
@@ -375,7 +384,7 @@
                 </router-link>
             </div>
         </div>
-        <modalWindow label="Добавить группу">
+        <modalWindow label="Добавить группу" @close="closeModal">
             <template #default="{ close }">
                 <v-card
                     prepend-icon="mdi-account"
@@ -468,7 +477,7 @@
                                 name="login"
                                 :class="{
                                     'form-input': true,
-                                    red: isError.school,
+                                    'red': isError.school,
                                 }"
                                 v-model:value="formGroup.school"
                             ></Input>
@@ -515,14 +524,13 @@ import { HTTP } from '@app/http';
 import { ref, onMounted, watch, computed } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { SelectSort } from '@shared/components/selects';
-import { useRoute } from 'vue-router';
 import { useUserStore } from '@layouts/stores/user';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import { watchEffect } from 'vue';
 
 const error = ref([]);
-const route = useRoute();
+// const route = useRoute();
 const groups = [];
 
 const userStore = useUserStore();
@@ -554,6 +562,7 @@ const formGroup = ref({
 const del = ref({
     check: false,
 });
+const childId = ref(0);
 
 const skill = ref({});
 const rules = {
@@ -569,11 +578,15 @@ const rules = {
     average_age: { required },
 };
 
+const checkDeleteGroup = ref(false);
+
 const v$ = useVuelidate(rules, form, formGroup);
 const V$ = useVuelidate(rules, formGroup);
 const isError = ref({});
+const cyrillicPattern = /[\u0400-\u04FF\-]+/;
 
 watchEffect(() => {
+    console.log('watchEffect');
     isError.value = {};
     if (v$.value.$invalid) {
         if (v$.value.first_name.$error) {
@@ -624,24 +637,41 @@ watchEffect(() => {
             isError.value.average_age = ['Разрешен ввод только цифр'];
         }
     }
+
+    if (userStore.currentUser.tasks_type === 'индивидуальный') {
+
+        if (form.value.first_name == form.value.first_name.replace(cyrillicPattern, '') && form.value.first_name !== '') {
+            isError.value.first_name = [
+                'Поле должно содержать только кириллицу и знак "-"',
+            ];
+        }
+
+        if (form.value.last_name == form.value.last_name.replace(cyrillicPattern, '' )  && form.value.last_name !== '') {
+            isError.value.last_name = [
+                'Поле должно содержать только кириллицу и знак "-"',
+            ];
+        }
+    }
 });
 const isFormValidInd = computed(() => {
     return (
         form.value.first_name !== '' &&
         form.value.last_name !== '' &&
-        form.value.sex !== '' &&
+        form.value.sex !== null &&
         form.value.age !== '' &&
-        form.value.region !== '' &&
+        form.value.region !== null &&
         form.value.school !== '' &&
         form.value.grade !== '' &&
-        form.value.data_processing_agreement
+        form.value.data_processing_agreement &&
+        form.value.first_name != form.value.first_name.replace(cyrillicPattern, '') &&
+        form.value.last_name != form.value.last_name.replace(cyrillicPattern, '')  
     );
 });
 const isFormValidGrp = computed(() => {
     return (
         formGroup.value.name !== '' &&
         formGroup.value.number_of_students !== '' &&
-        formGroup.value.region !== '' &&
+        formGroup.value.region !== null &&
         formGroup.value.school !== '' &&
         formGroup.value.average_age
     );
@@ -679,12 +709,15 @@ const deleteGroup = async (id, index) => {
 
 const AddChild = async () => {
     try {
+        console.log('form', form.value);
         const response = await HTTP.post('/children/', form.value, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+
+
         form.value = response.data;
         await userStore.getChildren();
         fetchSkills();
@@ -702,7 +735,7 @@ const AddGroup = async () => {
             },
         });
         formGroup.value = response.data;
-        await userStore.getGroup();
+        await userStore.getGroups();
         fetchSkills();
     } catch (error) {
         console.log('errr', error);
@@ -724,6 +757,9 @@ const GetRegion = async () => {
     }
 };
 
+GetRegion();
+
+
 const GetSkill = async (id, index) => {
     try {
         const response = await HTTP.get(`/answers/${id}/check_progress/`, {
@@ -732,49 +768,110 @@ const GetSkill = async (id, index) => {
                 Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
+        if (!skill.value[id]) {
+            skill.value[id] = {};
+        }
+        // console.log(skill.value[id], skill.value, id, response.data);
         skill.value[id] = response.data;
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
     }
 };
-const fetchSkills = () => {
+
+const fetchSkills = async () => {
     if (userStore.currentUser.tasks_type === 'индивидуальный') {
+        console.log('here');
         for (let i = 0; i < userStore.children.length; i++) {
             const id = userStore.children[i].id;
-            GetSkill(id, i);
+            await GetSkill(id, i);
         }
-    }
-    if (userStore.currentUser.tasks_type === 'групповой') {
+    } else if (userStore.currentUser.tasks_type === 'групповой') {
+        console.log('here2');
         for (let i = 0; i < userStore.groups.length; i++) {
             const id = userStore.groups[i].id;
-            GetSkill(id, i);
+            await GetSkill(id, i);
         }
     }
+
+    resetForm();
 };
+
+const resetForm = () => {
+    if (userStore.currentUser.tasks_type === 'индивидуальный') {
+        form.value = {
+            first_name: '',
+            last_name: '',
+            age: '',
+            region: null,
+            school: '',
+            grade: '',
+            attended_speech_therapist: false,
+            sex: null,
+            data_processing_agreement: false,
+        };
+
+        del.value ={
+            check: false,
+        };
+
+        v$.value.$reset();
+
+    }  else if (userStore.currentUser.tasks_type === 'групповой') {
+        formGroup.value = {
+            name: '',
+            number_of_students: '',
+            average_age: '',
+            region: null,
+            school: '',
+        };
+
+        del.value ={
+            check: false,
+        };
+
+        V$.value.$reset();
+    }
+}
 
 watch(
     () => userStore.children,
-    (newSkill) => {
-        if (!newSkill) {
-            console.log('here');
+    async (newSkill) => {
+        if (!newSkill || newSkill.length === 0) {
+            console.log('here once');
+            return false;
         }
-        fetchSkills();
+        await fetchSkills();
     },
-    { immediate: true, deep: true },
+    { immediate: true },
 );
 
 watch(
     () => userStore.groups,
-    (newGroup) => {
-        if (!newGroup) {
-            console.log('here');
+    async (newGroup) => {
+        if (!newGroup || newGroup.length === 0) {
+            console.log('here group');
+            return false;
         }
-        fetchSkills();
+        await fetchSkills();
     },
-    { immediate: true, deep: true },
+    { immediate: true },
 );
-document.body.classList.remove('no-scroll');
+
+const closeModal = () => {
+
+    isError.value = {};
+
+    resetForm();
+    
+}
+
+// onMounted(async () => {
+//     await userStore.getChildren();
+//     fetchSkills();
+// });
+
+// document.body.classList.remove('no-scroll');
 </script>
 <style lang="scss" scoped>
 .profile {
@@ -888,6 +985,7 @@ document.body.classList.remove('no-scroll');
 
 .delete-profile {
     align-self: flex-end;
+    cursor: pointer;
 }
 
 .child__name {
@@ -947,20 +1045,23 @@ document.body.classList.remove('no-scroll');
     margin-top: 8px;
     display: flex;
     margin-bottom: 20px;
+    font-family: 'Nunito', sans-serif;
 
     input {
         width: 20px;
         height: 20px;
         border: 1px solid black;
+        flex: 0 1 0;
+        margin-right: 8px;
     }
 
     &_text a {
-        max-width: 320px;
-        font-family: 'Nunito', sans-serif;
-        font-size: 14px;
+        //max-width: 320px;
+        
+        font-size: 16px;
         color: #35383f;
         font-weight: 500;
-        margin-left: 8px;
+        //margin-left: 8px;
         text-decoration: none;
     }
 }
