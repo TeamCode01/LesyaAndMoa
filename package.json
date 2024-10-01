@@ -18,7 +18,7 @@
         "vue": "^3.4.21",
         "vue-draggable-next": "^2.2.1",
         "vue-interactjs": "^0.1.10",
-        "vue-router": "^4.2.5",
+        "vue-router": "^4.0.13",
         "vue-social-sharing": "^4.0.0-alpha4",
         "vue-sweetalert2": "^5.0.11",
         "vue3-carousel": "^0.3.3",
