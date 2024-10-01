@@ -32,7 +32,7 @@
                 </div>
             </div>
             <img
-                v-show="show_hand"
+            v-show="show_hand"
                 class="hand"
                 @click="playSound($event)"
                 :id="'hand_' + task_id"
@@ -203,8 +203,8 @@ watch(
 );
 
 onBeforeRouteLeave((to, from) => {
-  childId = null;
-  console.log('id', childId);
+    childId = null;
+    console.log('id', childId);
 });
 
 onMounted(() => {
@@ -222,48 +222,80 @@ onMounted(() => {
     bottom: 25%;
     right: 45%;
     transform: translate(-50%, -50%);
+    @media (max-width: 1300px) {
+        bottom: 28%;
+        right: 38%;
+    }
 }
 #hand_2 {
     position: absolute;
     bottom: 28%;
     right: 46%;
     transform: translate(-50%, -50%);
+    @media (max-width: 1300px) {
+        bottom: 28%;
+        right: 42%;
+    }
 }
 #hand_3 {
     position: absolute;
     bottom: 38%;
     right: 58%;
     transform: translate(-50%, -50%);
+    @media (max-width: 1300px) {
+        bottom: 38%;
+        right: 53%;
+    }
 }
 #hand_4 {
     position: absolute;
     bottom: 35%;
     right: 44%;
     transform: translate(-50%, -50%);
+    @media (max-width: 1300px) {
+        bottom: 35%;
+        right: 40%;
+    }
 }
 #hand_5 {
     position: absolute;
     bottom: 40%;
     right: 41%;
     transform: translate(-50%, -50%);
+    @media (max-width: 1300px) {
+        bottom: 40%;
+        right: 37%;
+    }
 }
 #hand_6 {
     position: absolute;
     bottom: 38%;
     right: 39%;
     transform: translate(-50%, -50%);
+    @media (max-width: 1300px) {
+        bottom: 38%;
+        right: 35%;
+    }
 }
 #hand_7 {
     position: absolute;
     bottom: 40%;
     right: 56%;
     transform: translate(-50%, -50%);
+    @media (max-width: 1300px) {
+        bottom: 40%;
+        right: 50%;
+    }
 }
 #hand_8 {
     position: absolute;
     bottom: 38%;
     right: 34%;
     transform: translate(-50%, -50%);
+    @media (max-width: 1300px) {
+        bottom: 28%;
+        right: 37%;
+    }
 }
 
 #hand_16 {
@@ -271,6 +303,10 @@ onMounted(() => {
     bottom: 45%;
     right: 26%;
     transform: translate(-50%, -50%);
+    @media (max-width: 1300px) {
+        bottom: 45%;
+        right: 23%;
+    }
 }
 
 #hand_18 {
@@ -278,6 +314,10 @@ onMounted(() => {
     bottom: 32%;
     right: 26%;
     transform: translate(-50%, -50%);
+    @media (max-width: 1300px) {
+        bottom: 32%;
+        right: 23%;
+    }
 }
 
 .game {
