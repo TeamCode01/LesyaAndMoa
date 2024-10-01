@@ -16,6 +16,7 @@
                     "
                     :class="{ disabled: item.disabled == true }"
                     class="task"
+                    :data-id="item.id"
                     v-for="item in tasks"
                     :key="item.id"
                 >
@@ -512,7 +513,6 @@ watch(
     async (newId) => {
         if (newId) {
             props.childId = newId;
-            let sidebar = document.querySelector('.sidebar__bg');
             await answerStore.getAnswers(props.childId);
             tasks.value.forEach((task, index) => {
                 answerStore.answers.forEach((answer) => {
@@ -535,8 +535,15 @@ watch(
             if (taskFindArr.length > 0) {
                 let nextElId = taskFindArr.at(-1).id;
                 tasks.value[nextElId].disabled = false;
-                // const lastStartedTaskElement = this.$refs.sidebar.querySelector(`.task[data-id="${nextElId}"]`)
-                // lastStartedTaskElement.scrollIntoView({ behavior: 'smooth' });
+                // Get the sidebar element
+                const sidebar = document.querySelector('.sidebar__bg');
+
+                // Find the next task element
+                const nextTaskElement = sidebar.querySelector(
+                    `.task[data-id="${nextElId}"]`,
+                );
+                // Scroll to the next task element
+                nextTaskElement.scrollIntoView({ behavior: 'smooth' });
                 switchTask(
                     tasks.value[nextElId].id,
                     tasks.value[nextElId].open,
@@ -901,6 +908,8 @@ onActivated(() => {
         height: 300px;
         padding: 8px 0;
         overflow-y: scroll;
+        overflow-x: hidden;
+        // margin-right: 28px;
 
         @media (max-width: 1023px) {
             height: 185px;
@@ -960,29 +969,32 @@ onActivated(() => {
     color: #a5acb1;
     cursor: not-allowed;
 }
-
-.sidebar__bg::-webkit-scrollbar {
-    width: 8px;
-    max-height: 148px;
-}
-
-.sidebar__bg::-webkit-scrollbar-thumb {
-    background-color: #4d65e5;
-    border-radius: 7px;
-    cursor: pointer;
-    max-height: 148px;
-    width: 8px;
-
-    @media (max-width: 1024px) {
-        background: white;
-        border-radius: 0px;
-        cursor: pointer;
-        max-height: 0px;
-        width: 0px;
+@supports (scrollbar-color: auto) {
+    .sidebar__bg {
+        scrollbar-color: #4d65e5 #fff;
     }
 }
 
-.sidebar__bg::-webkit-scrollbar-thumb:hover {
-    background: white;
+@supports selector(::-webkit-scrollbar) {
+    .sidebar__bg::-webkit-scrollbar {
+        background: #4d65e5;
+        width: 8px;
+        cursor: pointer;
+        border-radius: 7px;
+        max-height: 148px;
+    }
+    .sidebar__bg::-webkit-scrollbar-thumb {
+        background: #fff;
+        max-height: 148px;
+        width: 8px;
+        @media (max-width: 1024px) {
+            background: white;
+            border-radius: 0px;
+            cursor: pointer;
+            max-height: 0px;
+            width: 0px;
+        }
+    }
 }
+
 </style>

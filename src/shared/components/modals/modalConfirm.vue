@@ -1,6 +1,15 @@
 <template>
     <div class="text-center">
+    
         <v-dialog v-model="dialog" max-width="505">
+            <!-- <div class="close icon-closed">
+                <img
+                    @click="closeDialog"
+                    class="close-icon"
+                    src="@app/assets/icons/icon-close.svg"
+                    alt="крест"
+                />
+            </div> -->
             <template v-slot:activator="{ props: activatorProps }">
                 <div
                     class="text-none font-weight-regular"
@@ -11,14 +20,7 @@
                     <span>{{ label }}</span>
                 </div>
             </template>
-            <div class="close icon-closed">
-                <img
-                    @click="closeDialog"
-                    class="close-icon"
-                    src="@app/assets/icons/icon-close.svg"
-                    alt="крест"
-                />
-            </div>
+          
             <slot :close="closeDialog"></slot>
         </v-dialog>
     </div>
