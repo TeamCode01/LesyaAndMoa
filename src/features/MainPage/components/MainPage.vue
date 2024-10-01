@@ -536,7 +536,7 @@ const playAudio = (audioPath) => {
         import.meta.url,
     ).href;
     // audio.value.currentTime = localStorage.getItem('time') || 0;
-     audio.value.play();
+    audio.value.play();
     // audio.value.addEventListener('abort', () => {
     //     console.log('Audio playback was aborted by the user.');
     // });
@@ -565,16 +565,15 @@ function handleScroll(e) {
         });
 
         if (posTop + test.offsetHeight < 0) {
-        // localStorage.setItem('time', audio.value.currentTime);
-        audio.value.pause();
-    } else {
-        // audio.value.currentTime = localStorage.getItem('time');
-        // audio.value.play();
-    }
+            // localStorage.setItem('time', audio.value.currentTime);
+            audio.value.pause();
+        } else {
+            // audio.value.currentTime = localStorage.getItem('time');
+            // audio.value.play();
+        }
 
         // document.removeEventListener('scroll', handleScroll);
     }
-  
 }
 
 const mute = () => {

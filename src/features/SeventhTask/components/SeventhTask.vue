@@ -3,7 +3,11 @@
         <div class="task_block__wrapper">
             <template v-if="startGame">
                 <div class="task_block__close" @click="hide">
-                    <svgIcon icon-name="close-icon" class="close-icon" alt="крест"></svgIcon>
+                    <svgIcon
+                        icon-name="close-icon"
+                        class="close-icon"
+                        alt="крест"
+                    ></svgIcon>
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
@@ -11,86 +15,227 @@
                         Верно соотнеси слово, его толкование и картинку.
                     </p>
                 </div>
-                <canvas @mousedown="engage" @mouseup="disengage" @mousemove="draw" @touchstart="engage"
-                    @touchend="disengage" @touchmove="draw" @click="voiceActing" ref="canvasRef"
-                    class="canvas_draw"></canvas>
+                <canvas
+                    @mousedown="engage"
+                    @mouseup="disengage"
+                    @mousemove="draw"
+                    @touchstart="engage"
+                    @touchend="disengage"
+                    @touchmove="draw"
+                    @click="voiceActing"
+                    ref="canvasRef"
+                    class="canvas_draw"
+                ></canvas>
                 <div class="draggable-list">
                     <div class="draggable-list__words">
-                        <div class="draggable-list__word-container" v-for="(word, word_index) in words[option]"
-                            :key="word_index">
-                            <div :ref="el => refBlockSound[1][word_index - 1] = el"
-                                :class="{ 'draggable-list__word': true, correct_select: word.correct, not_correct_select: word.correct === false }">
-                                {{ word.word }}</div>
+                        <div
+                            class="draggable-list__word-container"
+                            v-for="(word, word_index) in words[option]"
+                            :key="word_index"
+                        >
+                            <div
+                                :ref="
+                                    (el) =>
+                                        (refBlockSound[1][word_index - 1] = el)
+                                "
+                                :class="{
+                                    'draggable-list__word': true,
+                                    correct_select: word.correct,
+                                    not_correct_select: word.correct === false,
+                                }"
+                            >
+                                {{ word.word }}
+                            </div>
 
-                            <div :ref="(el) => { refColumns[1][word_index - 1] = el }" style="display: flex">
-                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
-                                </SvgIcon>    
+                            <div
+                                :ref="
+                                    (el) => {
+                                        refColumns[1][word_index - 1] = el;
+                                    }
+                                "
+                                style="display: flex"
+                            >
+                                <SvgIcon
+                                    icon-name="green-circle"
+                                    class="draggable-list__circle"
+                                >
+                                </SvgIcon>
                             </div>
                         </div>
                     </div>
-                    <div class="draggable-list__sentences" v-if="!showCorrectRow">
-                        <div class="draggable-list__sentence-container"
-                            v-for="(sentence, sentence_index) in sentences[option]" :key="sentence_index">
-
-                            <div :ref="(el) => { refColumns[2][sentence_index - 1] = el }" style="display: flex">
-                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
-                                </SvgIcon>    
+                    <div
+                        class="draggable-list__sentences"
+                        v-if="!showCorrectRow"
+                    >
+                        <div
+                            class="draggable-list__sentence-container"
+                            v-for="(sentence, sentence_index) in sentences[
+                                option
+                            ]"
+                            :key="sentence_index"
+                        >
+                            <div
+                                :ref="
+                                    (el) => {
+                                        refColumns[2][sentence_index - 1] = el;
+                                    }
+                                "
+                                style="display: flex"
+                            >
+                                <SvgIcon
+                                    icon-name="green-circle"
+                                    class="draggable-list__circle"
+                                >
+                                </SvgIcon>
                             </div>
 
-                            <div :ref="el => refBlockSound[2][sentence_index - 1] = el"
-                                :class="{ 'draggable-list__sentence': true, correct_select: sentence.correct, not_correct_select: sentence.correct === false }">
-                                {{ sentence.sentence }}</div>
+                            <div
+                                :ref="
+                                    (el) =>
+                                        (refBlockSound[2][sentence_index - 1] =
+                                            el)
+                                "
+                                :class="{
+                                    'draggable-list__sentence': true,
+                                    correct_select: sentence.correct,
+                                    not_correct_select:
+                                        sentence.correct === false,
+                                }"
+                            >
+                                {{ sentence.sentence }}
+                            </div>
 
-                            <div :ref="(el) => { refColumns[3][sentence_index - 1] = el }" style="display: flex">
-                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
-                                </SvgIcon>    
+                            <div
+                                :ref="
+                                    (el) => {
+                                        refColumns[3][sentence_index - 1] = el;
+                                    }
+                                "
+                                style="display: flex"
+                            >
+                                <SvgIcon
+                                    icon-name="green-circle"
+                                    class="draggable-list__circle"
+                                >
+                                </SvgIcon>
                             </div>
                         </div>
                     </div>
                     <div class="draggable-list__sentences" v-else>
-                        <div class="draggable-list__sentence-container"
-                            v-for="(rowId, rowId_index) in correctRowId[option][2]" :key="rowId_index">
-                            <div :ref="(el) => { refColumns[2][rowId_index - 1] = el }" style="display: flex">
-                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
-                                </SvgIcon>    
+                        <div
+                            class="draggable-list__sentence-container"
+                            v-for="(rowId, rowId_index) in correctRowId[
+                                option
+                            ][2]"
+                            :key="rowId_index"
+                        >
+                            <div
+                                :ref="
+                                    (el) => {
+                                        refColumns[2][rowId_index - 1] = el;
+                                    }
+                                "
+                                style="display: flex"
+                            >
+                                <SvgIcon
+                                    icon-name="green-circle"
+                                    class="draggable-list__circle"
+                                >
+                                </SvgIcon>
                             </div>
 
-                            <div :ref="el => refBlockSound[2][rowId_index - 1] = el" class="draggable-list__sentence">{{
-                                sentences[option][rowId].sentence }}</div>
+                            <div
+                                :ref="
+                                    (el) =>
+                                        (refBlockSound[2][rowId_index - 1] = el)
+                                "
+                                class="draggable-list__sentence"
+                            >
+                                {{ sentences[option][rowId].sentence }}
+                            </div>
 
-                            <div :ref="(el) => { refColumns[3][rowId_index - 1] = el }" style="display: flex">
-                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
-                                </SvgIcon>    
+                            <div
+                                :ref="
+                                    (el) => {
+                                        refColumns[3][rowId_index - 1] = el;
+                                    }
+                                "
+                                style="display: flex"
+                            >
+                                <SvgIcon
+                                    icon-name="green-circle"
+                                    class="draggable-list__circle"
+                                >
+                                </SvgIcon>
                             </div>
                         </div>
                     </div>
 
-                    <div class="draggable-list__pictures" v-if="!showCorrectRow">
-                        <div class="draggable-list__picture-container" v-for="(img, img_index) in images[option]"
-                            :key="img_index">
-                            <div :ref="(el) => { refColumns[4][img_index - 1] = el }" style="display: flex">
-                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
-                                </SvgIcon>    
+                    <div
+                        class="draggable-list__pictures"
+                        v-if="!showCorrectRow"
+                    >
+                        <div
+                            class="draggable-list__picture-container"
+                            v-for="(img, img_index) in images[option]"
+                            :key="img_index"
+                        >
+                            <div
+                                :ref="
+                                    (el) => {
+                                        refColumns[4][img_index - 1] = el;
+                                    }
+                                "
+                                style="display: flex"
+                            >
+                                <SvgIcon
+                                    icon-name="green-circle"
+                                    class="draggable-list__circle"
+                                >
+                                </SvgIcon>
                             </div>
-                            <img :src="img.url" class="draggable-list__image">
+                            <img :src="img.url" class="draggable-list__image" />
                         </div>
                     </div>
                     <div class="draggable-list__pictures" v-else>
-                        <div class="draggable-list__picture-container"
-                            v-for="(rowId, rowId_index) in correctRowId[option][3]" :key="rowId_index">
-
-                            <div :ref="(el) => { refColumns[4][rowId_index - 1] = el }" style="display: flex">
-                                <SvgIcon icon-name="green-circle" class="draggable-list__circle" >
-                                </SvgIcon>    
+                        <div
+                            class="draggable-list__picture-container"
+                            v-for="(rowId, rowId_index) in correctRowId[
+                                option
+                            ][3]"
+                            :key="rowId_index"
+                        >
+                            <div
+                                :ref="
+                                    (el) => {
+                                        refColumns[4][rowId_index - 1] = el;
+                                    }
+                                "
+                                style="display: flex"
+                            >
+                                <SvgIcon
+                                    icon-name="green-circle"
+                                    class="draggable-list__circle"
+                                >
+                                </SvgIcon>
                             </div>
 
-                            <img :src="images[option][rowId].url" class="draggable-list__image">
+                            <img
+                                :src="images[option][rowId].url"
+                                class="draggable-list__image"
+                            />
                         </div>
                     </div>
                 </div>
             </template>
-            <TaskResultBanner :bg="getImageUrl('lesya.gif')" text="Друзья поняли, что всего один знак (Ь — мягкий знак или Ъ — твёрдый знак) так различает значение слов!" v-else
-                @hide="hide()" class="end-modal" @next="next()"></TaskResultBanner>
+            <TaskResultBanner
+                :bg="getImageUrl('lesya.gif')"
+                text="Друзья поняли, что всего один знак (Ь — мягкий знак или Ъ — твёрдый знак) так различает значение слов!"
+                v-else
+                @hide="hide()"
+                class="end-modal"
+                @next="next()"
+            ></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -105,7 +250,6 @@ import gameActions from '@mixins/gameAction';
 import { SvgIcon } from '@shared/components/svgIcon';
 
 onMounted(() => {
-
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
         '--scroll-position',
@@ -114,17 +258,14 @@ onMounted(() => {
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
-    console.log('Компонент создан')
-})
+    console.log('Компонент создан');
+});
 
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
-    console.log('Компонент уничтожен')
-})
-
-
-
+    console.log('Компонент уничтожен');
+});
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
@@ -136,11 +277,11 @@ const corrValue = ref(0);
 const lines = ref([]);
 const refBlockSound = ref({
     1: [],
-    2: []
-})
+    2: [],
+});
 const blockSoundCords = ref({
     1: [],
-    2: []
+    2: [],
 });
 const showCorrectRow = ref(false);
 const correctRowId = ref({
@@ -153,7 +294,7 @@ const correctRowId = ref({
         1: [1, 2, 3, 4],
         2: [2, 1, 4, 3],
         3: [4, 3, 1, 2],
-    }
+    },
 });
 const refColumns = ref({
     1: [],
@@ -162,15 +303,35 @@ const refColumns = ref({
     4: [],
 });
 const centralCords = ref({
-    1: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }],
-    2: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }],
-    3: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }],
-    4: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }],
-})
+    1: [
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+    ],
+    2: [
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+    ],
+    3: [
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+    ],
+    4: [
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+    ],
+});
 const startCords = ref({
     x: 0,
     y: 0,
-})
+});
 
 const audio = ref(new Audio());
 const isFirstPassing = ref(true);
@@ -245,7 +406,7 @@ const words = ref({
             correctRightRow: 3,
         },
     },
-})
+});
 
 const sentences = ref({
     1: {
@@ -324,30 +485,42 @@ const sentences = ref({
             correctLeftRow: 3,
         },
     },
-})
+});
 
 const images = ref({
     1: {
         1: {
-            url: new URL("/assets/creatures/SeventhTask/girl's-top.png", import.meta.url).href,
+            url: new URL(
+                "/assets/creatures/SeventhTask/girl's-top.png",
+                import.meta.url,
+            ).href,
             correct: null,
             correctLeft: false,
             correctLeftRow: 2,
         },
         2: {
-            url: new URL("/assets/creatures/SeventhTask/chess.png", import.meta.url).href,
+            url: new URL(
+                '/assets/creatures/SeventhTask/chess.png',
+                import.meta.url,
+            ).href,
             correct: null,
             correctLeft: false,
             correctLeftRow: 1,
         },
         3: {
-            url: new URL("/assets/creatures/SeventhTask/horse.png", import.meta.url).href,
+            url: new URL(
+                '/assets/creatures/SeventhTask/horse.png',
+                import.meta.url,
+            ).href,
             correct: null,
             correctLeft: false,
             correctLeftRow: 4,
         },
         4: {
-            url: new URL("/assets/creatures/SeventhTask/swamp.png", import.meta.url).href,
+            url: new URL(
+                '/assets/creatures/SeventhTask/swamp.png',
+                import.meta.url,
+            ).href,
             correct: null,
             correctLeft: false,
             correctLeftRow: 3,
@@ -355,31 +528,43 @@ const images = ref({
     },
     2: {
         1: {
-            url: new URL("/assets/creatures/SeventhTask/chalk.png", import.meta.url).href,
+            url: new URL(
+                '/assets/creatures/SeventhTask/chalk.png',
+                import.meta.url,
+            ).href,
             correct: null,
             correctLeft: false,
-            correctLeftRow: 4
+            correctLeftRow: 4,
         },
         2: {
-            url: new URL("/assets/creatures/SeventhTask/shallow.png", import.meta.url).href,
+            url: new URL(
+                '/assets/creatures/SeventhTask/shallow.png',
+                import.meta.url,
+            ).href,
             correct: null,
             correctLeft: false,
-            correctLeftRow: 3
+            correctLeftRow: 3,
         },
         3: {
-            url: new URL("/assets/creatures/SeventhTask/food.png", import.meta.url).href,
+            url: new URL(
+                '/assets/creatures/SeventhTask/food.png',
+                import.meta.url,
+            ).href,
             correct: null,
             correctLeft: false,
-            correctLeftRow: 1
+            correctLeftRow: 1,
         },
         4: {
-            url: new URL("/assets/creatures/SeventhTask/sit.png", import.meta.url).href,
+            url: new URL(
+                '/assets/creatures/SeventhTask/sit.png',
+                import.meta.url,
+            ).href,
             correct: null,
             correctLeft: false,
-            correctLeftRow: 2
+            correctLeftRow: 2,
         },
     },
-})
+});
 
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
 const props = defineProps({
@@ -394,7 +579,7 @@ const props = defineProps({
     },
 
     finish: {
-        type: Boolean
+        type: Boolean,
     },
 });
 const hide = () => {
@@ -403,7 +588,7 @@ const hide = () => {
 
 const next = () => {
     emit('next-modal');
-}
+};
 
 const voiceActing = () => {
     let onBlock = false;
@@ -413,10 +598,18 @@ const voiceActing = () => {
     for (const columnId in blockSoundCords.value) {
         for (const rowId in blockSoundCords.value[columnId]) {
             if (
-                pos.x >= blockSoundCords.value[columnId][rowId].leftUpperCornerCords.x &&
-                pos.y >= blockSoundCords.value[columnId][rowId].leftUpperCornerCords.y &&
-                pos.x <= blockSoundCords.value[columnId][rowId].rightLowerCornerCords.x &&
-                pos.y <= blockSoundCords.value[columnId][rowId].rightLowerCornerCords.y
+                pos.x >=
+                    blockSoundCords.value[columnId][rowId].leftUpperCornerCords
+                        .x &&
+                pos.y >=
+                    blockSoundCords.value[columnId][rowId].leftUpperCornerCords
+                        .y &&
+                pos.x <=
+                    blockSoundCords.value[columnId][rowId].rightLowerCornerCords
+                        .x &&
+                pos.y <=
+                    blockSoundCords.value[columnId][rowId].rightLowerCornerCords
+                        .y
             ) {
                 clickOnColumn = columnId;
                 clickOnRow = rowId;
@@ -426,19 +619,16 @@ const voiceActing = () => {
         }
     }
 
-
     if (onBlock) {
         if (clickOnColumn == 1) {
-
             playAudio(words.value[option.value][+clickOnRow + 1].audio);
         } else if (clickOnColumn == 2) {
             playAudio(sentences.value[option.value][+clickOnRow + 1].audio);
         }
     }
-}
+};
 
-
-const getSrcUrl = (path) => {    
+const getSrcUrl = (path) => {
     return new URL(path, import.meta.url).href;
 };
 
@@ -446,43 +636,40 @@ const getImageUrl = (path) => {
     return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
-
-
 const playAudio = (audioPath) => {
-    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
+    audio.value.src = new URL(
+        `/assets/audio/${audioPath}`,
+        import.meta.url,
+    ).href;
     audio.value.play();
-}
+};
 const stopAudio = (audioPath) => {
     if (audio.value.paused) {
         playAudio(audioPath);
     } else {
         audio.value.pause();
     }
-}
+};
 
 const getCursorPosition = (event) => {
     const rect = canvas.getBoundingClientRect();
-    if (event.type == "touchstart" || event.type == "touchmove") {
+    if (event.type == 'touchstart' || event.type == 'touchmove') {
         return {
             x: event.touches[0].clientX - rect.left,
-            y: event.touches[0].clientY - rect.top
-        }
-    }
-
-    else if (event.type == "touchend") {
+            y: event.touches[0].clientY - rect.top,
+        };
+    } else if (event.type == 'touchend') {
         return {
             x: event.changedTouches[0].clientX - rect.left,
-            y: event.changedTouches[0].clientY - rect.top
-        }
+            y: event.changedTouches[0].clientY - rect.top,
+        };
     }
-
-
 
     return {
         x: event.clientX - rect.left,
-        y: event.clientY - rect.top
+        y: event.clientY - rect.top,
     };
-}
+};
 
 const draw = (event) => {
     if (isDrawing.value) {
@@ -490,7 +677,7 @@ const draw = (event) => {
         if (pos.x > leftBorder && pos.x < rightBorder) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             redraw();
-            ctx.strokeStyle = "green";
+            ctx.strokeStyle = 'green';
             ctx.lineWidth = 2;
             ctx.setLineDash([5, 5]);
             ctx.beginPath();
@@ -498,7 +685,7 @@ const draw = (event) => {
             ctx.lineTo(pos.x, pos.y);
             ctx.stroke();
             ctx.closePath();
-            ctx.fillStyle = "green";
+            ctx.fillStyle = 'green';
             ctx.beginPath();
             ctx.arc(pos.x, pos.y, 5, 0, Math.PI * 2);
             ctx.fill();
@@ -510,24 +697,56 @@ const draw = (event) => {
             redraw();
         }
     }
-}
+};
 
 const checkRowsAndColumnsIds = (pos) => {
-    const inFirstLineX = (pos.x > centralCords.value[1][0].minX && pos.x < centralCords.value[1][0].maxX);
-    const inSecondLineX = (pos.x > centralCords.value[2][0].minX && pos.x < centralCords.value[2][0].maxX);
-    const inThirdLineX = (pos.x > centralCords.value[3][0].minX && pos.x < centralCords.value[3][0].maxX);
-    const inFourthLineX = (pos.x > centralCords.value[4][0].minX && pos.x < centralCords.value[4][0].maxX);
+    const inFirstLineX =
+        pos.x > centralCords.value[1][0].minX &&
+        pos.x < centralCords.value[1][0].maxX;
+    const inSecondLineX =
+        pos.x > centralCords.value[2][0].minX &&
+        pos.x < centralCords.value[2][0].maxX;
+    const inThirdLineX =
+        pos.x > centralCords.value[3][0].minX &&
+        pos.x < centralCords.value[3][0].maxX;
+    const inFourthLineX =
+        pos.x > centralCords.value[4][0].minX &&
+        pos.x < centralCords.value[4][0].maxX;
 
-    const inFirstLineY = (pos.y > centralCords.value[1][0].minY && pos.y < centralCords.value[1][0].maxY);
-    const inSecondLineY = (pos.y > centralCords.value[1][1].minY && pos.y < centralCords.value[1][1].maxY);
-    const inThirdLineY = (pos.y > centralCords.value[1][2].minY && pos.y < centralCords.value[1][2].maxY);
-    const inFourthLineY = (pos.y > centralCords.value[1][3].minY && pos.y < centralCords.value[1][3].maxY);
+    const inFirstLineY =
+        pos.y > centralCords.value[1][0].minY &&
+        pos.y < centralCords.value[1][0].maxY;
+    const inSecondLineY =
+        pos.y > centralCords.value[1][1].minY &&
+        pos.y < centralCords.value[1][1].maxY;
+    const inThirdLineY =
+        pos.y > centralCords.value[1][2].minY &&
+        pos.y < centralCords.value[1][2].maxY;
+    const inFourthLineY =
+        pos.y > centralCords.value[1][3].minY &&
+        pos.y < centralCords.value[1][3].maxY;
 
-    const columnId = inFirstLineX ? 1 : inSecondLineX ? 2 : inThirdLineX ? 3 : inFourthLineX ? 4 : false;
-    const rowId = inFirstLineY ? 1 : inSecondLineY ? 2 : inThirdLineY ? 3 : inFourthLineY ? 4 : false;
+    const columnId = inFirstLineX
+        ? 1
+        : inSecondLineX
+        ? 2
+        : inThirdLineX
+        ? 3
+        : inFourthLineX
+        ? 4
+        : false;
+    const rowId = inFirstLineY
+        ? 1
+        : inSecondLineY
+        ? 2
+        : inThirdLineY
+        ? 3
+        : inFourthLineY
+        ? 4
+        : false;
 
     return { column: columnId, row: rowId };
-}
+};
 
 const isDone = (column, row) => {
     if (column == 1) {
@@ -535,21 +754,23 @@ const isDone = (column, row) => {
     } else if (column == 2) {
         return sentences.value[option.value][row].correctLeft;
     } else if (column == 3) {
-        return sentences.value[option.value][row].correctRight
+        return sentences.value[option.value][row].correctRight;
     } else if (column == 4) {
         return images.value[option.value][row].correctLeft;
     }
-}
+};
 
 const engage = (event) => {
     const pos = getCursorPosition(event);
-    startIds = checkRowsAndColumnsIds(pos)
+    startIds = checkRowsAndColumnsIds(pos);
     const done = isDone(startIds.column, startIds.row);
 
     if (startIds.column && startIds.row && !done) {
         isDrawing.value = true;
-        startCords.value.x = centralCords.value[startIds.column][startIds.row - 1].x;
-        startCords.value.y = centralCords.value[startIds.column][startIds.row - 1].y;
+        startCords.value.x =
+            centralCords.value[startIds.column][startIds.row - 1].x;
+        startCords.value.y =
+            centralCords.value[startIds.column][startIds.row - 1].y;
         if (startIds.column == 1 || startIds.column == 2) {
             leftBorder = centralCords.value[1][0].x - 30;
             rightBorder = centralCords.value[2][0].x + 30;
@@ -558,7 +779,7 @@ const engage = (event) => {
             rightBorder = centralCords.value[4][0].x + 30;
         }
     }
-}
+};
 
 const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
     if (startColumn == 1) {
@@ -581,7 +802,8 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
             }, 1000);
             return false;
         }
-    } if (startColumn == 2) {
+    }
+    if (startColumn == 2) {
         if (sentences.value[option.value][startRow].correctLeftRow == endRow) {
             sentences.value[option.value][startRow].correctLeft = true;
             words.value[option.value][endRow].correctRight = true;
@@ -642,47 +864,73 @@ const correctAnswer = (startColumn, startRow, endColumn, endRow) => {
         }
     }
 
-    return true
-}
+    return true;
+};
 
 const redrawCorrectRows = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i <= 1; ++i) {
         for (let j = 0; j <= 3; ++j) {
             console.log(centralCords.value);
-            console.log(centralCords.value[i * 2 + 1][j].x, centralCords.value[i * 2 + 1][j].y);
-            ctx.fillStyle = "green";
+            console.log(
+                centralCords.value[i * 2 + 1][j].x,
+                centralCords.value[i * 2 + 1][j].y,
+            );
+            ctx.fillStyle = 'green';
             ctx.beginPath();
-            ctx.arc(centralCords.value[i * 2 + 1][j].x, centralCords.value[i * 2 + 1][j].y, 5, 0, Math.PI * 2);
+            ctx.arc(
+                centralCords.value[i * 2 + 1][j].x,
+                centralCords.value[i * 2 + 1][j].y,
+                5,
+                0,
+                Math.PI * 2,
+            );
             ctx.fill();
             ctx.stroke();
             ctx.closePath();
 
-            ctx.strokeStyle = "green";
+            ctx.strokeStyle = 'green';
             ctx.lineWidth = 2;
             ctx.setLineDash([]);
             ctx.beginPath();
-            ctx.moveTo(centralCords.value[i * 2 + 1][j].x, centralCords.value[i * 2 + 1][j].y);
-            ctx.lineTo(centralCords.value[i * 2 + 2][j].x, centralCords.value[i * 2 + 2][j].y);
+            ctx.moveTo(
+                centralCords.value[i * 2 + 1][j].x,
+                centralCords.value[i * 2 + 1][j].y,
+            );
+            ctx.lineTo(
+                centralCords.value[i * 2 + 2][j].x,
+                centralCords.value[i * 2 + 2][j].y,
+            );
             ctx.stroke();
             ctx.closePath();
 
-            ctx.fillStyle = "green";
+            ctx.fillStyle = 'green';
             ctx.beginPath();
-            ctx.arc(centralCords.value[i * 2 + 2][j].x, centralCords.value[i * 2 + 2][j].y, 5, 0, Math.PI * 2);
+            ctx.arc(
+                centralCords.value[i * 2 + 2][j].x,
+                centralCords.value[i * 2 + 2][j].y,
+                5,
+                0,
+                Math.PI * 2,
+            );
             ctx.fill();
             ctx.stroke();
             ctx.closePath();
         }
     }
-}
+};
 
 const disengage = (event) => {
     if (isDrawing.value) {
         const pos = getCursorPosition(event);
         endIds = checkRowsAndColumnsIds(pos);
         if (endIds.column && endIds.row && endIds.column !== startIds.column) {
-            const correctAns = correctAnswer(startIds.column, startIds.row, endIds.column, endIds.row);
+            const correctAns = correctAnswer(
+                startIds.column,
+                startIds.row,
+                endIds.column,
+                endIds.row,
+            );
             if (correctAns) {
                 countAnswers.value++;
 
@@ -692,7 +940,7 @@ const disengage = (event) => {
                     startX: startCords.value.x,
                     startY: startCords.value.y,
                     endX: centralCords.value[endIds.column][endIds.row - 1].x,
-                    endY: centralCords.value[endIds.column][endIds.row - 1].y
+                    endY: centralCords.value[endIds.column][endIds.row - 1].y,
                 });
 
                 if (countAnswers.value == 8) {
@@ -710,7 +958,12 @@ const disengage = (event) => {
                             isFirstOptionCompleted.value = true;
                             if (!isSecondOptionCompleted.value) {
                                 setTimeout(() => {
-                                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                    ctx.clearRect(
+                                        0,
+                                        0,
+                                        canvas.width,
+                                        canvas.height,
+                                    );
                                     lines.value = [];
                                     option.value = 2;
                                     countAnswers.value = 0;
@@ -720,15 +973,26 @@ const disengage = (event) => {
                             isSecondOptionCompleted.value = true;
                             if (!isFirstOptionCompleted.value) {
                                 setTimeout(() => {
-                                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                    ctx.clearRect(
+                                        0,
+                                        0,
+                                        canvas.width,
+                                        canvas.height,
+                                    );
                                     lines.value = [];
                                     option.value = 1;
                                     countAnswers.value = 0;
                                 }, 2000);
                             }
                         }
-                        console.log(isFirstOptionCompleted.value, isSecondOptionCompleted.value);
-                        if (isFirstOptionCompleted.value && isSecondOptionCompleted.value) {
+                        console.log(
+                            isFirstOptionCompleted.value,
+                            isSecondOptionCompleted.value,
+                        );
+                        if (
+                            isFirstOptionCompleted.value &&
+                            isSecondOptionCompleted.value
+                        ) {
                             setTimeout(() => {
                                 showCorrectRow.value = true;
                                 playAudio(`Task7/278.7.mp3`);
@@ -736,7 +1000,10 @@ const disengage = (event) => {
                             }, 1000);
                             setTimeout(() => {
                                 if (is_correct.value === false) {
-                                    endGameRequest(props.childId, corrValue.value);
+                                    endGameRequest(
+                                        props.childId,
+                                        corrValue.value,
+                                    );
                                     emit('correct');
                                     emit('open');
                                 }
@@ -753,18 +1020,18 @@ const disengage = (event) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         redraw();
     }
-}
+};
 
 const redraw = () => {
-    lines.value.forEach(line => {
-        ctx.fillStyle = "green";
+    lines.value.forEach((line) => {
+        ctx.fillStyle = 'green';
         ctx.beginPath();
         ctx.arc(line.startX, line.startY, 5, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
 
-        ctx.strokeStyle = "green";
+        ctx.strokeStyle = 'green';
         ctx.lineWidth = 2;
         ctx.setLineDash([]);
         ctx.beginPath();
@@ -773,14 +1040,14 @@ const redraw = () => {
         ctx.stroke();
         ctx.closePath();
 
-        ctx.fillStyle = "green";
+        ctx.fillStyle = 'green';
         ctx.beginPath();
         ctx.arc(line.endX, line.endY, 5, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
     });
-}
+};
 
 const resizeCanvas = () => {
     canvas.width = window.innerWidth;
@@ -789,7 +1056,7 @@ const resizeCanvas = () => {
         getCenterCords();
         redraw();
     }, 100);
-}
+};
 
 const getCenterCords = () => {
     for (const columnsId in centralCords.value) {
@@ -822,12 +1089,12 @@ const getCenterCords = () => {
                 const x = rect.left + rect.width / 2 - canvasRect.left;
                 const y = rect.top + rect.height / 2 - canvasRect.top;
                 if (columnsId == 1) {
-                    const temp = {}
+                    const temp = {};
                     temp.leftUpperCornerCords = { x: x - 40, y: y - 23 };
                     temp.rightLowerCornerCords = { x: x + 40, y: y + 23 };
                     blockSoundCords.value[columnsId].push(temp);
                 } else if (columnsId == 2) {
-                    const temp = {}
+                    const temp = {};
                     temp.leftUpperCornerCords = { x: x - 220, y: y - 23 };
                     temp.rightLowerCornerCords = { x: x + 220, y: y + 23 };
                     blockSoundCords.value[columnsId].push(temp);
@@ -835,19 +1102,16 @@ const getCenterCords = () => {
             }
         }
     }
-    
+
     console.log('centralCords', centralCords.value);
-}
+};
 
 onMounted(async () => {
-    
     try {
         const correct = await getCorrectAnswer(7, props.childId);
-        corrValue.value = correct.correctId;
-        is_correct.value = correct.is_correct;
-    }
-    catch (error) {
-        console.log(error);
+        corrValue.value = localStorage.getItem('correctAnswer');
+    } catch (err) {
+        corrValue.value = localStorage.getItem('correctAnswer');
     }
 
     option.value = Math.floor(Math.random() * 2) + 1;
@@ -857,7 +1121,7 @@ onMounted(async () => {
     resizeCanvas();
 
     window.addEventListener('resize', resizeCanvas);
-})
+});
 </script>
 
 <style lang="scss" scoped>
@@ -885,12 +1149,12 @@ onMounted(async () => {
 
 .correct_select {
     border: 2px solid;
-    border-color: #5CCF54;
+    border-color: #5ccf54;
 }
 
 .not_correct_select {
     border: 2px solid;
-    border-color: #DB0000;
+    border-color: #db0000;
 }
 
 .SeventhTask {
@@ -1050,4 +1314,5 @@ onMounted(async () => {
         width: 96px;
     }
 }
-</style>s
+</style>
+s

@@ -96,7 +96,7 @@
 <script setup>
 import { Sidebar } from '@widgets/SideBarGame';
 import { ref, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { onBeforeRouteLeave, useRoute } from 'vue-router';
 import { HTTP } from '@app/http';
 import gameActions from '@mixins/gameAction';
 import { useAnswerStore } from '@layouts/stores/answers';
@@ -193,14 +193,28 @@ const playSound = () => {
 
 watch(
     () => route.params.id,
-    async (newId) => {
+    (newId) => {
         if (newId) {
             childId = newId;
-            // console.log('newId', newId, childId);
+            console.log('newId', newId, childId);
+        } else {
+            console.log('hogg');
+            childId = null;
         }
     },
-    { immediate: true },
+    { immediate: true, deep: true },
 );
+
+// onBeforeRouteLeave(() => {
+//     childId = null;
+//     console.log('id', childId);
+// });
+
+window.addEventListener('popstate', (event) => {
+    childId = null;
+    // childId = null;
+    console.log('hoh', childId);
+});
 
 onMounted(() => {
     showHand();

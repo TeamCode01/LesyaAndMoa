@@ -213,9 +213,19 @@ const clickItem = (word) => {
 };
 
 onMounted(async () => {
-    const correct = await getCorrectAnswer(6, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    // corrValue.value = localStorage.getItem('correctAnswer');
+ 
+    // const correct = await getCorrectAnswer(6, props.childId);
+
+    // is_correct.value = localStorage.getItem('correct');
+    try {
+        const correct = await getCorrectAnswer(6, props.childId);
+        corrValue.value = localStorage.getItem('correctAnswer');
+    } catch (err) {
+        corrValue.value = localStorage.getItem('correctAnswer');
+    }
+    // corrValue.value = correct.correctId;
+    // is_correct.value = correct.is_correct;
 });
 
 onMounted(() => {

@@ -309,7 +309,6 @@ const show = ref(props.show);
 const correct = ref(false);
 const started = ref(null);
 const ids = ref([1, 2, 3, 4, 5, 6, 7, 8, 16, 18]);
-const audio_ids_music = ref([1]);
 const startedAudio = ref(new Audio());
 
 const close = () => {
@@ -338,6 +337,16 @@ const playAudio = (audioPath) => {
     ).href;
     audio.value.play();
 };
+const postAudio = () => {
+    audio.value.addEventListener('ended', () => {
+        isPlaying.value = false;
+        show_hand.value = true;
+        emit('sendPreAudio', isPlaying.value);
+        emit('show', show.value);
+        emit('hand', show_hand.value);
+        audio.value.pause();
+    });
+};
 
 const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
     const task = tasks.value.find((item) => item.id == id);
@@ -354,44 +363,60 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
         emit('sendId', taskId.value);
         emit('sendAudio', startAudioV);
         if (ids.value.includes(taskId.value)) {
-            // console.log('1');
             isPlaying.value = true;
             emit('sendPreAudio', isPlaying.value);
-            playAudio('Music/звук 1_.mp3');
-            if (audio_ids_music.value.includes(taskId.value)) {
-                audio.value.addEventListener('ended', () => {
-                    // console.log('1.1');
-                    isPlaying.value = false;
-                    emit('sendPreAudio', isPlaying.value);
-                    isPlaying.value = true;
-                    playAudio('Other/10.общее.mp3');
-                    emit('sendPreAudio', isPlaying.value);
+            switch (taskId.value) {
+                case 1:
+                    playAudio('Music/звук 1_.mp3');
                     audio.value.addEventListener('ended', () => {
-                        show_hand.value = true;
                         isPlaying.value = false;
                         emit('sendPreAudio', isPlaying.value);
-                        emit('hand', show_hand.value);
-                        audio.value.pause();
+                        isPlaying.value = true;
+                        playAudio('Other/10.общее.mp3');
+                        emit('sendPreAudio', isPlaying.value);
+                        postAudio();
                     });
-                });
-            } else {
-                audio.value.addEventListener('ended', () => {
-                    // console.log('1.2');
-                    isPlaying.value = false;
-                    show_hand.value = true;
-                    emit('sendPreAudio', isPlaying.value);
-                    emit('show', show.value);
-                    emit('hand', show_hand.value);
-                });
+                    break;
+                case 2:
+                    playAudio('Music/звук 2_.mp3');
+                    postAudio();
+                    break;
+                case 3:
+                    playAudio('Music/звук 3_.mp3');
+                    postAudio();
+                    break;
+                case 4:
+                    playAudio('Music/звук 4_.mp3');
+                    postAudio();
+                    break;
+                case 5:
+                    playAudio('Music/звук 5_.mp3');
+                    postAudio();
+                    break;
+                case 6:
+                    playAudio('Music/звук 6_.mp3');
+                    postAudio();
+                    break;
+
+                case 7:
+                    playAudio('Music/звук 7_.mp3');
+                    postAudio();
+                    break;
+
+                case 8:
+                    playAudio('Music/звук 8_.mp3');
+                    postAudio();
+                    break;
+
+                default:
+                    break;
             }
         } else {
-            // console.log('2', show_hand.value);
             isPlaying.value = false;
             emit('sendPreAudio', isPlaying.value === false);
             playAudio(startAudioV);
             props.audioObj = audio.value;
             audio.value.addEventListener('ended', () => {
-                // console.log('1.3');
                 emit('sendAudio', startAudioV);
                 show.value = true;
                 emit('show', show.value);
@@ -405,21 +430,12 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
     }
 };
 
-// window.addEventListener('popstate', (event) => {
-//     console.log('hoh');
-//     if (event.state && event.state.tasks) {
-//         console.log('hoh2');
-//         tasks.value = event.state.tasks;
-//     }
-// });
-
 const next = () => {
     SeeTask.value = false;
     endTime.value = false;
     show.value = false;
     emit('show', show.value);
     const taskFindArr = tasks.value.filter((task) => task.done === true);
-    // console.log('taskFindArr', taskFindArr);
     if (taskFindArr.length > 0) {
         let nextElId = taskFindArr.at(-1).id;
         tasks.value[nextElId].disabled = false;
@@ -492,10 +508,10 @@ watch(
 
 watch(
     () => props.childId,
-    async (newId, oldId) => {
+    async (newId) => {
         console.log('childId', props.childId, newId);
 
-        if (newId !== oldId) {
+        if (newId) {
             props.childId = newId;
             await answerStore.getAnswers(props.childId);
             tasks.value.forEach((task, index) => {
@@ -512,7 +528,6 @@ watch(
             if (taskFindArr.length > 0) {
                 let nextElId = taskFindArr.at(-1).id;
                 tasks.value[nextElId].disabled = false;
-                // console.log('id', tasks.value[nextElId].id);
                 switchTask(
                     tasks.value[nextElId].id,
                     tasks.value[nextElId].open,
@@ -538,46 +553,8 @@ watch(
                 audio.value.pause();
             });
         } else {
-            await answerStore.getAnswers(props.childId);
-            tasks.value.forEach((task, index) => {
-                answerStore.answers.forEach((answer) => {
-                    if (answer.task?.id === task.id) {
-                        task.done = answer.is_correct;
-                        task.disabled = false;
-                    }
-                });
-            });
-            const taskFindArr = tasks.value.filter(
-                (task) => task.done === true,
-            );
-            if (taskFindArr.length > 0) {
-                let nextElId = taskFindArr.at(-1).id;
-                tasks.value[nextElId].disabled = false;
-                // console.log('id', tasks.value[nextElId].id);
-                switchTask(
-                    tasks.value[nextElId].id,
-                    tasks.value[nextElId].open,
-                    tasks.value[nextElId].time,
-                    tasks.value[nextElId].img,
-                    tasks.value[nextElId].audio,
-                    tasks.value[nextElId].startAudio,
-                );
-            } else {
-                switchTask(
-                    1,
-                    false,
-                    22,
-                    'animals.jpg',
-                    'Task1/12.1.mp3',
-                    'Task1/11.1_.mp3',
-                );
-            }
-            window.addEventListener('popstate', (event) => {
-                if (audio.value.paused) {
-                    audio.value.play();
-                }
-                audio.value.pause();
-            });
+            console.log('hogg5');
+            props.childId = null;
         }
     },
     {
@@ -587,6 +564,8 @@ watch(
 );
 
 onBeforeRouteLeave(() => {
+    props.childId = null;
+    console.log('id', props.childId);
     if (audio.value.paused) {
         audio.value.play();
     }
@@ -641,7 +620,7 @@ onActivated(() => {
             end: false,
             img: 'task4.jpg',
             audio: 'Task4/45.4.mp3',
-            startAudio: 'Task4/61.5_.mp3',
+            startAudio: 'Task4/44.4_.mp3',
         },
         {
             id: 5,
@@ -667,7 +646,7 @@ onActivated(() => {
             audio: 'Task6/79.6.mp3',
             startAudio: 'Task6/78.6_.mp3',
         },
-   
+
         {
             id: 8,
             name: 'Задание 8',

@@ -3,7 +3,11 @@
         <div class="ElevenTask task_block">
             <div class="ElevenTask__wrapper">
                 <div class="task_block__close" @click="hide">
-                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                    <img
+                        class="close-icon"
+                        src="@app/assets/icons/close-icon.svg"
+                        alt="крест"
+                    />
                 </div>
 
                 <div class="task_block__time">
@@ -15,84 +19,246 @@
                 </div>
                 <div class="ElevenTask__content">
                     <div class="fairy_tales__wrapper hide">
-                        <div class="fairy_tales__item" @click="chooseFairyTail($event, item.correct)"
-                            @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
-                            v-for="item in fairytails" :key="item.id">
+                        <div
+                            class="fairy_tales__item"
+                            @click="chooseFairyTail($event, item.correct)"
+                            @mouseover="playAudio(item.audio)"
+                            @mouseout="stopAudio(item.audio)"
+                            v-for="item in fairytails"
+                            :key="item.id"
+                        >
                             «{{ item.name }}»
                         </div>
                     </div>
 
                     <div class="draggable-list">
-                        <VueDraggableNext class="list-group-item item" v-for="(item, index) in syllables" :key="item.id"
-                        :group="{ name: 'syllables', pull: 'clone', put: false }" :sort="false"
-                        @mouseover="playAudio(item.audio)"
-                        @mouseout="stopAudio(item.audio)"
-                        @touchstart="playAudio(item.audio)"
-                        @choose="drag($event, item.name, item.id, index)">
+                        <VueDraggableNext
+                            class="list-group-item item"
+                            v-for="(item, index) in syllables"
+                            :key="item.id"
+                            :group="{
+                                name: 'syllables',
+                                pull: 'clone',
+                                put: false,
+                            }"
+                            :sort="false"
+                            @mouseover="playAudio(item.audio)"
+                            @mouseout="stopAudio(item.audio)"
+                            @touchstart="playAudio(item.audio)"
+                            @choose="drag($event, item.name, item.id, index)"
+                        >
                             <div :value="item">
                                 {{ item.name }}
                             </div>
                         </VueDraggableNext>
                     </div>
                     <div class="finish_words__wrapper hide">
-                        <div class="finish_words__item" v-for="item in finish_answers" :key="item">
+                        <div
+                            class="finish_words__item"
+                            v-for="item in finish_answers"
+                            :key="item"
+                        >
                             {{ item }}
                         </div>
                     </div>
                     <div class="inputs">
                         <div class="input-group">
-                            <VueDraggableNext :group="{ name: 'answers', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 1, 1)" ghost-class="none" draggable="false">
-                                <input type="text" class="input-item row1 part1" />
+                            <VueDraggableNext
+                                :group="{
+                                    name: 'answers',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 1, 1)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    type="text"
+                                    class="input-item row1 part1"
+                                />
                             </VueDraggableNext>
-                            <VueDraggableNext :group="{ name: 'answers', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 2, 1)" ghost-class="none" draggable="false">
-                                <input type="text" class="input-item row1 part2" />
-                            </VueDraggableNext>
-
-                            <VueDraggableNext :group="{ name: 'answers', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 1, 2)" ghost-class="none" draggable="false">
-                                <input type="text" class="input-item row2 part1" />
-                            </VueDraggableNext>
-                            <VueDraggableNext :group="{ name: 'answers', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 2, 2)" ghost-class="none" draggable="false">
-                                <input type="text" class="input-item row2 part2" />
-                            </VueDraggableNext>
-
-                            <VueDraggableNext :group="{ name: 'answers', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 1, 3)" ghost-class="none" draggable="false">
-                                <input type="text" class="input-item row3 part1" />
-                            </VueDraggableNext>
-                            <VueDraggableNext :group="{ name: 'answers', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 2, 3)" ghost-class="none" draggable="false">
-                                <input type="text" class="input-item row3 part2" />
-                            </VueDraggableNext>
-
-                            <VueDraggableNext :group="{ name: 'answers', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 1, 4)" ghost-class="none" draggable="false">
-                                <input type="text" class="input-item row4 part1" />
-                            </VueDraggableNext>
-                            <VueDraggableNext :group="{ name: 'answers', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 2, 4)" ghost-class="none" draggable="false">
-                                <input type="text" class="input-item row4 part2" />
+                            <VueDraggableNext
+                                :group="{
+                                    name: 'answers',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 2, 1)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    type="text"
+                                    class="input-item row1 part2"
+                                />
                             </VueDraggableNext>
 
-                            <VueDraggableNext :group="{ name: 'answers', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 1, 5)" ghost-class="none" draggable="false">
-                                <input type="text" class="input-item row5 part1" />
+                            <VueDraggableNext
+                                :group="{
+                                    name: 'answers',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 1, 2)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    type="text"
+                                    class="input-item row2 part1"
+                                />
                             </VueDraggableNext>
-                            <VueDraggableNext :group="{ name: 'answers', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 2, 5)" ghost-class="none" draggable="false">
-                                <input type="text" class="input-item row5 part2" />
+                            <VueDraggableNext
+                                :group="{
+                                    name: 'answers',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 2, 2)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    type="text"
+                                    class="input-item row2 part2"
+                                />
                             </VueDraggableNext>
 
-                            <VueDraggableNext :group="{ name: 'answers', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 1, 6)" ghost-class="none" draggable="false">
-                                <input type="text" class="input-item row6 part1" />
+                            <VueDraggableNext
+                                :group="{
+                                    name: 'answers',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 1, 3)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    type="text"
+                                    class="input-item row3 part1"
+                                />
                             </VueDraggableNext>
-                            <VueDraggableNext :group="{ name: 'answers', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 2, 6)" ghost-class="none" draggable="false">
-                                <input type="text" class="input-item row6 part2" />
+                            <VueDraggableNext
+                                :group="{
+                                    name: 'answers',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 2, 3)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    type="text"
+                                    class="input-item row3 part2"
+                                />
+                            </VueDraggableNext>
+
+                            <VueDraggableNext
+                                :group="{
+                                    name: 'answers',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 1, 4)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    type="text"
+                                    class="input-item row4 part1"
+                                />
+                            </VueDraggableNext>
+                            <VueDraggableNext
+                                :group="{
+                                    name: 'answers',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 2, 4)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    type="text"
+                                    class="input-item row4 part2"
+                                />
+                            </VueDraggableNext>
+
+                            <VueDraggableNext
+                                :group="{
+                                    name: 'answers',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 1, 5)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    type="text"
+                                    class="input-item row5 part1"
+                                />
+                            </VueDraggableNext>
+                            <VueDraggableNext
+                                :group="{
+                                    name: 'answers',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 2, 5)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    type="text"
+                                    class="input-item row5 part2"
+                                />
+                            </VueDraggableNext>
+
+                            <VueDraggableNext
+                                :group="{
+                                    name: 'answers',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 1, 6)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    type="text"
+                                    class="input-item row6 part1"
+                                />
+                            </VueDraggableNext>
+                            <VueDraggableNext
+                                :group="{
+                                    name: 'answers',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 2, 6)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    type="text"
+                                    class="input-item row6 part2"
+                                />
                             </VueDraggableNext>
                         </div>
                     </div>
@@ -101,8 +267,15 @@
         </div>
     </template>
 
-    <TaskResultBanner :img="getImageUrl('king.png')" :bg="getImageUrl('lesya.gif')" class="end-modal"
-        text="Молодец!" v-else @next="next" @hide="hide"></TaskResultBanner>
+    <TaskResultBanner
+        :img="getImageUrl('king.png')"
+        :bg="getImageUrl('lesya.gif')"
+        class="end-modal"
+        text="Молодец!"
+        v-else
+        @next="next"
+        @hide="hide"
+    ></TaskResultBanner>
 </template>
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
@@ -128,33 +301,34 @@ const props = defineProps({
         required: false,
     },
     finish: {
-        type: Boolean
+        type: Boolean,
     },
 
     childId: {
         type: Number,
         required: false,
-    }
+    },
 });
 
 const getImageUrl = (path) => {
-  return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
-
 const playAudio = async (audioPath) => {
-    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
+    audio.value.src = new URL(
+        `/assets/audio/${audioPath}`,
+        import.meta.url,
+    ).href;
     if (props.finish === true) {
         await audio.value.play();
     }
-}
+};
 
 const playEndAudio = (audioPath) => {
     const end_audio = new Audio();
     end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
-}
-
+};
 
 const stopAudio = (audioPath) => {
     if (audio.value.paused) {
@@ -162,16 +336,15 @@ const stopAudio = (audioPath) => {
     } else {
         audio.value.pause();
     }
-}
+};
 
 const next = () => {
     emit('next-modal');
     endGame.value = true;
-}
+};
 
 const is_correct = ref(false);
 const corrValue = ref(0);
-
 
 const syllables = ref([
     { id: 1, name: 'МЫШ', part: 1, audio: 'Task11/331.11.mp3' },
@@ -189,7 +362,7 @@ const syllables = ref([
 ]);
 const dropIndex = ref(syllables.value.length - 1);
 
-const dataTransfer = ref({})
+const dataTransfer = ref({});
 const drag = (event, syllable, id, index) => {
     // event.dataTransfer.setData('text', syllable);
     // event.dataTransfer.setData('id', id);
@@ -219,11 +392,11 @@ const answers = ref([
 const drop = (event, part, row) => {
     // event.preventDefault();
 
-    Array.from(event.to.children).forEach(element => {
+    Array.from(event.to.children).forEach((element) => {
         if (element.tagName == 'DIV') {
-            event.to.removeChild(element)
+            event.to.removeChild(element);
         }
-    })
+    });
 
     if (syllables.value[dropIndex.value].part != part) {
         playEndAudio('Common/2.1.mp3');
@@ -283,13 +456,13 @@ const chooseFairyTail = (event, status) => {
 
         setTimeout(() => {
             if (is_correct.value === false) {
-                endGameRequest(props.childId, corrValue.value);;
+                endGameRequest(props.childId, corrValue.value);
                 emit('correct');
                 emit('open');
             }
             endGame.value = true;
             event.target.classList.remove('green');
-            playAudio('Task11/348.11_.mp3')
+            playAudio('Task11/348.11_.mp3');
         }, 1000);
     } else {
         event.target.value = status;
@@ -305,11 +478,17 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(async() => {
-    const correct = await getCorrectAnswer(11, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-})
+onMounted(async () => {
+    // const correct = await getCorrectAnswer(11, props.childId);
+    // corrValue.value = correct.correctId;
+    // is_correct.value = correct.is_correct;
+    try {
+        const correct = await getCorrectAnswer(11, props.childId);
+        corrValue.value = localStorage.getItem('correctAnswer');
+    } catch (err) {
+        corrValue.value = localStorage.getItem('correctAnswer');
+    }
+});
 
 onMounted(() => {
     const scrollY = window.scrollY || document.documentElement.scrollTop;
@@ -320,19 +499,17 @@ onMounted(() => {
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
-    console.log('game mount')
+    console.log('game mount');
 });
-
 
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
-    console.log('game unmount')
+    console.log('game unmount');
 });
-
 </script>
 <style lang="scss" scoped>
-*{
+* {
     user-select: none;
 }
 .end-modal {
@@ -468,7 +645,7 @@ onBeforeUnmount(() => {
 }
 
 .red {
-    border: 2px solid #DB0000
+    border: 2px solid #db0000;
 }
 
 .check {
@@ -494,7 +671,7 @@ onBeforeUnmount(() => {
     font-family: 'Nunito';
     font-weight: 700;
     text-align: center;
-    border: 2px solid #DB0000
+    border: 2px solid #db0000;
 }
 
 .hidden {
@@ -505,7 +682,7 @@ onBeforeUnmount(() => {
     display: none;
 }
 
-.list-group-item > div{
+.list-group-item > div {
     width: 100%;
 }
 </style>

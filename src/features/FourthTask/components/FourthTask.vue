@@ -3,7 +3,11 @@
         <div class="task_block__wrapper">
             <template v-if="startGame">
                 <div class="task_block__close" @click="hide">
-                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                    <img
+                        class="close-icon"
+                        src="@app/assets/icons/close-icon.svg"
+                        alt="крест"
+                    />
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
@@ -13,32 +17,72 @@
                 </div>
                 <div class="draggable-list">
                     <div class="draggable-list__items">
-                        <div v-for="(line, line_index) in syllables" :key="line_index">
+                        <div
+                            v-for="(line, line_index) in syllables"
+                            :key="line_index"
+                        >
                             <div
-                                :class="{ 'draggable-list__item1': 1 == line_index, 'draggable-list__item2': 2 == line_index, 'draggable-list__item3': 3 == line_index }">
-                                <button v-for="(item, item_index) in line" :key="item_index"
+                                :class="{
+                                    'draggable-list__item1': 1 == line_index,
+                                    'draggable-list__item2': 2 == line_index,
+                                    'draggable-list__item3': 3 == line_index,
+                                }"
+                            >
+                                <button
+                                    v-for="(item, item_index) in line"
+                                    :key="item_index"
                                     @click="onSelection(line_index, item_index)"
-                                    :class="{ 'draggable-list__button': true, correct_select: item.correct, not_correct_select: item.correct === false }">
-                                    {{ item.name }}</button>
+                                    :class="{
+                                        'draggable-list__button': true,
+                                        correct_select: item.correct,
+                                        not_correct_select:
+                                            item.correct === false,
+                                    }"
+                                >
+                                    {{ item.name }}
+                                </button>
                             </div>
                         </div>
                     </div>
                     <div v-if="firstListen">
-                        <button class="draggable-list__button_final" @click="listenTo()">
-                            <span class="draggable-list__button-speaker">Прослушать</span>
-                            <img src="@app\assets\icons\speaker.svg" alt="speaker" />
+                        <button
+                            class="draggable-list__button_final"
+                            @click="listenTo()"
+                        >
+                            <span class="draggable-list__button-speaker"
+                                >Прослушать</span
+                            >
+                            <img
+                                src="@app\assets\icons\speaker.svg"
+                                alt="speaker"
+                            />
                         </button>
                     </div>
                     <div v-else>
-                        <button class="draggable-list__button_final" @click="listenTo()">
-                            <span class="draggable-list__button-repeat">Повторить</span>
-                            <img src="@app\assets\icons\repeat.svg" alt="repeat" />
+                        <button
+                            class="draggable-list__button_final"
+                            @click="listenTo()"
+                        >
+                            <span class="draggable-list__button-repeat"
+                                >Повторить</span
+                            >
+                            <img
+                                src="@app\assets\icons\repeat.svg"
+                                alt="repeat"
+                            />
                         </button>
                     </div>
                 </div>
             </template>
-            <TaskResultBanner :img="getImageUrl('flowers.png')" :bg="getImageUrl('moa.gif')" text="Здорово!" v-else
-                @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
+            <TaskResultBanner
+                :img="getImageUrl('flowers.png')"
+                :bg="getImageUrl('moa.gif')"
+                text="Здорово!"
+                v-else
+                @next="next()"
+                @hide="hide()"
+                class="end-modal"
+            ></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -67,7 +111,7 @@ const props = defineProps({
     childId: {
         type: Number,
         required: false,
-    }
+    },
 });
 
 const countAnswers = ref(0);
@@ -80,40 +124,42 @@ const getImageUrl = (path) => {
 };
 
 const playAudio = (audioPath) => {
-    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
+    audio.value.src = new URL(
+        `/assets/audio/${audioPath}`,
+        import.meta.url,
+    ).href;
     audio.value.play();
-
-}
+};
 const corrValue = ref(0);
 
 const next = () => {
     emit('next-modal');
     // endGame.value = true;
-}
+};
 
 const currSyllable = ref();
-const played = ref([])
+const played = ref([]);
 const syllables = ref({
     1: {
-        1: { name: "ШО", audio: 'Task4/46.4.mp3', correct: null },
-        2: { name: "БА", audio: 'Task4/47.4.mp3', correct: null },
-        3: { name: "ГЮ", audio: 'Task4/48.4.mp3', correct: null },
-        4: { name: "ЛЫ", audio: 'Task4/49.4.mp3', correct: null },
-        5: { name: "ХА", audio: 'Task4/50.4.mp3', correct: null },
+        1: { name: 'ШО', audio: 'Task4/46.4.mp3', correct: null },
+        2: { name: 'БА', audio: 'Task4/47.4.mp3', correct: null },
+        3: { name: 'ГЮ', audio: 'Task4/48.4.mp3', correct: null },
+        4: { name: 'ЛЫ', audio: 'Task4/49.4.mp3', correct: null },
+        5: { name: 'ХА', audio: 'Task4/50.4.mp3', correct: null },
     },
     2: {
-        6: { name: "ДЯ", audio: 'Task4/51.4.mp3', correct: null },
-        7: { name: "ЩИ", audio: 'Task4/52.4.mp3', correct: null },
-        8: { name: "ФО", audio: 'Task4/53.4.mp3', correct: null },
-        9: { name: "ЖУ", audio: 'Task4/54.4.mp3', correct: null },
+        6: { name: 'ДЯ', audio: 'Task4/51.4.mp3', correct: null },
+        7: { name: 'ЩИ', audio: 'Task4/52.4.mp3', correct: null },
+        8: { name: 'ФО', audio: 'Task4/53.4.mp3', correct: null },
+        9: { name: 'ЖУ', audio: 'Task4/54.4.mp3', correct: null },
     },
     3: {
-        10: { name: "ЗИ", audio: 'Task4/55.4.mp3', correct: null },
-        11: { name: "ТЫ", audio: 'Task4/56.4.mp3', correct: null },
-        12: { name: "ВЕ", audio: 'Task4/57.4.mp3', correct: null },
-        13: { name: "КЕ", audio: 'Task4/58.4.mp3', correct: null },
-        14: { name: "РЮ", audio: 'Task4/59.4.mp3', correct: null },
-    }
+        10: { name: 'ЗИ', audio: 'Task4/55.4.mp3', correct: null },
+        11: { name: 'ТЫ', audio: 'Task4/56.4.mp3', correct: null },
+        12: { name: 'ВЕ', audio: 'Task4/57.4.mp3', correct: null },
+        13: { name: 'КЕ', audio: 'Task4/58.4.mp3', correct: null },
+        14: { name: 'РЮ', audio: 'Task4/59.4.mp3', correct: null },
+    },
 });
 
 const onSelection = (firstIndex, id) => {
@@ -137,20 +183,24 @@ const onSelection = (firstIndex, id) => {
     }
     if (countAnswers.value == 14) {
         endGame.value = true;
-        setTimeout(() => {
+        setTimeout(async () => {
+            const correct = await getCorrectAnswer(4, props.childId);
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+            startGame.value = false;
+            playAudio('Task4/60.4_.mp3');
             if (is_correct.value === false) {
+                console.log('correct');
                 endGameRequest(props.childId, corrValue.value);
                 emit('correct');
                 emit('open');
             }
-            startGame.value = false;
-            playAudio('Task4/60.4_.mp3');
         }, 1000);
     }
-}
+};
 
 const listenTo = () => {
-    if(endGame.value) return
+    if (endGame.value) return;
     if (firstListen.value) {
         firstListen.value = false;
         let exist = true;
@@ -158,7 +208,7 @@ const listenTo = () => {
             currSyllable.value = Math.floor(Math.random() * 14 + 1);
             if (!played.value.includes(currSyllable.value)) exist = false;
         }
-        played.value.push(currSyllable.value)
+        played.value.push(currSyllable.value);
     }
 
     if ([1, 2, 3, 4, 5].includes(currSyllable.value)) {
@@ -168,17 +218,20 @@ const listenTo = () => {
     } else {
         playAudio(syllables.value[3][currSyllable.value].audio);
     }
-}
+};
 
 const hide = () => {
     emit('close');
 };
 
-onMounted(async () => {
-    const correct = await getCorrectAnswer(4, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-})
+// onMounted(async () => {
+//     try {
+//         const correct = await getCorrectAnswer(4, props.childId);
+//         corrValue.value = localStorage.getItem('correctAnswer');
+//     } catch (err) {
+//         corrValue.value = localStorage.getItem('correctAnswer');
+//     }
+// })
 
 onMounted(() => {
     const scrollY = window.scrollY || document.documentElement.scrollTop;
@@ -189,16 +242,14 @@ onMounted(() => {
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
-    console.log('game mount')
+    console.log('game mount');
 });
-
 
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
-    console.log('game unmount')
+    console.log('game unmount');
 });
-
 </script>
 <style lang="scss" scoped>
 * {
@@ -208,7 +259,6 @@ onBeforeUnmount(() => {
 .end-modal {
     width: 1200px;
     height: 600px;
-
 
     @media (max-width: 1200px) {
         width: 944px;
@@ -320,11 +370,11 @@ onBeforeUnmount(() => {
 
 .correct_select {
     border: 2px solid;
-    border-color: #5CCF54;
+    border-color: #5ccf54;
 }
 
 .not_correct_select {
     border: 2px solid;
-    border-color: #DB0000;
+    border-color: #db0000;
 }
 </style>

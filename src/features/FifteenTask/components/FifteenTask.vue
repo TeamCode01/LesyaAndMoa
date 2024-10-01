@@ -242,13 +242,19 @@ const dropLetter = (event, letter) => {
 };
 
 onMounted(async() => {
+    // try {
+    //     const correct = await getCorrectAnswer(15, props.childId);
+    //     corrValue.value = correct.correctId;
+    //     is_correct.value = correct.is_correct;
+    // }
+    // catch (error) {
+    //     console.log(error);
+    // }
     try {
         const correct = await getCorrectAnswer(15, props.childId);
-        corrValue.value = correct.correctId;
-        is_correct.value = correct.is_correct;
-    }
-    catch (error) {
-        console.log(error);
+        corrValue.value = localStorage.getItem('correctAnswer');
+    } catch (err) {
+        corrValue.value = localStorage.getItem('correctAnswer');
     }
 });
 

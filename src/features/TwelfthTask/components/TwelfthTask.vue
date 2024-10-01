@@ -378,13 +378,19 @@ const wordIsActive = (event) => {
 
 onMounted(async () => {
     try {
-        const correct = await getCorrectAnswer(8, props.childId);
-        corrValue.value = correct.correctId;
-        is_correct.value = correct.is_correct;
+        const correct = await getCorrectAnswer(12, props.childId);
+        corrValue.value = localStorage.getItem('correctAnswer');
+    } catch (err) {
+        corrValue.value = localStorage.getItem('correctAnswer');
     }
-    catch (error) {
-        console.log(error);
-    }
+    // try {
+    //     const correct = await getCorrectAnswer(8, props.childId);
+    //     corrValue.value = correct.correctId;
+    //     is_correct.value = correct.is_correct;
+    // }
+    // catch (error) {
+    //     console.log(error);
+    // }
 })
 
 onMounted(() => {

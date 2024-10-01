@@ -287,9 +287,15 @@ const next = () => {
     emit('next-modal');
 }
 onMounted(async () => {
-    const correct = await getCorrectAnswer(10, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    // const correct = await getCorrectAnswer(10, props.childId);
+    // corrValue.value = correct.correctId;
+    // is_correct.value = correct.is_correct;
+    try {
+        const correct = await getCorrectAnswer(10, props.childId);
+        corrValue.value = localStorage.getItem('correctAnswer');
+    } catch (err) {
+        corrValue.value = localStorage.getItem('correctAnswer');
+    }
 })
 
 onMounted(() => {

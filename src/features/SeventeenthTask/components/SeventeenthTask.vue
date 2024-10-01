@@ -696,12 +696,18 @@ onMounted(async () => {
     canvas = canvasRef.value;
     try {
         const correct = await getCorrectAnswer(17, props.childId);
-        corrValue.value = correct.correctId;
-        is_correct.value = correct.is_correct;
+        corrValue.value = localStorage.getItem('correctAnswer');
+    } catch (err) {
+        corrValue.value = localStorage.getItem('correctAnswer');
     }
-    catch (error) {
-        console.log(error);
-    }
+    // try {
+    //     const correct = await getCorrectAnswer(17, props.childId);
+    //     corrValue.value = correct.correctId;
+    //     is_correct.value = correct.is_correct;
+    // }
+    // catch (error) {
+    //     console.log(error);
+    // }
     ctx = canvas.getContext('2d');
     await resizeCanvas();
     console.log('компонент создан')
