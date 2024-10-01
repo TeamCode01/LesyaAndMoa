@@ -245,7 +245,7 @@ import { HTTP } from '@app/http';
 import { Button } from '@shared/components/buttons';
 import arrow from '@app/assets/icons/Arrow.svg';
 import { useUserStore } from '@layouts/stores/user';
-import { ref, watch, onActivated, onMounted } from 'vue';
+import { ref, watch, onActivated, onMounted, nextTick } from 'vue';
 import { FirstTask } from '@features/FirstTask/components';
 import { ThirdTask } from '@features/ThirdTask/components';
 import { FourthTask } from '@features/FourthTask/components';
@@ -308,6 +308,7 @@ const show_hand = ref(false);
 const show = ref(props.show);
 const correct = ref(false);
 const started = ref(null);
+
 const ids = ref([1, 2, 3, 4, 5, 6, 7, 8, 16, 18]);
 const startedAudio = ref(new Audio());
 
@@ -509,10 +510,9 @@ watch(
 watch(
     () => props.childId,
     async (newId) => {
-        console.log('childIdProps', props.childId);
-
         if (newId) {
             props.childId = newId;
+            let sidebar = document.querySelector('.sidebar__bg');
             await answerStore.getAnswers(props.childId);
             tasks.value.forEach((task, index) => {
                 answerStore.answers.forEach((answer) => {
@@ -527,7 +527,6 @@ watch(
             );
             window.addEventListener('popstate', (event) => {
                 props.childId = null;
-                console.log('pop_child', props.childId);
                 if (audio.value.paused) {
                     audio.value.play();
                 }
@@ -536,6 +535,8 @@ watch(
             if (taskFindArr.length > 0) {
                 let nextElId = taskFindArr.at(-1).id;
                 tasks.value[nextElId].disabled = false;
+                // const lastStartedTaskElement = this.$refs.sidebar.querySelector(`.task[data-id="${nextElId}"]`)
+                // lastStartedTaskElement.scrollIntoView({ behavior: 'smooth' });
                 switchTask(
                     tasks.value[nextElId].id,
                     tasks.value[nextElId].open,
@@ -556,7 +557,6 @@ watch(
             }
         } else {
             props.childId = null;
-            console.log('child', props.childId);
         }
     },
     {
@@ -566,7 +566,6 @@ watch(
 
 onBeforeRouteLeave((to, from) => {
     props.childId = null;
-    console.log('props_id', props.childId);
     if (audio.value.paused) {
         audio.value.play();
     }

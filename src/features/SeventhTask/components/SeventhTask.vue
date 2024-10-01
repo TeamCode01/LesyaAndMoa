@@ -985,6 +985,14 @@ const disengage = (event) => {
                                 redrawCorrectRows();
                             }, 1000);
                             setTimeout(() => {
+                                if (is_correct.value === false) {
+                                    endGameRequest(
+                                        props.childId,
+                                        corrValue.value,
+                                    );
+                                    emit('correct');
+                                    emit('open');
+                                }
                                 startGame.value = false;
                             }, 11000);
                         }

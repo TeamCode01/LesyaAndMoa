@@ -3,7 +3,7 @@
         <div class="game" id="game">
             <Sidebar
                 :audio-obj="startAudio"
-                :childId="childId"
+                :childId="route.params.id"
                 :show="showBtn"
                 @send-img="sendImg"
                 @send-audio="sendAudio"

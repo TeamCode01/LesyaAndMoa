@@ -566,16 +566,11 @@ const playAudio = (audioPath, forcePlay = false) => {
     };
 
     audio.value.dataset.audioPath = audioPath;
-    // audio.value.currentTime = localStorage.getItem('time') || 0;
     audio.value.play();
 
-    //usedAudio[audioPath] = true;
     stateAudio[audioPath] = 'playing';
 
     console.log(stateAudio[audioPath], audioPath, audio.value.dataset);
-    // audio.value.addEventListener('abort', () => {
-    //     console.log('Audio playback was aborted by the user.');
-    // });
 };
 
 const playTestAudio = (audioPath) => {
@@ -609,17 +604,11 @@ function handleScroll(e) {
         //});
 
         if (posTop + test.offsetHeight < 0) {
-            //localStorage.setItem('time', audio.value.currentTime);
             if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
                 stateAudio[audio.value.dataset.audioPath] = 'paused';
                 audio.value.pause();
             }
-        } else {
-            //audio.value.currentTime = localStorage.getItem('time');
-            //audio.value.play();
         }
-
-        // document.removeEventListener('scroll', handleScroll);
     }
 }
 
@@ -696,21 +685,47 @@ onMounted(() => {
 });
 onUnmounted(() => {
     document.removeEventListener('scroll', handleScroll);
-    audio.value.pause();
+    if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
+        stateAudio[audio.value.dataset.audioPath] = 'paused';
+        audio.value.pause();
+    }
 });
 
 onBeforeRouteLeave(() => {
-    if (audio.value.paused) {
-        audio.value.play();
-    } else {
+    // if (
+    //     stateAudio['Music/звук 1_.mp3'] === 'playing' ||
+    //     stateAudio['TestTask/3.тестовое задание.mp3'] === 'playing'
+    // ) {
+    //     if (audio.value.paused) {
+    //         audio.value.play();
+    //     } else {
+    //         audio.value.pause();
+    //     }
+    // }
+    if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
+        stateAudio[audio.value.dataset.audioPath] = 'paused';
         audio.value.pause();
     }
 });
 
 onBeforeRouteUpdate(() => {
-    if (audio.value.paused) {
-        audio.value.play();
-    } else {
+    // if (audio.value.paused) {
+    //     audio.value.play();
+    // } else {
+    //     audio.value.pause();
+    // }
+    // if (
+    //     stateAudio['Music/звук 1_.mp3'] === 'playing' ||
+    //     stateAudio['TestTask/3.тестовое задание.mp3'] === 'playing'
+    // ) {
+    //     if (audio.value.paused) {
+    //         audio.value.play();
+    //     } else {
+    //         audio.value.pause();
+    //     }
+    // }
+    if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
+        stateAudio[audio.value.dataset.audioPath] = 'paused';
         audio.value.pause();
     }
 });
