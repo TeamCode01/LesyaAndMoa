@@ -531,19 +531,23 @@ const close = () => {
 };
 
 const usedAudio = {
-    "Music/звук 1_.mp3": false,
-    "TestTask/3.тестовое задание.mp3": false
-}
+    'Music/звук 1_.mp3': false,
+    'TestTask/3.тестовое задание.mp3': false,
+};
 const stateAudio = {
-    "Music/звук 1_.mp3": null,
-    "TestTask/3.тестовое задание.mp3": null
-}
+    'Music/звук 1_.mp3': null,
+    'TestTask/3.тестовое задание.mp3': null,
+};
 
 const playAudio = (audioPath, forcePlay = false) => {
-    if (!forcePlay){
-        if (stateAudio[audioPath] === 'ended' || stateAudio[audioPath] === 'playing') return 
-        if (stateAudio[audioPath] === 'paused'){ 
-            if (audio.value.paused){
+    if (!forcePlay) {
+        if (
+            stateAudio[audioPath] === 'ended' ||
+            stateAudio[audioPath] === 'playing'
+        )
+            return;
+        if (stateAudio[audioPath] === 'paused') {
+            if (audio.value.paused) {
                 //console.log(usedAudio[audioPath], audioPath, audio.value.src);
                 audio.value.play();
             }
@@ -551,25 +555,19 @@ const playAudio = (audioPath, forcePlay = false) => {
         }
     }
 
-    
-    
     audio.value.src = new URL(
         `/assets/audio/${audioPath}`,
         import.meta.url,
     ).href;
 
-
-    
     audio.value.onended = () => {
         stateAudio[audioPath] = 'ended';
         playAudio('TestTask/3.тестовое задание.mp3');
-    }
+    };
 
     audio.value.dataset.audioPath = audioPath;
     // audio.value.currentTime = localStorage.getItem('time') || 0;
     audio.value.play();
-
-    
 
     //usedAudio[audioPath] = true;
     stateAudio[audioPath] = 'playing';
@@ -593,25 +591,26 @@ function handleScroll(e) {
     const test = document.getElementById('test');
     const posTop = test.getBoundingClientRect().top;
     if (posTop + test.clientHeight <= window.innerHeight) {
-        
-        if (stateAudio['Music/звук 1_.mp3'] !== 'ended') playAudio('Music/звук 1_.mp3');
-        else if (stateAudio['TestTask/3.тестовое задание.mp3'] !== 'ended') playAudio('TestTask/3.тестовое задание.mp3');
+        if (stateAudio['Music/звук 1_.mp3'] !== 'ended')
+            playAudio('Music/звук 1_.mp3');
+        else if (stateAudio['TestTask/3.тестовое задание.mp3'] !== 'ended')
+            playAudio('TestTask/3.тестовое задание.mp3');
         //console.log(audio.value.dataset, usedAudio[audio.value.dataset.audioPath], audio.value.dataset.audioPath);
 
-       // audio.value.addEventListener('ended', () => {
-            //console.log('first ended', audio.value.src)
-            //if (usedAudio['TestTask/3.тестовое задание.mp3']) return
-            //playAudio('TestTask/3.тестовое задание.mp3');        
+        // audio.value.addEventListener('ended', () => {
+        //console.log('first ended', audio.value.src)
+        //if (usedAudio['TestTask/3.тестовое задание.mp3']) return
+        //playAudio('TestTask/3.тестовое задание.mp3');
 
-            //audio.value.addEventListener('ended', () => {
-                //audio.value.pause();
-                //console.log('second ended', audio.value.src)
-            //});
+        //audio.value.addEventListener('ended', () => {
+        //audio.value.pause();
+        //console.log('second ended', audio.value.src)
+        //});
         //});
 
         if (posTop + test.offsetHeight < 0) {
             //localStorage.setItem('time', audio.value.currentTime);
-            if (stateAudio[audio.value.dataset.audioPath] !== 'ended'){
+            if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
                 stateAudio[audio.value.dataset.audioPath] = 'paused';
                 audio.value.pause();
             }
@@ -634,7 +633,6 @@ const mute = () => {
 };
 
 const refresh = () => {
-
     stateAudio['Music/звук 1_.mp3'] = null;
     stateAudio['TestTask/3.тестовое задание.mp3'] = null;
 
@@ -702,7 +700,11 @@ onUnmounted(() => {
 });
 
 onBeforeRouteLeave(() => {
-    audio.value.pause();
+    if (audio.value.paused) {
+        audio.value.play();
+    } else {
+        audio.value.pause();
+    }
 });
 
 onBeforeRouteUpdate(() => {
@@ -725,14 +727,6 @@ watch(
         }
     },
 );
-
-// watch(
-//     () => audio.value.currentTime,
-//     (newTime) => {
-//       audio.value.currentTime = newTime;
-//       console.log('current', audio.value.currentTime, newTime)
-//     },
-// );
 </script>
 <style lang="scss" scoped>
 .networks {

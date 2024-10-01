@@ -246,26 +246,7 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import gameActions from '@mixins/gameAction';
-
 import { SvgIcon } from '@shared/components/svgIcon';
-
-onMounted(() => {
-    const scrollY = window.scrollY || document.documentElement.scrollTop;
-    document.documentElement.style.setProperty(
-        '--scroll-position',
-        `${scrollY}px`,
-    );
-    document.getElementsByTagName('html')[0].classList.add('no-scroll');
-    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
-
-    console.log('Компонент создан');
-});
-
-onBeforeUnmount(() => {
-    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
-    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
-    console.log('Компонент уничтожен');
-});
 
 const { methods } = gameActions;
 const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
@@ -951,6 +932,11 @@ const disengage = (event) => {
                             redrawCorrectRows();
                         }, 1000);
                         setTimeout(() => {
+                            if (is_correct.value === false) {
+                                endGameRequest(props.childId, corrValue.value);
+                                emit('correct');
+                                emit('open');
+                            }
                             startGame.value = false;
                         }, 11000);
                     } else {
@@ -999,14 +985,6 @@ const disengage = (event) => {
                                 redrawCorrectRows();
                             }, 1000);
                             setTimeout(() => {
-                                if (is_correct.value === false) {
-                                    endGameRequest(
-                                        props.childId,
-                                        corrValue.value,
-                                    );
-                                    emit('correct');
-                                    emit('open');
-                                }
                                 startGame.value = false;
                             }, 11000);
                         }
@@ -1126,6 +1104,24 @@ onMounted(async () => {
     resizeCanvas();
 
     window.addEventListener('resize', resizeCanvas);
+});
+
+onMounted(() => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    document.documentElement.style.setProperty(
+        '--scroll-position',
+        `${scrollY}px`,
+    );
+    document.getElementsByTagName('html')[0].classList.add('no-scroll');
+    document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
+
+    console.log('Компонент создан');
+});
+
+onBeforeUnmount(() => {
+    document.getElementsByTagName('html')[0].classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    console.log('Компонент уничтожен');
 });
 </script>
 
