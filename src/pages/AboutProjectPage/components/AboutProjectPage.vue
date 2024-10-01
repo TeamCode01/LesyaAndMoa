@@ -7,23 +7,23 @@
                     <h4>Дорогие взрослые!</h4>
 
                     <p>
-                        Наша методика ориентирована на ребят, которые тратят большие
-                        силы на процесс чтения, произнесения слов, ребят, которым понимание прочитанного даётся особенно
-                        нелегко.
-                        С такими ребятами часто сталкиваются педагоги в процессе
-                        своей работы: ребёнок допускает перестановку букв
-                        и слогов при чтении, не понимает смысл прочитанного,
-                        предпочитает отвечать устно, старается избегать
-                        письменных заданий, нервничает при работе с текстом.
-                        Ребёнок при этом испытывает неуверенность в своих силах,
-                        дискомфорт, неприятные эмоции. Часто нервозность
-                        возникает у родителей и педагогов, ведь кажется, будто
-                        ребёнок ленится, упрямится. Но стоит к таким ребятам
-                        присмотреться внимательнее. Если при этом у ребёнка
-                        развито образное мышление, хорошая память, ему легко
-                        даётся конструирование, проектирование,
-                        изобретательство, то речь идёт о ребёнке с дислексией,
-                        а вовсе не о ленивце и вредине.
+                        Наша методика ориентирована на ребят, которые тратят
+                        большие силы на процесс чтения, произнесения слов,
+                        ребят, которым понимание прочитанного даётся особенно
+                        нелегко. С такими ребятами часто сталкиваются педагоги
+                        в процессе своей работы: ребёнок допускает перестановку
+                        букв и слогов при чтении, не понимает смысл
+                        прочитанного, предпочитает отвечать устно, старается
+                        избегать письменных заданий, нервничает при работе
+                        с текстом. Ребёнок при этом испытывает неуверенность
+                        в своих силах, дискомфорт, неприятные эмоции. Часто
+                        нервозность возникает у родителей и педагогов, ведь
+                        кажется, будто ребёнок ленится, упрямится. Но стоит
+                        к таким ребятам присмотреться внимательнее. Если при
+                        этом у ребёнка развито образное мышление, хорошая
+                        память, ему легко даётся конструирование,
+                        проектирование, изобретательство, то речь идёт о ребёнке
+                        с дислексией, а вовсе не о ленивце и вредине.
                     </p>
 
                     <p>
@@ -48,24 +48,34 @@
                         справиться с дислексией и предотвратить связанную с ней
                         дисграфию как нарушение письма. 
                     </p>
-
-
-
                 </div>
                 <div class="description_block-img">
-                    <img src="@app/assets/img/AboutProject/Moa.svg" alt="Moa" class="img-moa" />
-                    <img src="@app/assets/img/AboutProject/moa-background.svg" alt="moa-background"
-                        class="moa-background" />
+                    <img
+                        src="@app/assets/img/AboutProject/Moa.svg"
+                        alt="Moa"
+                        class="img-moa"
+                    />
+                    <img
+                        src="@app/assets/img/AboutProject/moa-background.svg"
+                        alt="moa-background"
+                        class="moa-background"
+                    />
                 </div>
             </div>
             <div class="description_block2">
                 <div class="description_block-img2">
-                    <img src="@app/assets/img/AboutProject/Lesya.svg" alt="Lesya" class="img-lesya" />
-                    <img src="@app/assets/img/AboutProject/lesya-background.svg" alt="lesya-background"
-                        class="lesya-background" />
+                    <img
+                        src="@app/assets/img/AboutProject/Lesya.svg"
+                        alt="Lesya"
+                        class="img-lesya"
+                    />
+                    <img
+                        src="@app/assets/img/AboutProject/lesya-background.svg"
+                        alt="lesya-background"
+                        class="lesya-background"
+                    />
                 </div>
                 <div class="description_block-text">
-
                     <p>
                         Умение читать — это не просто умение складывать буквы
                         в слоги, а слоги — в слова. И хотя без этого не обойтись
@@ -110,14 +120,19 @@
                     </p>
                 </div>
                 <div class="support_block-QR">
-                    <img src="@app/assets/img/AboutProject/qr.png" alt="QR" class="support_block-QR-img" />
+                    <a
+                        href="https://messenger.online.sberbank.ru/sl/AwKSP3QVqavmuh76j?linkType=GROUP_CHAT&linkName=AwKSP3QVqavmuh76j&conversationType=1&cid=1727336951740832784"
+                        ><img
+                            src="@app/assets/img/AboutProject/qr.png"
+                            alt="QR"
+                            class="support_block-QR-img"
+                    /></a>
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </template>
 <script setup>
-
 import { onActivated, onMounted, ref, watch } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import { useBreadcrumbsStore, usePageStore } from '@shared/index';
@@ -127,28 +142,25 @@ const { toggleHideBreadcrumbs, setHideBreadcrumbs } = useBreadcrumbsStore();
 
 const route = useRoute();
 
-
 watch(route.path, () => {
     console.log('route');
     toggleHideBreadcrumbs(true);
     setHideBreadcrumbs(false);
-})
-
+});
 
 onMounted(() => {
     toggleHideBreadcrumbs(true);
     setHideBreadcrumbs(false);
+});
 
-})
-
-const { hidden } = storeToRefs(useBreadcrumbsStore)
+const { hidden } = storeToRefs(useBreadcrumbsStore);
 
 watch(hidden, (newValue) => {
     if (!newValue) {
         toggleHideBreadcrumbs(true);
         setHideBreadcrumbs(false);
     }
-})
+});
 
 onBeforeRouteLeave(() => {
     toggleHideBreadcrumbs(false);
@@ -158,8 +170,7 @@ onBeforeRouteLeave(() => {
 onActivated(() => {
     toggleHideBreadcrumbs(true);
     setHideBreadcrumbs(false);
-})
-
+});
 </script>
 <style lang="scss" scoped>
 h1 {
