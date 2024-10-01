@@ -403,7 +403,7 @@ import { Carousel, Slide } from 'vue3-carousel';
 import { TestTask } from '@features/TestTask';
 import { useUserStore } from '@layouts/stores/user';
 import { cookieModal } from '@shared/components/modals';
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { SvgIcon } from '@shared/components/svgIcon';
 
 const windowWidth = ref(window.innerWidth);
@@ -530,25 +530,27 @@ const close = () => {
     document.body.classList.remove('no-scroll');
 };
 
-const usedAudio = {
-    'Music/звук 1_.mp3': false,
-    'TestTask/3.тестовое задание.mp3': false,
-};
+
 const stateAudio = {
-    'Music/звук 1_.mp3': null,
-    'TestTask/3.тестовое задание.mp3': null,
+    'Music/звук 1_.mp3': {
+        state: null,
+        time: null
+    },
+    'TestTask/3.тестовое задание.mp3': {
+        state: null,
+        time: null
+    },
 };
 
 const playAudio = (audioPath, forcePlay = false) => {
     if (!forcePlay) {
         if (
-            stateAudio[audioPath] === 'ended' ||
-            stateAudio[audioPath] === 'playing'
+            stateAudio[audioPath].state === 'ended' ||
+            stateAudio[audioPath].state === 'playing'
         )
             return;
-        if (stateAudio[audioPath] === 'paused') {
+        if (stateAudio[audioPath].state === 'paused') {
             if (audio.value.paused) {
-                //console.log(usedAudio[audioPath], audioPath, audio.value.src);
                 audio.value.play();
             }
             return;
@@ -560,17 +562,26 @@ const playAudio = (audioPath, forcePlay = false) => {
         import.meta.url,
     ).href;
 
-    audio.value.onended = () => {
-        stateAudio[audioPath] = 'ended';
-        playAudio('TestTask/3.тестовое задание.mp3');
+    audio.value.addEventListener('ended', () => {
+        stateAudio[audioPath].state = 'ended';
+    })
+
+    if (audioPath === 'Music/звук 1_.mp3') {
+
+        audio.value.addEventListener('ended', () => {
+            playAudio('TestTask/3.тестовое задание.mp3');
+        })
+
     };
+
 
     audio.value.dataset.audioPath = audioPath;
     audio.value.play();
 
-    stateAudio[audioPath] = 'playing';
+    stateAudio[audioPath].state = 'playing';
 
-    console.log(stateAudio[audioPath], audioPath, audio.value.dataset);
+    console.log(stateAudio[audioPath].state, audioPath, audio.value.dataset)
+
 };
 
 const playTestAudio = (audioPath) => {
@@ -586,15 +597,13 @@ function handleScroll(e) {
     const test = document.getElementById('test');
     const posTop = test.getBoundingClientRect().top;
     if (posTop + test.clientHeight <= window.innerHeight) {
-        if (stateAudio['Music/звук 1_.mp3'] !== 'ended')
+        if (stateAudio['Music/звук 1_.mp3'].state !== 'ended')
             playAudio('Music/звук 1_.mp3');
-        else if (stateAudio['TestTask/3.тестовое задание.mp3'] !== 'ended')
+        else if (stateAudio['TestTask/3.тестовое задание.mp3'].state !== 'ended')
             playAudio('TestTask/3.тестовое задание.mp3');
-        //console.log(audio.value.dataset, usedAudio[audio.value.dataset.audioPath], audio.value.dataset.audioPath);
 
         // audio.value.addEventListener('ended', () => {
         //console.log('first ended', audio.value.src)
-        //if (usedAudio['TestTask/3.тестовое задание.mp3']) return
         //playAudio('TestTask/3.тестовое задание.mp3');
 
         //audio.value.addEventListener('ended', () => {
@@ -604,8 +613,8 @@ function handleScroll(e) {
         //});
 
         if (posTop + test.offsetHeight < 0) {
-            if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
-                stateAudio[audio.value.dataset.audioPath] = 'paused';
+            if (stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
+                stateAudio[audio.value.dataset.audioPath].state = 'paused';
                 audio.value.pause();
             }
         }
@@ -622,8 +631,10 @@ const mute = () => {
 };
 
 const refresh = () => {
-    stateAudio['Music/звук 1_.mp3'] = null;
-    stateAudio['TestTask/3.тестовое задание.mp3'] = null;
+    stateAudio['Music/звук 1_.mp3'].state = null;
+    stateAudio['TestTask/3.тестовое задание.mp3'].state = null;
+    stateAudio['Music/звук 1_.mp3'].time = null;
+    stateAudio['TestTask/3.тестовое задание.mp3'].time = null;
 
     playAudio('Music/звук 1_.mp3');
 
@@ -636,8 +647,8 @@ const refresh = () => {
 
 const skip = () => {
     audio.value.src = '';
-    stateAudio['Music/звук 1_.mp3'] = 'ended';
-    stateAudio['TestTask/3.тестовое задание.mp3'] = 'ended';
+    stateAudio['Music/звук 1_.mp3'].state = 'ended';
+    stateAudio['TestTask/3.тестовое задание.mp3'].state = 'ended';
     showBtn.value = true;
 };
 
@@ -665,11 +676,14 @@ onMounted(() => {
     }
 
     window.addEventListener('click', () => {
-        audio.value.play().catch((error) => {
+        if (stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
+            audio.value.play().catch((error) => {
             if (error.name === 'NotAllowedError') {
                 console.log('User interaction required to play audio');
             }
         });
+        }
+
     });
     document.addEventListener('scroll', handleScroll);
     windowWidth.value = window.innerWidth;
@@ -682,14 +696,20 @@ onMounted(() => {
         authorsToShow.value = windowWidth.value >= 650 ? 2 : 1;
     });
     GetNews();
+
+    console.log('onMount', stateAudio);
 });
 onUnmounted(() => {
     document.removeEventListener('scroll', handleScroll);
-    if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
-        stateAudio[audio.value.dataset.audioPath] = 'paused';
+    if (stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
+        stateAudio[audio.value.dataset.audioPath].state = 'paused';
         audio.value.pause();
     }
+
+    console.log(stateAudio, 'unmount');
 });
+
+
 
 onBeforeRouteLeave(() => {
     // if (
@@ -702,11 +722,19 @@ onBeforeRouteLeave(() => {
     //         audio.value.pause();
     //     }
     // }
-    if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
-        stateAudio[audio.value.dataset.audioPath] = 'paused';
+
+    if (!audio.value.src) return
+    if (stateAudio[audio.value.dataset.audioPath].state && stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
+        stateAudio[audio.value.dataset.audioPath].state = 'paused';
+        stateAudio[audio.value.dataset.audioPath].time = audio.value.currentTime;
         audio.value.pause();
+        audio.value.src = '';
     }
+
+    console.log('beforeRouterLeave', stateAudio,  audio.value, audio.value.currentTime);
+
 });
+
 
 onBeforeRouteUpdate(() => {
     // if (audio.value.paused) {
@@ -724,11 +752,16 @@ onBeforeRouteUpdate(() => {
     //         audio.value.pause();
     //     }
     // }
-    if (stateAudio[audio.value.dataset.audioPath] !== 'ended') {
-        stateAudio[audio.value.dataset.audioPath] = 'paused';
+    if (stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
+        stateAudio[audio.value.dataset.audioPath].state = 'paused';
+        stateAudio[audio.value.dataset.audioPath].time = audio.value.currentTime;
         audio.value.pause();
     }
+
+    console.log('beforeRouterUpdate', stateAudio);
 });
+
+
 
 watch(
     () => isOpen.value,
@@ -742,6 +775,31 @@ watch(
         }
     },
 );
+
+const route = useRoute();
+watch(
+    () => route.path, // Слежение за изменением пути (можно заменить на слежение за параметрами)
+    (newPath, oldPath) => {
+        // Ваша логика для входа на страницу
+        if (newPath === '/') {
+            console.log('Вы вошли на главную страницу');
+
+            for (let key in stateAudio) {
+                if (stateAudio[key].state === 'paused') {
+                    
+                    stateAudio[key].state = null;
+                    playAudio(key);
+                    audio.value.currentTime = stateAudio[key].time;
+                    console.log(key, stateAudio[key]);
+                }
+            }
+
+        }
+    },
+    { immediate: false } // Не позволяет вызвать сразу при первой загрузке
+);
+
+
 </script>
 <style lang="scss" scoped>
 .networks {
