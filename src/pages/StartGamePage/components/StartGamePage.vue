@@ -196,24 +196,15 @@ watch(
     (newId) => {
         if (newId) {
             childId = newId;
-            console.log('newId', newId, childId);
-        } else {
-            console.log('hogg');
-            childId = null;
+            console.log('newId', childId);
         }
     },
-    { immediate: true, deep: true },
+    { immediate: true },
 );
 
-// onBeforeRouteLeave(() => {
-//     childId = null;
-//     console.log('id', childId);
-// });
-
-window.addEventListener('popstate', (event) => {
-    childId = null;
-    // childId = null;
-    console.log('hoh', childId);
+onBeforeRouteLeave((to, from) => {
+  childId = null;
+  console.log('id', childId);
 });
 
 onMounted(() => {

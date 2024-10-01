@@ -258,13 +258,20 @@ const resetTask = () => {
     answersCounter.value = 0;
 };
 
-onMounted(async() => {
-    const correct = await getCorrectAnswer(16, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
-});
 
-onMounted(() => {
+onMounted(async() => {
+    try {
+        const correct = await getCorrectAnswer(16, props.childId);
+        console.log(correct);
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
+    } catch (err) {
+        console.error('Error fetching correct answer:', err);
+    }
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
         '--scroll-position',

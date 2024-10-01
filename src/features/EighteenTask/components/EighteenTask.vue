@@ -93,14 +93,17 @@ const sendAnswer = () => {
 }
 
 onMounted(async () => {
-    // const correct = await getCorrectAnswer(18, props.childId);
-    // corrValue.value = correct.correctId;
-    // is_correct.value = correct.is_correct;
     try {
         const correct = await getCorrectAnswer(18, props.childId);
-        corrValue.value = localStorage.getItem('correctAnswer');
+        console.log(correct);
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
     } catch (err) {
-        corrValue.value = localStorage.getItem('correctAnswer');
+        console.error('Error fetching correct answer:', err);
     }
 })
 

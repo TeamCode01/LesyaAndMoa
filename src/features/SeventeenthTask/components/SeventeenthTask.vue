@@ -3,79 +3,184 @@
         <div class="task_block__wrapper">
             <template v-if="startGame">
                 <div class="task_block__close" @click="hide()">
-                    <svgIcon icon-name="close-icon" class="close-icon" alt="крест"></svgIcon>
+                    <svgIcon
+                        icon-name="close-icon"
+                        class="close-icon"
+                        alt="крест"
+                    ></svgIcon>
                 </div>
                 <div class="task_block__time" @click="console.log(refPoints)">
                     <Timer :end="end"></Timer>
-                    <p class="title-h4 task_block__title SeventeenthTask__title">
+                    <p
+                        class="title-h4 task_block__title SeventeenthTask__title"
+                    >
                         Собери слова из двух частей. <br />
                         Соедини полученные слова с картинками.
                     </p>
-
                 </div>
-                <canvas class="canvas_draw" ref="canvasRef"
-                    @mousedown="engage" @mouseup="disengage" @mousemove="draw"
-                    @touchstart="engage" @touchend="disengage" @touchmove="draw"
-                    @click="voiceActing" v-show="endFirstTask && true"></canvas>
-                <div class="draggable-list" ref="taskBlock" @dragover.prevent @drop="missDrop($event)">
-
-                    <transition name="fade-words-top" @after-enter="getCenterCords()">
-                        <div class="draggable-list__words-top" v-if="endFirstTask">
-                            <div class="draggable-list__word-top" v-for="word in secondTask[0]" :key="word.id">
+                <canvas
+                    class="canvas_draw"
+                    ref="canvasRef"
+                    @mousedown="engage"
+                    @mouseup="disengage"
+                    @mousemove="draw"
+                    @touchstart="engage"
+                    @touchend="disengage"
+                    @touchmove="draw"
+                    @click="voiceActing"
+                    v-show="endFirstTask && true"
+                ></canvas>
+                <div
+                    class="draggable-list"
+                    ref="taskBlock"
+                    @dragover.prevent
+                    @drop="missDrop($event)"
+                >
+                    <transition
+                        name="fade-words-top"
+                        @after-enter="getCenterCords()"
+                    >
+                        <div
+                            class="draggable-list__words-top"
+                            v-if="endFirstTask"
+                        >
+                            <div
+                                class="draggable-list__word-top"
+                                v-for="word in secondTask[0]"
+                                :key="word.id"
+                            >
                                 <div class="draggable-list__word">
                                     {{ word.text }}
                                 </div>
-                                <div :ref="(el) => { refPoints[1][word.id - 1] = el; }" style="display: flex">
-                                    <SvgIcon icon-name="green-circle" class="draggable-list__word-top-circle" >
-                                    </SvgIcon>    
+                                <div
+                                    :ref="
+                                        (el) => {
+                                            refPoints[1][word.id - 1] = el;
+                                        }
+                                    "
+                                    style="display: flex"
+                                >
+                                    <SvgIcon
+                                        icon-name="green-circle"
+                                        class="draggable-list__word-top-circle"
+                                    >
+                                    </SvgIcon>
                                 </div>
                             </div>
                         </div>
                     </transition>
 
                     <div class="draggable-list__syllables" v-if="!endFirstTask">
-                        <div class="draggable-list__set-syllables" v-for="row in firstTask[0]" :key="row"
-                            draggable="false">
-
-
-
-                            <VueDraggableNext :group="`${ (word.id == dragIdPuzzle) ? { name: 'word', pull: 'clone', put: false } : { name: 'word', pull: 'clone', put: true } }`"
-                                :sort="false" @add = "drop($event, word)" :class="[word.class]"
-                                :ghost-class="word.id == dragIdPuzzle ? 'hidden' : 'none'" :drag-class="'block'"
-                                @choose="($event)=>{drag($event, word); if (word.isActive) { playAudio(word.text)}}"
+                        <div
+                            class="draggable-list__set-syllables"
+                            v-for="row in firstTask[0]"
+                            :key="row"
+                            draggable="false"
+                        >
+                            <VueDraggableNext
+                                :group="`${
+                                    word.id == dragIdPuzzle
+                                        ? {
+                                              name: 'word',
+                                              pull: 'clone',
+                                              put: false,
+                                          }
+                                        : {
+                                              name: 'word',
+                                              pull: 'clone',
+                                              put: true,
+                                          }
+                                }`"
+                                :sort="false"
+                                @add="drop($event, word)"
+                                :class="[word.class]"
+                                :ghost-class="
+                                    word.id == dragIdPuzzle ? 'hidden' : 'none'
+                                "
+                                :drag-class="'block'"
+                                @choose="
+                                    ($event) => {
+                                        drag($event, word);
+                                        if (word.isActive) {
+                                            playAudio(word.text);
+                                        }
+                                    }
+                                "
                                 :data-is-active="word.isActive"
-                                v-for="word in row" :key="word.id">
-
+                                v-for="word in row"
+                                :key="word.id"
+                            >
                                 <div
-                                    :ref="(el) => { refPuzzles[word.id - 1] = el}"
-                                    draggable="false">
-                                    
-                                    
+                                    :ref="
+                                        (el) => {
+                                            refPuzzles[word.id - 1] = el;
+                                        }
+                                    "
+                                    draggable="false"
+                                >
                                     <!--<img v-if="word.error == 0 " src="/public/SeventeenthTask/figure-in-ba.png" :alt="word.class"  draggable="false"
                                     :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" /> -->
-                                    
 
-                                    <img v-if="word.error == 0 " :src="wordsSrc[word.id - 1].src" :alt="word.class"  draggable="false"
-                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" data-type='none'/>
-                                    
-                                    <img v-else-if="word.error == 1" :src="wordsSrc[word.id - 1].srcRight" :alt="word.class"  draggable="false"
-                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" data-type='true'/>
+                                    <img
+                                        v-if="word.error == 0"
+                                        :src="wordsSrc[word.id - 1].src"
+                                        :alt="word.class"
+                                        draggable="false"
+                                        :style="{
+                                            opacity: word.isActive
+                                                ? '100%'
+                                                : '0%',
+                                            cursor: word.isActive
+                                                ? 'pointer'
+                                                : 'auto',
+                                        }"
+                                        data-type="none"
+                                    />
 
-                                    <img v-else :src="wordsSrc[word.id - 1].srcError" :alt="word.class"  draggable="false"
-                                    :style="{ opacity: word.isActive ? '100%' : '0%', cursor: word.isActive ? 'pointer' : 'auto'}" data-type='error' />
+                                    <img
+                                        v-else-if="word.error == 1"
+                                        :src="wordsSrc[word.id - 1].srcRight"
+                                        :alt="word.class"
+                                        draggable="false"
+                                        :style="{
+                                            opacity: word.isActive
+                                                ? '100%'
+                                                : '0%',
+                                            cursor: word.isActive
+                                                ? 'pointer'
+                                                : 'auto',
+                                        }"
+                                        data-type="true"
+                                    />
 
+                                    <img
+                                        v-else
+                                        :src="wordsSrc[word.id - 1].srcError"
+                                        :alt="word.class"
+                                        draggable="false"
+                                        :style="{
+                                            opacity: word.isActive
+                                                ? '100%'
+                                                : '0%',
+                                            cursor: word.isActive
+                                                ? 'pointer'
+                                                : 'auto',
+                                        }"
+                                        data-type="error"
+                                    />
                                 </div>
-
-
                             </VueDraggableNext>
-
                         </div>
                     </div>
 
                     <transition name="fade-words">
                         <div class="draggable-list__words" v-if="!endFirstTask">
                             <transition-group name="fade-word">
-                                <div class="draggable-list__word" v-for="word in firstTask[1]" :key="word.id">
+                                <div
+                                    class="draggable-list__word"
+                                    v-for="word in firstTask[1]"
+                                    :key="word.id"
+                                >
                                     {{ word.text }}
                                 </div>
                             </transition-group>
@@ -83,25 +188,55 @@
                     </transition>
 
                     <transition name="fade-pictures">
-                        <div class="draggable-list__pictures" v-if="endFirstTask">
-                            <div class="draggable-list__picture" v-for="picture in secondTask[1]" :key="picture.id">
-
-
-                                <div :ref="(el) => { refPoints[2][picture.id - 1] = el; }" style="display: flex">
-                                    <SvgIcon icon-name="green-circle" class="draggable-list__word-top-circle" >
-                                    </SvgIcon>    
+                        <div
+                            class="draggable-list__pictures"
+                            v-if="endFirstTask"
+                        >
+                            <div
+                                class="draggable-list__picture"
+                                v-for="picture in secondTask[1]"
+                                :key="picture.id"
+                            >
+                                <div
+                                    :ref="
+                                        (el) => {
+                                            refPoints[2][picture.id - 1] = el;
+                                        }
+                                    "
+                                    style="display: flex"
+                                >
+                                    <SvgIcon
+                                        icon-name="green-circle"
+                                        class="draggable-list__word-top-circle"
+                                    >
+                                    </SvgIcon>
                                 </div>
-                                <img :src="getSrcUrl(picture.alt+'.png')" :alt="picture.alt" class="draggable-list__lesyaandmoa"
-                                    v-if="!endSecondTask" />
-                                <img :src="getSrcUrl(picture.alt+'.png')" :alt="picture.endalt" class="draggable-list__lesyaandmoa"
-                                    v-else />
+                                <img
+                                    :src="getSrcUrl(picture.alt + '.png')"
+                                    :alt="picture.alt"
+                                    class="draggable-list__lesyaandmoa"
+                                    v-if="!endSecondTask"
+                                />
+                                <img
+                                    :src="getSrcUrl(picture.alt + '.png')"
+                                    :alt="picture.endalt"
+                                    class="draggable-list__lesyaandmoa"
+                                    v-else
+                                />
                             </div>
                         </div>
                     </transition>
                 </div>
             </template>
-            <TaskResultBanner :img="getImageUrl('Cup.png')" :bg="getImageUrl('lesya.gif')" text="Потрясающе!"
-                v-if="!startGame" @next="next()" @hide="hide()" class="end-modal"></TaskResultBanner>
+            <TaskResultBanner
+                :img="getImageUrl('Cup.png')"
+                :bg="getImageUrl('lesya.gif')"
+                text="Потрясающе!"
+                v-if="!startGame"
+                @next="next()"
+                @hide="hide()"
+                class="end-modal"
+            ></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -122,7 +257,7 @@ import { TaskResultBanner } from '@features/TaskResultBanner/components';
 import { SvgIcon } from '@shared/components/svgIcon';
 
 import { dataFirstTask, dataSecondTask } from './task.js';
-import audioMap from './audioMap'
+import audioMap from './audioMap';
 import gameActions from '@mixins/gameAction';
 
 import { wordsSrc as words } from '@app/assets/creatures/SeventeenthTask/images.js';
@@ -139,7 +274,7 @@ const props = defineProps({
     childId: {
         type: Number,
         required: false,
-    }
+    },
 });
 const hide = () => {
     emit('close');
@@ -149,39 +284,46 @@ const next = () => {
     emit('next-modal');
 };
 
-const getSrcUrl = (path) => { 
+const getSrcUrl = (path) => {
     //console.log(new URL(`./${path}`, import.meta.url).href);
     //console.log(`@/assets/creatures/SeventeenthTask/${path}.png`, new URL(`@/assets/creatures/SeventeenthTask/${path}`, import.meta.url))
-    return new URL(`/assets/creatures/SeventeenthTask/${path}`, import.meta.url).href;
+    return new URL(`/assets/creatures/SeventeenthTask/${path}`, import.meta.url)
+        .href;
     //return new URL(`/assets/creatures/SeventeenthTask/${path}`, import.meta.url).href;
 };
-
 
 //
 // ПЕРВЫЙ ЭТАП ЗАДАНИЯ
 //
 
-const dragIdPuzzle = ref()
+const dragIdPuzzle = ref();
 
 const audio = ref(new Audio());
 const is_correct = ref(false);
 const is_started = ref(null);
 const corrValue = ref(0);
 const playAudio = (audioPath, isInMap = true, isFromTaskSix = false) => {
-
     if (isFromTaskSix) {
-        audio.value.src = new URL(`/assets/audio/Task6/${isInMap ? audioMap.get(audioPath) : audioPath}`, import.meta.url).href;
+        audio.value.src = new URL(
+            `/assets/audio/Task6/${
+                isInMap ? audioMap.get(audioPath) : audioPath
+            }`,
+            import.meta.url,
+        ).href;
         audio.value.play();
-        return
+        return;
     }
 
-    audio.value.src = new URL(`/assets/audio/Task17/${isInMap ? audioMap.get(audioPath) : audioPath}`, import.meta.url).href;
+    audio.value.src = new URL(
+        `/assets/audio/Task17/${isInMap ? audioMap.get(audioPath) : audioPath}`,
+        import.meta.url,
+    ).href;
     audio.value.play();
-}
+};
 
 const startGame = ref(true);
 const getImageUrl = (path) => {
- return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
 const firstTask = ref();
@@ -207,116 +349,180 @@ firstTask.value[1] = [];
 secondTask.value = structuredClone(dataSecondTask);
 
 const wordsSrc = [
-    { id: 1, src: getSrcUrl('figure-in-ro.png'),      srcError: getSrcUrl('figure-in-ro-wrong.png'),      srcRight: getSrcUrl('figure-in-ro-right.png') },
-    { id: 2, src: getSrcUrl('figure-out-laka.png'),   srcError: getSrcUrl('figure-out-laka-wrong.png'),   srcRight: getSrcUrl('figure-out-laka-right.png') },
-    { id: 3, src: getSrcUrl('figure-out-koro.png'),   srcError: getSrcUrl('figure-out-koro-wrong.png'),   srcRight: getSrcUrl('figure-out-koro-right.png') },
-    { id: 4, src: getSrcUrl('figure-in-vo.png'),      srcError: getSrcUrl('figure-in-vo-wrong.png'),      srcRight: getSrcUrl('figure-in-vo-right.png') },
-    { id: 5, src: getSrcUrl('figure-in-ka.png'),      srcError: getSrcUrl('figure-in-ka-wrong.png'),      srcRight: getSrcUrl('figure-in-ka-right.png') },
-    { id: 6, src: getSrcUrl('figure-in-va.png'),      srcError: getSrcUrl('figure-in-va-wrong.png'),      srcRight: getSrcUrl('figure-in-va-right.png') },
-    { id: 7, src: getSrcUrl('figure-out-so.png'),     srcError: getSrcUrl('figure-out-so-wrong.png'),     srcRight: getSrcUrl('figure-out-so-right.png') },
-    { id: 8, src: getSrcUrl('figure-out-re.png'),     srcError: getSrcUrl('figure-out-re-wrong.png'),     srcRight: getSrcUrl('figure-out-re-right.png') },
-    { id: 9, src: getSrcUrl('figure-in-ob.png'),      srcError: getSrcUrl('figure-in-ob-wrong.png'),      srcRight: getSrcUrl('figure-in-ob-right.png') },
-    { id: 10,src: getSrcUrl('figure-in-ba.png'),      srcError: getSrcUrl('figure-in-ba-wrong.png'),      srcRight: getSrcUrl('figure-in-ba-right.png') },
-    { id: 11,src: getSrcUrl('figure-out-dere.png'),   srcError: getSrcUrl('figure-out-dere-wrong.png'),   srcRight: getSrcUrl('figure-out-dere-right.png') },
-    { id: 12,src: getSrcUrl('figure-out-ta.png'),     srcError: getSrcUrl('figure-out-ta-wrong.png'),     srcRight: getSrcUrl('figure-out-ta-right.png')},
-    { id: 13,src: getSrcUrl('figure-in-mu.png'),      srcError: getSrcUrl('figure-in-mu-wrong.png'),      srcRight: getSrcUrl('figure-in-mu-right.png') },
-    { id: 14,src: getSrcUrl('figure-out-mashka.png'), srcError: getSrcUrl('figure-out-mashka-wrong.png'), srcRight: getSrcUrl('figure-out-mashka-right.png') }
+    {
+        id: 1,
+        src: getSrcUrl('figure-in-ro.png'),
+        srcError: getSrcUrl('figure-in-ro-wrong.png'),
+        srcRight: getSrcUrl('figure-in-ro-right.png'),
+    },
+    {
+        id: 2,
+        src: getSrcUrl('figure-out-laka.png'),
+        srcError: getSrcUrl('figure-out-laka-wrong.png'),
+        srcRight: getSrcUrl('figure-out-laka-right.png'),
+    },
+    {
+        id: 3,
+        src: getSrcUrl('figure-out-koro.png'),
+        srcError: getSrcUrl('figure-out-koro-wrong.png'),
+        srcRight: getSrcUrl('figure-out-koro-right.png'),
+    },
+    {
+        id: 4,
+        src: getSrcUrl('figure-in-vo.png'),
+        srcError: getSrcUrl('figure-in-vo-wrong.png'),
+        srcRight: getSrcUrl('figure-in-vo-right.png'),
+    },
+    {
+        id: 5,
+        src: getSrcUrl('figure-in-ka.png'),
+        srcError: getSrcUrl('figure-in-ka-wrong.png'),
+        srcRight: getSrcUrl('figure-in-ka-right.png'),
+    },
+    {
+        id: 6,
+        src: getSrcUrl('figure-in-va.png'),
+        srcError: getSrcUrl('figure-in-va-wrong.png'),
+        srcRight: getSrcUrl('figure-in-va-right.png'),
+    },
+    {
+        id: 7,
+        src: getSrcUrl('figure-out-so.png'),
+        srcError: getSrcUrl('figure-out-so-wrong.png'),
+        srcRight: getSrcUrl('figure-out-so-right.png'),
+    },
+    {
+        id: 8,
+        src: getSrcUrl('figure-out-re.png'),
+        srcError: getSrcUrl('figure-out-re-wrong.png'),
+        srcRight: getSrcUrl('figure-out-re-right.png'),
+    },
+    {
+        id: 9,
+        src: getSrcUrl('figure-in-ob.png'),
+        srcError: getSrcUrl('figure-in-ob-wrong.png'),
+        srcRight: getSrcUrl('figure-in-ob-right.png'),
+    },
+    {
+        id: 10,
+        src: getSrcUrl('figure-in-ba.png'),
+        srcError: getSrcUrl('figure-in-ba-wrong.png'),
+        srcRight: getSrcUrl('figure-in-ba-right.png'),
+    },
+    {
+        id: 11,
+        src: getSrcUrl('figure-out-dere.png'),
+        srcError: getSrcUrl('figure-out-dere-wrong.png'),
+        srcRight: getSrcUrl('figure-out-dere-right.png'),
+    },
+    {
+        id: 12,
+        src: getSrcUrl('figure-out-ta.png'),
+        srcError: getSrcUrl('figure-out-ta-wrong.png'),
+        srcRight: getSrcUrl('figure-out-ta-right.png'),
+    },
+    {
+        id: 13,
+        src: getSrcUrl('figure-in-mu.png'),
+        srcError: getSrcUrl('figure-in-mu-wrong.png'),
+        srcRight: getSrcUrl('figure-in-mu-right.png'),
+    },
+    {
+        id: 14,
+        src: getSrcUrl('figure-out-mashka.png'),
+        srcError: getSrcUrl('figure-out-mashka-wrong.png'),
+        srcRight: getSrcUrl('figure-out-mashka-right.png'),
+    },
 ];
 
-const dataTransfer = ref({})
+const dataTransfer = ref({});
 const drag = (event, word) => {
     event.from.dataset['isActive'] = 'false';
     dragIdPuzzle.value = word.id;
     dataTransfer.value = word;
     console.log('drag', event);
-}
+};
 
 const drop = (event, word) => {
-
-    console.log('drop', event)
-    let dragElem = event.item
-    event.to.removeChild(event.item)
+    console.log('drop', event);
+    let dragElem = event.item;
+    event.to.removeChild(event.item);
 
     if (event.to.dataset['isActive'] == 'false') {
-        console.log('event')
-        console.log(event.to)
-        console.log(event.to.dataset)
-        event.from.dataset['isActive'] = 'true'
-        event.from.appendChild(dragElem)
-        return
+        console.log('event');
+        console.log(event.to);
+        console.log(event.to.dataset);
+        event.from.dataset['isActive'] = 'true';
+        event.from.appendChild(dragElem);
+        return;
     }
 
+    let dragId = dataTransfer.value.id;
 
-
-    let dragId = dataTransfer.value.id
-
-    if (dataTransfer.value.answer == word.id){
-
-        event.to.removeChild(event.to.children[0])
+    if (dataTransfer.value.answer == word.id) {
+        event.to.removeChild(event.to.children[0]);
         event.to.dataset['isActive'] = 'false';
 
-        event.to.classList.add('standart_cursor')
-        event.from.classList.add('standart_cursor')
+        event.to.classList.add('standart_cursor');
+        event.from.classList.add('standart_cursor');
 
         playAudio(`right.${Math.ceil(Math.random() * 3)}.mp3`, false, true);
         let answer = {};
-            if (dataTransfer.value.id == 1 || dataTransfer.value.id == 14) {
-                answer.id = 1;
-                answer.text = 'РОМАШКА';
-            } else if (dataTransfer.value.id == 2 || dataTransfer.value.id == 9) {
-                answer.id = 5;
-                answer.text = 'ОБЛАКА';
-            } else if (dataTransfer.value.id == 3 || dataTransfer.value.id == 6) {
-                answer.id = 3;
-                answer.text = 'КОРОВА';
-            } else if (dataTransfer.value.id == 4 || dataTransfer.value.id == 11) {
-                answer.id = 2;
-                answer.text = 'ДЕРЕВО';
-            } else if (dataTransfer.value.id == 5 || dataTransfer.value.id == 8) {
-                answer.id = 4;
-                answer.text = 'РЕКА';
-            }
+        if (dataTransfer.value.id == 1 || dataTransfer.value.id == 14) {
+            answer.id = 1;
+            answer.text = 'РОМАШКА';
+        } else if (dataTransfer.value.id == 2 || dataTransfer.value.id == 9) {
+            answer.id = 5;
+            answer.text = 'ОБЛАКА';
+        } else if (dataTransfer.value.id == 3 || dataTransfer.value.id == 6) {
+            answer.id = 3;
+            answer.text = 'КОРОВА';
+        } else if (dataTransfer.value.id == 4 || dataTransfer.value.id == 11) {
+            answer.id = 2;
+            answer.text = 'ДЕРЕВО';
+        } else if (dataTransfer.value.id == 5 || dataTransfer.value.id == 8) {
+            answer.id = 4;
+            answer.text = 'РЕКА';
+        }
 
-            firstTask.value[1].push(answer);
-            firstTask.value[1].sort((a, b) => a.id - b.id);
+        firstTask.value[1].push(answer);
+        firstTask.value[1].sort((a, b) => a.id - b.id);
+
+        setTimeout(() => {
+            firstTaskAnswerCounter.value += 1;
+
+            playAudio('слово-' + answer.id);
 
             setTimeout(() => {
-                firstTaskAnswerCounter.value += 1;
-
-                playAudio('слово-' + answer.id)
-
-                setTimeout(() => {
-                    if (firstTaskAnswerCounter.value == 5) {
-                        endFirstTask.value = true;
-                    }
-                }, 2000)
-            }, 1000);
-    }
-    else{
-        event.from.appendChild(dragElem)
-        playAudio(`wrong.${Math.ceil(Math.random() * 3)}.mp3`, false, true)
-        console.log('false')
+                if (firstTaskAnswerCounter.value == 5) {
+                    endFirstTask.value = true;
+                }
+            }, 2000);
+        }, 1000);
+    } else {
+        event.from.appendChild(dragElem);
+        playAudio(`wrong.${Math.ceil(Math.random() * 3)}.mp3`, false, true);
+        console.log('false');
 
         event.from.children[0].children[0].src = wordsSrc[dragId - 1].srcError;
         event.to.children[0].children[0].src = wordsSrc[word.id - 1].srcError;
 
-        event.to.dataset['isActive'] = 'true'
-        event.from.dataset['isActive'] = 'true'
+        event.to.dataset['isActive'] = 'true';
+        event.from.dataset['isActive'] = 'true';
 
-        setTimeout(()=>{
+        setTimeout(() => {
             try {
-                event.from.children[0].children[0].src = wordsSrc[dragId - 1].src;
-            }
-            catch {}
-            
+                event.from.children[0].children[0].src =
+                    wordsSrc[dragId - 1].src;
+            } catch {}
+
             try {
-                event.to.children[0].children[0].src = wordsSrc[word.id - 1].src
-            }
-            catch {}
-        }, 2000)
+                event.to.children[0].children[0].src =
+                    wordsSrc[word.id - 1].src;
+            } catch {}
+        }, 2000);
     }
-}
-
+};
 
 //
 // ВТОРОЙ ЭТАП ЗАДАНИЯ
@@ -330,7 +536,6 @@ const refPoints = ref({
     1: [],
     2: [],
 });
-
 
 const centralCords = ref({
     1: [
@@ -385,22 +590,21 @@ const resizeCanvas = async () => {
 
 const getCursorPosition = (event) => {
     const rect = canvas.getBoundingClientRect();
-    if (event.type == "touchstart" || event.type == "touchmove") {
-        console.log(event)
+    if (event.type == 'touchstart' || event.type == 'touchmove') {
+        console.log(event);
         return {
             x: event.touches[0].clientX - rect.left,
-            y: event.touches[0].clientY - rect.top
-        }
-    }
-    else if (event.type == "touchend") {
+            y: event.touches[0].clientY - rect.top,
+        };
+    } else if (event.type == 'touchend') {
         return {
             x: event.changedTouches[0].clientX - rect.left,
-            y: event.changedTouches[0].clientY - rect.top
-        }
+            y: event.changedTouches[0].clientY - rect.top,
+        };
     }
     return {
         x: event.clientX - rect.left,
-        y: event.clientY - rect.top
+        y: event.clientY - rect.top,
     };
 };
 
@@ -456,7 +660,17 @@ const checkRowsAndColumnsIds = (pos) => {
         pos.y > centralCords.value[2][0].minY &&
         pos.y < centralCords.value[2][0].maxY;
 
-    const columnId = inFirstLineX ? 1 : inSecondLineX ? 2 : inThirdLineX ? 3 : inFourthLineX ? 4 : inFifthLineX ? 5 : false;
+    const columnId = inFirstLineX
+        ? 1
+        : inSecondLineX
+        ? 2
+        : inThirdLineX
+        ? 3
+        : inFourthLineX
+        ? 4
+        : inFifthLineX
+        ? 5
+        : false;
     const rowId = inFirstLineY ? 1 : inSecondLineY ? 2 : false;
 
     return { row: rowId, column: columnId };
@@ -607,7 +821,7 @@ const disengage = (event) => {
                 startIds.column,
                 startIds.row,
                 endIds.column,
-                endIds.row
+                endIds.row,
             );
             if (correct) {
                 SecondTaskAnswerCounter.value++;
@@ -615,7 +829,11 @@ const disengage = (event) => {
                     startIds.column - 1
                 ].done = true;
                 centralCords.value[endIds.row][endIds.column - 1].done = true;
-                playAudio(`right.${Math.ceil(Math.random() * 3)}.mp3`, false, true);
+                playAudio(
+                    `right.${Math.ceil(Math.random() * 3)}.mp3`,
+                    false,
+                    true,
+                );
 
                 lines.value.push({
                     startX: startCords.value.x,
@@ -631,7 +849,11 @@ const disengage = (event) => {
                     }, 2000);
                 }
             } else {
-                playAudio(`wrong.${Math.ceil(Math.random() * 3)}.mp3`, false, true);
+                playAudio(
+                    `wrong.${Math.ceil(Math.random() * 3)}.mp3`,
+                    false,
+                    true,
+                );
             }
         }
         isDrawing.value = false;
@@ -640,8 +862,7 @@ const disengage = (event) => {
     }
 };
 
-
-const voiceActing = () => { };
+const voiceActing = () => {};
 
 const finalDraw = () => {
     console.log(centralCords.value);
@@ -679,7 +900,7 @@ const finalDraw = () => {
 
     setTimeout(() => {
         playAudio('469.17_.mp3', false);
-    }, 500)
+    }, 500);
 
     setTimeout(() => {
         if (is_correct.value === false) {
@@ -687,37 +908,34 @@ const finalDraw = () => {
             emit('correct');
             emit('open');
         }
-        console.log('final')
+        console.log('final');
         startGame.value = false;
     }, 4000);
 };
 
 onMounted(async () => {
     canvas = canvasRef.value;
-    try {
-        const correct = await getCorrectAnswer(17, props.childId);
-        corrValue.value = localStorage.getItem('correctAnswer');
-    } catch (err) {
-        corrValue.value = localStorage.getItem('correctAnswer');
-    }
-    // try {
-    //     const correct = await getCorrectAnswer(17, props.childId);
-    //     corrValue.value = correct.correctId;
-    //     is_correct.value = correct.is_correct;
-    // }
-    // catch (error) {
-    //     console.log(error);
-    // }
     ctx = canvas.getContext('2d');
     await resizeCanvas();
-    console.log('компонент создан')
+    console.log('компонент создан');
+    try {
+        const correct = await getCorrectAnswer(17, props.childId);
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
+    } catch (err) {
+        console.error('Error fetching correct answer:', err);
+    }
     window.addEventListener('resize', () => {
         resizeCanvas();
     });
 });
 
 onBeforeUnmount(() => {
-    console.log('компонент удален')
+    console.log('компонент удален');
     window.removeEventListener('resize', () => {
         resizeCanvas();
     });
@@ -725,7 +943,6 @@ onBeforeUnmount(() => {
 watch(endFirstTask, () => {
     canvas.removeAttribute('style');
 });
-
 
 onMounted(() => {
     const scrollY = window.scrollY || document.documentElement.scrollTop;
@@ -736,18 +953,15 @@ onMounted(() => {
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
-    console.log('game mount')
+    console.log('game mount');
 });
-
 
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
-    console.log('game unmount')
+    console.log('game unmount');
 });
-
 </script>
-
 
 <style lang="scss" scoped>
 * {
@@ -757,7 +971,6 @@ onBeforeUnmount(() => {
 .end-modal {
     width: 1200px;
     height: 600px;
-
 
     @media (max-width: 1200px) {
         width: 944px;
@@ -1025,13 +1238,13 @@ onBeforeUnmount(() => {
     }
 }
 
-.none{
+.none {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
 }
 
-.dot{
+.dot {
     width: 1px;
     height: 1px;
 }
@@ -1041,11 +1254,11 @@ onBeforeUnmount(() => {
     opacity: 100% !important;
 }
 
-.hidden{
+.hidden {
     opacity: 0% !important;
 }
 
-.standart_cursor{
+.standart_cursor {
     cursor: default !important;
 }
 </style>

@@ -257,25 +257,22 @@ const drop = (event) => {
     }
 };
 
-// onMounted(async () => {
-//     try {
-//         const correct = await getCorrectAnswer(1, props.childId);
-//         corrValue.value = localStorage.getItem('correctAnswer');
-//     } catch (err) {
-//         corrValue.value = localStorage.getItem('correctAnswer');
-//     }
-// });
-
 const allowDrop = (event) => {
     event.preventDefault();
 };
 
 onMounted(async () => {
-    // await answerStore.getAnswers(props.childId);
-    const correct = await getCorrectAnswer(1, props.childId);
-    // console.log(correct, 'cor', answerStore.answers);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    try {
+        const correct = await getCorrectAnswer(1, props.childId);
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
+    } catch (err) {
+        console.error('Error fetching correct answer:', err);
+    }
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
         '--scroll-position',

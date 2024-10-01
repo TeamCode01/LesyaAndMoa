@@ -3,7 +3,11 @@
         <div class="task_block__wrapper">
             <template v-if="startGame">
                 <div class="task_block__close" @click="hide">
-                    <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
+                    <img
+                        class="close-icon"
+                        src="@app/assets/icons/close-icon.svg"
+                        alt="крест"
+                    />
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
@@ -13,56 +17,116 @@
                 </div>
                 <div class="draggable-list">
                     <div class="draggable-list__words">
-                        <div class="draggable-list__set-words" v-for="(line, index_line) in prepositions"
-                            :key="index_line">
-                            <VueDraggableNext v-for="(item, index) in line" :key="item.id"
-                            :group="{ name: 'letters', pull: 'clone', put: false }" :sort="false"
-                            @choose="drag($event, item, index)"
-
-                            @mouseover="playAudio(item.audio)" @mouseout="stopAudio(item.audio)"
-                            @touchstart="playAudio(item.audio)"
+                        <div
+                            class="draggable-list__set-words"
+                            v-for="(line, index_line) in prepositions"
+                            :key="index_line"
+                        >
+                            <VueDraggableNext
+                                v-for="(item, index) in line"
+                                :key="item.id"
+                                :group="{
+                                    name: 'letters',
+                                    pull: 'clone',
+                                    put: false,
+                                }"
+                                :sort="false"
+                                @choose="drag($event, item, index)"
+                                @mouseover="playAudio(item.audio)"
+                                @mouseout="stopAudio(item.audio)"
+                                @touchstart="playAudio(item.audio)"
                             >
-
-                                <div :id="item.id + '_elem'"
-                                    :class="{ 'draggable-list__word': true, correct_select: item.correct, not_correct_select: item.correct === false }"
-
-                                    :value="item.text">
+                                <div
+                                    :id="item.id + '_elem'"
+                                    :class="{
+                                        'draggable-list__word': true,
+                                        correct_select: item.correct,
+                                        not_correct_select:
+                                            item.correct === false,
+                                    }"
+                                    :value="item.text"
+                                >
                                     {{ item.text }}
                                 </div>
-
                             </VueDraggableNext>
                         </div>
                     </div>
                     <div class="draggable-list__answer">
                         <div class="draggable-list__answer-wrapper">
                             <p>{{ questions[currStage].first_part }}</p>
-                            <VueDraggableNext class="draggable-list__quastion-block" v-if="!givenAnswer[1]"
-                                :group="{ name: 'letters', pull: false, put: true }" :sort="false"
-                                @add="drop($event, 1)" ghost-class="none" draggable="false">
-
-                                <input class="answer" readonly @focus="($event)=>{$event.target.blur()}"/>
-
+                            <VueDraggableNext
+                                class="draggable-list__quastion-block"
+                                v-if="!givenAnswer[1]"
+                                :group="{
+                                    name: 'letters',
+                                    pull: false,
+                                    put: true,
+                                }"
+                                :sort="false"
+                                @add="drop($event, 1)"
+                                ghost-class="none"
+                                draggable="false"
+                            >
+                                <input
+                                    class="answer"
+                                    readonly
+                                    @focus="
+                                        ($event) => {
+                                            $event.target.blur();
+                                        }
+                                    "
+                                />
                             </VueDraggableNext>
-                            <p v-else>&nbsp;{{ questions[currStage].first_answer }}&nbsp;</p>
+                            <p v-else>
+                                &nbsp;{{
+                                    questions[currStage].first_answer
+                                }}&nbsp;
+                            </p>
                             <p>{{ questions[currStage].second_part }}</p>
                             <template v-if="currStage > 2">
-                                <VueDraggableNext class="draggable-list__quastion-block" v-if="!givenAnswer[2]"
-                                    :group="{ name: 'letters', pull: false, put: true }" :sort="false"
-                                    @add="drop($event, 2)" ghost-class="none" draggable="false">
-
-                                    <input class="answer" readonly @focus="($event)=>{$event.target.blur()}"/>
-
+                                <VueDraggableNext
+                                    class="draggable-list__quastion-block"
+                                    v-if="!givenAnswer[2]"
+                                    :group="{
+                                        name: 'letters',
+                                        pull: false,
+                                        put: true,
+                                    }"
+                                    :sort="false"
+                                    @add="drop($event, 2)"
+                                    ghost-class="none"
+                                    draggable="false"
+                                >
+                                    <input
+                                        class="answer"
+                                        readonly
+                                        @focus="
+                                            ($event) => {
+                                                $event.target.blur();
+                                            }
+                                        "
+                                    />
                                 </VueDraggableNext>
-                                <p v-else>&nbsp;{{ questions[currStage].second_answer }}&nbsp;</p>
+                                <p v-else>
+                                    &nbsp;{{
+                                        questions[currStage].second_answer
+                                    }}&nbsp;
+                                </p>
                                 <p>{{ questions[currStage].third_part }}</p>
                             </template>
-
                         </div>
                     </div>
                 </div>
             </template>
-            <TaskResultBanner :img="getImageUrl('Diamond.png')" :bg="getImageUrl('moa.gif')"
-                text="Замечательно!" v-else @hide="hide()" @next="next()" class="end-modal"></TaskResultBanner>
+            <TaskResultBanner
+                :img="getImageUrl('Diamond.png')"
+                :bg="getImageUrl('moa.gif')"
+                text="Замечательно!"
+                v-else
+                @hide="hide()"
+                @next="next()"
+                class="end-modal"
+            ></TaskResultBanner>
         </div>
     </div>
 </template>
@@ -86,12 +150,12 @@ const props = defineProps({
         required: false,
     },
     finish: {
-        type: Boolean
+        type: Boolean,
     },
     childId: {
         type: Number,
         required: false,
-    }
+    },
 });
 
 const givenAnswer = ref({
@@ -103,54 +167,53 @@ const corrValue = ref(0);
 const currStage = ref(1);
 const questions = ref({
     1: {
-        first_part: "Мы прилетели ",
-        second_part: "планеты Музи.",
-        first_answer: "с"
+        first_part: 'Мы прилетели ',
+        second_part: 'планеты Музи.',
+        first_answer: 'с',
     },
     2: {
-        first_part: "Наш межгалактический корабль разбился ",
-        second_part: "лесу.",
-        first_answer: "в",
+        first_part: 'Наш межгалактический корабль разбился ',
+        second_part: 'лесу.',
+        first_answer: 'в',
     },
     3: {
-        first_part: "Мы добрались",
-        second_part: "места крушения в город",
-        third_part: "поле",
-        first_answer: "до",
-        second_answer: "через"
+        first_part: 'Мы добрались',
+        second_part: 'места крушения в город',
+        third_part: 'поле',
+        first_answer: 'до',
+        second_answer: 'через',
     },
     4: {
-        first_part: "И спрятались",
-        second_part: "крышей игрового домика",
-        third_part: "детской площадке",
-        first_answer: "под",
-        second_answer: "на"
-    }
-}
-)
+        first_part: 'И спрятались',
+        second_part: 'крышей игрового домика',
+        third_part: 'детской площадке',
+        first_answer: 'под',
+        second_answer: 'на',
+    },
+});
 
 const prepositions = ref({
     1: {
-        1: { text: "В", audio: "Task10/318.10.mp3", correct: null },
-        2: { text: "НА", audio: "Task10/319.10.mp3", correct: null },
-        3: { text: "ИЗ", audio: "Task10/320.10.mp3", correct: null },
-        4: { text: "ОТ", audio: "Task10/321.10.mp3", correct: null },
-        5: { text: "ЧЕРЕЗ", audio: "Task10/322.10.mp3", correct: null },
+        1: { text: 'В', audio: 'Task10/318.10.mp3', correct: null },
+        2: { text: 'НА', audio: 'Task10/319.10.mp3', correct: null },
+        3: { text: 'ИЗ', audio: 'Task10/320.10.mp3', correct: null },
+        4: { text: 'ОТ', audio: 'Task10/321.10.mp3', correct: null },
+        5: { text: 'ЧЕРЕЗ', audio: 'Task10/322.10.mp3', correct: null },
     },
     2: {
-        6: { text: "С", audio: "Task10/323.10.mp3", correct: null },
-        7: { text: "ДО", audio: "Task10/324.10.mp3", correct: null },
-        8: { text: "ПРИ", audio: "Task10/325.10.mp3", correct: null },
-        9: { text: "У", audio: "Task10/326.10.mp3", correct: null },
-        10: { text: "ПОД", audio: "Task10/327.10.mp3", correct: null },
-    }
-})
+        6: { text: 'С', audio: 'Task10/323.10.mp3', correct: null },
+        7: { text: 'ДО', audio: 'Task10/324.10.mp3', correct: null },
+        8: { text: 'ПРИ', audio: 'Task10/325.10.mp3', correct: null },
+        9: { text: 'У', audio: 'Task10/326.10.mp3', correct: null },
+        10: { text: 'ПОД', audio: 'Task10/327.10.mp3', correct: null },
+    },
+});
 
 const getImageUrl = (path) => {
- return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+    return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
-const dataTransfer = ref({})
+const dataTransfer = ref({});
 const drag = (event, preposition, index) => {
     // event.dataTransfer.setData('text', preposition.text);
     // event.dataTransfer.setData('id', index);
@@ -160,37 +223,42 @@ const drag = (event, preposition, index) => {
     dataTransfer.value.id = index;
 };
 
-let fromBlock
+let fromBlock;
 
 const drop = (event, num) => {
     // const text = event.dataTransfer.getData('text');
     // const id = event.dataTransfer.getData('id');
 
     const text = dataTransfer.value.text;
-    const id = dataTransfer.value.id
+    const id = dataTransfer.value.id;
 
     fromBlock = event.from.children[0];
 
-    Array.from(event.to.children).forEach(element => {
+    Array.from(event.to.children).forEach((element) => {
         if (element.classList.contains('draggable-list__word')) {
-            event.to.removeChild(element)
+            event.to.removeChild(element);
         }
-    })
+    });
 
     if (currStage.value <= 2) {
-        if (text.toLowerCase() == questions.value[currStage.value].first_answer) {
+        if (
+            text.toLowerCase() == questions.value[currStage.value].first_answer
+        ) {
             correctAnswer(id, true, fromBlock);
             givenAnswer.value[1] = true;
             setTimeout(() => {
                 givenAnswer.value[1] = false;
                 currStage.value += 1;
-            }, 2000)
+            }, 2000);
         } else {
             correctAnswer(id, false, fromBlock);
         }
     } else {
         if (num == 1) {
-            if (text.toLowerCase() == questions.value[currStage.value].first_answer) {
+            if (
+                text.toLowerCase() ==
+                questions.value[currStage.value].first_answer
+            ) {
                 correctAnswer(id, true, fromBlock);
                 givenAnswer.value[1] = true;
                 if (givenAnswer.value[1] && givenAnswer.value[2]) {
@@ -200,15 +268,18 @@ const drop = (event, num) => {
                         currStage.value += 1;
                         if (currStage.value == 5) {
                             startGame.value = false;
-                            playAudio(`Task10/328.10_.mp3`)
+                            playAudio(`Task10/328.10_.mp3`);
                         }
-                    }, 2000)
+                    }, 2000);
                 }
             } else {
                 correctAnswer(id, false, fromBlock);
             }
         } else {
-            if (text.toLowerCase() == questions.value[currStage.value].second_answer) {
+            if (
+                text.toLowerCase() ==
+                questions.value[currStage.value].second_answer
+            ) {
                 correctAnswer(id, true, fromBlock);
                 givenAnswer.value[2] = true;
                 if (givenAnswer.value[1] && givenAnswer.value[2]) {
@@ -223,9 +294,9 @@ const drop = (event, num) => {
                                 emit('open');
                             }
                             startGame.value = false;
-                            playAudio(`Task10/328.10_.mp3`)
+                            playAudio(`Task10/328.10_.mp3`);
                         }
-                    }, 2000)
+                    }, 2000);
                 }
             } else {
                 correctAnswer(id, false, fromBlock);
@@ -235,24 +306,34 @@ const drop = (event, num) => {
 };
 
 const correctAnswer = (id, correct, block) => {
-    correct ? playEndAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`) : playEndAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+    correct
+        ? playEndAudio(`Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`)
+        : playEndAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
     if (id <= 5) {
-        block.classList.add(`${correct ? 'correct_select' : 'not_correct_select'}`);
+        block.classList.add(
+            `${correct ? 'correct_select' : 'not_correct_select'}`,
+        );
         prepositions.value[1][id].correct = correct;
         setTimeout(() => {
-            prepositions.value[1][id].correct = null
-            block.classList.remove(`${correct ? 'correct_select' : 'not_correct_select'}`);
+            prepositions.value[1][id].correct = null;
+            block.classList.remove(
+                `${correct ? 'correct_select' : 'not_correct_select'}`,
+            );
         }, 2000);
     } else {
-        console.log(prepositions.value[2], id)
-        block.classList.add(`${correct ? 'correct_select' : 'not_correct_select'}`);
+        console.log(prepositions.value[2], id);
+        block.classList.add(
+            `${correct ? 'correct_select' : 'not_correct_select'}`,
+        );
         prepositions.value[2][id].correct = correct;
         setTimeout(() => {
             prepositions.value[2][id].correct = null;
-            block.classList.remove(`${correct ? 'correct_select' : 'not_correct_select'}`);
+            block.classList.remove(
+                `${correct ? 'correct_select' : 'not_correct_select'}`,
+            );
         }, 2000);
     }
-}
+};
 
 const allowDrop = (event) => {
     event.preventDefault();
@@ -261,17 +342,20 @@ const allowDrop = (event) => {
 const audio = ref(new Audio());
 
 const playAudio = async (audioPath) => {
-    audio.value.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
+    audio.value.src = new URL(
+        `/assets/audio/${audioPath}`,
+        import.meta.url,
+    ).href;
     if (props.finish === true) {
         await audio.value.play();
     }
-}
+};
 
 const playEndAudio = (audioPath) => {
     const end_audio = new Audio();
     end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
-}
+};
 
 const stopAudio = (audioPath) => {
     if (audio.value.paused) {
@@ -279,26 +363,26 @@ const stopAudio = (audioPath) => {
     } else {
         audio.value.pause();
     }
-}
+};
 const hide = () => {
     emit('close');
 };
 const next = () => {
     emit('next-modal');
-}
+};
+
 onMounted(async () => {
-    // const correct = await getCorrectAnswer(10, props.childId);
-    // corrValue.value = correct.correctId;
-    // is_correct.value = correct.is_correct;
     try {
         const correct = await getCorrectAnswer(10, props.childId);
-        corrValue.value = localStorage.getItem('correctAnswer');
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
     } catch (err) {
-        corrValue.value = localStorage.getItem('correctAnswer');
+        console.error('Error fetching correct answer:', err);
     }
-})
-
-onMounted(() => {
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
         '--scroll-position',
@@ -307,20 +391,18 @@ onMounted(() => {
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
-    console.log('game mount')
+    console.log('game mount');
 });
-
 
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
-    console.log('game unmount')
+    console.log('game unmount');
 });
-
 </script>
 
 <style lang="scss" scoped>
-*{
+* {
     user-select: none;
 }
 
@@ -328,14 +410,13 @@ onBeforeUnmount(() => {
     width: 1200px;
     height: 600px;
 
-
     @media (max-width: 1200px) {
         width: 944px;
         height: 500px;
     }
 }
 
-.answer{
+.answer {
     width: 90px;
     height: 44px;
     background: url(/assets/icons/quastion.svg) no-repeat center center;
@@ -343,12 +424,12 @@ onBeforeUnmount(() => {
 
 .correct_select {
     border: 2px solid;
-    border-color: #5CCF54;
+    border-color: #5ccf54;
 }
 
 .not_correct_select {
     border: 2px solid;
-    border-color: #DB0000;
+    border-color: #db0000;
 }
 
 .TenthTask {

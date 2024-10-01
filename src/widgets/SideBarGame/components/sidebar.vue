@@ -53,23 +53,23 @@
                 >
                 </FirstTask>
                 <SecondTask
-                    @correct="checkCorrect(2)"
                     :childId="props.childId"
                     :finish="finish"
                     :end="endTime"
-                    @next-modal="next()"
                     @close="close()"
+                    @next-modal="next()"
+                    @correct="checkCorrect(2)"
                     @open="checkOpen(3)"
                     v-if="taskId === 2 && SeeTask"
                 >
                 </SecondTask>
                 <ThirdTask
-                    @correct="checkCorrect(3)"
                     :childId="props.childId"
                     :finish="finish"
                     :end="endTime"
-                    @next-modal="next()"
                     @close="close()"
+                    @next-modal="next()"
+                    @correct="checkCorrect(3)"
                     @open="checkOpen(4)"
                     v-if="taskId === 3 && SeeTask"
                 >
@@ -509,7 +509,7 @@ watch(
 watch(
     () => props.childId,
     async (newId) => {
-        console.log('childId', props.childId, newId);
+        console.log('childIdProps', props.childId);
 
         if (newId) {
             props.childId = newId;
@@ -525,6 +525,14 @@ watch(
             const taskFindArr = tasks.value.filter(
                 (task) => task.done === true,
             );
+            window.addEventListener('popstate', (event) => {
+                props.childId = null;
+                console.log('pop_child', props.childId);
+                if (audio.value.paused) {
+                    audio.value.play();
+                }
+                audio.value.pause();
+            });
             if (taskFindArr.length > 0) {
                 let nextElId = taskFindArr.at(-1).id;
                 tasks.value[nextElId].disabled = false;
@@ -546,26 +554,19 @@ watch(
                     'Task1/11.1_.mp3',
                 );
             }
-            window.addEventListener('popstate', (event) => {
-                if (audio.value.paused) {
-                    audio.value.play();
-                }
-                audio.value.pause();
-            });
         } else {
-            console.log('hogg5');
             props.childId = null;
+            console.log('child', props.childId);
         }
     },
     {
         immediate: true,
-        deep: true,
     },
 );
 
-onBeforeRouteLeave(() => {
+onBeforeRouteLeave((to, from) => {
     props.childId = null;
-    console.log('id', props.childId);
+    console.log('props_id', props.childId);
     if (audio.value.paused) {
         audio.value.play();
     }

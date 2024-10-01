@@ -183,14 +183,10 @@ const onSelection = (firstIndex, id) => {
     }
     if (countAnswers.value == 14) {
         endGame.value = true;
-        setTimeout(async () => {
-            const correct = await getCorrectAnswer(4, props.childId);
-            corrValue.value = correct.correctId;
-            is_correct.value = correct.is_correct;
+        setTimeout(() => {
             startGame.value = false;
             playAudio('Task4/60.4_.mp3');
             if (is_correct.value === false) {
-                console.log('correct');
                 endGameRequest(props.childId, corrValue.value);
                 emit('correct');
                 emit('open');
@@ -224,16 +220,20 @@ const hide = () => {
     emit('close');
 };
 
-// onMounted(async () => {
-//     try {
-//         const correct = await getCorrectAnswer(4, props.childId);
-//         corrValue.value = localStorage.getItem('correctAnswer');
-//     } catch (err) {
-//         corrValue.value = localStorage.getItem('correctAnswer');
-//     }
-// })
 
-onMounted(() => {
+onMounted(async() => {
+    try {
+        const correct = await getCorrectAnswer(4, props.childId);
+        console.log(correct);
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
+    } catch (err) {
+        console.error('Error fetching correct answer:', err);
+    }
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
         '--scroll-position',

@@ -269,19 +269,18 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(async () => {
-    // const correct = await getCorrectAnswer(13, props.childId);
-    // corrValue.value = correct.correctId;
-    // is_correct.value = correct.is_correct;
+onMounted(async() => {
     try {
         const correct = await getCorrectAnswer(13, props.childId);
-        corrValue.value = localStorage.getItem('correctAnswer');
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
     } catch (err) {
-        corrValue.value = localStorage.getItem('correctAnswer');
+        console.error('Error fetching correct answer:', err);
     }
-});
-
-onMounted(() => {
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
         '--scroll-position',

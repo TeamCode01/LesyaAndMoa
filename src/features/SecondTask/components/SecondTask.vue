@@ -68,6 +68,7 @@ const audio = ref(new Audio());
 const hide = () => {
     emit('close');
     endGame.value = true;
+    audio.value.pause();
 };
 const answerStore = useAnswerStore();
 const corrValue = ref(0);
@@ -145,19 +146,18 @@ const chooseTask = (event, status) => {
     }
 };
 
-// onMounted(async () => {
-//     try {
-//         const correct = await getCorrectAnswer(2, props.childId);
-//         corrValue.value = localStorage.getItem('correctAnswer');
-//     } catch (err) {
-//         corrValue.value = localStorage.getItem('correctAnswer');
-//     }
-// });
-
 onMounted(async() => {
-    const correct = await getCorrectAnswer(2, props.childId);
-    corrValue.value = correct.correctId;
-    is_correct.value = correct.is_correct;
+    try {
+        const correct = await getCorrectAnswer(2, props.childId);
+        if (correct) {
+            corrValue.value = correct.correctId;
+            is_correct.value = correct.is_correct;
+        } else {
+            console.error('getCorrectAnswer returned undefined');
+        }
+    } catch (err) {
+        console.error('Error fetching correct answer:', err);
+    }
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     document.documentElement.style.setProperty(
         '--scroll-position',
