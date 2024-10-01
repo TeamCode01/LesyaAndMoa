@@ -409,6 +409,14 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
                     playAudio('Music/звук 8_.mp3');
                     postAudio();
                     break;
+                case 16:
+                    playAudio('Music/звук 9_.mp3');
+                    postAudio();
+                    break;
+                case 18:
+                    playAudio('Music/звук 1_.mp3');
+                    postAudio();
+                    break;
 
                 default:
                     break;
@@ -996,5 +1004,4 @@ onActivated(() => {
         }
     }
 }
-
 </style>
