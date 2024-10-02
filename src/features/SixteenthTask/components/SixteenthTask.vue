@@ -220,6 +220,12 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                 event.to.children[0].classList.add(
                     'draggable-list__subcontainer-square_warning'
                 );
+                let reactionAudioSrc = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
+                let reactionAudio = new Audio(
+                    reactionAudioSrc
+                );
+                reactionAudio.play();
+
                 setTimeout(() => {
                     event.to.children[0].classList.remove(
                         'draggable-list__subcontainer-square_warning'
