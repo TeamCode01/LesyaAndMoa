@@ -166,6 +166,8 @@ const lastItem = ref();
 
 const selectedWord = ref();
 
+let endAudio = new Audio();
+
 const clickItem = (word) => {
     if (word.text == taskWord.value) {
         let audioPath = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
@@ -180,8 +182,8 @@ const clickItem = (word) => {
 
             if (answersCounter.value == 15) {
                 let audioPathSimple = new URL(`/assets/audio/Task6/259.6_.mp3`, import.meta.url).href;
-                let audio = new Audio(audioPathSimple);
-                audio.play();
+                endAudio = new Audio(audioPathSimple);
+                endAudio.play();
 
                 setTimeout(() => {
                     if (is_correct.value === false) {
@@ -240,6 +242,7 @@ onMounted(async () => {
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    endAudio.src = '';
     console.log('game unmount')
 });
 

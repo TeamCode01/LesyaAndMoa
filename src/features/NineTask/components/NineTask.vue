@@ -202,8 +202,9 @@ const playAudio = async (audioPath) => {
     }
 };
 
+
+const end_audio = new Audio();
 const playEndAudio = (audioPath) => {
-    const end_audio = new Audio();
     end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
 };
@@ -362,6 +363,7 @@ onMounted(async () => {
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    end_audio.src = '';
     console.log('game unmount');
 });
 </script>

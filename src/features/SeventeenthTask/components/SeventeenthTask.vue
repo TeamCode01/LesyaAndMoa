@@ -864,6 +864,7 @@ const disengage = (event) => {
 
 const voiceActing = () => {};
 
+let gameIsClose = false;
 const finalDraw = () => {
     console.log(centralCords.value);
 
@@ -897,9 +898,10 @@ const finalDraw = () => {
         ctx.stroke();
         ctx.closePath();
     }
-
     setTimeout(() => {
-        playAudio('469.17_.mp3', false);
+        if (gameIsClose !== true){
+            playAudio('469.17_.mp3', false);
+        }
     }, 500);
 
     setTimeout(() => {
@@ -959,6 +961,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    audio.value.src = '';
+    gameIsClose = true;
     console.log('game unmount');
 });
 </script>

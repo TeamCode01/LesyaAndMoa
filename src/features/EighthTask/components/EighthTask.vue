@@ -465,8 +465,8 @@ const props = defineProps({
     },
 });
 
+const audio =  new Audio();
 const playAudio = (audioPath) => {
-    const audio = new Audio();
     audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     audio.play();
     if (!soundPlayed) {
@@ -760,6 +760,8 @@ onMounted(async () => {
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+
+    audio.src = "";
     console.log('game unmount');
 });
 </script>

@@ -248,6 +248,7 @@ onMounted(async() => {
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    audio.value.src = '';
     console.log('game unmount');
 });
 </script>

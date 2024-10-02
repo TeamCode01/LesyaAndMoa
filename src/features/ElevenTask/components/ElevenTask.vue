@@ -501,6 +501,7 @@ onMounted(() => {
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
+    audio.value.src = '';
     console.log('game mount');
 });
 

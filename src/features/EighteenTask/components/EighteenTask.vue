@@ -66,7 +66,7 @@ const playAudio = (audioPath) => {
 
 const answer = ref('');
 const correct_answer = ref('Я рада была подружиться с ребятами. Они научили нас с Моа понимать их язык. Я узнала много новых слов. Мне нравится на Земле!')
-
+let gameIsClose = false;
 const sendAnswer = () => {
     const answer_input = document.getElementById('input');
     if (answer.value === correct_answer.value) {
@@ -80,7 +80,9 @@ const sendAnswer = () => {
             }
             endGame.value = true;
             answer_input.classList.remove('green');
-            playAudio('Task18/472.18_.mp3')
+            if (!gameIsClose){
+                playAudio('Task18/472.18_.mp3')
+            }
         }, 1000)
 
     } else {
@@ -123,6 +125,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    gameIsClose = true;
+    audio.value.src = '';
     console.log('game unmount')
 });
 

@@ -67,13 +67,13 @@
                                 </VueDraggableNext>
 
                                 <VueDraggableNext :group="{ name: 'speakers', pull: false, put: true }" :sort="false"
-                                @add = "drop($event, 'sound', answer.id)" :ghost-class="'none'" draggable="false">
+                                @add = "drop($event, 'sound', answer.id, answer)" :ghost-class="'none'" draggable="false">
 
                                     <div class="draggable-list__speaker"
                                     :class="{ 'item_right': answer.sound.error == 1, 'item_wrong': answer.sound.error == -1 }"
                                     :data-id="answer.id" :data-type="answer.type">
 
-                                    <SvgIcon iconName="speaker" v-if="answer.sound.isActive" class="speaker"></SvgIcon>
+                                        <SvgIcon :height="32" :width="32" iconName="speaker-violet" :color="'#4E3B7F'" v-if="answer.sound.isActive" class="speaker"></SvgIcon>
                                     </div>
 
                                 </VueDraggableNext>
@@ -169,10 +169,13 @@ const drag = (event, elem) => {
     isDrag.value = true
 }
 
-const drop = (event, type, id) => {
-    event.to.removeChild(event.item)
+let reactionAudio_path;
+let reactionAudio;
+let finalaudio_path;
+let finalaudio;
 
-    console.log(type, id)
+const drop = (event, type, id, answer) => {
+    event.to.removeChild(event.item)
     if (isDrag.value == false) return
 
     isDrag.value = false
@@ -183,8 +186,9 @@ const drop = (event, type, id) => {
     if (elem.type != type) return
 
     if (elem.answer == id){
+        
         if (elem.type == 'word') event.to.children[0].innerHTML = elem.text
-        else event.to.children[0].innerHTML = '<img src="/assets/icons/speaker-violet.svg" alt="speaker" class="speaker" />'
+        else answer.sound.isActive = true
 
         event.from.dataset['isActive'] = 'false'
         event.from.classList.add('hidden')
@@ -206,8 +210,8 @@ const drop = (event, type, id) => {
                         emit('open');
                     }
                 }, 1000)
-                let finalaudio_path = new URL('/assets/audio/Task14/388.14.mp3', import.meta.url).href
-                let finalaudio = new Audio(finalaudio_path);
+                finalaudio_path = new URL('/assets/audio/Task14/388.14.mp3', import.meta.url).href
+                finalaudio = new Audio(finalaudio_path);
                 finalaudio.play();
             }
         }, 2000)
@@ -215,8 +219,8 @@ const drop = (event, type, id) => {
 
     else{
         event.from.children[0].classList.add('item_wrong')
-        let reactionAudio_path = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
-        let reactionAudio = new Audio(reactionAudio_path);
+        reactionAudio_path = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
+        reactionAudio = new Audio(reactionAudio_path);
         reactionAudio.play();
 
         setTimeout(() => {
@@ -265,6 +269,7 @@ onMounted(async() => {
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
+
     console.log('game mount')
 });
 
@@ -272,6 +277,13 @@ onMounted(async() => {
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+    
+    try{
+        finalaudio.src = '';
+    }
+    catch{
+        console.log('no audio');
+    }
     console.log('game unmount')
 });
 

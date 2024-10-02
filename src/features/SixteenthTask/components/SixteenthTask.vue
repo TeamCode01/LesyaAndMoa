@@ -122,6 +122,9 @@ const dragLetter = (event, wordID, letterID) => {
     dataTransfer.value.letterID = letterID
 };
 
+const audioEnd = ref(new Audio());
+let gameIsClose = false;
+
 const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
     // let dragwordID = event.dataTransfer.getData('text').split(' ')[0];
     // let dragletterID = event.dataTransfer.getData('text').split(' ')[1];
@@ -177,16 +180,19 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                     event.to.children[0].classList.remove(
                         'draggable-list__subcontainer-square_right'
                     );
-                    let audioPathSrc = new URL(`/assets/audio/Task16/${audioMap.get('final')}`, import.meta.url).href
-                    let audio = new Audio(audioPathSrc);
-                    audio.play();
+                    let audioPathSrc = new URL(`/assets/audio/Task16/${audioMap.get('final')}`, import.meta.url).href;
+                    audioEnd.value.src = audioPathSrc;
+                    audioEnd.value.play();
                 }, 2000);
 
                 setTimeout(() => {
                     answersCounter.value += 1;
-                    let audioPathSrc = new URL(`/assets/audio/Task16/${audioMap.get('Изумительно')}`, import.meta.url).href
-                    let audio = new Audio(audioPathSrc);
-                    audio.play();
+                    
+                    if ( gameIsClose !== true ) {
+                        let audioPathSrc = new URL(`/assets/audio/Task16/${audioMap.get('Изумительно')}`, import.meta.url).href
+                        audioEnd.value.src = audioPathSrc;
+                        audioEnd.value.play();
+                    }
 
                     setTimeout(() => {
                         if (is_correct.value === false) {
@@ -287,6 +293,9 @@ onMounted(async() => {
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+
+    audioEnd.value.src = "";
+    gameIsClose = true;
     console.log('game unmount')
 });
 

@@ -144,6 +144,8 @@ const drag = (event, word) => {
     dataTransfer.value = word
 };
 
+let finalSrc = new URL('/assets/audio/Task15/426.15_.mp3', import.meta.url).href
+let finalaudio = new Audio(finalSrc);
 const dropLetter = (event, letter) => {
     // let dragx = event.dataTransfer.getData('text').split(' ')[0];
     // let dragy = event.dataTransfer.getData('text').split(' ')[1];
@@ -184,15 +186,8 @@ const dropLetter = (event, letter) => {
                                     word_audio.play()
                                 }, 1000)
                             }
-
                         }
-
-
-
                     });
-
-
-
                 })
             );
 
@@ -218,8 +213,7 @@ const dropLetter = (event, letter) => {
                             emit('open');
                         }
                     }, 1000)
-                    let finalSrc = new URL('/assets/audio/Task15/426.15_.mp3', import.meta.url).href
-                    let finalaudio = new Audio(finalSrc);
+
                     finalaudio.play();
                 }
 
@@ -271,6 +265,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+
+    finalaudio.src = "";
     console.log('game unmount')
 });
 

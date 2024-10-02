@@ -310,6 +310,9 @@ const dragLetter = (event, id, text) => {
     dragAudio.value.play();
 };
 
+let endAudio = new Audio();
+let endAudio_words = new Audio();
+
 const dropLetter = (event, id, isActive) => {
     //let dragid = event.dataTransfer.getData('text')
     let dragid = dataTransfer.value.id;
@@ -427,8 +430,8 @@ const dropLetter = (event, id, isActive) => {
                         '/assets/audio/Task12/з.12 полн.текст Веселые ребята наши друзья.mp3',
                         import.meta.url,
                     ).href;
-                    let audio = new Audio(audioPath_4);
-                    audio.play();
+                    endAudio_words = new Audio(audioPath_4);
+                    endAudio_words.play();
                 }, 2000);
             }
 
@@ -447,8 +450,8 @@ const dropLetter = (event, id, isActive) => {
                         '/assets/audio/Task12/368.12_.mp3',
                         import.meta.url,
                     ).href;
-                    let audio = new Audio(audio_path);
-                    audio.play();
+                    endAudio = new Audio(audio_path);
+                    endAudio.play();
                 }
             }, 7000);
         } else {
@@ -522,6 +525,9 @@ onMounted(async () => {
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
+
+    endAudio_words.src = '';
+    endAudio.src = '';
     console.log('game unmount');
 });
 </script>
