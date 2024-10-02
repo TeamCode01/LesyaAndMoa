@@ -179,11 +179,17 @@ const playEndAudio = (audioPath) => {
 
 const stopAudio = (audioPath) => {
     if (audio.value.paused) {
-        playAudio(audioPath);
+        audio.value.play();
     } else {
         audio.value.pause();
     }
 };
+
+const playCorrectAudio = (audioPath) => {
+    const correct_audio = new Audio();
+    correct_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
+    correct_audio.play();
+}
 
 const is_correct = ref(false);
 const corrValue = ref(0);
@@ -228,9 +234,9 @@ const drop = (event) => {
         (answer.value === 'РАДЫ' && text === 'ОБЩАТЬСЯ') ||
         (answer.value === 'ОБЩАТЬСЯ' && text === 'ДЕТСКУЮ')
     ) {
-        playAudio('Common/1.2.mp3');
         elem.classList.add('green');
         answer_drop.value = text;
+        playCorrectAudio('Common/1.2.mp3');
         setTimeout(() => {
             //words.value.splice(dropIndex.value, 1);
             elem.parentElement.parentElement.removeChild(elem.parentElement);
@@ -242,7 +248,7 @@ const drop = (event) => {
         if (text === 'ДЕТСКУЮ') {
             event.target.classList.add('green');
 
-            playAudio('Common/1.2.mp3');
+            playCorrectAudio('Common/1.2.mp3');
             event.target.classList.remove('green');
             setTimeout(() => {
                 if (is_correct.value === false) {
@@ -255,8 +261,8 @@ const drop = (event) => {
             }, 1000);
         }
     } else {
-        playAudio('Common/2.1.mp3');
         elem.classList.add('red');
+        playCorrectAudio('Common/2.1.mp3');
         setTimeout(() => {
             elem.classList.remove('red');
         }, 2000);
@@ -269,7 +275,7 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-onMounted(async() => {
+onMounted(async () => {
     try {
         const correct = await getCorrectAnswer(13, props.childId);
         if (correct) {
@@ -380,7 +386,6 @@ onBeforeUnmount(() => {
                 outline: none;
                 font-family: 'Nunito';
                 text-align: center;
-                font-family: Inter;
             }
         }
     }
@@ -390,6 +395,8 @@ onBeforeUnmount(() => {
     background-color: $blueGame;
     text-transform: lowercase;
     margin: 0px !important;
+    font-weight: 700;
+    font-family: 'Nunito';
     min-width: 60px !important;
 }
 

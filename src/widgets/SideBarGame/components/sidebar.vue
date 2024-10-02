@@ -50,7 +50,7 @@
                     @next-modal="next()"
                     @correct="checkCorrect(1)"
                     @open="checkOpen(2)"
-                    v-if="taskId === 1 && SeeTask"
+                    v-if="taskId === 1"
                 >
                 </FirstTask>
                 <SecondTask
@@ -61,7 +61,7 @@
                     @next-modal="next()"
                     @correct="checkCorrect(2)"
                     @open="checkOpen(3)"
-                    v-if="taskId === 2 && SeeTask"
+                    v-if="taskId === 2"
                 >
                 </SecondTask>
                 <ThirdTask
@@ -72,7 +72,7 @@
                     @next-modal="next()"
                     @correct="checkCorrect(3)"
                     @open="checkOpen(4)"
-                    v-if="taskId === 3 && SeeTask"
+                    v-if="taskId === 3"
                 >
                 </ThirdTask>
                 <FourthTask
@@ -98,7 +98,7 @@
                 <SixTask
                     @next-modal="next()"
                     @correct="checkCorrect(6)"
-                    @open="checkOpen(8)"
+                    @open="checkOpen(7)"
                     :end="endTime"
                     :childId="props.childId"
                     @close="close()"
@@ -107,15 +107,26 @@
                 </SixTask>
                 <EighthTask
                     @next-modal="next()"
+                    @correct="checkCorrect(7)"
+                    @open="checkOpen(8)"
+                    :childId="props.childId"
+                    :end="endTime"
+                    @close="close()"
+                    v-if="taskId === 7"
+                >
+                </EighthTask>
+                <NineTask
+                    @next-modal="next()"
                     @correct="checkCorrect(8)"
                     @open="checkOpen(9)"
                     :childId="props.childId"
+                    :finish="finish"
                     :end="endTime"
                     @close="close()"
                     v-if="taskId === 8"
                 >
-                </EighthTask>
-                <NineTask
+                </NineTask>
+                <TenthTask
                     @next-modal="next()"
                     @correct="checkCorrect(9)"
                     @open="checkOpen(10)"
@@ -125,8 +136,8 @@
                     @close="close()"
                     v-if="taskId === 9"
                 >
-                </NineTask>
-                <TenthTask
+                </TenthTask>
+                <ElevenTask
                     @next-modal="next()"
                     @correct="checkCorrect(10)"
                     @open="checkOpen(11)"
@@ -136,47 +147,36 @@
                     @close="close()"
                     v-if="taskId === 10"
                 >
-                </TenthTask>
-                <ElevenTask
+                </ElevenTask>
+                <TwelfthTask
                     @next-modal="next()"
                     @correct="checkCorrect(11)"
                     @open="checkOpen(12)"
                     :childId="props.childId"
-                    :finish="finish"
                     :end="endTime"
                     @close="close()"
                     v-if="taskId === 11"
                 >
-                </ElevenTask>
-                <TwelfthTask
+                </TwelfthTask>
+                <ThirteenthTask
                     @next-modal="next()"
                     @correct="checkCorrect(12)"
                     @open="checkOpen(13)"
                     :childId="props.childId"
+                    :finish="finish"
                     :end="endTime"
                     @close="close()"
                     v-if="taskId === 12"
                 >
-                </TwelfthTask>
-                <ThirteenthTask
-                    @next-modal="next()"
-                    @correct="checkCorrect(13)"
-                    @open="checkOpen(7)"
-                    :childId="props.childId"
-                    :finish="finish"
-                    :end="endTime"
-                    @close="close()"
-                    v-if="taskId === 13"
-                >
                 </ThirteenthTask>
                 <SeventhTask
                     @next-modal="next()"
-                    @correct="checkCorrect(7)"
+                    @correct="checkCorrect(13)"
                     @open="checkOpen(14)"
                     :childId="props.childId"
                     :end="endTime"
                     @close="close()"
-                    v-if="taskId === 7"
+                    v-if="taskId === 13"
                 >
                 </SeventhTask>
                 <FourteenthTask
@@ -310,7 +310,7 @@ const show = ref(props.show);
 const correct = ref(false);
 const started = ref(null);
 
-const ids = ref([1, 2, 3, 4, 5, 6, 7, 8, 16, 18]);
+const ids = ref([1, 2, 3, 4, 5, 6, 7, 13, 16, 18]);
 const startedAudio = ref(new Audio());
 
 const close = () => {
@@ -371,6 +371,7 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
                 case 1:
                     playAudio('Music/звук 1_.mp3');
                     audio.value.addEventListener('ended', () => {
+                        show.value = false;
                         isPlaying.value = false;
                         emit('sendPreAudio', isPlaying.value);
                         isPlaying.value = true;
@@ -401,12 +402,12 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
                     break;
 
                 case 7:
-                    playAudio('Music/звук 7_.mp3');
+                    playAudio('Music/звук 8_.mp3');
                     postAudio();
                     break;
 
-                case 8:
-                    playAudio('Music/звук 8_.mp3');
+                case 13:
+                    playAudio('Music/звук 7_.mp3');
                     postAudio();
                     break;
                 case 16:
@@ -448,7 +449,9 @@ const next = () => {
     const taskFindArr = tasks.value.filter((task) => task.done === true);
     if (taskFindArr.length > 0) {
         let nextElId = taskFindArr.at(-1).id;
+        console.log('id', nextElId)
         tasks.value[nextElId].disabled = false;
+
 
         switchTask(
             tasks.value[nextElId].id,
@@ -542,16 +545,9 @@ watch(
             });
             if (taskFindArr.length > 0) {
                 let nextElId = taskFindArr.at(-1).id;
+                console.log('watch', nextElId, taskFindArr);
                 tasks.value[nextElId].disabled = false;
-                // Get the sidebar element
-                const sidebar = document.querySelector('.sidebar__bg');
 
-                // Find the next task element
-                const nextTaskElement = sidebar.querySelector(
-                    `.task[data-id="${nextElId}"]`,
-                );
-                // Scroll to the next task element
-                nextTaskElement.scrollIntoView({ behavior: 'smooth' });
                 switchTask(
                     tasks.value[nextElId].id,
                     tasks.value[nextElId].open,
@@ -560,6 +556,14 @@ watch(
                     tasks.value[nextElId].audio,
                     tasks.value[nextElId].startAudio,
                 );
+
+                const sidebar = document.querySelector('.sidebar__bg');
+
+                // Find the next task element
+                const nextTaskElement = sidebar.querySelector(
+                    `.task[data-id="${nextElId}"]`,
+                );
+                nextTaskElement.scrollIntoView({ behavior: 'smooth' });
             } else {
                 switchTask(
                     1,
@@ -576,6 +580,7 @@ watch(
     },
     {
         immediate: true,
+        deep: true,
     },
 );
 
@@ -663,7 +668,7 @@ onActivated(() => {
         },
 
         {
-            id: 8,
+            id: 7,
             name: 'Задание 8',
             disabled: true,
             done: false,
@@ -675,7 +680,7 @@ onActivated(() => {
             startAudio: 'Task8/279.8_.mp3',
         },
         {
-            id: 9,
+            id: 8,
             name: 'Задание 9',
             disabled: true,
             done: false,
@@ -687,7 +692,7 @@ onActivated(() => {
             startAudio: 'Task9/298.9.mp3',
         },
         {
-            id: 10,
+            id: 9,
             name: 'Задание 10',
             disabled: true,
             done: false,
@@ -699,7 +704,7 @@ onActivated(() => {
             startAudio: 'Task10/316.10.mp3',
         },
         {
-            id: 11,
+            id: 10,
             name: 'Задание 11',
             disabled: true,
             done: false,
@@ -711,7 +716,7 @@ onActivated(() => {
             startAudio: 'Task11/329.11.mp3',
         },
         {
-            id: 12,
+            id: 11,
             name: 'Задание 12',
             disabled: true,
             done: false,
@@ -723,7 +728,7 @@ onActivated(() => {
             startAudio: 'Task12/349.12.mp3',
         },
         {
-            id: 13,
+            id: 12,
             name: 'Задание 13',
             disabled: true,
             done: false,
@@ -735,7 +740,7 @@ onActivated(() => {
             startAudio: 'Task13/369.13.mp3',
         },
         {
-            id: 7,
+            id: 13,
             name: 'Задание 7',
             disabled: true,
             done: false,
