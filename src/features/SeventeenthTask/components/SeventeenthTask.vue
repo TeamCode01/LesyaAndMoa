@@ -218,7 +218,7 @@
                                     v-if="!endSecondTask"
                                 />
                                 <img
-                                    :src="getSrcUrl(picture.alt + '.png')"
+                                    :src="getSrcUrl(picture.endalt + '.png')"
                                     :alt="picture.endalt"
                                     class="draggable-list__lesyaandmoa"
                                     v-else
@@ -844,8 +844,8 @@ const disengage = (event) => {
 
                 if (SecondTaskAnswerCounter.value == 5) {
                     setTimeout(() => {
-                        finalDraw();
                         endSecondTask.value = true;
+                        finalDraw();
                     }, 2000);
                 }
             } else {
@@ -867,6 +867,7 @@ const voiceActing = () => {};
 let gameIsClose = false;
 const finalDraw = () => {
     console.log(centralCords.value);
+    endSecondTask.value = true;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let dot in centralCords.value[1]) {
