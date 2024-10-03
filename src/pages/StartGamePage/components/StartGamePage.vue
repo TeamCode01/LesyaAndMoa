@@ -32,7 +32,7 @@
                 </div>
             </div>
             <img
-            v-show="show_hand"
+                v-show="show_hand"
                 class="hand"
                 @click="playSound($event)"
                 :id="'hand_' + task_id"
@@ -107,7 +107,7 @@ const answerStore = useAnswerStore();
 
 let img = ref('animals.jpg');
 let audio = ref('../assets/audio/Task1/11.1_.mp3');
-const ids = ref([1, 2, 3, 4, 5, 6, 7, 8, 16, 18]);
+const ids = ref([1, 2, 3, 4, 5, 6, 7, 13, 16, 18]);
 const audio_ids_music = ref([1]);
 const showBtn = ref(false);
 const route = useRoute();
@@ -277,7 +277,7 @@ onMounted(() => {
         right: 35%;
     }
 }
-#hand_7 {
+#hand_13 {
     position: absolute;
     bottom: 40%;
     right: 56%;

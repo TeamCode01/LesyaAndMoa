@@ -158,6 +158,7 @@ const LoginUser = async () => {
 }
 .login-input--error {
     background-color: #fff;
+    border-radius: 10px;
 }
 
 .login-input-pass {

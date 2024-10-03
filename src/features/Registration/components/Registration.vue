@@ -127,7 +127,7 @@ import { Button } from '@shared/components/buttons';
 import { SelectSort } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
+import { required, minLength } from '@vuelidate/validators';
 import { watchEffect } from 'vue';
 
 const tasksChoose = ref([
@@ -146,7 +146,7 @@ const form = ref({
 
 const rules = {
     email: { required },
-    password: { required },
+    password: { required, minLength: minLength(8) },
     re_password: { required },
     tasks_type: { required },
 };

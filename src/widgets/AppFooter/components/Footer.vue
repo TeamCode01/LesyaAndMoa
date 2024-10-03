@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="footer__wrapper_info">
-                    <div class="footer__wrapper_phone"><a href="tel:89661655130">8 (966) 165-51-30</a></div>
+                    <div class="footer__wrapper_phone"><a href="tel:+79661655130">8 (966) 165-51-30</a></div>
                     <div class="footer__wrapper_phone"><a href="mailto:Lesya-i-Moa@yandex.ru">Lesya-i-Moa@yandex.ru</a></div>
                     <div class="footer__wrapper_links">
                         <router-link
