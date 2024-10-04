@@ -652,6 +652,15 @@ watchEffect(() => {
             ];
         }
     }
+
+    if (userStore.currentUser.tasks_type === 'групповой') {
+
+        if (formGroup.value.name == formGroup.value.name.replace(cyrillicPattern, '') && formGroup.value.name !== '') {
+            isError.value.name = [
+                'Поле должно содержать только кириллицу и знак "-"',
+            ];
+        }
+    }
 });
 const isFormValidInd = computed(() => {
     return (
@@ -673,7 +682,8 @@ const isFormValidGrp = computed(() => {
         formGroup.value.number_of_students !== '' &&
         formGroup.value.region !== null &&
         formGroup.value.school !== '' &&
-        formGroup.value.average_age
+        formGroup.value.average_age &&
+        formGroup.value.name != formGroup.value.name.replace(cyrillicPattern, '')
     );
 });
 const isValidDelete = computed(() => {

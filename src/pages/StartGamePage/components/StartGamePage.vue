@@ -107,7 +107,7 @@ const answerStore = useAnswerStore();
 
 let img = ref('animals.jpg');
 let audio = ref('../assets/audio/Task1/11.1_.mp3');
-const ids = ref([1, 2, 3, 4, 5, 6, 7, 13, 16, 18]);
+const ids = ref([1, 2, 3, 4, 5, 6, 7, 13, 14, 16, 18]);
 const audio_ids_music = ref([1]);
 const showBtn = ref(false);
 const route = useRoute();
@@ -222,8 +222,8 @@ onMounted(() => {
     bottom: 25%;
     right: 45%;
     transform: translate(-50%, -50%);
-    @media (max-width: 1300px) {
-        bottom: 28%;
+    @media (max-width: 1400px) {
+        bottom: 28%;    
         right: 38%;
     }
 }
@@ -232,9 +232,9 @@ onMounted(() => {
     bottom: 28%;
     right: 46%;
     transform: translate(-50%, -50%);
-    @media (max-width: 1300px) {
+    @media (max-width: 1400px) {
         bottom: 28%;
-        right: 42%;
+        right: 40%;
     }
 }
 #hand_3 {
@@ -242,9 +242,9 @@ onMounted(() => {
     bottom: 38%;
     right: 58%;
     transform: translate(-50%, -50%);
-    @media (max-width: 1300px) {
+    @media (max-width: 1400px) {
         bottom: 38%;
-        right: 53%;
+        right: 50%;
     }
 }
 #hand_4 {
@@ -252,9 +252,9 @@ onMounted(() => {
     bottom: 35%;
     right: 44%;
     transform: translate(-50%, -50%);
-    @media (max-width: 1300px) {
+    @media (max-width: 1400px) {
         bottom: 35%;
-        right: 40%;
+        right: 38%;
     }
 }
 #hand_5 {
@@ -262,9 +262,9 @@ onMounted(() => {
     bottom: 40%;
     right: 41%;
     transform: translate(-50%, -50%);
-    @media (max-width: 1300px) {
+    @media (max-width: 1400px) {
         bottom: 40%;
-        right: 37%;
+        right: 35%;
     }
 }
 #hand_6 {
@@ -272,17 +272,20 @@ onMounted(() => {
     bottom: 38%;
     right: 39%;
     transform: translate(-50%, -50%);
-    @media (max-width: 1300px) {
+    @media (max-width: 1400px) {
         bottom: 38%;
-        right: 35%;
+        right: 34%;
     }
 }
+
+
+
 #hand_13 {
     position: absolute;
     bottom: 40%;
     right: 56%;
     transform: translate(-50%, -50%);
-    @media (max-width: 1300px) {
+    @media (max-width: 1400px) {
         bottom: 40%;
         right: 50%;
     }
@@ -292,22 +295,48 @@ onMounted(() => {
     bottom: 38%;
     right: 34%;
     transform: translate(-50%, -50%);
-    @media (max-width: 1300px) {
+    @media (max-width: 1400px) {
         bottom: 28%;
         right: 37%;
     }
 }
+
+#hand_7{
+    position: absolute;
+    bottom: 38%;
+    right: 34%;
+    transform: translate(-50%, -50%);
+    @media (max-width: 1400px) {
+        bottom: 28%;
+        right: 37%;
+    }
+}
+
+#hand_14 {
+    position: absolute;
+    bottom: 30%;
+    right: 54%;
+    transform: translate(-50%, -50%);
+    @media (max-width: 1400px) {
+        bottom: 35%;
+        right: 46%;
+    }
+}
+
+
 
 #hand_16 {
     position: absolute;
     bottom: 45%;
     right: 26%;
     transform: translate(-50%, -50%);
-    @media (max-width: 1300px) {
+    @media (max-width: 1400px) {
         bottom: 45%;
         right: 23%;
     }
 }
+
+
 
 #hand_18 {
     position: absolute;
@@ -320,14 +349,22 @@ onMounted(() => {
     }
 }
 
+#hand_9,#hand_10,#hand_11,#hand_12,#hand_15,#hand_17 {
+    display: none;
+}
+
 .game {
     display: flex;
+    width: 1200px;
     padding: 56px 40px 56px 40px;
     margin: 60px 0px 90px 0px;
     background-color: $pink;
     border-radius: 20px;
     position: relative;
 
+    @media (max-width: 1400px) {
+        width: 944px;
+    }
     &_img {
         width: 100%;
         cursor: pointer;
@@ -341,6 +378,10 @@ onMounted(() => {
             border-radius: 20px;
             width: 100%;
             height: 530px;
+
+            @media (max-width: 1400px) {
+                height: 480px;
+            }
 
             @media (max-width: 1024px) {
                 height: 400px;
@@ -379,6 +420,10 @@ onMounted(() => {
     margin: 0px auto;
     width: 100%;
     padding: 0 120px;
+
+    display: flex;
+    justify-content: center;
+
 
     //@media (max-width: 1440px) {
     // max-width: 1200px;

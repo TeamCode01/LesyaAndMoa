@@ -185,6 +185,7 @@
                     @open="checkOpen(15)"
                     :childId="props.childId"
                     :end="endTime"
+                    :finish = "finish"
                     @close="close()"
                     v-if="taskId === 14"
                 >
@@ -310,7 +311,7 @@ const show = ref(props.show);
 const correct = ref(false);
 const started = ref(null);
 
-const ids = ref([1, 2, 3, 4, 5, 6, 7, 13, 16, 18]);
+const ids = ref([1, 2, 3, 4, 5, 6, 7, 13, 14, 16, 18]);
 const startedAudio = ref(new Audio());
 
 const close = () => {
@@ -352,6 +353,7 @@ const postAudio = () => {
 
 const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
     const task = tasks.value.find((item) => item.id == id);
+    console.log(id)
     if (task.disabled === false) {
         taskId.value = id;
         SeeTask.value = false;
@@ -408,6 +410,10 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
 
                 case 13:
                     playAudio('Music/звук 7_.mp3');
+                    postAudio();
+                    break;
+                case 14:
+                    playAudio('Music/звук 2_.mp3');
                     postAudio();
                     break;
                 case 16:

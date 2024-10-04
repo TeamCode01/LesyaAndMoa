@@ -113,6 +113,11 @@ const LoginUser = async () => {
     row-gap: 50px;
     position: relative;
     justify-content: center;
+
+    @media (max-width: 1140px) {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 .Login {
@@ -207,9 +212,11 @@ const LoginUser = async () => {
     @media (max-width: 1200px) {
         width: 213px;
         height: 403px;
+        left: 80%;
+        top: 125px;
     }
     @media (max-width: 1140px) {
-        top: 620px;
+        top: 680px;
         left: 50%;
         margin-left: -106px;
     }

@@ -173,6 +173,7 @@ let reactionAudio_path;
 let reactionAudio;
 let finalaudio_path;
 let finalaudio;
+let gameIsClose = false;
 
 const drop = (event, type, id, answer) => {
     event.to.removeChild(event.item)
@@ -210,9 +211,13 @@ const drop = (event, type, id, answer) => {
                         emit('open');
                     }
                 }, 1000)
-                finalaudio_path = new URL('/assets/audio/Task14/388.14.mp3', import.meta.url).href
-                finalaudio = new Audio(finalaudio_path);
-                finalaudio.play();
+                
+                if ( !gameIsClose )
+                {
+                    finalaudio_path = new URL('/assets/audio/Task14/388.14.mp3', import.meta.url).href
+                    finalaudio = new Audio(finalaudio_path);
+                    finalaudio.play();
+                }
             }
         }, 2000)
     }
@@ -277,7 +282,7 @@ onMounted(async() => {
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
-    
+    gameIsClose = true;
     try{
         finalaudio.src = '';
     }
