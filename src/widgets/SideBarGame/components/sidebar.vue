@@ -353,7 +353,6 @@ const postAudio = () => {
 
 const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
     const task = tasks.value.find((item) => item.id == id);
-    console.log(id)
     if (task.disabled === false) {
         taskId.value = id;
         SeeTask.value = false;
