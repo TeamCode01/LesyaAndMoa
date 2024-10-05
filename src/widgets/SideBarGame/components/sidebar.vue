@@ -185,7 +185,7 @@
                     @open="checkOpen(15)"
                     :childId="props.childId"
                     :end="endTime"
-                    :finish = "finish"
+                    :finish="finish"
                     @close="close()"
                     v-if="taskId === 14"
                 >
@@ -353,6 +353,7 @@ const postAudio = () => {
 
 const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
     const task = tasks.value.find((item) => item.id == id);
+    console.log(id);
     if (task.disabled === false) {
         taskId.value = id;
         SeeTask.value = false;
@@ -454,9 +455,8 @@ const next = () => {
     const taskFindArr = tasks.value.filter((task) => task.done === true);
     if (taskFindArr.length > 0) {
         let nextElId = taskFindArr.at(-1).id;
-        console.log('id', nextElId)
+        console.log('id', nextElId);
         tasks.value[nextElId].disabled = false;
-
 
         switchTask(
             tasks.value[nextElId].id,
@@ -505,6 +505,8 @@ watch(
         console.log('see', SeeTask.value);
         taskId.value = newId;
         show.value = false;
+        show_hand.value = false;
+        emit('hand', show_hand.value);
         emit('show', show.value);
     },
 );
