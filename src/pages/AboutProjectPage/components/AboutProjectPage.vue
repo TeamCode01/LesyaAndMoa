@@ -197,10 +197,12 @@ h1 {
 .description {
     display: flex;
     flex-direction: column;
+    align-items: center;
     margin-bottom: 80px;
 }
 
 .description_block {
+
     display: flex;
     flex-direction: row;
     max-width: 1200px;
