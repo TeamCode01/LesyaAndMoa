@@ -4,7 +4,7 @@
         @close="closeCookie"
         @accept="acceptCookie('cookie', cur_date, 1)"
     />
-    <div @click="show_socials = !show_socials" class="link-share">
+    <div @click.prevent="shareLink" class="link-share">
         <Transition name="slide-fade">
             <div v-if="show_socials" class="networks__wrapper">
                 <ShareNetwork
@@ -437,6 +437,9 @@ const sharing = ref({
 const getImageUrl = (path) => {
     return new URL(`/assets/icons/${path}`, import.meta.url).href;
 };
+const shareLink = () => {
+    show_socials.value = !show_socials.value;
+};
 
 const networks = ref([
     {
@@ -530,15 +533,14 @@ const close = () => {
     document.body.classList.remove('no-scroll');
 };
 
-
 const stateAudio = {
     'Music/звук 1_.mp3': {
         state: null,
-        time: null
+        time: null,
     },
     'TestTask/3.тестовое задание.mp3': {
         state: null,
-        time: null
+        time: null,
     },
 };
 
@@ -564,24 +566,20 @@ const playAudio = (audioPath, forcePlay = false) => {
 
     audio.value.addEventListener('ended', () => {
         stateAudio[audioPath].state = 'ended';
-    })
+    });
 
     if (audioPath === 'Music/звук 1_.mp3') {
-
         audio.value.addEventListener('ended', () => {
             playAudio('TestTask/3.тестовое задание.mp3');
-        })
-
-    };
-
+        });
+    }
 
     audio.value.dataset.audioPath = audioPath;
     audio.value.play();
 
     stateAudio[audioPath].state = 'playing';
 
-    console.log(stateAudio[audioPath].state, audioPath, audio.value.dataset)
-
+    console.log(stateAudio[audioPath].state, audioPath, audio.value.dataset);
 };
 
 const playTestAudio = (audioPath) => {
@@ -599,7 +597,9 @@ function handleScroll(e) {
     if (posTop + test.clientHeight <= window.innerHeight) {
         if (stateAudio['Music/звук 1_.mp3'].state !== 'ended')
             playAudio('Music/звук 1_.mp3');
-        else if (stateAudio['TestTask/3.тестовое задание.mp3'].state !== 'ended')
+        else if (
+            stateAudio['TestTask/3.тестовое задание.mp3'].state !== 'ended'
+        )
             playAudio('TestTask/3.тестовое задание.mp3');
 
         // audio.value.addEventListener('ended', () => {
@@ -637,12 +637,6 @@ const refresh = () => {
     stateAudio['TestTask/3.тестовое задание.mp3'].time = null;
 
     playAudio('Music/звук 1_.mp3');
-
-    //if (audio.value.paused) {
-    //    audio.value.currentTime = 0;
-    //    audio.value.play();
-    //}
-    //audio.value.currentTime = 0;
 };
 
 const skip = () => {
@@ -674,17 +668,15 @@ onMounted(() => {
     } else {
         showCookie.value = true;
     }
-
-    window.addEventListener('click', () => {
-        if (stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
-            audio.value.play().catch((error) => {
-            if (error.name === 'NotAllowedError') {
-                console.log('User interaction required to play audio');
-            }
-        });
-        }
-
-    });
+    // window.addEventListener('click', () => {
+    //     if (stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
+    //         audio.value.play().catch((error) => {
+    //             if (error.name === 'NotAllowedError') {
+    //                 console.log('User interaction required to play audio');
+    //             }
+    //         });
+    //     }
+    // });
     document.addEventListener('scroll', handleScroll);
     windowWidth.value = window.innerWidth;
     itemsToShow.value = windowWidth.value >= 660 ? 2 : 1;
@@ -709,8 +701,6 @@ onUnmounted(() => {
     console.log(stateAudio, 'unmount');
 });
 
-
-
 onBeforeRouteLeave(() => {
     // if (
     //     stateAudio['Music/звук 1_.mp3'] === 'playing' ||
@@ -723,18 +713,25 @@ onBeforeRouteLeave(() => {
     //     }
     // }
 
-    if (!audio.value.src) return
-    if (stateAudio[audio.value.dataset.audioPath].state && stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
+    if (!audio.value.src) return;
+    if (
+        stateAudio[audio.value.dataset.audioPath].state &&
+        stateAudio[audio.value.dataset.audioPath].state !== 'ended'
+    ) {
         stateAudio[audio.value.dataset.audioPath].state = 'paused';
-        stateAudio[audio.value.dataset.audioPath].time = audio.value.currentTime;
+        stateAudio[audio.value.dataset.audioPath].time =
+            audio.value.currentTime;
         audio.value.pause();
         audio.value.src = '';
     }
 
-    console.log('beforeRouterLeave', stateAudio,  audio.value, audio.value.currentTime);
-
+    console.log(
+        'beforeRouterLeave',
+        stateAudio,
+        audio.value,
+        audio.value.currentTime,
+    );
 });
-
 
 onBeforeRouteUpdate(() => {
     // if (audio.value.paused) {
@@ -754,14 +751,13 @@ onBeforeRouteUpdate(() => {
     // }
     if (stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
         stateAudio[audio.value.dataset.audioPath].state = 'paused';
-        stateAudio[audio.value.dataset.audioPath].time = audio.value.currentTime;
+        stateAudio[audio.value.dataset.audioPath].time =
+            audio.value.currentTime;
         audio.value.pause();
     }
 
     console.log('beforeRouterUpdate', stateAudio);
 });
-
-
 
 watch(
     () => isOpen.value,
@@ -786,20 +782,16 @@ watch(
 
             for (let key in stateAudio) {
                 if (stateAudio[key].state === 'paused') {
-                    
                     stateAudio[key].state = null;
                     playAudio(key);
                     audio.value.currentTime = stateAudio[key].time;
                     console.log(key, stateAudio[key]);
                 }
             }
-
         }
     },
-    { immediate: false } // Не позволяет вызвать сразу при первой загрузке
+    { immediate: false }, // Не позволяет вызвать сразу при первой загрузке
 );
-
-
 </script>
 <style lang="scss" scoped>
 .networks {
