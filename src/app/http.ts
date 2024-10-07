@@ -10,11 +10,11 @@ const urls = [
     '/token/login/',
     '/users/',
     '/news/',
-    '/reset_password_confirm/',
+    '/users/reset_password_confirm/',
 ]
 
 const post_urls = [
-    '/reset_password/',
+    '/users/reset_password/',
 ]
 
 

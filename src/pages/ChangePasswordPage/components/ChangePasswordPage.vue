@@ -59,7 +59,7 @@ const changePass = async () => {
         if (!data.value) {
             return;
         }
-        const response = await HTTP.post('/reset_password/', data.value);
+        const response = await HTTP.post('/users/reset_password/', data.value);
         data.value.email = '';
         isError.value.email = '';
     } catch (error) {

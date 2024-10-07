@@ -340,14 +340,18 @@ const playAudio = (audioPath) => {
     ).href;
     audio.value.play();
 };
-const postAudio = () => {
+const postAudio = (audioPath) => {
     audio.value.addEventListener('ended', () => {
         isPlaying.value = false;
         show_hand.value = true;
+        show.value = false;
         emit('sendPreAudio', isPlaying.value);
         emit('show', show.value);
         emit('hand', show_hand.value);
+        emit('sendAudio', audioPath);
         audio.value.pause();
+
+        
     });
 };
 
@@ -365,7 +369,7 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
         taskImage.value = img;
         emit('sendImg', img);
         emit('sendId', taskId.value);
-        emit('sendAudio', startAudioV);
+     
         if (ids.value.includes(taskId.value)) {
             isPlaying.value = true;
             emit('sendPreAudio', isPlaying.value);
@@ -379,28 +383,28 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
                         isPlaying.value = true;
                         playAudio('Other/10.общее.mp3');
                         emit('sendPreAudio', isPlaying.value);
-                        postAudio();
+                        postAudio('Task1/11.1_.mp3');
                     });
                     break;
                 case 2:
                     playAudio('Music/звук 2_.mp3');
-                    postAudio();
+                    postAudio('Task2/24.2_.mp3');
                     break;
                 case 3:
                     playAudio('Music/звук 3_.mp3');
-                    postAudio();
+                    postAudio('Task3/30.3_.mp3');
                     break;
                 case 4:
                     playAudio('Music/звук 4_.mp3');
-                    postAudio();
+                    postAudio('Task4/44.4_.mp3');
                     break;
                 case 5:
                     playAudio('Music/звук 5_.mp3');
-                    postAudio();
+                    postAudio('Task5/61.5_.mp3');
                     break;
                 case 6:
                     playAudio('Music/звук 6_.mp3');
-                    postAudio();
+                    postAudio('Task6/78.6_.mp3');
                     break;
 
                 case 7:
@@ -418,11 +422,12 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
                     break;
                 case 16:
                     playAudio('Music/звук 9_.mp3');
-                    postAudio();
+                    postAudio('Task16/427.16_.mp3');
+                
                     break;
                 case 18:
                     playAudio('Music/звук 1_.mp3');
-                    postAudio();
+                    postAudio('Task18/470.18_.mp3');
                     break;
 
                 default:
@@ -673,10 +678,11 @@ onActivated(() => {
             audio: 'Task6/79.6.mp3',
             startAudio: 'Task6/78.6_.mp3',
         },
+      
 
         {
             id: 7,
-            name: 'Задание 8',
+            name: 'Задание 7',
             disabled: true,
             done: false,
             open: false,
@@ -688,7 +694,7 @@ onActivated(() => {
         },
         {
             id: 8,
-            name: 'Задание 9',
+            name: 'Задание 8',
             disabled: true,
             done: false,
             open: false,
@@ -700,7 +706,7 @@ onActivated(() => {
         },
         {
             id: 9,
-            name: 'Задание 10',
+            name: 'Задание 9',
             disabled: true,
             done: false,
             open: false,
@@ -712,7 +718,7 @@ onActivated(() => {
         },
         {
             id: 10,
-            name: 'Задание 11',
+            name: 'Задание 10',
             disabled: true,
             done: false,
             open: false,
@@ -724,7 +730,7 @@ onActivated(() => {
         },
         {
             id: 11,
-            name: 'Задание 12',
+            name: 'Задание 11',
             disabled: true,
             done: false,
             open: false,
@@ -736,7 +742,7 @@ onActivated(() => {
         },
         {
             id: 12,
-            name: 'Задание 13',
+            name: 'Задание 12',
             disabled: true,
             done: false,
             open: false,
@@ -746,9 +752,10 @@ onActivated(() => {
             audio: 'Task13/370.13.mp3',
             startAudio: 'Task13/369.13.mp3',
         },
+
         {
             id: 13,
-            name: 'Задание 7',
+            name: 'Задание 13',
             disabled: true,
             done: false,
             open: false,
@@ -758,6 +765,7 @@ onActivated(() => {
             audio: 'Task7/261.7.mp3',
             startAudio: 'Task7/260.7_.mp3',
         },
+
         {
             id: 14,
             name: 'Задание 14',

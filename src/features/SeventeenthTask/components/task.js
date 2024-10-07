@@ -35,9 +35,9 @@ const dataSecondTask = [
     [
         { id: 1, src: '/assets/creatures/SeventeenthTask/tree.png', alt: 'tree', endsrc: '/assets/creatures/SeventeenthTask/daisy.png', endalt: 'daisy', },
         { id: 2, src: '/assets/creatures/SeventeenthTask/daisy.png', alt: 'daisy', endsrc: '/assets/creatures/SeventeenthTask/tree.png', endalt: 'tree', },
-        { id: 3, src: '/assets/creatures/SeventeenthTask/cloud.png', alt: 'cloud', endsrc: '/assets/creatures/SeventeenthTask/cow.png', endalt: 'cow', },
+        { id: 3, src: '/assets/creatures/SeventeenthTask/clouds.png', alt: 'clouds', endsrc: '/assets/creatures/SeventeenthTask/cow.png', endalt: 'cow', },
         { id: 4, src: '/assets/creatures/SeventeenthTask/cow.png', alt: 'cow', endsrc: '/assets/creatures/SeventeenthTask/river.png', endalt: 'river', },
-        { id: 5, src: '/assets/creatures/SeventeenthTask/river.png', alt: 'river', endsrc: '/assets/creatures/SeventeenthTask/cloud.png', endalt: 'cloud', }
+        { id: 5, src: '/assets/creatures/SeventeenthTask/river.png', alt: 'river', endsrc: '/assets/creatures/SeventeenthTask/clouds.png', endalt: 'clouds', }
     ]
 ];
 

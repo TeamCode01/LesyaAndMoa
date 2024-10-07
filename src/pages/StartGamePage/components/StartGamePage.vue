@@ -132,6 +132,7 @@ const sendImg = (image) => {
 
 const sendAudio = (music) => {
     audio.value = music;
+    // console.log('audio', audio.value);
 };
 const sendPreAudio = (pre) => {
     isPlaying.value = pre;
@@ -178,11 +179,11 @@ const refresh = () => {
 const playSound = () => {
     if (ids.value.includes(task_id.value)) {
         show_hand.value = false;
+        showBtn.value = false;
         startAudio.value.src = new URL(
             `/assets/audio/${audio.value}`,
             import.meta.url,
         ).href;
-        // console.log('audio', startAudio.value.src);
         startAudio.value.play();
         startAudio.value.addEventListener('ended', () => {
             showBtn.value = true;
@@ -196,7 +197,6 @@ watch(
     (newId) => {
         if (newId) {
             childId = newId;
-            console.log('newId', childId);
         }
     },
     { immediate: true },
@@ -204,7 +204,6 @@ watch(
 
 onBeforeRouteLeave((to, from) => {
     childId = null;
-    console.log('id', childId);
 });
 
 onMounted(() => {

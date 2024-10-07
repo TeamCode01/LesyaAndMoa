@@ -311,16 +311,9 @@ const syllables = ref({
     ],
     2: {
         1: [
+         
             {
                 id: 1,
-                text: 'ПА',
-                audio: 'Task8/289.8.mp3',
-                correct: null,
-                hidden: false,
-                drag_class: false,
-            },
-            {
-                id: 2,
                 text: 'ТЕР',
                 audio: 'Task8/290.8.mp3',
                 correct: null,
@@ -328,9 +321,17 @@ const syllables = ref({
                 drag_class: false,
             },
             {
-                id: 3,
+                id: 2,
                 text: 'РО',
                 audio: 'Task8/291.8.mp3',
+                correct: null,
+                hidden: false,
+                drag_class: false,
+            },
+            {
+                id: 3,
+                text: 'ПА',
+                audio: 'Task8/289.8.mp3',
                 correct: null,
                 hidden: false,
                 drag_class: false,
