@@ -311,7 +311,6 @@ const syllables = ref({
     ],
     2: {
         1: [
-         
             {
                 id: 1,
                 text: 'ТЕР',
@@ -330,12 +329,13 @@ const syllables = ref({
             },
             {
                 id: 3,
-                text: 'ПА',
-                audio: 'Task8/289.8.mp3',
+                text: 'ТО',
+                audio: 'Task8/294.8.mp3',
                 correct: null,
                 hidden: false,
                 drag_class: false,
             },
+
             {
                 id: 4,
                 text: 'ЛЕ',
@@ -354,10 +354,11 @@ const syllables = ref({
                 hidden: false,
                 drag_class: false,
             },
+
             {
                 id: 6,
-                text: 'ТО',
-                audio: 'Task8/294.8.mp3',
+                text: 'ПА',
+                audio: 'Task8/289.8.mp3',
                 correct: null,
                 hidden: false,
                 drag_class: false,
@@ -466,7 +467,7 @@ const props = defineProps({
     },
 });
 
-const audio =  new Audio();
+const audio = new Audio();
 const playAudio = (audioPath) => {
     audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     audio.play();
@@ -762,7 +763,7 @@ onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
 
-    audio.src = "";
+    audio.src = '';
     console.log('game unmount');
 });
 </script>

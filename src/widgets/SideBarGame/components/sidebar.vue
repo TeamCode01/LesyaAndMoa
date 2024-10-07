@@ -409,16 +409,16 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
 
                 case 7:
                     playAudio('Music/звук 8_.mp3');
-                    postAudio();
+                    postAudio('Task8/279.8_.mp3');
                     break;
 
                 case 13:
                     playAudio('Music/звук 7_.mp3');
-                    postAudio();
+                    postAudio('Task7/260.7_.mp3');
                     break;
                 case 14:
                     playAudio('Music/звук 2_.mp3');
-                    postAudio();
+                    postAudio('Task14/378.14_.mp3');
                     break;
                 case 16:
                     playAudio('Music/звук 9_.mp3');
@@ -679,7 +679,6 @@ onActivated(() => {
             startAudio: 'Task6/78.6_.mp3',
         },
       
-
         {
             id: 7,
             name: 'Задание 7',

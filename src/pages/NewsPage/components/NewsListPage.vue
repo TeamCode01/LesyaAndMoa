@@ -252,11 +252,20 @@ onBeforeRouteLeave(() => {
 }
 
 .news-list__card-img img {
-    width: 97%;
-    height: 240px;
+    width: 100%;
+    height: auto;
+    max-height: 240px;
     border-radius: 20px;
     object-fit: cover;
     overflow: hidden;
+
+    // @media (max-width: 990px) {
+    //     max-height: 200px;
+    // }
+
+    // @media (max-width: 680px) {
+    //     max-height: 160px;
+    // }
 }
 
 .news-list__title {
