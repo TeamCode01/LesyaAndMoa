@@ -137,6 +137,7 @@ const LoginUser = async () => {
     }
     @media (max-width: 568px) {
         min-width: 90vw;
+        width: 90vw;
     }
 }
 .Login h2 {
