@@ -249,12 +249,13 @@ onBeforeRouteLeave(() => {
 .news-list__card-img {
     display: flex;
     margin-bottom: 12px;
+
+
 }
 
 .news-list__card-img img {
     width: 100%;
     height: auto;
-    max-height: 240px;
     border-radius: 20px;
     object-fit: cover;
     overflow: hidden;
