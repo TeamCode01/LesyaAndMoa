@@ -103,7 +103,6 @@
                     @click="
                         if (isFormValid) {
                             RegisterUser();
-                            close();
                         }
                     "
                 ></Button>
