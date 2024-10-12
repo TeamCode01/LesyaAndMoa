@@ -41,6 +41,7 @@
                 :class="{ game_img_disabled: isPlaying === true }"
             />
             <div
+                @click="playSound($event)"
                 class="game_img"
                 :class="{ game_img_disabled: isPlaying === true }"
             >
@@ -222,7 +223,7 @@ onMounted(() => {
     right: 45%;
     transform: translate(-50%, -50%);
     @media (max-width: 1400px) {
-        bottom: 28%;    
+        bottom: 28%;
         right: 38%;
     }
 }
@@ -277,8 +278,6 @@ onMounted(() => {
     }
 }
 
-
-
 #hand_13 {
     position: absolute;
     bottom: 40%;
@@ -300,7 +299,7 @@ onMounted(() => {
     }
 }
 
-#hand_7{
+#hand_7 {
     position: absolute;
     bottom: 38%;
     right: 34%;
@@ -322,8 +321,6 @@ onMounted(() => {
     }
 }
 
-
-
 #hand_16 {
     position: absolute;
     bottom: 45%;
@@ -334,8 +331,6 @@ onMounted(() => {
         right: 23%;
     }
 }
-
-
 
 #hand_18 {
     position: absolute;
@@ -348,7 +343,12 @@ onMounted(() => {
     }
 }
 
-#hand_9,#hand_10,#hand_11,#hand_12,#hand_15,#hand_17 {
+#hand_9,
+#hand_10,
+#hand_11,
+#hand_12,
+#hand_15,
+#hand_17 {
     display: none;
 }
 
@@ -422,7 +422,6 @@ onMounted(() => {
 
     display: flex;
     justify-content: center;
-
 
     //@media (max-width: 1440px) {
     // max-width: 1200px;
