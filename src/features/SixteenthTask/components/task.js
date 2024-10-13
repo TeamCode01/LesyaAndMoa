@@ -14,7 +14,7 @@ const dataTask = [
                 wordid: 2,
                 word: [
                     { id: 1, classid: 1, text: 'К', isActive: true },
-                    { id: 2, classid: 4, text: 'И', isActive: true },
+                    { id: 2, classid: 4, text: 'и', isActive: true },
                     { id: 3, classid: 3, text: 'П', isActive: true },
                     { id: 4, classid: 5, text: 'С', isActive: true },
                     { id: 5, classid: 6, text: 'О', isActive: true },

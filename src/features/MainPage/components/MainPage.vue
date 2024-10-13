@@ -545,19 +545,22 @@ const stateAudio = {
         time: null,
     },
 };
-
+let flagAddListener = false;
 const playAudio = (audioPath, forcePlay = false) => {
+
     if (!forcePlay) {
         if (
             stateAudio[audioPath].state === 'ended' ||
             stateAudio[audioPath].state === 'playing'
-        )
+        ){
             return;
+        }
         if (stateAudio[audioPath].state === 'paused') {
-            if (audio.value.paused) {
+            {
                 audio.value.play();
+                stateAudio[audioPath].state = 'playing'
+                return;
             }
-            return;
         }
     }
 
@@ -567,21 +570,23 @@ const playAudio = (audioPath, forcePlay = false) => {
     ).href;
 
     audio.value.addEventListener('ended', () => {
-        stateAudio[audioPath].state = 'ended';
-    });
 
-    if (audioPath === 'Music/звук 1_.mp3') {
-        audio.value.addEventListener('ended', () => {
-            playAudio('TestTask/3.тестовое задание.mp3');
-        });
-    }
+        if (audioPath === audio.value.dataset.audioPath){
+            console.log(audioPath, stateAudio[audioPath])
+            stateAudio[audioPath].state = 'ended'
+
+            if (audioPath === 'Music/звук 1_.mp3' && flagAddListener == false) {
+                playAudio('TestTask/3.тестовое задание.mp3');
+                flagAddListener = true;
+            }
+        };
+
+    });
 
     audio.value.dataset.audioPath = audioPath;
     audio.value.play();
 
     stateAudio[audioPath].state = 'playing';
-
-    console.log(stateAudio[audioPath].state, audioPath, audio.value.dataset);
 };
 
 const playTestAudio = (audioPath) => {
@@ -597,12 +602,15 @@ function handleScroll(e) {
     const test = document.getElementById('test');
     const posTop = test.getBoundingClientRect().top;
     if (posTop + test.clientHeight <= window.innerHeight) {
-        if (stateAudio['Music/звук 1_.mp3'].state !== 'ended')
+        if (stateAudio['Music/звук 1_.mp3'].state !== 'ended'){
             playAudio('Music/звук 1_.mp3');
+        }
+            
         else if (
             stateAudio['TestTask/3.тестовое задание.mp3'].state !== 'ended'
-        )
+        ){
             playAudio('TestTask/3.тестовое задание.mp3');
+        }
 
         // audio.value.addEventListener('ended', () => {
         //console.log('first ended', audio.value.src)
@@ -617,6 +625,9 @@ function handleScroll(e) {
         if (posTop + test.offsetHeight < 0) {
             if (stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
                 stateAudio[audio.value.dataset.audioPath].state = 'paused';
+                audio.value.pause();
+            }
+            else{
                 audio.value.pause();
             }
         }
@@ -704,7 +715,6 @@ onMounted(() => {
     });
     GetNews();
 
-    console.log('onMount', stateAudio);
 });
 onUnmounted(() => {
     document.removeEventListener('scroll', handleScroll);
@@ -723,7 +733,6 @@ onUnmounted(() => {
         }
     });
 
-    console.log(stateAudio, 'unmount');
 });
 
 onBeforeRouteLeave(() => {
@@ -750,12 +759,6 @@ onBeforeRouteLeave(() => {
         audio.value.src = '';
     }
 
-    console.log(
-        'beforeRouterLeave',
-        stateAudio,
-        audio.value,
-        audio.value.currentTime,
-    );
 });
 
 onBeforeRouteUpdate(() => {
@@ -781,7 +784,6 @@ onBeforeRouteUpdate(() => {
         audio.value.pause();
     }
 
-    console.log('beforeRouterUpdate', stateAudio);
 });
 
 watch(
@@ -802,7 +804,6 @@ const route = useRoute();
 watch(
     () => Object.keys(userStore.currentUser).length,
     (newVal, oldVal) => {
-        console.log(newVal, oldVal);
 
         stateAudio['Music/звук 1_.mp3'].state = null;
         stateAudio['TestTask/3.тестовое задание.mp3'].state = null;
@@ -826,7 +827,6 @@ watch(
                     stateAudio[key].state = null;
                     playAudio(key);
                     audio.value.currentTime = stateAudio[key].time;
-                    console.log(key, stateAudio[key]);
                 }
             }
         }

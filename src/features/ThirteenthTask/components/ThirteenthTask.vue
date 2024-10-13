@@ -15,6 +15,18 @@
                         alt="крест"
                     />
                 </div>
+
+                <div class="game_icons_item" @click="mute()">
+                    <img
+                        v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg"
+                        alt="sound"
+                    /><img
+                        v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg"
+                        alt=""
+                    />
+                </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
                     <p class="ThirteenthTask__title">
@@ -161,17 +173,30 @@ const getImageUrl = (path) => {
     return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
+const isMuted = ref(false);
+const mute = () => {
+    isMuted.value = !isMuted.value;
+    if (isMuted.value === true) {
+        audio.value.volume = 0;
+    } else {
+        audio.value.volume = 1;
+    }
+};
+
 const playAudio = async (audioPath) => {
+    if (isMuted.value && audioPath !== "Task13/377.13_.mp3") return;
     audio.value.src = new URL(
         `/assets/audio/${audioPath}`,
         import.meta.url,
     ).href;
     if (props.finish === true) {
+        audio.value.volume = 1;
         await audio.value.play();
     }
 };
 
 const playEndAudio = (audioPath) => {
+    if (isMuted.value) return;
     const end_audio = new Audio();
     end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
@@ -186,6 +211,7 @@ const stopAudio = (audioPath) => {
 };
 
 const playCorrectAudio = (audioPath) => {
+    if (isMuted.value) return;
     const correct_audio = new Audio();
     correct_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     correct_audio.play();
@@ -411,5 +437,21 @@ onBeforeUnmount(() => {
     border-radius: 6px;
     border: none;
     cursor: pointer;
+}
+
+.game_icons_item{
+    top: 16px;
+    position: absolute;
+    right: 60px;
+    z-index: 1000;
+
+    width: 40px;
+    height: 40px;
+    background-color: #e6f2fa;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

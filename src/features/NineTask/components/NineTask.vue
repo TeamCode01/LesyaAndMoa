@@ -9,7 +9,17 @@
                         alt="крест"
                     />
                 </div>
-
+                <div class="game_icons_item" @click="mute()">
+                    <img
+                        v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg"
+                        alt="sound"
+                    /><img
+                        v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg"
+                        alt=""
+                    />
+                </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
                     <p class="title-h4 NineTask__title">
@@ -192,12 +202,29 @@ const getImageUrl = (path) => {
 const audio = ref(new Audio());
 const is_correct = ref(false);
 
+const isMuted = ref(false);
+const mute = () => {
+    isMuted.value = !isMuted.value;
+    if (isMuted.value === true) {
+        audio.value.volume = 0;
+    } else {
+        audio.value.volume = 1;
+    }
+};
+
 const playAudio = async (audioPath) => {
+    if (isMuted.value && audioPath !== 'Task9/315.9_.mp3'){
+        return
+    };
+
+    console.log('play')
     audio.value.src = new URL(
         `/assets/audio/${audioPath}`,
         import.meta.url,
     ).href;
     if (props.finish === true) {
+        
+        audio.value.volume = 1;
         await audio.value.play();
     }
 };
@@ -205,6 +232,7 @@ const playAudio = async (audioPath) => {
 
 const end_audio = new Audio();
 const playEndAudio = (audioPath) => {
+    if (isMuted.value) return;
     end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
 };
@@ -810,5 +838,21 @@ onBeforeUnmount(() => {
 
 .none {
     display: none;
+}
+
+.game_icons_item{
+    top: 16px;
+    position: absolute;
+    right: 60px;
+    z-index: 1000;
+
+    width: 40px;
+    height: 40px;
+    background-color: #e6f2fa;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>
