@@ -10,6 +10,18 @@
                     />
                 </div>
 
+                <div class="game_icons_item" @click="mute()">
+                    <img
+                        v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg"
+                        alt="sound"
+                    /><img
+                        v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg"
+                        alt=""
+                    />
+                </div>
+
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
                     <p class="title-h4 task_block__title">
@@ -315,16 +327,20 @@ const getImageUrl = (path) => {
 };
 
 const playAudio = async (audioPath) => {
+    console.log(audioPath);
+    if (isMuted.value && audioPath !== "Task11/348.11_.mp3") return;
     audio.value.src = new URL(
         `/assets/audio/${audioPath}`,
         import.meta.url,
     ).href;
     if (props.finish === true) {
+        audio.value.volume = 1;
         await audio.value.play();
     }
 };
 
 const playEndAudio = (audioPath) => {
+    if (isMuted.value) return;
     const end_audio = new Audio();
     end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
@@ -361,6 +377,16 @@ const syllables = ref([
     { id: 12, name: 'ЧОК', part: 2, audio: 'Task11/342.11.mp3' },
 ]);
 const dropIndex = ref(syllables.value.length - 1);
+
+const isMuted = ref(false);
+const mute = () => {
+    isMuted.value = !isMuted.value;
+    if (isMuted.value === true) {
+        audio.value.volume = 0;
+    } else {
+        audio.value.volume = 1;
+    }
+};
 
 const dataTransfer = ref({});
 const drag = (event, syllable, id, index) => {
@@ -687,5 +713,21 @@ onBeforeUnmount(() => {
 
 .list-group-item > div {
     width: 100%;
+}
+
+.game_icons_item{
+    top: 16px;
+    position: absolute;
+    right: 60px;
+    z-index: 1000;
+
+    width: 40px;
+    height: 40px;
+    background-color: #e6f2fa;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

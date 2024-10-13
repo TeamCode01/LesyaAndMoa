@@ -9,6 +9,17 @@
                         alt="крест"
                     />
                 </div>
+                <div class="game_icons_item" @click="mute()">
+                    <img
+                        v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg"
+                        alt="sound"
+                    /><img
+                        v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg"
+                        alt=""
+                    />
+                </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
                     <p class="title-h4 task_block__title EighthTask__title">
@@ -221,6 +232,16 @@ const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const startGame = ref(true);
 const draggable = ref(true);
 let soundPlayed = false;
+
+const isMuted = ref(false);
+const mute = () => {
+    isMuted.value = !isMuted.value;
+    if (isMuted.value === true) {
+        audio.value.volume = 0;
+    } else {
+        audio.value.volume = 1;
+    }
+};
 const squareAnswer = ref({
     text: '',
     firstIndex: 0,
@@ -448,11 +469,13 @@ const answers = ref([
 
 const clickText = (event, syllable) => {
     if (soundPlayed || event.target.dataset['isactive'] !== 'true') return;
+    
     playAudio(syllable.audio);
     soundPlayed = true;
     setTimeout(() => {
         soundPlayed = false;
     }, 500);
+    
 };
 
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
@@ -469,6 +492,7 @@ const props = defineProps({
 
 const audio = new Audio();
 const playAudio = (audioPath) => {
+    if (isMuted.value) return;
     audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     audio.play();
     if (!soundPlayed) {
@@ -482,6 +506,8 @@ const playAudio = (audioPath) => {
 const dataTransfer = ref({});
 
 const checkDragAndDrop = ref(false);
+
+const newWords = ['ЕЩ','УБ','БОБ','ФОТ','ТУЛ','ЧОК','ФЫ','ГУ']
 
 const drag = (event, syllable, fromPlace) => {
     // event.dataTransfer.setData('id', syllable.id);
@@ -525,7 +551,6 @@ const drop = (event, place) => {
 
     event.to.removeChild(event.item);
     event.from.classList.remove('hidden');
-    console.log('drop', checkDragAndDrop.value);
 
     if (checkDragAndDrop.value == false) {
         event.from.classList.add('hidden');
@@ -615,14 +640,16 @@ const drop = (event, place) => {
                 find = true;
                 correctAnswers.value[countAnswers.value] = obj;
                 countAnswers.value++;
-                playAudio(obj.audio);
-                setTimeout(
-                    () =>
-                        playAudio(
-                            `Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`,
-                        ),
-                    1000,
-                );
+                if (!isMuted.value){
+                    playAudio(obj.audio);
+                    setTimeout(
+                        () =>
+                            playAudio(
+                                `Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`,
+                            ),
+                        1000,
+                    );
+                }
                 break;
             }
         }
@@ -647,7 +674,11 @@ const drop = (event, place) => {
             syllables.value[circleAnswer.value.firstIndex][
                 circleAnswer.value.secondIndex
             ][circleAnswer.value.thirdIndex].correct = false;
-            playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+            
+            if (!isMuted.value){
+                playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+            }
+
             setTimeout(() => {
                 syllables.value[squareAnswer.value.firstIndex][
                     squareAnswer.value.secondIndex
@@ -700,6 +731,9 @@ const drop = (event, place) => {
 
                 squareFrom.classList.add('hidden');
                 circleFrom.classList.add('hidden');
+
+                // let word = newWords.pop();
+                // circleFrom.innerHTML = `<div id="draggable-list__syllable" value="${word}">${word}</div>`
             }, 2000);
         }
         if (countAnswers.value == 8) {
@@ -1210,4 +1244,45 @@ onBeforeUnmount(() => {
     display: block !important;
     opacity: 100% !important;
 }
+
+.game_icons_item{
+    top: 16px;
+    position: absolute;
+    right: 60px;
+    z-index: 1000;
+
+    width: 40px;
+    height: 40px;
+    background-color: #e6f2fa;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>
+<style lang="scss">
+    #draggable-list__syllable{
+        
+        cursor: pointer;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background-color: $blueGame;
+        color: $darkBlue;
+        font-family: 'Nunito', sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+
+        @media (max-width: 1024px) {
+            font-size: 16px;
+            width: 63px;
+            height: 63px;
+        }
+
+    }
 </style>
