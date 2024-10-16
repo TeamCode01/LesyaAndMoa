@@ -141,9 +141,26 @@
                                                     syllable.correct === false,
                                             }"
                                             :value="syllable.text"
+                                            v-if="!syllable.finished"
                                         >
                                             {{ syllable.text }}
                                         </div>
+
+                                        <div
+                                            :class="{
+                                                'draggable-list__syllable': true,
+                                                hidden: syllable.secondBlock.hidden,
+                                                correct_select:
+                                                    syllable.secondBlock.correct,
+                                                not_correct_select:
+                                                    syllable.secondBlock.correct === false,
+                                            }"
+                                            :value="syllable.secondBlock.text"
+                                            v-else
+                                        >
+                                            {{ syllable.secondBlock.text }}
+                                        </div>
+
                                     </VueDraggableNext>
                                 </div>
                             </div>
@@ -330,7 +347,7 @@ const syllables = ref({
             drag_class: false,
         },
     ],
-    2: {
+    2:{
         1: [
             {
                 id: 1,
@@ -339,6 +356,16 @@ const syllables = ref({
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'БА',
+                    audio: 'Task6/80.6.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
             {
                 id: 2,
@@ -347,6 +374,16 @@ const syllables = ref({
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'ДО',
+                    audio: 'Task6/114.6.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
             {
                 id: 3,
@@ -355,8 +392,17 @@ const syllables = ref({
                 correct: null,
                 hidden: false,
                 drag_class: false,
-            },
+                finished: false,
 
+                secondBlock: {
+                    id: 999,
+                    text: 'НО',
+                    audio: 'Task6/171.6.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
+            },
             {
                 id: 4,
                 text: 'ЛЕ',
@@ -364,6 +410,16 @@ const syllables = ref({
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'ХА',
+                    audio: 'Task6/227.6.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
         ],
         2: [
@@ -374,8 +430,17 @@ const syllables = ref({
                 correct: null,
                 hidden: false,
                 drag_class: false,
-            },
+                finished: false,
 
+                secondBlock: {
+                    id: 999,
+                    text: 'ТУ',
+                    audio: 'Task6/209.6.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
+            },
             {
                 id: 6,
                 text: 'ПА',
@@ -383,6 +448,16 @@ const syllables = ref({
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'ХИ',
+                    audio: 'Task6/236.6.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
             {
                 id: 7,
@@ -391,6 +466,16 @@ const syllables = ref({
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'ФЫ',
+                    audio: 'Task6/225.6.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
             {
                 id: 8,
@@ -399,6 +484,16 @@ const syllables = ref({
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'ГУ',
+                    audio: 'Task6/102.6.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
         ],
     },
@@ -469,8 +564,17 @@ const answers = ref([
 
 const clickText = (event, syllable) => {
     if (soundPlayed || event.target.dataset['isactive'] !== 'true') return;
-    
-    playAudio(syllable.audio);
+
+
+    console.log('play')
+    if (Object.keys(syllable).includes('finished') && syllable.finished){
+
+        playAudio(syllable.secondBlock.audio);
+    }
+    else{
+        playAudio(syllable.audio);
+    }
+
     soundPlayed = true;
     setTimeout(() => {
         soundPlayed = false;
@@ -507,24 +611,28 @@ const dataTransfer = ref({});
 
 const checkDragAndDrop = ref(false);
 
-const newWords = ['ЕЩ','УБ','БОБ','ФОТ','ТУЛ','ЧОК','ФЫ','ГУ']
+
 
 const drag = (event, syllable, fromPlace) => {
     // event.dataTransfer.setData('id', syllable.id);
     // event.dataTransfer.setData('fromPlace', fromPlace)
+    console.log('syllable', syllable, event.from);
     if (
         event.from.classList.contains('hidden') ||
         event.from.dataset['isactive'] !== 'true'
     ) {
+        console.log('sss')
         checkDragAndDrop.value = false;
         dataTransfer.value.id = '';
         dataTransfer.value.fromPlace = '';
+        dataTransfer.value.syllable = {};
         return;
     }
 
     checkDragAndDrop.value = true;
     dataTransfer.value.id = syllable.id;
     dataTransfer.value.fromPlace = fromPlace;
+    dataTransfer.value.syllable = syllable;
 
     if (
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(
@@ -551,6 +659,8 @@ const drop = (event, place) => {
 
     event.to.removeChild(event.item);
     event.from.classList.remove('hidden');
+
+    console.log(dataTransfer.value)
 
     if (checkDragAndDrop.value == false) {
         event.from.classList.add('hidden');
@@ -611,20 +721,49 @@ const drop = (event, place) => {
             circleFrom.children[0].classList.add('standrart_cursor');
 
             if (id < 5) {
-                syllables.value[fromPlace][1][id - 1].drag_class = true;
-                circleAnswer.value.text =
-                    syllables.value[fromPlace][1][id - 1].text;
-                circleAnswer.value.firstIndex = fromPlace;
-                circleAnswer.value.secondIndex = 1;
-                circleAnswer.value.thirdIndex = id - 1;
+                if (syllables.value[fromPlace][1][id - 1].finished !== true){
+                    syllables.value[fromPlace][1][id - 1].drag_class = true;
+                    circleAnswer.value.text =
+                        syllables.value[fromPlace][1][id - 1].text;
+                    circleAnswer.value.firstIndex = fromPlace;
+                    circleAnswer.value.secondIndex = 1;
+                    circleAnswer.value.thirdIndex = id - 1;
+                }
+
+                else{
+                    syllables.value[fromPlace][1][id - 1].secondBlock.drag_class = true;
+                    circleAnswer.value.text =
+                        syllables.value[fromPlace][1][id - 1].secondBlock.text;
+                    circleAnswer.value.firstIndex = fromPlace;
+                    circleAnswer.value.secondIndex = 1;
+                    circleAnswer.value.thirdIndex = id - 1;
+                }
+
             } else {
-                syllables.value[fromPlace][2][id - 5].drag_class = true;
-                circleAnswer.value.text =
-                    syllables.value[fromPlace][2][id - 5].text;
-                circleAnswer.value.firstIndex = fromPlace;
-                circleAnswer.value.secondIndex = 2;
-                circleAnswer.value.thirdIndex = id - 5;
+
+                if (syllables.value[fromPlace][2][id - 5].finished !== true){
+                    syllables.value[fromPlace][2][id - 5].drag_class = true;
+                    circleAnswer.value.text =
+                        syllables.value[fromPlace][2][id - 5].text;
+                    circleAnswer.value.firstIndex = fromPlace;
+                    circleAnswer.value.secondIndex = 2;
+                    circleAnswer.value.thirdIndex = id - 5;
+                }
+
+                else{
+
+                    syllables.value[fromPlace][2][id - 5].secondBlock.drag_class = true;
+                    circleAnswer.value.text =
+                        syllables.value[fromPlace][2][id - 5].secondBlock.text;
+                    circleAnswer.value.firstIndex = fromPlace;
+                    circleAnswer.value.secondIndex = 2;
+                    circleAnswer.value.thirdIndex = id - 5;
+
+
+                }
+
             }
+            
         }
     }
     if (squareAnswer.value.text && circleAnswer.value.text) {
@@ -719,9 +858,16 @@ const drop = (event, place) => {
                 syllables.value[circleAnswer.value.firstIndex][
                     circleAnswer.value.secondIndex
                 ][circleAnswer.value.thirdIndex].correct = null;
+                
+                syllables.value[circleAnswer.value.firstIndex][
+                    circleAnswer.value.secondIndex
+                ][circleAnswer.value.thirdIndex].finished = true;
+
                 squareAnswer.value = {};
                 circleAnswer.value = {};
                 draggable.value = true;
+
+
 
                 squareFrom.children[0].classList.remove('correct_select');
                 circleFrom.children[0].classList.remove('correct_select');
@@ -729,8 +875,10 @@ const drop = (event, place) => {
                 squareFrom.removeChild(squareFrom.children[0]);
                 circleFrom.removeChild(circleFrom.children[0]);
 
+                circleFrom.dataset['isactive'] = 'true';
+
                 squareFrom.classList.add('hidden');
-                circleFrom.classList.add('hidden');
+                //circleFrom.classList.add('hidden');
 
                 // let word = newWords.pop();
                 // circleFrom.innerHTML = `<div id="draggable-list__syllable" value="${word}">${word}</div>`
