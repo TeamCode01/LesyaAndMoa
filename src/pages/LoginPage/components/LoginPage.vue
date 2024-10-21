@@ -12,8 +12,8 @@ import { LoginForm } from '@features/Authorization/AuthorizationWithEmail/compon
 
 <style lang="scss" scoped>
 .AuthWrapper {
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-size: 100%;
+    background-repeat: repeat-y;
     background-image: url(/assets/img/auth/background.png);
 }
 .container {

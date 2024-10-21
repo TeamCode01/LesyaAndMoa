@@ -80,19 +80,22 @@ const v$ = useVuelidate(rules, data);
 const isError = ref({});
 const router = useRouter();
 
+
 watchEffect(() => {
+    console.log('Валидация')
     isError.value = {};
     if (v$.value.$invalid) {
         if (v$.value.email.$error) {
             isError.value.email = ['Данное поле должно быть заполнено'];
         }
     }
+    console.log('Валидация Окончена')
 });
 
 const LoginUser = async () => {
     try {
         const response = await HTTP.post('/token/login/', data.value);
-        data.value = response.data;
+
         localStorage.setItem('Token', response.data.auth_token);
         userStore.getUser();
         Error.value = false;
@@ -100,6 +103,15 @@ const LoginUser = async () => {
             name: 'profile-page',
             params: { id: response.data.id },
         });
+
+        if (response.data.auth_token){
+            data.value = {
+                email: '',
+                password: '',
+            };
+            v$.value.$reset(); 
+        }
+
     } catch (error) {
         console.log('errr', error);
         Error.value = error.response.data;

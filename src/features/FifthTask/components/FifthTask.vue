@@ -129,7 +129,7 @@ const syllables = ref({
         10: { name: 'ЗАП', audio: 'Task5/72.5.mp3', correct: null },
         11: { name: 'МЫЙ', audio: 'Task5/73.5.mp3', correct: null },
         12: { name: 'БУК', audio: 'Task5/74.5.mp3', correct: null },
-        13: { name: 'ОЛЬТ', audio: 'Task5/75.5.mp3', correct: null },
+        13: { name: 'ОЛЬТ', audio: 'Task5/75.5.new.mp3', correct: null },
         14: { name: 'ВЕЦ', audio: 'Task5/76.5.mp3', correct: null },
     },
 });

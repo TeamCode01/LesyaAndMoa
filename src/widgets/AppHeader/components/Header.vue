@@ -41,12 +41,14 @@
                     <div
                         v-if="Object.keys(userStore.currentUser).length"
                         class="header__wrapper_avatar"
+                        @click="showBurger()"
                     >
                         <img
                             src="@app/assets/icons/avatar.png"
                             alt="Аватарка"
+                            
                         />
-                        <div id="open-modal" @click="showBurger()">
+                        <div id="open-modal" >
                             <img
                                 id="modal-mini"
                                 class="header__wrapper_avatar_arrow"
@@ -86,12 +88,14 @@
                     <div
                         v-if="Object.keys(userStore.currentUser).length"
                         class="header__wrapper_avatar"
+                        @click="showBurger()"
                     >
                         <img
                             src="@app/assets/icons/avatar.png"
                             alt="Аватарка"
+                            
                         />
-                        <div id="open-modal" @click="showBurger()">
+                        <div id="open-modal">
                             <img
                                 id="modal-mini"
                                 class="header__wrapper_avatar_arrow"
@@ -143,7 +147,7 @@
                 <li>
                     <router-link
                         class="link-small"
-                        :to="{ name: 'main-page', hash: '#news' }"
+                        :to="{ name: 'main-page', hash: '#footer' }"
                         >Контакты</router-link
                     >
                 </li>
@@ -199,11 +203,10 @@
         </div>
     </div>
     <div class="overlay" v-show="showDelete"></div>
-    <div
-        class="delete-profile__wrapper"
-        id="delete-wrapper"
-        v-show="showDelete"
-    >
+    <div class="delete-profile__wrapper" 
+            id="delete-wrapper" 
+            v-show="showDelete"
+        >
         <h3 class="delete-profile__title">Удаление профиля пользователя</h3>
 
         <div>
@@ -295,6 +298,7 @@ const showProfile = () => {
     }
 };
 const showBurger = () => {
+    console.log('Событие отработало')
     if (showModalMini.value === false) {
         document.body.classList.add('no-scroll'); // Disable scrolling
         showModalMini.value = true;
@@ -305,6 +309,7 @@ const showBurger = () => {
 };
 
 const closeMenu = () => {
+    console.log('Событие закрытия')
     showModalMini.value = false;
     document.body.classList.remove('no-scroll');
 };
@@ -354,7 +359,7 @@ const deleteUser = async () => {
 
 document.addEventListener('click', (event) => {
     if (
-        event.target.id !== 'modal-mini' &&
+        event.target.id !== 'modal-mini' && event.target.alt !== 'Аватарка' &&
         !event.target.matches('.modal__wrapper_mini') &&
         showModalMini.value !== false
     ) {
@@ -368,7 +373,8 @@ document.addEventListener('click', (event) => {
         !event.target.matches('.delete-profile__wrapper') &&
         showDelete.value !== false
     ) {
-        // showDelete.value = false;
+        /*showDelete.value = false;
+        */
         document.body.classList.remove(
             'no-scroll',
         ); /* Прокрутка возвращается */
@@ -389,7 +395,8 @@ window.addEventListener('popstate', (event) => {
     closeMenu();
 });
 </script>
-<style lang="scss">
+
+<style lang='scss'>
 .link-small {
     cursor: pointer;
 }
@@ -733,7 +740,7 @@ body {
 // }
 
 .close {
-    &-icon {
+    .close-icon {
         cursor: pointer;
     }
 

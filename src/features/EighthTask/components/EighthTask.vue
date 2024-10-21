@@ -125,7 +125,7 @@
                                         data-isActive="true"
                                         :ghost-class="'hidden'"
                                         :drag-class="`${
-                                            syllable.drag_class == true
+                                            syllable.secondBlock.drag_class == true
                                                 ? 'hidden'
                                                 : ''
                                         }`"
@@ -360,8 +360,8 @@ const syllables = ref({
 
                 secondBlock: {
                     id: 999,
-                    text: 'БА',
-                    audio: 'Task6/80.6.mp3',
+                    text: 'АТ',
+                    audio: 'Task8/АТ.mp3',
                     correct: null,
                     hidden: false,
                     drag_class: false,
@@ -378,8 +378,8 @@ const syllables = ref({
 
                 secondBlock: {
                     id: 999,
-                    text: 'ДО',
-                    audio: 'Task6/114.6.mp3',
+                    text: 'ГУ',
+                    audio: 'Task8/ГУ.mp3',
                     correct: null,
                     hidden: false,
                     drag_class: false,
@@ -396,8 +396,8 @@ const syllables = ref({
 
                 secondBlock: {
                     id: 999,
-                    text: 'НО',
-                    audio: 'Task6/171.6.mp3',
+                    text: 'ИК',
+                    audio: 'Task8/ИК.mp3',
                     correct: null,
                     hidden: false,
                     drag_class: false,
@@ -414,8 +414,8 @@ const syllables = ref({
 
                 secondBlock: {
                     id: 999,
-                    text: 'ХА',
-                    audio: 'Task6/227.6.mp3',
+                    text: 'МЕВ',
+                    audio: 'Task8/МЕВ.mp3',
                     correct: null,
                     hidden: false,
                     drag_class: false,
@@ -434,8 +434,8 @@ const syllables = ref({
 
                 secondBlock: {
                     id: 999,
-                    text: 'ТУ',
-                    audio: 'Task6/209.6.mp3',
+                    text: 'МО',
+                    audio: 'Task8/МО.mp3',
                     correct: null,
                     hidden: false,
                     drag_class: false,
@@ -452,8 +452,8 @@ const syllables = ref({
 
                 secondBlock: {
                     id: 999,
-                    text: 'ХИ',
-                    audio: 'Task6/236.6.mp3',
+                    text: 'УВ',
+                    audio: 'Task8/УВ.mp3',
                     correct: null,
                     hidden: false,
                     drag_class: false,
@@ -470,8 +470,8 @@ const syllables = ref({
 
                 secondBlock: {
                     id: 999,
-                    text: 'ФЫ',
-                    audio: 'Task6/225.6.mp3',
+                    text: 'УЗ',
+                    audio: 'Task8/УЗ.mp3',
                     correct: null,
                     hidden: false,
                     drag_class: false,
@@ -488,8 +488,8 @@ const syllables = ref({
 
                 secondBlock: {
                     id: 999,
-                    text: 'ГУ',
-                    audio: 'Task6/102.6.mp3',
+                    text: 'ХО',
+                    audio: 'Task8/ХО.mp3',
                     correct: null,
                     hidden: false,
                     drag_class: false,
