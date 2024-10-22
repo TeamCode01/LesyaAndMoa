@@ -147,6 +147,7 @@
                                     </div>
                                 </VueDraggableNext>
                             </div>
+                            <div class="draggable-list__symbol"></div>
                         </div>
 
                         <!-- ВОДА -->
@@ -663,6 +664,7 @@ onBeforeUnmount(() => {
 }
 
 .draggable-list__answer-wrapper {
+    position: relative;
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -745,5 +747,15 @@ onBeforeUnmount(() => {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.draggable-list__symbol{
+    width: 30px;
+    height: 4px;
+    background: #000;
+    position: absolute;
+    //top: -40px;
+    right: -20px;
+    border-radius: 4px;
 }
 </style>

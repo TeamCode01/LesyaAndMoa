@@ -34,14 +34,14 @@
             <img
                 v-show="show_hand"
                 class="hand"
-                @click="playSound($event)"
+                @click="setAudioFromSended(); playSound($event)"
                 :id="'hand_' + task_id"
                 src="@app/assets/icons/hand.svg"
                 alt="hand"
                 :class="{ game_img_disabled: isPlaying === true }"
             />
             <div
-                @click="playSound($event)"
+                @click="setAudioFromSended(); playSound($event)"
                 class="game_img"
                 :class="{ game_img_disabled: isPlaying === true }"
             >
@@ -120,6 +120,13 @@ const startAudio = ref(new Audio());
 const preAudio = ref(new Audio());
 const isPlaying = ref(false);
 const isMuted = ref(false);
+
+const sendedAudio = ref('');
+
+const setAudioFromSended = () => {
+    audio.value = sendedAudio.value;
+}
+
 const getImageUrl = (path) => {
     return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
@@ -132,7 +139,14 @@ const sendImg = (image) => {
 };
 
 const sendAudio = (music) => {
-    audio.value = music;
+    console.log(sendedAudio.value, music)
+    sendedAudio.value = music
+    setTimeout(() => {
+        if (!show_hand.value){
+            audio.value = sendedAudio.value
+        }
+    }, 10);
+
     // console.log('audio', audio.value);
 };
 const sendPreAudio = (pre) => {
@@ -166,18 +180,21 @@ const skip = () => {
 };
 
 const refresh = () => {
+    console.log('refresh audio.value', audio.value, startAudio.value)
     if (startAudio.value.paused) {
         startAudio.value.currentTime = 0;
-        startAudio.value.src = new URL(
-            `/assets/audio/${audio.value}`,
-            import.meta.url,
-        ).href;
         startAudio.value.play();
+        // startAudio.value.src = new URL(
+        //     `/assets/audio/${audio.value}`,
+        //     import.meta.url,
+        // ).href;
+        
     }
     startAudio.value.currentTime = 0;
 };
 
-const playSound = () => {
+const playSound = (event, hand) => {
+    console.log('play audio.value', audio.value, startAudio.value)
     if (ids.value.includes(task_id.value)) {
         show_hand.value = false;
         showBtn.value = false;

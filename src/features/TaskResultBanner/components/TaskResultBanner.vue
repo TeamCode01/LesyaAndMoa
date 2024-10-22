@@ -38,9 +38,20 @@
                     </button>
                 </div>
                 <div v-else>
+                    <div class="child__scale ">
+                        <v-progress-linear
+                            v-model="props.progress"
+                            height="30"
+                            class="scale"
+                        >
+                            <template v-slot:default="{ value }">
+                                <strong>{{ Math.ceil(value) }}%</strong>
+                            </template>
+                        </v-progress-linear>
+                    </div>
                     <button
                         @click="goToGames"
-                        class="left-result__button left-result__text"
+                        class="left-result__button left-result__text mt-8"
                     >
                         <div class="left-result__wrap">
                             <span class="left-result__text">К обучению</span>
@@ -100,6 +111,10 @@ const props = defineProps({
     is_test: {
         type: Boolean,
         default: false,
+    },
+    progress: {
+        type: Number,
+        default: 0,
     },
     is_end: {
         type: Boolean,
@@ -163,6 +178,16 @@ onBeforeUnmount(() => {
 .test-result {
     width: 100% !important;
     padding: 0px 40px;
+}
+
+.scale {
+    // color: #5ccf54;
+    color: white;
+    border-radius: 8px;
+}
+
+.scale strong {
+    color: black;
 }
 
 .result-banner {

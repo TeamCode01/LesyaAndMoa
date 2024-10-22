@@ -51,7 +51,7 @@ const dataTask = [
                     { id: 4, classid: 6, text: 'О', isActive: true },
                     { id: 5, classid: 9, text: 'м', isActive: true },
                     { id: 6, classid: 5, text: 'З', isActive: true },
-                    { id: 7, classid: 7, text: 'ь', isActive: true },
+                    { id: 7, classid: 7, text: 'Ь', isActive: true },
                 ]
             },
         ]
@@ -89,7 +89,7 @@ const dataTask = [
                     { id: 2, classid: 5, text: 'Н', isActive: true },
                     { id: 3, classid: 3, text: 'В', isActive: true },
                     { id: 4, classid: 10, text: 'И', isActive: true },
-                    { id: 5, classid: 1, text: 'к', isActive: true },
+                    { id: 5, classid: 1, text: 'К', isActive: true },
                 ]
             },
             {
@@ -109,7 +109,7 @@ const dataTask = [
                     { id: 2, classid: 8, text: 'о', isActive: true },
                     { id: 3, classid: 3, text: 'П', isActive: true },
                     { id: 4, classid: 5, text: 'Л', isActive: true },
-                    { id: 5, classid: 1, text: 'к', isActive: true },
+                    { id: 5, classid: 1, text: 'К', isActive: true },
                     { id: 6, classid: 7, text: 'А', isActive: true },
                 ]
             }

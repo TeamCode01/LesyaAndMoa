@@ -586,7 +586,6 @@ const isError = ref({});
 const cyrillicPattern = /[\u0400-\u04FF\-]+/;
 
 watchEffect(() => {
-    console.log('watchEffect');
     isError.value = {};
     if (v$.value.$invalid) {
         if (v$.value.first_name.$error) {
@@ -760,7 +759,7 @@ const GetRegion = async () => {
                 'Content-Type': 'application/json',
             },
         });
-        reg.value = response.data;
+        reg.value = [...response.data].sort((a, b) => a.name.localeCompare(b.name));
     } catch (error) {
         console.log('errr', error);
         error.value = error.response.data;

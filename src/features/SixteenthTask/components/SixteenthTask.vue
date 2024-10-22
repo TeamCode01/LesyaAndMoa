@@ -228,7 +228,7 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                         };
                     }, 1500)
 
-                }, 8000)
+                }, 9000)
 
 
             }
@@ -265,11 +265,13 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
     } else {
         if (!letterIsActive) {
             event.to.children[0].classList.add('draggable-list__subcontainer-square_wrong');
-            let reactionAudioSrc = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
-            let reactionAudio = new Audio(
-                reactionAudioSrc
-            );
-            reactionAudio.play();
+            if (!isMuted.value){
+                let reactionAudioSrc = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
+                let reactionAudio = new Audio(
+                    reactionAudioSrc
+                );
+                reactionAudio.play();
+            }
             setTimeout(() => {
                 event.to.children[0].classList.remove(
                     'draggable-list__subcontainer-square_wrong'
@@ -483,7 +485,7 @@ onBeforeUnmount(() => {
 }
 
 .draggable-list__letter1 {
-    height: 17px;
+    height: 18px;
     font-family: 'Nunito', sans-serif;
     font-size: 18px;
     font-weight: 400;
@@ -555,9 +557,9 @@ onBeforeUnmount(() => {
 }
 
 .draggable-list__letter9 {
-    height: 24px;
+    height: 26px;
     font-family: 'Nunito', sans-serif;
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 400;
     color: $violetLetters-game;
     cursor: pointer;
@@ -847,6 +849,8 @@ onBeforeUnmount(() => {
 
     font-size: 36px;
     font-weight: 300;
+    height: 100%;
+    width: 100%;
 }
 
 .hidden{

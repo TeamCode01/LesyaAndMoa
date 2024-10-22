@@ -747,16 +747,17 @@ onBeforeRouteLeave(() => {
     //     }
     // }
 
-    if (!audio.value.src) return;
-    if (
-        stateAudio[audio.value.dataset.audioPath]?.state &&
-        stateAudio[audio.value.dataset.audioPath].state !== 'ended'
-    ) {
-        stateAudio[audio.value.dataset.audioPath].state = 'paused';
-        stateAudio[audio.value.dataset.audioPath].time =
-            audio.value.currentTime;
-        audio.value.pause();
-        audio.value.src = '';
+    if (audio.value.src){
+        if (
+            stateAudio[audio.value.dataset.audioPath]?.state &&
+            stateAudio[audio.value.dataset.audioPath].state !== 'ended'
+        ) {
+            stateAudio[audio.value.dataset.audioPath].state = 'paused';
+            stateAudio[audio.value.dataset.audioPath].time =
+                audio.value.currentTime;
+            audio.value.pause();
+            audio.value.src = '';
+        }
     }
 
 });
@@ -777,12 +778,15 @@ onBeforeRouteUpdate(() => {
     //         audio.value.pause();
     //     }
     // }
+
+    console.log('Обновление');
+    if (audio.value.src){ 
     if (stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
         stateAudio[audio.value.dataset.audioPath].state = 'paused';
         stateAudio[audio.value.dataset.audioPath].time =
             audio.value.currentTime;
         audio.value.pause();
-    }
+    }}
 
 });
 
@@ -818,9 +822,9 @@ watch(
     () => route.path, // Слежение за изменением пути (можно заменить на слежение за параметрами)
     (newPath, oldPath) => {
         // Ваша логика для входа на страницу
+        console.log(newPath, oldPath)
         if (newPath === '/') {
             console.log('Вы вошли на главную страницу');
-
 
             for (let key in stateAudio) {
                 if (stateAudio[key].state === 'paused') {
@@ -833,6 +837,7 @@ watch(
     },
     { immediate: false }, // Не позволяет вызвать сразу при первой загрузке
 );
+
 
 
 

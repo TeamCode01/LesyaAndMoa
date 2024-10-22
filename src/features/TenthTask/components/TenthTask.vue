@@ -191,7 +191,7 @@ const questions = ref({
         first_part: 'Мы добрались',
         second_part: 'места крушения в город',
         third_part: 'поле',
-        first_answer: 'до',
+        first_answer: 'от',
         second_answer: 'через',
     },
     4: {

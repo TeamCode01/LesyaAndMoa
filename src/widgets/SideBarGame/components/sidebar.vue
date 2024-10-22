@@ -341,7 +341,7 @@ const playAudio = (audioPath) => {
     audio.value.play();
 };
 const postAudio = (audioPath) => {
-    audio.value.addEventListener('ended', () => {
+    audio.value.onended = () => {
         isPlaying.value = false;
         show_hand.value = true;
         show.value = false;
@@ -349,15 +349,22 @@ const postAudio = (audioPath) => {
         emit('show', show.value);
         emit('hand', show_hand.value);
         emit('sendAudio', audioPath);
-        audio.value.pause();
-
-        
-    });
+        audio.value.pause();      
+    }
+    // audio.value.addEventListener('ended', () => {
+    //     isPlaying.value = false;
+    //     show_hand.value = true;
+    //     show.value = false;
+    //     emit('sendPreAudio', isPlaying.value);
+    //     emit('show', show.value);
+    //     emit('hand', show_hand.value);
+    //     emit('sendAudio', audioPath);
+    //     audio.value.pause();        
+    // });
 };
 
 const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
     const task = tasks.value.find((item) => item.id == id);
-    console.log(id);
     if (task.disabled === false) {
         taskId.value = id;
         SeeTask.value = false;
@@ -372,11 +379,25 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
      
         if (ids.value.includes(taskId.value)) {
             isPlaying.value = true;
+            audio.value.onended = () => {}
             emit('sendPreAudio', isPlaying.value);
+            console.log('Послано из sidebar', startAudioV);
+            emit('sendAudio', startAudioV);
+            
             switch (taskId.value) {
                 case 1:
                     playAudio('Music/звук 1_.mp3');
-                    audio.value.addEventListener('ended', () => {
+                    // audio.value.addEventListener('ended', () => {
+                    //     show.value = false;
+                    //     isPlaying.value = false;
+                    //     emit('sendPreAudio', isPlaying.value);
+                    //     isPlaying.value = true;
+                    //     playAudio('Other/10.общее.mp3');
+                    //     emit('sendPreAudio', isPlaying.value);
+                    //     postAudio('Task1/11.1_.mp3');
+                    // });
+
+                    audio.value.onended = () => {
                         show.value = false;
                         isPlaying.value = false;
                         emit('sendPreAudio', isPlaying.value);
@@ -384,7 +405,8 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
                         playAudio('Other/10.общее.mp3');
                         emit('sendPreAudio', isPlaying.value);
                         postAudio('Task1/11.1_.mp3');
-                    });
+                    }
+
                     break;
                 case 2:
                     playAudio('Music/звук 2_.mp3');
@@ -438,14 +460,25 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
             emit('sendPreAudio', isPlaying.value === false);
             playAudio(startAudioV);
             props.audioObj = audio.value;
-            audio.value.addEventListener('ended', () => {
+            console.log('Какое-то исключение',  taskId.value)
+            audio.value.onended =  () => {
+                console.log('Кончилось аудио из исключений', startAudioV)
                 emit('sendAudio', startAudioV);
                 show.value = true;
                 emit('show', show.value);
                 audio.value.pause();
                 show_hand.value = false;
                 emit('hand', show_hand.value);
-            });
+            }
+            // audio.value.addEventListener('ended', () => {
+            //     console.log('В sidebar закончилось аудио', startAudioV);
+            //     emit('sendAudio', startAudioV);
+            //     show.value = true;
+            //     emit('show', show.value);
+            //     audio.value.pause();
+            //     show_hand.value = false;
+            //     emit('hand', show_hand.value);
+            // });
         }
     } else {
         console.log('Задание закрыто ');

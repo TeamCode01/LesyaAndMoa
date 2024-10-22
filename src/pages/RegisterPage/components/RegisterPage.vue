@@ -10,8 +10,8 @@ import { RegistrationForm } from '@features/Registration/components';
 </script>
 <style lang="scss" scoped>
 .RegWrapper {
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-size: 100%;
+    background-repeat: repeat-y;
     background-image: url(/assets/img/auth/background.png);
 }
 .container {
