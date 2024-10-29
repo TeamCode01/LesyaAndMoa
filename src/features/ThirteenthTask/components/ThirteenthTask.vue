@@ -96,7 +96,7 @@
                     с вами.
                 </div>
                 <div
-                    v-show="answer === 'ОБЩАТЬСЯ'"
+                    v-show="answer === 'ОБЩАТЬСЯ' || answer === 'ДЕТСКУЮ'"
                     class="ThirteenthTask__wrapper_answer"
                 >
                     Приходите чаще на
@@ -130,7 +130,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 
@@ -262,19 +262,54 @@ const drop = (event) => {
     ) {
         elem.classList.add('green');
         answer_drop.value = text;
+
         playCorrectAudio('Common/1.2.mp3');
         setTimeout(() => {
             //words.value.splice(dropIndex.value, 1);
             elem.parentElement.parentElement.removeChild(elem.parentElement);
             elem.classList.remove('green');
-            answer.value = text;
-            answer_drop.value = '?';
+
+
+            setTimeout(() => {
+                let timeout = 4500;
+
+                sentence_audiopath = "";
+                secondsentence_audiopath = "";
+
+                if (text === 'РАДЫ') {
+                    sentence_audiopath = "Task13/з.13 МЫ ОЧЕНЬ РАДЫ С ВАМИ ПОЗНАКОМИТЬСЯ.mp3"
+                    secondsentence_audiopath = "Task13/з.13 Нам нравится_с вами.mp3";
+                }
+                else if (text === 'ОБЩАТЬСЯ') {
+                    sentence_audiopath = 'Task13/з.13 НАМ НРАВИТСЯ ОБЩАТЬСЯ С ВАМИ.mp3';
+                    secondsentence_audiopath = "Task13/з.13 Приходите чаще на_площадку.mp3";
+                }
+                else if (text === 'ДЕТСКУЮ') {
+                    sentence_audiopath = 'Task13/з.13 ПРИХОДИТЕ ЧАЩЕ НА ДЕТСКУЮ ПЛОЩАДКУ.mp3';
+                }
+
+                sentence_audio.src = new URL(`/assets/audio/${sentence_audiopath}`,import.meta.url,).href;
+
+                if (!isMuted.value);
+                {
+                    sentence_audio.play();
+                }
+
+                setTimeout(() => {
+                    answer.value = text;
+                    answer_drop.value = answer.value == "ДЕТСКУЮ" ? "ДЕТСКУЮ" : "?";
+                    sentence_audio.src = new URL(`/assets/audio/${secondsentence_audiopath}`,import.meta.url,).href;
+                    if (!isMuted.value && (text !== "ДЕТСКУЮ"));
+                    {   
+                        sentence_audio.play();
+                    }
+                }, timeout);
+            }, 0)
         }, 2000);
 
-        if (text === 'ДЕТСКУЮ') {
-            event.target.classList.add('green');
+        
 
-            playCorrectAudio('Common/1.2.mp3');
+        if (text === 'ДЕТСКУЮ') {
             event.target.classList.remove('green');
             setTimeout(() => {
                 if (is_correct.value === false) {
@@ -284,7 +319,7 @@ const drop = (event) => {
                 }
                 endGame.value = true;
                 playAudio('Task13/377.13_.mp3');
-            }, 1000);
+            }, 7000);
         }
     } else {
         elem.classList.add('red');
@@ -300,6 +335,12 @@ const drop = (event) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+let sentence_audio = new Audio(); 
+let sentence_audiopath = "";
+let secondsentence_audiopath = "";
+
+
 
 onMounted(async () => {
     try {
@@ -321,15 +362,35 @@ onMounted(async () => {
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
+    secondsentence_audiopath = "Task13/з.13 Мы очень_с вами познакомиться.mp3";     
+    sentence_audio.src = new URL(`/assets/audio/${secondsentence_audiopath}`,import.meta.url,).href;
+
+    setTimeout(() => {
+        if (!isMuted.value && !gameIsClose);
+        {   
+            sentence_audio.play();
+        }
+    }, 3500);
+
+
     console.log('game mount');
 });
-
+let gameIsClose = false;
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
     audio.value.src = "";
+    sentence_audio.src = "";
     console.log('game unmount');
+    gameIsClose = true;
 });
+
+
+watch(
+    () => answer.value,
+    (newVal, oldVal) => {
+    console.log('answer changed', newVal, oldVal);
+})
 </script>
 <style lang="scss" scoped>
 * {
