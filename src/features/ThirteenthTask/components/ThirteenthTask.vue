@@ -178,21 +178,23 @@ const mute = () => {
     isMuted.value = !isMuted.value;
     if (isMuted.value === true) {
         audio.value.volume = 0;
+        audioQuestion.volume = 0;
     } else {
         audio.value.volume = 1;
+        audioQuestion.volume = 1;
     }
 };
 
 const playAudio = async (audioPath) => {
-    if (isMuted.value && audioPath !== "Task13/377.13_.mp3") return;
     audio.value.src = new URL(
         `/assets/audio/${audioPath}`,
         import.meta.url,
     ).href;
-    if (props.finish === true) {
+    if (audioPath === 'Task13/377.13_.mp3') {
         audio.value.volume = 1;
-        await audio.value.play();
     }
+
+    await audio.value.play();
 };
 
 const playEndAudio = (audioPath) => {
@@ -216,6 +218,16 @@ const playCorrectAudio = (audioPath) => {
     correct_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     correct_audio.play();
 }
+
+let audioQuestion = new Audio();
+const playAudioQuestion = async (audioPath) => {
+    if (gameIsClose) return;
+    audioQuestion.src = new URL(
+        `/assets/audio/${audioPath}`,
+        import.meta.url,
+    ).href;
+    await audioQuestion.play();
+};
 
 const is_correct = ref(false);
 const corrValue = ref(0);
@@ -288,21 +300,17 @@ const drop = (event) => {
                     sentence_audiopath = 'Task13/з.13 ПРИХОДИТЕ ЧАЩЕ НА ДЕТСКУЮ ПЛОЩАДКУ.mp3';
                 }
 
-                sentence_audio.src = new URL(`/assets/audio/${sentence_audiopath}`,import.meta.url,).href;
-
-                if (!isMuted.value);
                 {
-                    sentence_audio.play();
+                    playAudioQuestion(sentence_audiopath);
                 }
 
                 setTimeout(() => {
                     answer.value = text;
                     answer_drop.value = answer.value == "ДЕТСКУЮ" ? "ДЕТСКУЮ" : "?";
-                    sentence_audio.src = new URL(`/assets/audio/${secondsentence_audiopath}`,import.meta.url,).href;
-                    if (!isMuted.value && (text !== "ДЕТСКУЮ"));
-                    {   
-                        sentence_audio.play();
+                    if (text !== 'ДЕТСКУЮ') {
+                        playAudioQuestion(secondsentence_audiopath);
                     }
+
                 }, timeout);
             }, 0)
         }, 2000);
@@ -363,12 +371,11 @@ onMounted(async () => {
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
     secondsentence_audiopath = "Task13/з.13 Мы очень_с вами познакомиться.mp3";     
-    sentence_audio.src = new URL(`/assets/audio/${secondsentence_audiopath}`,import.meta.url,).href;
 
     setTimeout(() => {
-        if (!isMuted.value && !gameIsClose);
+        if (!gameIsClose);
         {   
-            sentence_audio.play();
+            playAudioQuestion(secondsentence_audiopath);
         }
     }, 3500);
 
@@ -380,7 +387,7 @@ onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
     audio.value.src = "";
-    sentence_audio.src = "";
+    audioQuestion.src = "";
     console.log('game unmount');
     gameIsClose = true;
 });

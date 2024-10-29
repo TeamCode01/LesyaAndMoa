@@ -301,7 +301,6 @@ const drop = (event, num) => {
 
                     setTimeout(() => {
                         playAudioQuestion(questions.value[currStage.value].audio_src_end);
-                        console.log(questions.value[currStage.value].audio_src_end)
                         setTimeout(() => {
 
                             givenAnswer.value[1] = false;
@@ -310,7 +309,6 @@ const drop = (event, num) => {
 
                             if (currStage.value < 5) {
                                 playAudioQuestion(questions.value[currStage.value].audio_src_start);
-                                console.log(questions.value[currStage.value].audio_src_start)
                             }
 
                             setTimeout(() => {
@@ -339,7 +337,6 @@ const drop = (event, num) => {
 
                     setTimeout(() => {
                         playAudioQuestion(questions.value[currStage.value].audio_src_end);
-                        console.log(questions.value[currStage.value].audio_src_end)
 
                         setTimeout(() => {
 
@@ -349,7 +346,6 @@ const drop = (event, num) => {
 
                             if (currStage.value < 5) {
                                 playAudioQuestion(questions.value[currStage.value].audio_src_start);
-                                console.log(questions.value[currStage.value].audio_src_start)
                             }
 
                             setTimeout(() => {
@@ -408,26 +404,28 @@ const allowDrop = (event) => {
 const audio = ref(new Audio());
 
 const playAudio = async (audioPath) => {
-    if (isMuted.value && audioPath !== 'Task10/328.10_.mp3') return; 
     audio.value.src = new URL(
         `/assets/audio/${audioPath}`,
         import.meta.url,
     ).href;
-    if (props.finish === true) {
+
+    if (audioPath === 'Task10/328.10_.mp3') {
         audio.value.volume = 1;
-        await audio.value.play();
     }
+
+    await audio.value.play();
 };
 
-const audioQuestion = new Audio();
+let audioQuestion = new Audio();
 
 const playAudioQuestion = async (audioPath) => {
+    if (gameIsClose) return;
     audioQuestion.src = new URL(
         `/assets/audio/${audioPath}`,
         import.meta.url,
     ).href;
     await audioQuestion.play();
-};
+};``
 
 const playEndAudio = (audioPath) => {
     if (isMuted.value) return;
@@ -437,11 +435,12 @@ const playEndAudio = (audioPath) => {
 };
 
 const stopAudio = (audioPath) => {
-    if (audio.value.paused) {
-        playAudio(audioPath);
-    } else {
-        audio.value.pause();
-    }
+    audio.value.src = "";
+    // if (audio.value.paused) {
+    //     playAudio(audioPath);
+    // } else {
+    //     audio.value.pause();
+    // }
 };
 const hide = () => {
     emit('close');
@@ -479,11 +478,13 @@ onMounted(async () => {
     }, 3500);
 });
 
+let gameIsClose = false;
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
     audio.value.src = "";
     audioQuestion.src = "";
+    gameIsClose = true;
     console.log('game unmount');
 });
 </script>
