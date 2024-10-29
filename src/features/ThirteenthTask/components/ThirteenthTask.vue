@@ -96,7 +96,7 @@
                     с вами.
                 </div>
                 <div
-                    v-show="answer === 'ОБЩАТЬСЯ'"
+                    v-show="answer === 'ОБЩАТЬСЯ' || answer === 'ДЕТСКУЮ'"
                     class="ThirteenthTask__wrapper_answer"
                 >
                     Приходите чаще на
@@ -130,7 +130,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 
@@ -178,21 +178,23 @@ const mute = () => {
     isMuted.value = !isMuted.value;
     if (isMuted.value === true) {
         audio.value.volume = 0;
+        audioQuestion.volume = 0;
     } else {
         audio.value.volume = 1;
+        audioQuestion.volume = 1;
     }
 };
 
 const playAudio = async (audioPath) => {
-    if (isMuted.value && audioPath !== "Task13/377.13_.mp3") return;
     audio.value.src = new URL(
         `/assets/audio/${audioPath}`,
         import.meta.url,
     ).href;
-    if (props.finish === true) {
+    if (audioPath === 'Task13/377.13_.mp3') {
         audio.value.volume = 1;
-        await audio.value.play();
     }
+
+    await audio.value.play();
 };
 
 const playEndAudio = (audioPath) => {
@@ -216,6 +218,16 @@ const playCorrectAudio = (audioPath) => {
     correct_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     correct_audio.play();
 }
+
+let audioQuestion = new Audio();
+const playAudioQuestion = async (audioPath) => {
+    if (gameIsClose) return;
+    audioQuestion.src = new URL(
+        `/assets/audio/${audioPath}`,
+        import.meta.url,
+    ).href;
+    await audioQuestion.play();
+};
 
 const is_correct = ref(false);
 const corrValue = ref(0);
@@ -262,19 +274,50 @@ const drop = (event) => {
     ) {
         elem.classList.add('green');
         answer_drop.value = text;
+
         playCorrectAudio('Common/1.2.mp3');
         setTimeout(() => {
             //words.value.splice(dropIndex.value, 1);
             elem.parentElement.parentElement.removeChild(elem.parentElement);
             elem.classList.remove('green');
-            answer.value = text;
-            answer_drop.value = '?';
+
+
+            setTimeout(() => {
+                let timeout = 4500;
+
+                sentence_audiopath = "";
+                secondsentence_audiopath = "";
+
+                if (text === 'РАДЫ') {
+                    sentence_audiopath = "Task13/з.13 МЫ ОЧЕНЬ РАДЫ С ВАМИ ПОЗНАКОМИТЬСЯ.mp3"
+                    secondsentence_audiopath = "Task13/з.13 Нам нравится_с вами.mp3";
+                }
+                else if (text === 'ОБЩАТЬСЯ') {
+                    sentence_audiopath = 'Task13/з.13 НАМ НРАВИТСЯ ОБЩАТЬСЯ С ВАМИ.mp3';
+                    secondsentence_audiopath = "Task13/з.13 Приходите чаще на_площадку.mp3";
+                }
+                else if (text === 'ДЕТСКУЮ') {
+                    sentence_audiopath = 'Task13/з.13 ПРИХОДИТЕ ЧАЩЕ НА ДЕТСКУЮ ПЛОЩАДКУ.mp3';
+                }
+
+                {
+                    playAudioQuestion(sentence_audiopath);
+                }
+
+                setTimeout(() => {
+                    answer.value = text;
+                    answer_drop.value = answer.value == "ДЕТСКУЮ" ? "ДЕТСКУЮ" : "?";
+                    if (text !== 'ДЕТСКУЮ') {
+                        playAudioQuestion(secondsentence_audiopath);
+                    }
+
+                }, timeout);
+            }, 0)
         }, 2000);
 
-        if (text === 'ДЕТСКУЮ') {
-            event.target.classList.add('green');
+        
 
-            playCorrectAudio('Common/1.2.mp3');
+        if (text === 'ДЕТСКУЮ') {
             event.target.classList.remove('green');
             setTimeout(() => {
                 if (is_correct.value === false) {
@@ -284,7 +327,7 @@ const drop = (event) => {
                 }
                 endGame.value = true;
                 playAudio('Task13/377.13_.mp3');
-            }, 1000);
+            }, 7000);
         }
     } else {
         elem.classList.add('red');
@@ -300,6 +343,12 @@ const drop = (event) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+let sentence_audio = new Audio(); 
+let sentence_audiopath = "";
+let secondsentence_audiopath = "";
+
+
 
 onMounted(async () => {
     try {
@@ -321,15 +370,34 @@ onMounted(async () => {
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
+    secondsentence_audiopath = "Task13/з.13 Мы очень_с вами познакомиться.mp3";     
+
+    setTimeout(() => {
+        if (!gameIsClose);
+        {   
+            playAudioQuestion(secondsentence_audiopath);
+        }
+    }, 3500);
+
+
     console.log('game mount');
 });
-
+let gameIsClose = false;
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
     audio.value.src = "";
+    audioQuestion.src = "";
     console.log('game unmount');
+    gameIsClose = true;
 });
+
+
+watch(
+    () => answer.value,
+    (newVal, oldVal) => {
+    console.log('answer changed', newVal, oldVal);
+})
 </script>
 <style lang="scss" scoped>
 * {

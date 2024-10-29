@@ -139,7 +139,7 @@ const sendImg = (image) => {
 };
 
 const sendAudio = (music) => {
-    console.log(sendedAudio.value, music)
+    console.log(sendAudio.value, music)
     sendedAudio.value = music
     setTimeout(() => {
         if (!show_hand.value){
