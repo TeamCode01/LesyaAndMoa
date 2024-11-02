@@ -668,15 +668,16 @@ onMounted(() => {
     } else {
         showCookie.value = true;
     }
-    // window.addEventListener('click', () => {
-    //     if (stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
-    //         audio.value.play().catch((error) => {
-    //             if (error.name === 'NotAllowedError') {
-    //                 console.log('User interaction required to play audio');
-    //             }
-    //         });
-    //     }
-    // });
+    document.addEventListener('click', (event) => {
+        console.log(event);
+        if (stateAudio[audio.value.dataset.audioPath].state !== 'ended' ) {
+            audio.value.play().catch((error) => {
+                if (error.name === 'NotAllowedError') {
+                    console.log('User interaction required to play audio');
+                }
+            });
+        }
+    });
     document.addEventListener('scroll', handleScroll);
     windowWidth.value = window.innerWidth;
     itemsToShow.value = windowWidth.value >= 660 ? 2 : 1;
