@@ -5,6 +5,20 @@
                 <div class="task_block__close" @click="hide">
                     <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
+
+                <div class="game_icons_item" @click="mute()">
+                    <img
+                        v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg"
+                        alt="sound"
+                    /><img
+                        v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg"
+                        alt=""
+                    />
+                </div>
+
+
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
                     <p class="title-h4 task_block__title SixteenthTask__title">
@@ -113,6 +127,16 @@ answerArray.value = dataAnswer;
 
 const answersCounter = ref(0);
 
+const isMuted = ref(false);
+const mute = () => {
+    isMuted.value = !isMuted.value;
+    if (isMuted.value === true) {
+        audio.value.volume = 0;
+    } else {
+        audio.value.volume = 1;
+    }
+};
+
 
 const dataTransfer = ref({})
 const dragLetter = (event, wordID, letterID) => {
@@ -143,8 +167,8 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                         word.word.map((letter) => {
                             if (letter.id == letterID) {
                                 letter.isActive = true;
-                                if (word.word.every((item) => { return item.isActive })) {
-                                    let wordPath = new URL(`/assets/audio/Task6/${audioMap.get('слово-' + word.wordid)}`, import.meta.url).href;
+                                if (word.word.every((item) => { return item.isActive }) && !isMuted.value) {
+                                    let wordPath = new URL(`/assets/audio/Task16/${audioMap.get('слово-' + word.wordid)}`, import.meta.url).href;
                                     let audio = new Audio(wordPath);
                                     setTimeout(() => {
                                         audio.play();
@@ -163,12 +187,14 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                         });
                 });
             });
-            let reactionPath = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
 
-            let reactionAudio = new Audio(
-                reactionPath
-            );
-            reactionAudio.play();
+
+            
+            if (!isMuted.value){
+                let reactionPath = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
+                let reactionAudio = new Audio(reactionPath);
+                reactionAudio.play();
+            }
             event.to.children[0].classList.add(
                 'draggable-list__subcontainer-square_right'
             );
@@ -202,7 +228,7 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                         };
                     }, 1500)
 
-                }, 8000)
+                }, 9000)
 
 
             }
@@ -220,11 +246,14 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
                 event.to.children[0].classList.add(
                     'draggable-list__subcontainer-square_warning'
                 );
-                let reactionAudioSrc = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
-                let reactionAudio = new Audio(
-                    reactionAudioSrc
-                );
-                reactionAudio.play();
+
+                if (!isMuted.value){
+                    let reactionAudioSrc = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
+                    let reactionAudio = new Audio(
+                        reactionAudioSrc
+                    );
+                    reactionAudio.play();
+                }
 
                 setTimeout(() => {
                     event.to.children[0].classList.remove(
@@ -236,11 +265,13 @@ const dropLetterNew = (event, wordID, letterID, letterIsActive) => {
     } else {
         if (!letterIsActive) {
             event.to.children[0].classList.add('draggable-list__subcontainer-square_wrong');
-            let reactionAudioSrc = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
-            let reactionAudio = new Audio(
-                reactionAudioSrc
-            );
-            reactionAudio.play();
+            if (!isMuted.value){
+                let reactionAudioSrc = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
+                let reactionAudio = new Audio(
+                    reactionAudioSrc
+                );
+                reactionAudio.play();
+            }
             setTimeout(() => {
                 event.to.children[0].classList.remove(
                     'draggable-list__subcontainer-square_wrong'
@@ -454,9 +485,9 @@ onBeforeUnmount(() => {
 }
 
 .draggable-list__letter1 {
-    height: 20px;
+    height: 18px;
     font-family: 'Nunito', sans-serif;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 400;
     color: $violetLetters-game;
     cursor: pointer;
@@ -481,9 +512,9 @@ onBeforeUnmount(() => {
 }
 
 .draggable-list__letter4 {
-    height: 16px;
+    height: 20px;
     font-family: 'Nunito', sans-serif;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 500;
     color: $violetLetters-game;
     cursor: pointer;
@@ -526,9 +557,9 @@ onBeforeUnmount(() => {
 }
 
 .draggable-list__letter9 {
-    height: 24px;
+    height: 26px;
     font-family: 'Nunito', sans-serif;
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 400;
     color: $violetLetters-game;
     cursor: pointer;
@@ -818,9 +849,27 @@ onBeforeUnmount(() => {
 
     font-size: 36px;
     font-weight: 300;
+    height: 100%;
+    width: 100%;
 }
 
 .hidden{
     opacity: 0% !important;
+}
+
+.game_icons_item{
+    top: 16px;
+    position: absolute;
+    right: 60px;
+    z-index: 1000;
+
+    width: 40px;
+    height: 40px;
+    background-color: #e6f2fa;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

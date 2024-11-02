@@ -5,6 +5,20 @@
                 <div class="task_block__close" @click="hide">
                     <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
+
+                <div class="game_icons_item" @click="mute()">
+                    <img
+                        v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg"
+                        alt="sound"
+                    /><img
+                        v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg"
+                        alt=""
+                    />
+                </div>
+
+
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
                     <p class="title-h4 task_block__title">
@@ -111,6 +125,16 @@ const getImageUrl = (path) => {
     return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
+const isMuted = ref(false);
+const mute = () => {
+    isMuted.value = !isMuted.value;
+    if (isMuted.value === true) {
+        audio.value.volume = 0;
+    } else {
+        audio.value.volume = 1;
+    }
+};
+
 
 let legalWords = [];
 
@@ -130,7 +154,7 @@ for (let row = 1; row in taskData; row++) {
 
 const playAudio = (text) => {
     if (!audio.value.paused) audio.value.pause()
-    if (text) {
+    if (text && !isMuted.value) {
         audio.value.src = new URL(`/assets/audio/Task15/${audioMap.get(text)}`, import.meta.url).href;
         audio.value.play()
     }
@@ -183,7 +207,7 @@ const dropLetter = (event, letter) => {
                                 setTimeout(() => {
                                     let audioPath = new URL(`/assets/audio/Task15/${audioMap.get('слово-' + word.id)}`, import.meta.url).href
                                     let word_audio = new Audio(audioPath);
-                                    word_audio.play()
+                                    if (!isMuted.value) word_audio.play()
                                 }, 1000)
                             }
                         }
@@ -195,12 +219,15 @@ const dropLetter = (event, letter) => {
             setTimeout(() => {
                 event.target.children[0].classList.add('task_block__letter_right');
             }, 1)
-            let reactionAudioSrc = new URL(
-                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
-            let reactionAudio = new Audio(
-                reactionAudioSrc
-            );
-            reactionAudio.play();
+
+            if (!isMuted.value){
+                let reactionAudioSrc = new URL(
+                    `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
+                let reactionAudio = new Audio(
+                    reactionAudioSrc
+                );
+                reactionAudio.play();
+            }
 
             setTimeout(() => {
                 event.target.children[0].classList.remove('task_block__letter_right');
@@ -221,12 +248,14 @@ const dropLetter = (event, letter) => {
         } else {
             event.target.children[0].classList.add('task_block__letter_wrong');
 
-            let reactionAudioSrc = new URL(
-                `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
-            let reactionAudio = new Audio(
-                reactionAudioSrc
-            );
-            reactionAudio.play();
+            if (!isMuted.value){
+                let reactionAudioSrc = new URL(
+                    `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href
+                let reactionAudio = new Audio(
+                    reactionAudioSrc
+                );
+                reactionAudio.play();
+            }
 
             setTimeout(() => {
                 event.target.children[0].classList.remove('task_block__letter_wrong');
@@ -485,5 +514,21 @@ onBeforeUnmount(() => {
 
 .hidden{
     opacity: 0% !important;
+}
+
+.game_icons_item{
+    top: 16px;
+    position: absolute;
+    right: 60px;
+    z-index: 1000;
+
+    width: 40px;
+    height: 40px;
+    background-color: #e6f2fa;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

@@ -9,6 +9,17 @@
                         alt="крест"
                     />
                 </div>
+                <div class="game_icons_item" @click="mute()">
+                    <img
+                        v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg"
+                        alt="sound"
+                    /><img
+                        v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg"
+                        alt=""
+                    />
+                </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
                     <p class="title-h4 task_block__title EighthTask__title">
@@ -114,7 +125,7 @@
                                         data-isActive="true"
                                         :ghost-class="'hidden'"
                                         :drag-class="`${
-                                            syllable.drag_class == true
+                                            syllable.secondBlock.drag_class == true
                                                 ? 'hidden'
                                                 : ''
                                         }`"
@@ -130,9 +141,26 @@
                                                     syllable.correct === false,
                                             }"
                                             :value="syllable.text"
+                                            v-if="!syllable.finished"
                                         >
                                             {{ syllable.text }}
                                         </div>
+
+                                        <div
+                                            :class="{
+                                                'draggable-list__syllable': true,
+                                                hidden: syllable.secondBlock.hidden,
+                                                correct_select:
+                                                    syllable.secondBlock.correct,
+                                                not_correct_select:
+                                                    syllable.secondBlock.correct === false,
+                                            }"
+                                            :value="syllable.secondBlock.text"
+                                            v-else
+                                        >
+                                            {{ syllable.secondBlock.text }}
+                                        </div>
+
                                     </VueDraggableNext>
                                 </div>
                             </div>
@@ -221,6 +249,16 @@ const { endGameRequest, startGameRequest, getCorrectAnswer } = methods;
 const startGame = ref(true);
 const draggable = ref(true);
 let soundPlayed = false;
+
+const isMuted = ref(false);
+const mute = () => {
+    isMuted.value = !isMuted.value;
+    if (isMuted.value === true) {
+        audio.value.volume = 0;
+    } else {
+        audio.value.volume = 1;
+    }
+};
 const squareAnswer = ref({
     text: '',
     firstIndex: 0,
@@ -309,31 +347,61 @@ const syllables = ref({
             drag_class: false,
         },
     ],
-    2: {
+    2:{
         1: [
             {
                 id: 1,
-                text: 'ПА',
-                audio: 'Task8/289.8.mp3',
-                correct: null,
-                hidden: false,
-                drag_class: false,
-            },
-            {
-                id: 2,
                 text: 'ТЕР',
                 audio: 'Task8/290.8.mp3',
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'АТ',
+                    audio: 'Task8/АТ.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
             {
-                id: 3,
+                id: 2,
                 text: 'РО',
                 audio: 'Task8/291.8.mp3',
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'ГУ',
+                    audio: 'Task8/ГУ.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
+            },
+            {
+                id: 3,
+                text: 'ТО',
+                audio: 'Task8/294.8.mp3',
+                correct: null,
+                hidden: false,
+                drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'ИК',
+                    audio: 'Task8/ИК.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
             {
                 id: 4,
@@ -342,6 +410,16 @@ const syllables = ref({
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'МЕВ',
+                    audio: 'Task8/МЕВ.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
         ],
         2: [
@@ -352,14 +430,34 @@ const syllables = ref({
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'МО',
+                    audio: 'Task8/МО.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
             {
                 id: 6,
-                text: 'ТО',
-                audio: 'Task8/294.8.mp3',
+                text: 'ПА',
+                audio: 'Task8/289.8.mp3',
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'УВ',
+                    audio: 'Task8/УВ.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
             {
                 id: 7,
@@ -368,6 +466,16 @@ const syllables = ref({
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'УЗ',
+                    audio: 'Task8/УЗ.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
             {
                 id: 8,
@@ -376,6 +484,16 @@ const syllables = ref({
                 correct: null,
                 hidden: false,
                 drag_class: false,
+                finished: false,
+
+                secondBlock: {
+                    id: 999,
+                    text: 'ХО',
+                    audio: 'Task8/ХО.mp3',
+                    correct: null,
+                    hidden: false,
+                    drag_class: false,
+                }
             },
         ],
     },
@@ -446,11 +564,22 @@ const answers = ref([
 
 const clickText = (event, syllable) => {
     if (soundPlayed || event.target.dataset['isactive'] !== 'true') return;
-    playAudio(syllable.audio);
+
+
+    console.log('play')
+    if (Object.keys(syllable).includes('finished') && syllable.finished){
+
+        playAudio(syllable.secondBlock.audio);
+    }
+    else{
+        playAudio(syllable.audio);
+    }
+
     soundPlayed = true;
     setTimeout(() => {
         soundPlayed = false;
     }, 500);
+    
 };
 
 const emit = defineEmits(['close', 'next-modal', 'correct', 'open']);
@@ -465,8 +594,9 @@ const props = defineProps({
     },
 });
 
-const audio =  new Audio();
+const audio = new Audio();
 const playAudio = (audioPath) => {
+    if (isMuted.value) return;
     audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     audio.play();
     if (!soundPlayed) {
@@ -481,22 +611,28 @@ const dataTransfer = ref({});
 
 const checkDragAndDrop = ref(false);
 
+
+
 const drag = (event, syllable, fromPlace) => {
     // event.dataTransfer.setData('id', syllable.id);
     // event.dataTransfer.setData('fromPlace', fromPlace)
+    console.log('syllable', syllable, event.from);
     if (
         event.from.classList.contains('hidden') ||
         event.from.dataset['isactive'] !== 'true'
     ) {
+        console.log('sss')
         checkDragAndDrop.value = false;
         dataTransfer.value.id = '';
         dataTransfer.value.fromPlace = '';
+        dataTransfer.value.syllable = {};
         return;
     }
 
     checkDragAndDrop.value = true;
     dataTransfer.value.id = syllable.id;
     dataTransfer.value.fromPlace = fromPlace;
+    dataTransfer.value.syllable = syllable;
 
     if (
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(
@@ -523,7 +659,8 @@ const drop = (event, place) => {
 
     event.to.removeChild(event.item);
     event.from.classList.remove('hidden');
-    console.log('drop', checkDragAndDrop.value);
+
+    console.log(dataTransfer.value)
 
     if (checkDragAndDrop.value == false) {
         event.from.classList.add('hidden');
@@ -584,20 +721,49 @@ const drop = (event, place) => {
             circleFrom.children[0].classList.add('standrart_cursor');
 
             if (id < 5) {
-                syllables.value[fromPlace][1][id - 1].drag_class = true;
-                circleAnswer.value.text =
-                    syllables.value[fromPlace][1][id - 1].text;
-                circleAnswer.value.firstIndex = fromPlace;
-                circleAnswer.value.secondIndex = 1;
-                circleAnswer.value.thirdIndex = id - 1;
+                if (syllables.value[fromPlace][1][id - 1].finished !== true){
+                    syllables.value[fromPlace][1][id - 1].drag_class = true;
+                    circleAnswer.value.text =
+                        syllables.value[fromPlace][1][id - 1].text;
+                    circleAnswer.value.firstIndex = fromPlace;
+                    circleAnswer.value.secondIndex = 1;
+                    circleAnswer.value.thirdIndex = id - 1;
+                }
+
+                else{
+                    syllables.value[fromPlace][1][id - 1].secondBlock.drag_class = true;
+                    circleAnswer.value.text =
+                        syllables.value[fromPlace][1][id - 1].secondBlock.text;
+                    circleAnswer.value.firstIndex = fromPlace;
+                    circleAnswer.value.secondIndex = 1;
+                    circleAnswer.value.thirdIndex = id - 1;
+                }
+
             } else {
-                syllables.value[fromPlace][2][id - 5].drag_class = true;
-                circleAnswer.value.text =
-                    syllables.value[fromPlace][2][id - 5].text;
-                circleAnswer.value.firstIndex = fromPlace;
-                circleAnswer.value.secondIndex = 2;
-                circleAnswer.value.thirdIndex = id - 5;
+
+                if (syllables.value[fromPlace][2][id - 5].finished !== true){
+                    syllables.value[fromPlace][2][id - 5].drag_class = true;
+                    circleAnswer.value.text =
+                        syllables.value[fromPlace][2][id - 5].text;
+                    circleAnswer.value.firstIndex = fromPlace;
+                    circleAnswer.value.secondIndex = 2;
+                    circleAnswer.value.thirdIndex = id - 5;
+                }
+
+                else{
+
+                    syllables.value[fromPlace][2][id - 5].secondBlock.drag_class = true;
+                    circleAnswer.value.text =
+                        syllables.value[fromPlace][2][id - 5].secondBlock.text;
+                    circleAnswer.value.firstIndex = fromPlace;
+                    circleAnswer.value.secondIndex = 2;
+                    circleAnswer.value.thirdIndex = id - 5;
+
+
+                }
+
             }
+            
         }
     }
     if (squareAnswer.value.text && circleAnswer.value.text) {
@@ -613,14 +779,16 @@ const drop = (event, place) => {
                 find = true;
                 correctAnswers.value[countAnswers.value] = obj;
                 countAnswers.value++;
-                playAudio(obj.audio);
-                setTimeout(
-                    () =>
-                        playAudio(
-                            `Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`,
-                        ),
-                    1000,
-                );
+                if (!isMuted.value){
+                    playAudio(obj.audio);
+                    setTimeout(
+                        () =>
+                            playAudio(
+                                `Common/1.${Math.floor(Math.random() * 3) + 1}.mp3`,
+                            ),
+                        1000,
+                    );
+                }
                 break;
             }
         }
@@ -645,7 +813,11 @@ const drop = (event, place) => {
             syllables.value[circleAnswer.value.firstIndex][
                 circleAnswer.value.secondIndex
             ][circleAnswer.value.thirdIndex].correct = false;
-            playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+            
+            if (!isMuted.value){
+                playAudio(`Common/2.${Math.floor(Math.random() * 3) + 1}.mp3`);
+            }
+
             setTimeout(() => {
                 syllables.value[squareAnswer.value.firstIndex][
                     squareAnswer.value.secondIndex
@@ -686,9 +858,16 @@ const drop = (event, place) => {
                 syllables.value[circleAnswer.value.firstIndex][
                     circleAnswer.value.secondIndex
                 ][circleAnswer.value.thirdIndex].correct = null;
+                
+                syllables.value[circleAnswer.value.firstIndex][
+                    circleAnswer.value.secondIndex
+                ][circleAnswer.value.thirdIndex].finished = true;
+
                 squareAnswer.value = {};
                 circleAnswer.value = {};
                 draggable.value = true;
+
+
 
                 squareFrom.children[0].classList.remove('correct_select');
                 circleFrom.children[0].classList.remove('correct_select');
@@ -696,8 +875,13 @@ const drop = (event, place) => {
                 squareFrom.removeChild(squareFrom.children[0]);
                 circleFrom.removeChild(circleFrom.children[0]);
 
+                circleFrom.dataset['isactive'] = 'true';
+
                 squareFrom.classList.add('hidden');
-                circleFrom.classList.add('hidden');
+                //circleFrom.classList.add('hidden');
+
+                // let word = newWords.pop();
+                // circleFrom.innerHTML = `<div id="draggable-list__syllable" value="${word}">${word}</div>`
             }, 2000);
         }
         if (countAnswers.value == 8) {
@@ -761,7 +945,7 @@ onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
 
-    audio.src = "";
+    audio.src = '';
     console.log('game unmount');
 });
 </script>
@@ -1208,4 +1392,45 @@ onBeforeUnmount(() => {
     display: block !important;
     opacity: 100% !important;
 }
+
+.game_icons_item{
+    top: 16px;
+    position: absolute;
+    right: 60px;
+    z-index: 1000;
+
+    width: 40px;
+    height: 40px;
+    background-color: #e6f2fa;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>
+<style lang="scss">
+    #draggable-list__syllable{
+        
+        cursor: pointer;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background-color: $blueGame;
+        color: $darkBlue;
+        font-family: 'Nunito', sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+
+        @media (max-width: 1024px) {
+            font-size: 16px;
+            width: 63px;
+            height: 63px;
+        }
+
+    }
 </style>

@@ -15,6 +15,18 @@
                         alt="крест"
                     />
                 </div>
+
+                <div class="game_icons_item" @click="mute()">
+                    <img
+                        v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg"
+                        alt="sound"
+                    /><img
+                        v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg"
+                        alt=""
+                    />
+                </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
                     <p class="ThirteenthTask__title">
@@ -84,7 +96,7 @@
                     с вами.
                 </div>
                 <div
-                    v-show="answer === 'ОБЩАТЬСЯ'"
+                    v-show="answer === 'ОБЩАТЬСЯ' || answer === 'ДЕТСКУЮ'"
                     class="ThirteenthTask__wrapper_answer"
                 >
                     Приходите чаще на
@@ -118,7 +130,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { Timer } from '@shared/components/timer';
 
@@ -161,17 +173,32 @@ const getImageUrl = (path) => {
     return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
 };
 
+const isMuted = ref(false);
+const mute = () => {
+    isMuted.value = !isMuted.value;
+    if (isMuted.value === true) {
+        audio.value.volume = 0;
+        audioQuestion.volume = 0;
+    } else {
+        audio.value.volume = 1;
+        audioQuestion.volume = 1;
+    }
+};
+
 const playAudio = async (audioPath) => {
     audio.value.src = new URL(
         `/assets/audio/${audioPath}`,
         import.meta.url,
     ).href;
-    if (props.finish === true) {
-        await audio.value.play();
+    if (audioPath === 'Task13/377.13_.mp3') {
+        audio.value.volume = 1;
     }
+
+    await audio.value.play();
 };
 
 const playEndAudio = (audioPath) => {
+    if (isMuted.value) return;
     const end_audio = new Audio();
     end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
@@ -186,10 +213,21 @@ const stopAudio = (audioPath) => {
 };
 
 const playCorrectAudio = (audioPath) => {
+    if (isMuted.value) return;
     const correct_audio = new Audio();
     correct_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     correct_audio.play();
 }
+
+let audioQuestion = new Audio();
+const playAudioQuestion = async (audioPath) => {
+    if (gameIsClose) return;
+    audioQuestion.src = new URL(
+        `/assets/audio/${audioPath}`,
+        import.meta.url,
+    ).href;
+    await audioQuestion.play();
+};
 
 const is_correct = ref(false);
 const corrValue = ref(0);
@@ -236,19 +274,50 @@ const drop = (event) => {
     ) {
         elem.classList.add('green');
         answer_drop.value = text;
+
         playCorrectAudio('Common/1.2.mp3');
         setTimeout(() => {
             //words.value.splice(dropIndex.value, 1);
             elem.parentElement.parentElement.removeChild(elem.parentElement);
             elem.classList.remove('green');
-            answer.value = text;
-            answer_drop.value = '?';
+
+
+            setTimeout(() => {
+                let timeout = 4500;
+
+                sentence_audiopath = "";
+                secondsentence_audiopath = "";
+
+                if (text === 'РАДЫ') {
+                    sentence_audiopath = "Task13/з.13 МЫ ОЧЕНЬ РАДЫ С ВАМИ ПОЗНАКОМИТЬСЯ.mp3"
+                    secondsentence_audiopath = "Task13/з.13 Нам нравится_с вами.mp3";
+                }
+                else if (text === 'ОБЩАТЬСЯ') {
+                    sentence_audiopath = 'Task13/з.13 НАМ НРАВИТСЯ ОБЩАТЬСЯ С ВАМИ.mp3';
+                    secondsentence_audiopath = "Task13/з.13 Приходите чаще на_площадку.mp3";
+                }
+                else if (text === 'ДЕТСКУЮ') {
+                    sentence_audiopath = 'Task13/з.13 ПРИХОДИТЕ ЧАЩЕ НА ДЕТСКУЮ ПЛОЩАДКУ.mp3';
+                }
+
+                {
+                    playAudioQuestion(sentence_audiopath);
+                }
+
+                setTimeout(() => {
+                    answer.value = text;
+                    answer_drop.value = answer.value == "ДЕТСКУЮ" ? "ДЕТСКУЮ" : "?";
+                    if (text !== 'ДЕТСКУЮ') {
+                        playAudioQuestion(secondsentence_audiopath);
+                    }
+
+                }, timeout);
+            }, 0)
         }, 2000);
 
-        if (text === 'ДЕТСКУЮ') {
-            event.target.classList.add('green');
+        
 
-            playCorrectAudio('Common/1.2.mp3');
+        if (text === 'ДЕТСКУЮ') {
             event.target.classList.remove('green');
             setTimeout(() => {
                 if (is_correct.value === false) {
@@ -258,7 +327,7 @@ const drop = (event) => {
                 }
                 endGame.value = true;
                 playAudio('Task13/377.13_.mp3');
-            }, 1000);
+            }, 7000);
         }
     } else {
         elem.classList.add('red');
@@ -274,6 +343,12 @@ const drop = (event) => {
 const allowDrop = (event) => {
     event.preventDefault();
 };
+
+let sentence_audio = new Audio(); 
+let sentence_audiopath = "";
+let secondsentence_audiopath = "";
+
+
 
 onMounted(async () => {
     try {
@@ -295,15 +370,34 @@ onMounted(async () => {
     document.getElementsByTagName('html')[0].classList.add('no-scroll');
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
+    secondsentence_audiopath = "Task13/з.13 Мы очень_с вами познакомиться.mp3";     
+
+    setTimeout(() => {
+        if (!gameIsClose);
+        {   
+            playAudioQuestion(secondsentence_audiopath);
+        }
+    }, 3500);
+
+
     console.log('game mount');
 });
-
+let gameIsClose = false;
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
     audio.value.src = "";
+    audioQuestion.src = "";
     console.log('game unmount');
+    gameIsClose = true;
 });
+
+
+watch(
+    () => answer.value,
+    (newVal, oldVal) => {
+    console.log('answer changed', newVal, oldVal);
+})
 </script>
 <style lang="scss" scoped>
 * {
@@ -411,5 +505,21 @@ onBeforeUnmount(() => {
     border-radius: 6px;
     border: none;
     cursor: pointer;
+}
+
+.game_icons_item{
+    top: 16px;
+    position: absolute;
+    right: 60px;
+    z-index: 1000;
+
+    width: 40px;
+    height: 40px;
+    background-color: #e6f2fa;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

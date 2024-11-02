@@ -197,10 +197,18 @@ const isFormValid = computed(() => {
 const RegisterUser = async () => {
     try {
         const response = await HTTP.post('/users/', form.value);
-        form.value = response.data;
         router.push({
             name: 'Login',
         });
+
+        setTimeout(() => {
+            form.value = {
+                email: '',
+                password: '',
+            };
+            v$.value.$reset(); 
+        }, 500);
+
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;

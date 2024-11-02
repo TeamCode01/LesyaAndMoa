@@ -9,6 +9,17 @@
                         alt="крест"
                     />
                 </div>
+                <div class="game_icons_item" @click="mute()">
+                    <img
+                        v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg"
+                        alt="sound"
+                    /><img
+                        v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg"
+                        alt=""
+                    />
+                </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
                     <p class="title-h4 task_block__title TenthTask__title">
@@ -170,18 +181,24 @@ const questions = ref({
         first_part: 'Мы прилетели ',
         second_part: 'планеты Музи.',
         first_answer: 'с',
+        audio_src_start: 'Task10/з.10 Мы прилетели_планеты Музи.mp3',
+        audio_src_end: 'Task10/з.10 МЫ ПРИЛЕТЕЛИ С ПЛАНЕТЫ МУЗИ.mp3',
     },
     2: {
         first_part: 'Наш межгалактический корабль разбился ',
         second_part: 'лесу.',
         first_answer: 'в',
+        audio_src_start: 'Task10/з.10 Наш межгалактический корабль разбился_лесу.mp3',
+        audio_src_end: 'Task10/з.10 НАШ МЕЖГАЛАКТИЧЕСКИЙ КОРАБЛЬ РАЗБИЛСЯ В ЛЕСУ.mp3',
     },
     3: {
         first_part: 'Мы добрались',
         second_part: 'места крушения в город',
         third_part: 'поле',
-        first_answer: 'до',
+        first_answer: 'от',
         second_answer: 'через',
+        audio_src_start: 'Task10/з.10 Мы добрались_места крушения_поле.mp3',
+        audio_src_end: 'Task10/з.10 МЫ ДОБРАЛИСЬ ДО МЕСТА КРУШЕНИЯ В ГОРОД ЧЕРЕЗ ПОЛЕ.mp3',
     },
     4: {
         first_part: 'И спрятались',
@@ -189,6 +206,8 @@ const questions = ref({
         third_part: 'детской площадке',
         first_answer: 'под',
         second_answer: 'на',
+        audio_src_start: 'Task10/з.10 И спрятались_крышей игрового домика_детской площадке.mp3',
+        audio_src_end: 'Task10/з.10 И СПРЯТАЛИСЬ ПОД КРЫШЕЙ ИГРОВОГО ДОМИКА НА ДЕТСКОЙ ПЛОЩАДКЕ.mp3',
     },
 });
 
@@ -211,6 +230,18 @@ const prepositions = ref({
 
 const getImageUrl = (path) => {
     return new URL(`/assets/backgrounds/${path}`, import.meta.url).href;
+};
+
+const isMuted = ref(false);
+const mute = () => {
+    isMuted.value = !isMuted.value;
+    if (isMuted.value === true) {
+        audio.value.volume = 0;
+        audioQuestion.volume = 0;
+    } else {
+        audio.value.volume = 1;
+        audioQuestion.volume = 1;
+    }
 };
 
 const dataTransfer = ref({});
@@ -247,8 +278,13 @@ const drop = (event, num) => {
             correctAnswer(id, true, fromBlock);
             givenAnswer.value[1] = true;
             setTimeout(() => {
-                givenAnswer.value[1] = false;
-                currStage.value += 1;
+                playAudioQuestion(questions.value[currStage.value].audio_src_end);
+
+                setTimeout(() => {
+                    givenAnswer.value[1] = false;
+                    currStage.value += 1;
+                    playAudioQuestion(questions.value[currStage.value].audio_src_start);
+                }, 4500)
             }, 2000);
         } else {
             correctAnswer(id, false, fromBlock);
@@ -262,15 +298,30 @@ const drop = (event, num) => {
                 correctAnswer(id, true, fromBlock);
                 givenAnswer.value[1] = true;
                 if (givenAnswer.value[1] && givenAnswer.value[2]) {
+
                     setTimeout(() => {
-                        givenAnswer.value[1] = false;
-                        givenAnswer.value[2] = false;
-                        currStage.value += 1;
-                        if (currStage.value == 5) {
-                            startGame.value = false;
-                            playAudio(`Task10/328.10_.mp3`);
-                        }
-                    }, 2000);
+                        playAudioQuestion(questions.value[currStage.value].audio_src_end);
+                        setTimeout(() => {
+
+                            givenAnswer.value[1] = false;
+                            givenAnswer.value[2] = false;
+                            currStage.value += 1;
+
+                            if (currStage.value < 5) {
+                                playAudioQuestion(questions.value[currStage.value].audio_src_start);
+                            }
+
+                            setTimeout(() => {
+
+                                if (currStage.value == 5) {
+                                    startGame.value = false;
+                                    playAudio(`Task10/328.10_.mp3`);
+                                }
+                            }, 4500);
+                        }, 4500)
+                    }, 2000)
+
+
                 }
             } else {
                 correctAnswer(id, false, fromBlock);
@@ -283,20 +334,31 @@ const drop = (event, num) => {
                 correctAnswer(id, true, fromBlock);
                 givenAnswer.value[2] = true;
                 if (givenAnswer.value[1] && givenAnswer.value[2]) {
+
                     setTimeout(() => {
-                        givenAnswer.value[1] = false;
-                        givenAnswer.value[2] = false;
-                        currStage.value += 1;
-                        if (currStage.value == 5) {
-                            if (is_correct.value === false) {
-                                endGameRequest(props.childId, corrValue.value);
-                                emit('correct');
-                                emit('open');
+                        playAudioQuestion(questions.value[currStage.value].audio_src_end);
+
+                        setTimeout(() => {
+
+                            givenAnswer.value[1] = false;
+                            givenAnswer.value[2] = false;
+                            currStage.value += 1;
+
+                            if (currStage.value < 5) {
+                                playAudioQuestion(questions.value[currStage.value].audio_src_start);
                             }
-                            startGame.value = false;
-                            playAudio(`Task10/328.10_.mp3`);
-                        }
-                    }, 2000);
+
+                            setTimeout(() => {
+
+                                if (currStage.value == 5) {
+                                    startGame.value = false;
+                                    playAudio(`Task10/328.10_.mp3`);
+                                }
+                            }, 4500);
+                        }, 4500)
+                    }, 2000)
+
+
                 }
             } else {
                 correctAnswer(id, false, fromBlock);
@@ -346,23 +408,39 @@ const playAudio = async (audioPath) => {
         `/assets/audio/${audioPath}`,
         import.meta.url,
     ).href;
-    if (props.finish === true) {
-        await audio.value.play();
+
+    if (audioPath === 'Task10/328.10_.mp3') {
+        audio.value.volume = 1;
     }
+
+    await audio.value.play();
 };
 
+let audioQuestion = new Audio();
+
+const playAudioQuestion = async (audioPath) => {
+    if (gameIsClose) return;
+    audioQuestion.src = new URL(
+        `/assets/audio/${audioPath}`,
+        import.meta.url,
+    ).href;
+    await audioQuestion.play();
+};``
+
 const playEndAudio = (audioPath) => {
+    if (isMuted.value) return;
     const end_audio = new Audio();
     end_audio.src = new URL(`/assets/audio/${audioPath}`, import.meta.url).href;
     end_audio.play();
 };
 
 const stopAudio = (audioPath) => {
-    if (audio.value.paused) {
-        playAudio(audioPath);
-    } else {
-        audio.value.pause();
-    }
+    audio.value.src = "";
+    // if (audio.value.paused) {
+    //     playAudio(audioPath);
+    // } else {
+    //     audio.value.pause();
+    // }
 };
 const hide = () => {
     emit('close');
@@ -392,12 +470,21 @@ onMounted(async () => {
     document.body.classList.add('no-scroll'); /* Прокрутка ставится на паузу */
 
     console.log('game mount');
+
+    setTimeout(() => {
+        {   
+            playAudioQuestion(questions.value[1].audio_src_start);
+        }
+    }, 3500);
 });
 
+let gameIsClose = false;
 onBeforeUnmount(() => {
     document.getElementsByTagName('html')[0].classList.remove('no-scroll');
     document.body.classList.remove('no-scroll'); /* Прокрутка возвращается */
     audio.value.src = "";
+    audioQuestion.src = "";
+    gameIsClose = true;
     console.log('game unmount');
 });
 </script>
@@ -562,5 +649,21 @@ onBeforeUnmount(() => {
 
 .none {
     display: none;
+}
+
+.game_icons_item{
+    top: 16px;
+    position: absolute;
+    right: 60px;
+    z-index: 1000;
+
+    width: 40px;
+    height: 40px;
+    background-color: #e6f2fa;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

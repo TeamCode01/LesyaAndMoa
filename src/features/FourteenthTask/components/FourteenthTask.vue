@@ -5,6 +5,19 @@
                 <div class="task_block__close" @click="hide">
                     <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
+
+                <div class="game_icons_item" @click="mute()">
+                    <img
+                        v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg"
+                        alt="sound"
+                    /><img
+                        v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg"
+                        alt=""
+                    />
+                </div>
+
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
                     <p class="title-h4 task_block__title FourteenthTask__title">
@@ -151,6 +164,17 @@ const draggableBlock = ref({
     type: '',
     id: 0,
 });
+
+const isMuted = ref(false);
+const mute = () => {
+    isMuted.value = !isMuted.value;
+    if (isMuted.value === true) {
+        audio.value.volume = 0;
+    } else {
+        audio.value.volume = 1;
+    }
+};
+
 const getPictureUrl = (path) => {
  return new URL(`/assets/img/${path}`, import.meta.url).href;
 };
@@ -195,9 +219,12 @@ const drop = (event, type, id, answer) => {
         event.from.classList.add('hidden')
 
         event.to.children[0].classList.add('item_right')
-        let reactionAudio_path = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
-        let reactionAudio = new Audio(reactionAudio_path);
-        reactionAudio.play();
+
+        if (!isMuted.value) {
+            let reactionAudio_path = new URL(`/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
+            let reactionAudio = new Audio(reactionAudio_path);
+            reactionAudio.play();
+        }
 
         setTimeout(() => {
             event.to.children[0].classList.remove('item_right')
@@ -224,9 +251,12 @@ const drop = (event, type, id, answer) => {
 
     else{
         event.from.children[0].classList.add('item_wrong')
-        reactionAudio_path = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
-        reactionAudio = new Audio(reactionAudio_path);
-        reactionAudio.play();
+
+        if (!isMuted.value) {
+            reactionAudio_path = new URL(`/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`, import.meta.url).href;
+            reactionAudio = new Audio(reactionAudio_path);
+            reactionAudio.play();
+        }
 
         setTimeout(() => {
             event.from.children[0].classList.remove('item_wrong')
@@ -528,4 +558,21 @@ onBeforeUnmount(() => {
 .hidden{
     opacity: 0% !important;
 }
+
+.game_icons_item{
+    top: 16px;
+    position: absolute;
+    right: 60px;
+    z-index: 1000;
+
+    width: 40px;
+    height: 40px;
+    background-color: #e6f2fa;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 </style>

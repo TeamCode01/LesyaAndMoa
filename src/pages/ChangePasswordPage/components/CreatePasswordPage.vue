@@ -63,7 +63,7 @@ const recoveryPass = async () => {
     }
 
     try {
-        const response = await HTTP.post('/reset_password_confirm/', {
+        const response = await HTTP.post('/users/reset_password_confirm/', {
             ...auth.value,
             new_password: new_pass.value,
         });

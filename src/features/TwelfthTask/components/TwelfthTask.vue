@@ -11,6 +11,18 @@
                     />
                 </div>
 
+                <div class="game_icons_item" @click="mute()">
+                    <img
+                        v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg"
+                        alt="sound"
+                    /><img
+                        v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg"
+                        alt=""
+                    />
+                </div>
+
                 <!-- ЗАДАНИЕ И ВРЕМЯ -->
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
@@ -135,6 +147,7 @@
                                     </div>
                                 </VueDraggableNext>
                             </div>
+                            <div class="draggable-list__symbol"></div>
                         </div>
 
                         <!-- ВОДА -->
@@ -295,6 +308,18 @@ const isTouch = ref(false);
 
 const refWords = ref({});
 
+const isMuted = ref(false);
+const mute = () => {
+    isMuted.value = !isMuted.value;
+    if (isMuted.value === true) {
+        audio.value.volume = 0;
+        if (endAudio_words.value.src) endAudio_words.value.volume = 0;
+    } else {
+        audio.value.volume = 1;
+        if (endAudio_words.value.src) endAudio_words.value.volume = 1;
+    }
+};
+
 const isDrag = ref(false);
 
 const dataTransfer = ref({});
@@ -302,12 +327,14 @@ const dragLetter = (event, id, text) => {
     //event.dataTransfer.setData('text', `${id}`);
     dataTransfer.value.id = id;
     isDrag.value = true;
-    if (dragAudio.value) dragAudio.value.pause();
-    dragAudio.value.src = new URL(
-        `/assets/audio/Task12/${audioMap.get(text)}`,
-        import.meta.url,
-    ).href;
-    dragAudio.value.play();
+    if (!isMuted.value) {
+        if (dragAudio.value) dragAudio.value.pause();
+        dragAudio.value.src = new URL(
+            `/assets/audio/Task12/${audioMap.get(text)}`,
+            import.meta.url,
+        ).href;
+        dragAudio.value.play();
+    }
 };
 
 let endAudio = new Audio();
@@ -403,14 +430,17 @@ const dropLetter = (event, id, isActive) => {
                 }),
             );
 
-            let reactionPath = new URL(
-                `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`,
-                import.meta.url,
-            ).href;
-            let reactionAudio = new Audio(reactionPath);
-            reactionAudio.play();
+            if (!isMuted.value) {
+                let reactionPath = new URL(
+                    `/assets/audio/Task6/right.${Math.ceil(Math.random() * 3)}.mp3`,
+                    import.meta.url,
+                ).href;
+                let reactionAudio = new Audio(reactionPath);
+                reactionAudio.play();
+            }
 
-            if (audioPath != '') {
+
+            if (audioPath != '' && !isMuted.value) {
                 setTimeout(() => {
                     let audio = new Audio(audioPath);
                     audio.play();
@@ -426,12 +456,14 @@ const dropLetter = (event, id, isActive) => {
                     }
                     //startGame.value = false;
 
-                    let audioPath_4 = new URL(
-                        '/assets/audio/Task12/з.12 полн.текст Веселые ребята наши друзья.mp3',
-                        import.meta.url,
-                    ).href;
-                    endAudio_words = new Audio(audioPath_4);
-                    endAudio_words.play();
+                    if (!isMuted.value) {
+                        let audioPath_4 = new URL(
+                            '/assets/audio/Task12/з.12 полн.текст Веселые ребята наши друзья.mp3',
+                            import.meta.url,
+                        ).href;
+                        endAudio_words = new Audio(audioPath_4);
+                        endAudio_words.play();
+                    }
                 }, 2000);
             }
 
@@ -453,7 +485,7 @@ const dropLetter = (event, id, isActive) => {
                     endAudio = new Audio(audio_path);
                     endAudio.play();
                 }
-            }, 7000);
+            }, isMuted.value ? 1000 : 7000);
         } else {
             Array.from(taskDOM.children).map((row) => {
                 Array.from(row.children).forEach((word) => {
@@ -468,12 +500,14 @@ const dropLetter = (event, id, isActive) => {
                     }
                 });
             });
-            let reactionPath_2 = new URL(
-                `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`,
-                import.meta.url,
-            ).href;
-            let reactionAudio = new Audio(reactionPath_2);
-            reactionAudio.play();
+            if (!isMuted.value) {
+                let reactionPath_2 = new URL(
+                    `/assets/audio/Task6/wrong.${Math.ceil(Math.random() * 3)}.mp3`,
+                    import.meta.url,
+                ).href;
+                let reactionAudio = new Audio(reactionPath_2);
+                reactionAudio.play();
+            }
         }
     }
 
@@ -630,6 +664,7 @@ onBeforeUnmount(() => {
 }
 
 .draggable-list__answer-wrapper {
+    position: relative;
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -696,5 +731,31 @@ onBeforeUnmount(() => {
 .none {
     display: none;
     cursor: default;
+}
+
+.game_icons_item{
+    top: 16px;
+    position: absolute;
+    right: 60px;
+    z-index: 1000;
+
+    width: 40px;
+    height: 40px;
+    background-color: #e6f2fa;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.draggable-list__symbol{
+    width: 30px;
+    height: 4px;
+    background: #000;
+    position: absolute;
+    //top: -40px;
+    right: -20px;
+    border-radius: 4px;
 }
 </style>

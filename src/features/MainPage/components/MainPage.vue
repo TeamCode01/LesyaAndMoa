@@ -438,7 +438,9 @@ const getImageUrl = (path) => {
     return new URL(`/assets/icons/${path}`, import.meta.url).href;
 };
 const shareLink = () => {
-    show_socials.value = !show_socials.value;
+    setTimeout(() => {
+        show_socials.value = !show_socials.value;
+    })
 };
 
 const networks = ref([
@@ -543,19 +545,22 @@ const stateAudio = {
         time: null,
     },
 };
-
+let flagAddListener = false;
 const playAudio = (audioPath, forcePlay = false) => {
+
     if (!forcePlay) {
         if (
             stateAudio[audioPath].state === 'ended' ||
             stateAudio[audioPath].state === 'playing'
-        )
+        ){
             return;
+        }
         if (stateAudio[audioPath].state === 'paused') {
-            if (audio.value.paused) {
+            {
                 audio.value.play();
+                stateAudio[audioPath].state = 'playing'
+                return;
             }
-            return;
         }
     }
 
@@ -565,21 +570,23 @@ const playAudio = (audioPath, forcePlay = false) => {
     ).href;
 
     audio.value.addEventListener('ended', () => {
-        stateAudio[audioPath].state = 'ended';
-    });
 
-    if (audioPath === 'Music/звук 1_.mp3') {
-        audio.value.addEventListener('ended', () => {
-            playAudio('TestTask/3.тестовое задание.mp3');
-        });
-    }
+        if (audioPath === audio.value.dataset.audioPath){
+            console.log(audioPath, stateAudio[audioPath])
+            stateAudio[audioPath].state = 'ended'
+
+            if (audioPath === 'Music/звук 1_.mp3' && flagAddListener == false) {
+                playAudio('TestTask/3.тестовое задание.mp3');
+                flagAddListener = true;
+            }
+        };
+
+    });
 
     audio.value.dataset.audioPath = audioPath;
     audio.value.play();
 
     stateAudio[audioPath].state = 'playing';
-
-    console.log(stateAudio[audioPath].state, audioPath, audio.value.dataset);
 };
 
 const playTestAudio = (audioPath) => {
@@ -595,12 +602,15 @@ function handleScroll(e) {
     const test = document.getElementById('test');
     const posTop = test.getBoundingClientRect().top;
     if (posTop + test.clientHeight <= window.innerHeight) {
-        if (stateAudio['Music/звук 1_.mp3'].state !== 'ended')
+        if (stateAudio['Music/звук 1_.mp3'].state !== 'ended'){
             playAudio('Music/звук 1_.mp3');
+        }
+            
         else if (
             stateAudio['TestTask/3.тестовое задание.mp3'].state !== 'ended'
-        )
+        ){
             playAudio('TestTask/3.тестовое задание.mp3');
+        }
 
         // audio.value.addEventListener('ended', () => {
         //console.log('first ended', audio.value.src)
@@ -615,6 +625,9 @@ function handleScroll(e) {
         if (posTop + test.offsetHeight < 0) {
             if (stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
                 stateAudio[audio.value.dataset.audioPath].state = 'paused';
+                audio.value.pause();
+            }
+            else{
                 audio.value.pause();
             }
         }
@@ -668,16 +681,28 @@ onMounted(() => {
     } else {
         showCookie.value = true;
     }
-    document.addEventListener('click', (event) => {
-        console.log(event);
-        if (stateAudio[audio.value.dataset.audioPath].state !== 'ended' ) {
+    
+    window.addEventListener('click', (e) => {
+        if (window.location.pathname === '/') {
+            if (stateAudio[audio.value.dataset.audioPath]?.state !== 'ended' && !(document.querySelector('.link-share').contains(e.target))) {
+                audio.value.play().catch((error) => {
+                    if (error.name === 'NotAllowedError') {
+                        console.log('User interaction required to play audio');
+                    }
+                });
+            }
+        }
+
+        else {
             audio.value.play().catch((error) => {
                 if (error.name === 'NotAllowedError') {
                     console.log('User interaction required to play audio');
                 }
             });
         }
+        
     });
+
     document.addEventListener('scroll', handleScroll);
     windowWidth.value = window.innerWidth;
     itemsToShow.value = windowWidth.value >= 660 ? 2 : 1;
@@ -690,7 +715,6 @@ onMounted(() => {
     });
     GetNews();
 
-    console.log('onMount', stateAudio);
 });
 onUnmounted(() => {
     document.removeEventListener('scroll', handleScroll);
@@ -699,7 +723,16 @@ onUnmounted(() => {
         audio.value.pause();
     }
 
-    console.log(stateAudio, 'unmount');
+    window.removeEventListener('click', (e) => {
+        if (stateAudio[audio.value.dataset.audioPath]?.state !== 'ended' && !(document.querySelector('.link-share').contains(e.target))) {
+            audio.value.play().catch((error) => {
+                if (error.name === 'NotAllowedError') {
+                    console.log('User interaction required to play audio');
+                }
+            });
+        }
+    });
+
 });
 
 onBeforeRouteLeave(() => {
@@ -714,24 +747,19 @@ onBeforeRouteLeave(() => {
     //     }
     // }
 
-    if (!audio.value.src) return;
-    if (
-        stateAudio[audio.value.dataset.audioPath].state &&
-        stateAudio[audio.value.dataset.audioPath].state !== 'ended'
-    ) {
-        stateAudio[audio.value.dataset.audioPath].state = 'paused';
-        stateAudio[audio.value.dataset.audioPath].time =
-            audio.value.currentTime;
-        audio.value.pause();
-        audio.value.src = '';
+    if (audio.value.src){
+        if (
+            stateAudio[audio.value.dataset.audioPath]?.state &&
+            stateAudio[audio.value.dataset.audioPath].state !== 'ended'
+        ) {
+            stateAudio[audio.value.dataset.audioPath].state = 'paused';
+            stateAudio[audio.value.dataset.audioPath].time =
+                audio.value.currentTime;
+            audio.value.pause();
+            audio.value.src = '';
+        }
     }
 
-    console.log(
-        'beforeRouterLeave',
-        stateAudio,
-        audio.value,
-        audio.value.currentTime,
-    );
 });
 
 onBeforeRouteUpdate(() => {
@@ -750,14 +778,16 @@ onBeforeRouteUpdate(() => {
     //         audio.value.pause();
     //     }
     // }
+
+    console.log('Обновление');
+    if (audio.value.src){ 
     if (stateAudio[audio.value.dataset.audioPath].state !== 'ended') {
         stateAudio[audio.value.dataset.audioPath].state = 'paused';
         stateAudio[audio.value.dataset.audioPath].time =
             audio.value.currentTime;
         audio.value.pause();
-    }
+    }}
 
-    console.log('beforeRouterUpdate', stateAudio);
 });
 
 watch(
@@ -774,10 +804,25 @@ watch(
 );
 
 const route = useRoute();
+
+watch(
+    () => Object.keys(userStore.currentUser).length,
+    (newVal, oldVal) => {
+
+        stateAudio['Music/звук 1_.mp3'].state = null;
+        stateAudio['TestTask/3.тестовое задание.mp3'].state = null;
+        stateAudio['Music/звук 1_.mp3'].time = null;
+        stateAudio['TestTask/3.тестовое задание.mp3'].time = null;
+
+        audio.value.src = '';
+    }
+)
+
 watch(
     () => route.path, // Слежение за изменением пути (можно заменить на слежение за параметрами)
     (newPath, oldPath) => {
         // Ваша логика для входа на страницу
+        console.log(newPath, oldPath)
         if (newPath === '/') {
             console.log('Вы вошли на главную страницу');
 
@@ -786,13 +831,17 @@ watch(
                     stateAudio[key].state = null;
                     playAudio(key);
                     audio.value.currentTime = stateAudio[key].time;
-                    console.log(key, stateAudio[key]);
                 }
             }
         }
     },
     { immediate: false }, // Не позволяет вызвать сразу при первой загрузке
 );
+
+
+
+
+
 </script>
 <style lang="scss" scoped>
 .networks {

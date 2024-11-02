@@ -5,6 +5,17 @@
                 <div class="task_block__close" @click="hide">
                     <img class="close-icon" src="@app/assets/icons/close-icon.svg" alt="крест" />
                 </div>
+                <div class="game_icons_item" @click="mute()">
+                    <img
+                        v-show="isMuted === false"
+                        src="@app/assets/icons/sound.svg"
+                        alt="sound"
+                    /><img
+                        v-show="isMuted === true"
+                        src="@app/assets/icons/muted.svg"
+                        alt=""
+                    />
+                </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
                     <p class="title-h4 EighteenTask__title">
@@ -64,6 +75,16 @@ const playAudio = (audioPath) => {
     audio.value.play();
 }
 
+const isMuted = ref(false);
+const mute = () => {
+    isMuted.value = !isMuted.value;
+    if (isMuted.value === true) {
+        audio.value.volume = 0;
+    } else {
+        audio.value.volume = 1;
+    }
+};
+
 const answer = ref('');
 const correct_answer = ref('Я рада была подружиться с ребятами. Они научили нас с Моа понимать их язык. Я узнала много новых слов. Мне нравится на Земле!')
 let gameIsClose = false;
@@ -72,6 +93,7 @@ const sendAnswer = () => {
     if (answer.value === correct_answer.value) {
         answer_input.classList.add('green');
         playAudio('Other/1. общее для разных заданий.mp3');
+
         setTimeout(() => {
 
             if (is_correct.value === false) {
@@ -88,6 +110,7 @@ const sendAnswer = () => {
     } else {
         answer_input.classList.add('red');
         playAudio('Other/2. общее для разных заданий.mp3');
+
         setTimeout(() => {
             answer_input.classList.remove('red');
         }, 2000)
@@ -214,5 +237,21 @@ onBeforeUnmount(() => {
             column-gap: 28px;
         }
     }
+}
+
+.game_icons_item{
+    top: 16px;
+    position: absolute;
+    right: 60px;
+    z-index: 1000;
+
+    width: 40px;
+    height: 40px;
+    background-color: #e6f2fa;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

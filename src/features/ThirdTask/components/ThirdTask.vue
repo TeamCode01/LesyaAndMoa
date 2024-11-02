@@ -47,7 +47,7 @@
                     <VueDraggableNext
                         class="box"
                         id="box"
-                        @mouseenter="playAudio('Task3/32.3.mp3')"
+                        @mouseenter="playAudio('Task3/32.3_слово.mp3')"
                         @add="drop($event, 0)"
                         :group="{ name: 'box', pull: false, put: true }"
                         :sort="false"
@@ -61,7 +61,7 @@
                     <VueDraggableNext
                         class="box2"
                         id="box2"
-                        @mouseover="playAudio('Task3/mix_3.mp3')"
+                        @mouseover="playAudio('Task3/mix.mp3')"
                         @add="drop($event, 1)"
                         :group="{ name: 'box2', pull: false, put: true }"
                         :sort="false"
