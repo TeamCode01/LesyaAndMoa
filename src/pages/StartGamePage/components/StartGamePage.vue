@@ -123,6 +123,142 @@ const isMuted = ref(false);
 
 const sendedAudio = ref('');
 
+const audio_state = ref([
+        {
+            id: 1,
+            music: 'Music/звук 1_.mp3',
+            haveMusic: true,
+            startAudio: 'Task1/11.1_.mp3',
+            currentSound: 'Task1/11.1_.mp3'
+        },
+        {
+            id: 2,
+            music: 'Music/звук 2_.mp3',
+            haveMusic: true,
+            startAudio: 'Task2/24.2_.mp3',
+            currentSound: 'Task2/24.2_.mp3',
+        },
+        {
+            id: 3,
+            music: 'Music/звук 3_.mp3',
+            haveMusic: true,
+            startAudio: 'Task3/30.3_.mp3',
+            currentSound: 'Task3/30.3_.mp3',
+        },
+        {
+            id: 4,
+            music: 'Music/звук 4_.mp3',
+            haveMusic: true,
+            startAudio: 'Task4/44.4_.mp3',
+            currentSound: 'Task4/44.4_.mp3',
+        },
+        {
+            id: 5,
+            music: 'Music/звук 5_.mp3',
+            haveMusic: true,
+            startAudio: 'Task5/61.5_.mp3',
+            currentSound: 'Task5/61.5_.mp3',
+        },
+        {
+            id: 6,
+            music: 'Music/звук 6_.mp3',
+            haveMusic: true,
+            startAudio: 'Task6/78.6_.mp3',
+            currentSound: 'Task6/78.6_.mp3',
+        },
+        {
+            id: 7,
+            music: 'Music/звук 8_.mp3',
+            haveMusic: true,
+            startAudio: 'Task8/279.8_new.mp3',
+            currentSound: 'Task8/279.8_new.mp3',
+        },
+        {
+            id: 8,
+            music: '',
+            haveMusic: false,
+            startAudio: 'Task9/298.9.mp3',
+            currentSound: 'Task9/298.9.mp3',
+        },
+        {
+            id: 9,
+            music: '',
+            haveMusic: false,
+            startAudio: 'Task10/316.10.mp3',
+            currentSound: 'Task10/316.10.mp3',
+        },
+        {
+            id: 10,
+            music: '',
+            haveMusic: false,
+            startAudio: 'Task11/329.11.mp3',
+            currentSound: 'Task11/329.11.mp3',
+        },
+        {
+            id: 11,
+            music: '',
+            haveMusic: false,
+            startAudio: 'Task12/349.12.mp3',
+            currentSound: 'Task12/349.12.mp3',
+        },
+        {
+            id: 12,
+            music: '',
+            haveMusic: false,
+            startAudio: 'Task13/369.13.mp3',
+            currentSound: 'Task13/369.13.mp3',
+        },
+
+        {
+            id: 13,
+            music: 'Music/звук 7_.mp3',
+            haveMusic: true,
+            startAudio: 'Task7/260.7_.mp3',
+            currentSound: 'Task7/260.7_.mp3',
+        },
+        {
+            id: 14,
+            audio: 'Task14/379.14.mp3',
+            music: 'Music/звук 2_.mp3',
+            haveMusic: true,
+            startAudio: 'Task14/378.14_.mp3',
+            currentSound: 'Task14/378.14_.mp3',
+        },
+        {
+            id: 15,
+            audio: 'Task15/390.15.mp3',
+            music: '',
+            haveMusic: false,
+            startAudio: 'Task15/389.15.mp3',
+            currentSound: 'Task15/389.15.mp3',
+        },
+        {
+            id: 16,
+            audio: 'Task16/428.16.mp3',
+            music: 'Music/звук 9_.mp3',
+            haveMusic: true,
+            startAudio: 'Task16/427.16_.mp3',
+            currentSound: 'Task16/427.16_.mp3',
+        },
+        {
+            id: 17,
+            audio: 'Task17/454.17.mp3',
+            music: '',
+            haveMusic: false,
+            startAudio: 'Task17/453.17.mp3',
+            currentSound: 'Task17/453.17.mp3',
+        },
+        {
+            id: 18,
+            audio: 'Task18/471.18.mp3',
+            music: 'Music/звук 1_.mp3',
+            haveMusic: true,
+            startAudio: 'Task18/470.18_.mp3',
+            currentSound: 'Task18/470.18_.mp3',
+        },
+    ]
+)
+
 const setAudioFromSended = () => {
     audio.value = sendedAudio.value;
 }
@@ -139,13 +275,15 @@ const sendImg = (image) => {
 };
 
 const sendAudio = (music) => {
-    console.log(sendAudio.value, music)
+    console.log("from startGamePage", task_id.value)
+    console.log(sendedAudio.value, music)
     sendedAudio.value = music
     setTimeout(() => {
+        console.log("Timeout hand - ", show_hand.value)
         if (!show_hand.value){
             audio.value = sendedAudio.value
         }
-    }, 10);
+    }, 100);
 
     // console.log('audio', audio.value);
 };
@@ -162,7 +300,9 @@ const getId = (id) => {
 };
 
 const showHand = (show) => {
+    console.log('showHand', show_hand.value ,show)
     show_hand.value = show;
+    console.log('showHandAfter', show_hand.value ,show)
 };
 
 const mute = () => {
@@ -193,7 +333,8 @@ const refresh = () => {
     startAudio.value.currentTime = 0;
 };
 
-const playSound = (event, hand) => {
+const playSound = (event) => {
+
     console.log('play audio.value', audio.value, startAudio.value)
     if (ids.value.includes(task_id.value)) {
         show_hand.value = false;
@@ -232,6 +373,20 @@ onMounted(() => {
         windowWidth.value = window.innerWidth;
     });
 });
+
+watch(
+    () => audio_state.value,
+    () => {
+        if (localStorage.getItem('type') === 'групповой') {
+            tasks.value.forEach((task, index) => {
+                task.disabled = false;
+            });
+        }
+    },
+    {
+        deep: true,
+    },
+);
 </script>
 <style lang="scss" scoped>
 #hand_1 {

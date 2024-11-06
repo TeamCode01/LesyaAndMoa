@@ -38,7 +38,7 @@
                                 put: false,
                             }"
                             :sort="false"
-                            @choose="drag($event, item.name, item.id, index)"
+                            @choose="drag($event, item.name, item.id, index, item.word)"
                         >
                             <div
                                 class="list-group-item item"
@@ -247,36 +247,37 @@ const stopAudio = (audioPath) => {
 const corrValue = ref(0);
 
 const letterss = ref([
-    { id: 'L', name: 'Л', audio: 'Task9/300.9.mp3' },
-    { id: 'B', name: 'Б', audio: 'Task9/301.9.mp3' },
-    { id: 'G', name: 'Г', audio: 'Task9/302.9.mp3' },
-    { id: 'm', name: 'М', audio: 'Task9/303.9.mp3' },
-    { id: 'E', name: 'Е', audio: 'Task9/304.9.mp3' },
-    { id: 'r', name: 'Р', audio: 'Task9/305.9.mp3' },
-    { id: 'O', name: 'О', audio: 'Task9/306.9.mp3' },
-    { id: 'C', name: 'С', audio: 'Task9/307.9.mp3' },
-    { id: 'y', name: 'У', audio: 'Task9/308.9.mp3' },
-    { id: 'R', name: 'Р', audio: 'Task9/305.9.mp3' },
-    { id: 'e', name: 'Е', audio: 'Task9/304.9.mp3' },
-    { id: 'c', name: 'С', audio: 'Task9/307.9.mp3' },
-    { id: 'i', name: 'Ь', audio: 'Task9/309.9.mp3' },
-    { id: 'ya', name: 'Я', audio: 'Task9/310.9.mp3' },
-    { id: 'N', name: 'Н', audio: 'Task9/311.9.mp3' },
-    { id: 'YA', name: 'Я', audio: 'Task9/310.9.mp3' },
-    { id: 'k', name: 'К', audio: 'Task9/312.9.mp3' },
-    { id: 'K', name: 'К', audio: 'Task9/312.9.mp3' },
-    { id: 'a', name: 'А', audio: 'Task9/314.9.mp3' },
-    { id: 'ch', name: 'Ч', audio: 'Task9/313.9.mp3' },
-    { id: 'A', name: 'А', audio: 'Task9/314.9.mp3' },
+    { id: 'L', name: 'Л', audio: 'Task9/300.9.mp3', word: 1 },
+    { id: 'B', name: 'Б', audio: 'Task9/301.9.mp3', word: 2 },
+    { id: 'G', name: 'Г', audio: 'Task9/302.9.mp3', word: 3 },
+    { id: 'm', name: 'М', audio: 'Task9/303.9.mp3', word: 4 },
+    { id: 'E', name: 'Е', audio: 'Task9/304.9.mp3', word: 1 },
+    { id: 'r', name: 'Р', audio: 'Task9/305.9.mp3', word: 2 },
+    { id: 'O', name: 'О', audio: 'Task9/306.9.mp3', word: 3 },
+    { id: 'C', name: 'С', audio: 'Task9/307.9.mp3', word: 1 },
+    { id: 'y', name: 'У', audio: 'Task9/308.9.mp3', word: 2 },
+    { id: 'R', name: 'Р', audio: 'Task9/305.9.mp3', word: 3 },
+    { id: 'e', name: 'Е', audio: 'Task9/304.9.mp3', word: 1 },
+    { id: 'c', name: 'С', audio: 'Task9/307.9.mp3', word: 2 },
+    { id: 'i', name: 'Ь', audio: 'Task9/309.9.mp3', word: 2 },
+    { id: 'ya', name: 'Я', audio: 'Task9/310.9.mp3', word: 4 },
+    { id: 'N', name: 'Н', audio: 'Task9/311.9.mp3', word: 1 },
+    { id: 'YA', name: 'Я', audio: 'Task9/310.9.mp3', word: 2 },
+    { id: 'k', name: 'К', audio: 'Task9/312.9.mp3', word: 3 },
+    { id: 'K', name: 'К', audio: 'Task9/312.9.mp3', word: 1 },
+    { id: 'a', name: 'А', audio: 'Task9/314.9.mp3', word: 3 },
+    { id: 'ch', name: 'Ч', audio: 'Task9/313.9.mp3', word: 4 },
+    { id: 'A', name: 'А', audio: 'Task9/314.9.mp3', word: 1 },
 ]);
 
 const dataTransfer = ref({});
-const drag = (event, letter, id, index) => {
+const drag = (event, letter, id, index, word) => {
     // event.dataTransfer.setData('text', letter);
     // event.dataTransfer.setData('id', id);
 
     dataTransfer.value.text = letter;
     dataTransfer.value.id = id;
+    dataTransfer.value.word = word;
     dropIndex.value = index;
 };
 const dropIndex = ref(letterss.value.length - 1);
@@ -327,7 +328,7 @@ const drop = (event, word, letter) => {
         }
     });
 
-    if (arr.value[word][letter].answer === text.toLowerCase()) {
+    if (arr.value[word][letter].answer === text.toLowerCase() && word == dataTransfer.value.word) {
         event.to.children[0].value = text;
         letterss.value.splice(dropIndex.value, 1);
         event.to.children[0].classList.add(
@@ -434,6 +435,10 @@ onBeforeUnmount(() => {
         transform: translate(-50%, -50%);
         column-gap: 2px;
         row-gap: 20px;
+
+        @media(max-width: 1024px) {
+            top: 70%;
+        }
     }
 }
 
@@ -447,6 +452,19 @@ onBeforeUnmount(() => {
 
         @media (max-width: 1024px) {
             padding: 30px 32px 32px 42px;
+        }
+    }
+
+    &__title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 500;
+        font-family: 'Nunito', sans-serif;
+        width: 700px;
+
+        @media (max-width: 1024px) {
+            font-size: 20px;
+            font-weight: 400;
         }
     }
 }
