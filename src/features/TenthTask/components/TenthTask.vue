@@ -198,7 +198,7 @@ const questions = ref({
         first_answer: 'от',
         second_answer: 'через',
         audio_src_start: 'Task10/з.10 Мы добрались_места крушения_поле.mp3',
-        audio_src_end: 'Task10/з.10 МЫ ДОБРАЛИСЬ ДО МЕСТА КРУШЕНИЯ В ГОРОД ЧЕРЕЗ ПОЛЕ.mp3',
+        audio_src_end: 'Task10/з.10 МЫ ДОБРАЛИСЬ ОТ МЕСТА КРУШЕНИЯ В ГОРОД ЧЕРЕЗ ПОЛЕ.mp3',
     },
     4: {
         first_part: 'И спрятались',
@@ -303,21 +303,25 @@ const drop = (event, num) => {
                         playAudioQuestion(questions.value[currStage.value].audio_src_end);
                         setTimeout(() => {
 
-                            givenAnswer.value[1] = false;
-                            givenAnswer.value[2] = false;
-                            currStage.value += 1;
-
-                            if (currStage.value < 5) {
+                            if (currStage.value < 4) {
+                                givenAnswer.value[1] = false;
+                                givenAnswer.value[2] = false;
+                                currStage.value += 1;
                                 playAudioQuestion(questions.value[currStage.value].audio_src_start);
                             }
-
-                            setTimeout(() => {
-
-                                if (currStage.value == 5) {
+                            else{
+                                setTimeout(() => {
                                     startGame.value = false;
                                     playAudio(`Task10/328.10_.mp3`);
-                                }
-                            }, 4500);
+
+                                    
+                                    if (is_correct.value === false) {
+                                        endGameRequest(props.childId, corrValue.value);
+                                        emit('correct');
+                                        emit('open');
+                                    }
+                                }, 4500);
+                            }
                         }, 4500)
                     }, 2000)
 
@@ -340,21 +344,26 @@ const drop = (event, num) => {
 
                         setTimeout(() => {
 
-                            givenAnswer.value[1] = false;
-                            givenAnswer.value[2] = false;
-                            currStage.value += 1;
-
-                            if (currStage.value < 5) {
+                            if (currStage.value < 4) {
+                                givenAnswer.value[1] = false;
+                                givenAnswer.value[2] = false;
+                                currStage.value += 1;
                                 playAudioQuestion(questions.value[currStage.value].audio_src_start);
                             }
 
-                            setTimeout(() => {
-
-                                if (currStage.value == 5) {
+                            else{
+                                setTimeout(() => {
                                     startGame.value = false;
                                     playAudio(`Task10/328.10_.mp3`);
-                                }
-                            }, 4500);
+
+                                    if (is_correct.value === false) {
+                                        endGameRequest(props.childId, corrValue.value);
+                                        emit('correct');
+                                        emit('open');
+                                    }
+
+                                }, 4500);
+                            }
                         }, 4500)
                     }, 2000)
 
