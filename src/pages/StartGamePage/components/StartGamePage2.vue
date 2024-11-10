@@ -7,11 +7,11 @@
                 :show="showBtn"
                 @send-img="sendImg"
                 @send-audio="sendAudio"
+                @send-pre-audio="sendPreAudio"
                 @show="showButton"
                 @hand="showHand"
                 @send-id="getId"
                 @startAudio="playMusic"
-                @stopAudio="stopMusic"
             />
             <div class="game_icons_wrap">
                 <div class="game_icons_item" @click="mute()">
@@ -35,16 +35,16 @@
             <img
                 v-show="show_hand"
                 class="hand"
-                @click="clickOnHand()"
+                @click="setAudioFromSended(); playSound($event); clickOnHand()"
                 :id="'hand_' + task_id"
                 src="@app/assets/icons/hand.svg"
                 alt="hand"
-                :class="{ game_img_disabled: imgIsClickable === false }"
+                :class="{ game_img_disabled: isPlaying === true }"
             />
             <div
-                @click="clickOnHand()"
+                @click="setAudioFromSended(); playSound($event); clickOnHand()"
                 class="game_img"
-                :class="{ game_img_disabled: imgIsClickable === false }"
+                :class="{ game_img_disabled: isPlaying === true }"
             >
                 <img class="game_img_bg" id="background-banner" alt="game" />
             </div>
@@ -119,8 +119,10 @@ let childId = route.params.id;
 const currentAudio = ref('');
 const startAudio = ref(new Audio());
 const preAudio = ref(new Audio());
-const imgIsClickable = ref(false);
+const isPlaying = ref(false);
 const isMuted = ref(false);
+
+
 
 
 const sendedAudio = ref('');
@@ -284,6 +286,9 @@ const sendAudio = (music) => {
 
     // console.log('audio', audio.value);
 };
+const sendPreAudio = (pre) => {
+    isPlaying.value = pre;
+};
 
 const showButton = (show) => {
     showBtn.value = show;
@@ -301,37 +306,49 @@ const mute = () => {
     isMuted.value = !isMuted.value;
     if (isMuted.value === true) {
         startAudio.value.volume = 0;
-        preAudio.value.volume = 0;
     } else {
         startAudio.value.volume = 1;
-        preAudio.value.volume = 1;
     }
 };
 const skip = () => {
     startAudio.value.pause();
-    preAudio.value.pause();
-
-
-    const selectedAudioObj = audio_state.value.find((audio) => audio.id === task_id.value);
-    selectedAudioObj.currentSound = selectedAudioObj.startAudio;
-
     show_hand.value = false;
     showBtn.value = true;
 };
 
 const refresh = () => {
-    if (preAudio.value.paused) {
-        preAudio.value.currentTime = 0;
-        preAudio.value.play();
+    console.log('refresh audio.value', audio.value, startAudio.value)
+    if (startAudio.value.paused) {
+        startAudio.value.currentTime = 0;
+        startAudio.value.play();
+        // startAudio.value.src = new URL(
+        //     `/assets/audio/${audio.value}`,
+        //     import.meta.url,
+        // ).href;
+        
     }
-    preAudio.value.currentTime = 0;
+    startAudio.value.currentTime = 0;
+};
+
+const playSound = (event) => {
+    console.log('play audio.value', audio.value, startAudio.value)
+    if (ids.value.includes(task_id.value)) {
+        show_hand.value = false;
+        showBtn.value = false;
+        startAudio.value.src = new URL(
+            `/assets/audio/${audio.value}`,
+            import.meta.url,
+        ).href;
+        startAudio.value.play();
+        startAudio.value.addEventListener('ended', () => {
+            showBtn.value = true;
+            show_hand.value = false;
+        });
+    }
 };
 
 const playMusic = () => {
     preAudio.value.onended = () => {};
-    show_hand.value = false;
-    showBtn.value = false;
-
     const selectedAudioObj = audio_state.value.find((audio) => audio.id === task_id.value);
     console.log(selectedAudioObj)
     const currentAudio = selectedAudioObj.currentSound;
@@ -340,34 +357,13 @@ const playMusic = () => {
         import.meta.url,
     ).href;
     preAudio.value.play();
-    imgIsClickable.value = false;
 
-    if (selectedAudioObj.music === selectedAudioObj.currentSound) {
-        // Отрабатывает в случае, когда играет музыкальная речь героев
-        if (task_id.value === 1){
-            preAudio.value.onended = () => {
-                preAudio.value.src = new URL(
-                `/assets/audio/${'Other/10.общее.mp3'}`,
-                import.meta.url,
-                ).href;
-                preAudio.value.play();
-                preAudio.value.onended = () => {
-                    show_hand.value = true;
-                    showBtn.value = false;
-                    imgIsClickable.value = true;
-                }
-            }
-        }
-        else{
-            preAudio.value.onended = () => {
+    if (selectedAudioObj.music === selectedAudioObj.currentAudio) {
+        preAudio.value.onended = () => {
             show_hand.value = true;
-            showBtn.value = false;
-            imgIsClickable.value = true;
-        }
         }
     }
     else{
-
         preAudio.value.onended = () => {
             show_hand.value = false;
             showBtn.value = true;
@@ -375,21 +371,11 @@ const playMusic = () => {
     }
 };
 
-const stopMusic = () => {
-    preAudio.value.pause();
-}
-
 const clickOnHand = () => {
-    if (!show_hand.value) return;
     show_hand.value = false;
-    imgIsClickable.value = false;
-    
-    const selectedAudioObj = audio_state.value.find((audio) => audio.id === task_id.value);
-    selectedAudioObj.currentSound = selectedAudioObj.startAudio;
 
     playMusic();
 }
-
 
 watch(
     () => route.params.id,
@@ -401,25 +387,12 @@ watch(
     { immediate: true },
 );
 
-watch(
-    () => audio_state.value,
-    () => {
-        localStorage.setItem('LM_audio_state', JSON.stringify(audio_state.value));
-    },
-    {
-        deep: true
-    }
-)
-
 onBeforeRouteLeave((to, from) => {
     childId = null;
 });
 
 onMounted(() => {
     showHand();
-    if (localStorage.getItem('LM_audio_state')){
-        цaudio_state.value = JSON.parse(localStorage.getItem('LM_audio_state'));
-    }
     document.getElementById('background-banner').src = getImageUrl(img.value);
 
     window.addEventListener('resize', () => {
@@ -427,7 +400,19 @@ onMounted(() => {
     });
 });
 
-
+watch(
+    () => audio_state.value,
+    () => {
+        if (localStorage.getItem('type') === 'групповой') {
+            tasks.value.forEach((task, index) => {
+                task.disabled = false;
+            });
+        }
+    },
+    {
+        deep: true,
+    },
+);
 </script>
 <style lang="scss" scoped>
 #hand_1 {

@@ -274,9 +274,10 @@ const emit = defineEmits([
     'sendAudio',
     'sendId',
     'show',
+    'startTask',
     'hand',
-    'startAudio',
-    'stopAudio'
+    'sendPreAudio',
+    'startAudio'
 ]);
 const props = defineProps({
     show: {
@@ -333,19 +334,151 @@ const playStartAudio = (audioPath) => {
     });
 };
 
+const playAudio = (audioPath, id = 0) => {
+    console.log('from sidebar', id)
+    audio.value.src = new URL(
+        `/assets/audio/${audioPath}`,
+        import.meta.url,
+    ).href;
+    audio.value.play();
+};
+const postAudio = (audioPath) => {
+    audio.value.onended = () => {
+        isPlaying.value = false;
+        show_hand.value = true;
+        show.value = false;
+        emit('sendPreAudio', isPlaying.value);
+        emit('show', show.value);
+        emit('hand', show_hand.value);
+        emit('sendAudio', audioPath);
+        audio.value.pause();      
+    }
+    // audio.value.addEventListener('ended', () => {
+    //     isPlaying.value = false;
+    //     show_hand.value = true;
+    //     show.value = false;
+    //     emit('sendPreAudio', isPlaying.value);
+    //     emit('show', show.value);
+    //     emit('hand', show_hand.value);
+    //     emit('sendAudio', audioPath);
+    //     audio.value.pause();        
+    // });
+};
 
 const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
     const task = tasks.value.find((item) => item.id == id);
     if (task.disabled === false) {
-        console.log("switchTask");
         taskId.value = id; // id задания - обязательно
         SeeTask.value = false; // отображение фона - обязательно
         timeVal.value = time; // время задания - оставить
         taskImage.value = img; // изображение задания - обязательно
 
+        startAudio.value = startAudioV; // перенести
+        show.value = false; // отображение кнопки - перенести
+        taskAudio.value = audio_task; // озвучка задания - перенести
+        endTime.value = false; // конец задания - отказано
         emit('sendImg', img);
         emit('sendId', taskId.value);
         emit('startAudio');
+     
+        if (ids.value.includes(taskId.value)) {
+            isPlaying.value = true;
+            
+            switch (taskId.value) {
+                case 1:
+                    playAudio('Music/звук 1_.mp3', id);
+                    // audio.value.addEventListener('ended', () => {
+                    //     show.value = false;
+                    //     isPlaying.value = false;
+                    //     emit('sendPreAudio', isPlaying.value);
+                    //     isPlaying.value = true;
+                    //     playAudio('Other/10.общее.mp3');
+                    //     emit('sendPreAudio', isPlaying.value);
+                    //     postAudio('Task1/11.1_.mp3');
+                    // });
+
+                    audio.value.onended = () => {
+                        show.value = false;
+                        isPlaying.value = false;
+                        emit('sendPreAudio', isPlaying.value);
+                        isPlaying.value = true;
+                        playAudio('Other/10.общее.mp3', id); // "Эта речь похожа на музыку" 
+                        emit('sendPreAudio', isPlaying.value);
+                        postAudio('Task1/11.1_.mp3');
+                    }
+
+                    break;
+                case 2:
+                    playAudio('Music/звук 2_.mp3', id);
+                    postAudio('Task2/24.2_.mp3');
+                    break;
+                case 3:
+                    playAudio('Music/звук 3_.mp3', id);
+                    postAudio('Task3/30.3_.mp3');
+                    break;
+                case 4:
+                    playAudio('Music/звук 4_.mp3', id);
+                    postAudio('Task4/44.4_.mp3');
+                    break;
+                case 5:
+                    playAudio('Music/звук 5_.mp3', id);
+                    postAudio('Task5/61.5_.mp3');
+                    break;
+                case 6:
+                    playAudio('Music/звук 6_.mp3', id);
+                    postAudio('Task6/78.6_.mp3');
+                    break;
+
+                case 7:
+                    playAudio('Music/звук 8_.mp3', id);
+                    postAudio('Task8/279.8_.mp3');
+                    break;
+
+                case 13:
+                    playAudio('Music/звук 7_.mp3', id);
+                    postAudio('Task7/260.7_.mp3');
+                    break;
+                case 14:
+                    playAudio('Music/звук 2_.mp3', id);
+                    postAudio('Task14/378.14_.mp3');
+                    break;
+                case 16:
+                    playAudio('Music/звук 9_.mp3', id);
+                    postAudio('Task16/427.16_.mp3');
+                
+                    break;
+                case 18:
+                    playAudio('Music/звук 1_.mp3', id);
+                    postAudio('Task18/470.18_.mp3');
+                    break;
+
+                default:
+                    break;
+            }
+        } else {
+            isPlaying.value = false;
+            emit('sendPreAudio', isPlaying.value === false);
+            playAudio(startAudioV, id);
+            props.audioObj = audio.value;
+            audio.value.onended =  () => {
+                console.log('Кончилось аудио из исключений', startAudioV)
+                emit('sendAudio', startAudioV);
+                show.value = true;
+                emit('show', show.value);
+                audio.value.pause();
+                show_hand.value = false;
+                emit('hand', show_hand.value);
+            }
+            // audio.value.addEventListener('ended', () => {
+            //     console.log('В sidebar закончилось аудио', startAudioV);
+            //     emit('sendAudio', startAudioV);
+            //     show.value = true;
+            //     emit('show', show.value);
+            //     audio.value.pause();
+            //     show_hand.value = false;
+            //     emit('hand', show_hand.value);
+            // });
+        }
     } else {
         console.log('Задание закрыто ');
     }
@@ -371,6 +504,22 @@ const next = (nextId = 0) => {
             tasks.value[nextElId].startAudio,
         );
     }
+
+    // if (taskFindArr.length > 0) {
+    //     let nextElId = taskFindArr.at(-1).id;
+    //     console.log(taskFindArr)
+    //     console.log('id', nextElId);
+    //     tasks.value[nextElId].disabled = false;
+
+    //     switchTask(
+    //         tasks.value[nextElId].id,
+    //         tasks.value[nextElId].open,
+    //         tasks.value[nextElId].time,
+    //         tasks.value[nextElId].img,
+    //         tasks.value[nextElId].audio,
+    //         tasks.value[nextElId].startAudio,
+    //     );
+    // }
 };
 
 const checkCorrect = (id) => {
@@ -394,12 +543,27 @@ const checkOpen = (id) => {
 const openTask = (taskId) => {
     SeeTask.value = true;
     finish.value = false;
-    emit('stopAudio');
     playStartAudio(taskAudio.value);
     setTimeout(() => {
         endTime.value = true;
     }, timeVal.value * 1000);
 };
+
+watch(
+    () => taskId.value,
+    (newId) => {
+        if (!newId) {
+            console.log('Id не подошел', newId);
+            return;
+        }
+        console.log('see', SeeTask.value, newId, taskId.value);
+        taskId.value = newId;
+        show.value = false;
+        show_hand.value = false;
+        emit('hand', show_hand.value);
+        emit('show', show.value);
+    },
+);
 
 watch(
     () => userStore.currentUser,
@@ -715,9 +879,9 @@ onActivated(() => {
         tasks.value.forEach((task, index) => {
             task.disabled = false;
         });
+        // console.log(tasks.value);
     }
 });
-
 
 
 
