@@ -159,7 +159,7 @@ const audio_state = ref([
             music: 'Music/звук 5_.mp3',
             haveMusic: true,
             startAudio: 'Task5/61.5_.mp3',
-            currentSound: 'TMusic/звук 5_.mp3',
+            currentSound: 'Music/звук 5_.mp3',
         },
         {
             id: 6,
@@ -418,7 +418,7 @@ onBeforeRouteLeave((to, from) => {
 onMounted(() => {
     showHand();
     if (localStorage.getItem('LM_audio_state')){
-        цaudio_state.value = JSON.parse(localStorage.getItem('LM_audio_state'));
+        audio_state.value = JSON.parse(localStorage.getItem('LM_audio_state'));
     }
     document.getElementById('background-banner').src = getImageUrl(img.value);
 
