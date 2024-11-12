@@ -342,6 +342,7 @@ const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
         SeeTask.value = false; // отображение фона - обязательно
         timeVal.value = time; // время задания - оставить
         taskImage.value = img; // изображение задания - обязательно
+        taskAudio.value = task.audio; // изменение звука при начале игры
 
         emit('sendImg', img);
         emit('sendId', taskId.value);
