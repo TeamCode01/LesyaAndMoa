@@ -91,7 +91,7 @@
                     </p>
                 </div>
                 <Button
-                    @click="openTest()"
+                    @click="skip(); openTest()"
                     class="Test__wrapper_btn"
                     :isImage="true"
                     :image="arrow"

@@ -18,7 +18,7 @@
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
-                    <p class="title-h4 EighteenTask__title">
+                    <p class="title-h4 EighteenTask__title task_block__title">
                         Прочитай текст, запиши его в поле ответа.
                     </p>
                 </div>
@@ -188,6 +188,17 @@ onBeforeUnmount(() => {
 }
 
 .EighteenTask {
+    &__title {
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 32.74px;
+        font-family: 'Nunito';
+        @media (max-width: 1024px) {
+            font-size: 20px;
+            line-height: 26.67px;
+        }
+    }
+
     &__task {
         img {
             display: block;

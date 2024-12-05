@@ -47,7 +47,7 @@
                     :finish="finish"
                     :end="endTime"
                     @close="close()"
-                    @next-modal="next()"
+                    @next-modal="next(1)"
                     @correct="checkCorrect(1)"
                     @open="checkOpen(2)"
                     v-if="taskId === 1"
@@ -58,7 +58,7 @@
                     :finish="finish"
                     :end="endTime"
                     @close="close()"
-                    @next-modal="next()"
+                    @next-modal="next(2)"
                     @correct="checkCorrect(2)"
                     @open="checkOpen(3)"
                     v-if="taskId === 2"
@@ -69,14 +69,14 @@
                     :finish="finish"
                     :end="endTime"
                     @close="close()"
-                    @next-modal="next()"
+                    @next-modal="next(3)"
                     @correct="checkCorrect(3)"
                     @open="checkOpen(4)"
                     v-if="taskId === 3"
                 >
                 </ThirdTask>
                 <FourthTask
-                    @next-modal="next()"
+                    @next-modal="next(4)"
                     @correct="checkCorrect(4)"
                     @open="checkOpen(5)"
                     :end="endTime"
@@ -86,7 +86,7 @@
                 >
                 </FourthTask>
                 <FifthTask
-                    @next-modal="next()"
+                    @next-modal="next(5)"
                     @correct="checkCorrect(5)"
                     @open="checkOpen(6)"
                     :end="endTime"
@@ -96,7 +96,7 @@
                 >
                 </FifthTask>
                 <SixTask
-                    @next-modal="next()"
+                    @next-modal="next(6)"
                     @correct="checkCorrect(6)"
                     @open="checkOpen(7)"
                     :end="endTime"
@@ -106,7 +106,7 @@
                 >
                 </SixTask>
                 <EighthTask
-                    @next-modal="next()"
+                    @next-modal="next(7)"
                     @correct="checkCorrect(7)"
                     @open="checkOpen(8)"
                     :childId="props.childId"
@@ -116,7 +116,7 @@
                 >
                 </EighthTask>
                 <NineTask
-                    @next-modal="next()"
+                    @next-modal="next(8)"
                     @correct="checkCorrect(8)"
                     @open="checkOpen(9)"
                     :childId="props.childId"
@@ -127,7 +127,7 @@
                 >
                 </NineTask>
                 <TenthTask
-                    @next-modal="next()"
+                    @next-modal="next(9)"
                     @correct="checkCorrect(9)"
                     @open="checkOpen(10)"
                     :childId="props.childId"
@@ -138,7 +138,7 @@
                 >
                 </TenthTask>
                 <ElevenTask
-                    @next-modal="next()"
+                    @next-modal="next(10)"
                     @correct="checkCorrect(10)"
                     @open="checkOpen(11)"
                     :childId="props.childId"
@@ -149,7 +149,7 @@
                 >
                 </ElevenTask>
                 <TwelfthTask
-                    @next-modal="next()"
+                    @next-modal="next(11)"
                     @correct="checkCorrect(11)"
                     @open="checkOpen(12)"
                     :childId="props.childId"
@@ -159,7 +159,7 @@
                 >
                 </TwelfthTask>
                 <ThirteenthTask
-                    @next-modal="next()"
+                    @next-modal="next(12)"
                     @correct="checkCorrect(12)"
                     @open="checkOpen(13)"
                     :childId="props.childId"
@@ -170,7 +170,7 @@
                 >
                 </ThirteenthTask>
                 <SeventhTask
-                    @next-modal="next()"
+                    @next-modal="next(13)"
                     @correct="checkCorrect(13)"
                     @open="checkOpen(14)"
                     :childId="props.childId"
@@ -180,7 +180,7 @@
                 >
                 </SeventhTask>
                 <FourteenthTask
-                    @next-modal="next()"
+                    @next-modal="next(14)"
                     @correct="checkCorrect(14)"
                     @open="checkOpen(15)"
                     :childId="props.childId"
@@ -191,7 +191,7 @@
                 >
                 </FourteenthTask>
                 <FifteenTask
-                    @next-modal="next()"
+                    @next-modal="next(15)"
                     @correct="checkCorrect(15)"
                     @open="checkOpen(16)"
                     :childId="props.childId"
@@ -201,7 +201,7 @@
                 >
                 </FifteenTask>
                 <SixteenthTask
-                    @next-modal="next()"
+                    @next-modal="next(16)"
                     @correct="checkCorrect(16)"
                     @open="checkOpen(17)"
                     :childId="props.childId"
@@ -211,7 +211,7 @@
                 >
                 </SixteenthTask>
                 <SeventeenthTask
-                    @next-modal="next()"
+                    @next-modal="next(17)"
                     @correct="checkCorrect(17)"
                     @open="checkOpen(18)"
                     :childId="props.childId"
@@ -221,7 +221,7 @@
                 >
                 </SeventeenthTask>
                 <EighteenTask
-                    @next-modal="next()"
+                    @next-modal="next(18)"
                     @correct="checkCorrect(18)"
                     :childId="props.childId"
                     :end="endTime"
@@ -274,9 +274,9 @@ const emit = defineEmits([
     'sendAudio',
     'sendId',
     'show',
-    'startTask',
     'hand',
-    'sendPreAudio',
+    'startAudio',
+    'stopAudio'
 ]);
 const props = defineProps({
     show: {
@@ -311,7 +311,7 @@ const show = ref(props.show);
 const correct = ref(false);
 const started = ref(null);
 
-const ids = ref([1, 2, 3, 4, 5, 6, 7, 13, 14, 16, 18]);
+const ids = ref([1, 2, 3, 4, 5, 6, 7, 13, 14, 16, 18]); // Задания с музыкой
 const startedAudio = ref(new Audio());
 
 const close = () => {
@@ -333,166 +333,33 @@ const playStartAudio = (audioPath) => {
     });
 };
 
-const playAudio = (audioPath) => {
-    audio.value.src = new URL(
-        `/assets/audio/${audioPath}`,
-        import.meta.url,
-    ).href;
-    audio.value.play();
-};
-const postAudio = (audioPath) => {
-    audio.value.onended = () => {
-        isPlaying.value = false;
-        show_hand.value = true;
-        show.value = false;
-        emit('sendPreAudio', isPlaying.value);
-        emit('show', show.value);
-        emit('hand', show_hand.value);
-        emit('sendAudio', audioPath);
-        audio.value.pause();      
-    }
-    // audio.value.addEventListener('ended', () => {
-    //     isPlaying.value = false;
-    //     show_hand.value = true;
-    //     show.value = false;
-    //     emit('sendPreAudio', isPlaying.value);
-    //     emit('show', show.value);
-    //     emit('hand', show_hand.value);
-    //     emit('sendAudio', audioPath);
-    //     audio.value.pause();        
-    // });
-};
 
 const switchTask = (id, openId, time, img, audio_task, startAudioV) => {
     const task = tasks.value.find((item) => item.id == id);
     if (task.disabled === false) {
-        taskId.value = id;
-        SeeTask.value = false;
-        startAudio.value = startAudioV;
-        timeVal.value = time;
-        show.value = false;
-        taskAudio.value = audio_task;
-        endTime.value = false;
-        taskImage.value = img;
+        console.log("switchTask");
+        taskId.value = id; // id задания - обязательно
+        SeeTask.value = false; // отображение фона - обязательно
+        timeVal.value = time; // время задания - оставить
+        taskImage.value = img; // изображение задания - обязательно
+        taskAudio.value = task.audio; // изменение звука при начале игры
+
         emit('sendImg', img);
         emit('sendId', taskId.value);
-     
-        if (ids.value.includes(taskId.value)) {
-            isPlaying.value = true;
-            audio.value.onended = () => {}
-            emit('sendPreAudio', isPlaying.value);
-            console.log('Послано из sidebar', startAudioV);
-            emit('sendAudio', startAudioV);
-            
-            switch (taskId.value) {
-                case 1:
-                    playAudio('Music/звук 1_.mp3');
-                    // audio.value.addEventListener('ended', () => {
-                    //     show.value = false;
-                    //     isPlaying.value = false;
-                    //     emit('sendPreAudio', isPlaying.value);
-                    //     isPlaying.value = true;
-                    //     playAudio('Other/10.общее.mp3');
-                    //     emit('sendPreAudio', isPlaying.value);
-                    //     postAudio('Task1/11.1_.mp3');
-                    // });
-
-                    audio.value.onended = () => {
-                        show.value = false;
-                        isPlaying.value = false;
-                        emit('sendPreAudio', isPlaying.value);
-                        isPlaying.value = true;
-                        playAudio('Other/10.общее.mp3');
-                        emit('sendPreAudio', isPlaying.value);
-                        postAudio('Task1/11.1_.mp3');
-                    }
-
-                    break;
-                case 2:
-                    playAudio('Music/звук 2_.mp3');
-                    postAudio('Task2/24.2_.mp3');
-                    break;
-                case 3:
-                    playAudio('Music/звук 3_.mp3');
-                    postAudio('Task3/30.3_.mp3');
-                    break;
-                case 4:
-                    playAudio('Music/звук 4_.mp3');
-                    postAudio('Task4/44.4_.mp3');
-                    break;
-                case 5:
-                    playAudio('Music/звук 5_.mp3');
-                    postAudio('Task5/61.5_.mp3');
-                    break;
-                case 6:
-                    playAudio('Music/звук 6_.mp3');
-                    postAudio('Task6/78.6_.mp3');
-                    break;
-
-                case 7:
-                    playAudio('Music/звук 8_.mp3');
-                    postAudio('Task8/279.8_.mp3');
-                    break;
-
-                case 13:
-                    playAudio('Music/звук 7_.mp3');
-                    postAudio('Task7/260.7_.mp3');
-                    break;
-                case 14:
-                    playAudio('Music/звук 2_.mp3');
-                    postAudio('Task14/378.14_.mp3');
-                    break;
-                case 16:
-                    playAudio('Music/звук 9_.mp3');
-                    postAudio('Task16/427.16_.mp3');
-                
-                    break;
-                case 18:
-                    playAudio('Music/звук 1_.mp3');
-                    postAudio('Task18/470.18_.mp3');
-                    break;
-
-                default:
-                    break;
-            }
-        } else {
-            isPlaying.value = false;
-            emit('sendPreAudio', isPlaying.value === false);
-            playAudio(startAudioV);
-            props.audioObj = audio.value;
-            console.log('Какое-то исключение',  taskId.value)
-            audio.value.onended =  () => {
-                console.log('Кончилось аудио из исключений', startAudioV)
-                emit('sendAudio', startAudioV);
-                show.value = true;
-                emit('show', show.value);
-                audio.value.pause();
-                show_hand.value = false;
-                emit('hand', show_hand.value);
-            }
-            // audio.value.addEventListener('ended', () => {
-            //     console.log('В sidebar закончилось аудио', startAudioV);
-            //     emit('sendAudio', startAudioV);
-            //     show.value = true;
-            //     emit('show', show.value);
-            //     audio.value.pause();
-            //     show_hand.value = false;
-            //     emit('hand', show_hand.value);
-            // });
-        }
+        emit('startAudio');
     } else {
         console.log('Задание закрыто ');
     }
 };
 
-const next = () => {
+const next = (nextId = 0) => {
     SeeTask.value = false;
     endTime.value = false;
     show.value = false;
     emit('show', show.value);
-    const taskFindArr = tasks.value.filter((task) => task.done === true);
-    if (taskFindArr.length > 0) {
-        let nextElId = taskFindArr.at(-1).id;
+
+    if (nextId !== 0) {
+        let nextElId = nextId
         console.log('id', nextElId);
         tasks.value[nextElId].disabled = false;
 
@@ -528,26 +395,12 @@ const checkOpen = (id) => {
 const openTask = (taskId) => {
     SeeTask.value = true;
     finish.value = false;
+    emit('stopAudio');
     playStartAudio(taskAudio.value);
     setTimeout(() => {
         endTime.value = true;
     }, timeVal.value * 1000);
 };
-
-watch(
-    () => taskId.value,
-    (newId) => {
-        if (!newId) {
-            return;
-        }
-        console.log('see', SeeTask.value);
-        taskId.value = newId;
-        show.value = false;
-        show_hand.value = false;
-        emit('hand', show_hand.value);
-        emit('show', show.value);
-    },
-);
 
 watch(
     () => userStore.currentUser,
@@ -662,7 +515,7 @@ onActivated(() => {
             img: 'task2.jpg',
             audio: 'Task2/25.2.mp3',
             startAudio: 'Task2/24.2_.mp3',
-        },
+        }, 
         {
             id: 3,
             name: 'Задание 3',
@@ -722,7 +575,7 @@ onActivated(() => {
             end: false,
             img: 'task6.jpg',
             audio: 'Task8/280.8.mp3',
-            startAudio: 'Task8/279.8_.mp3',
+            startAudio: 'Task8/279.8_new.mp3',
         },
         {
             id: 8,
@@ -863,9 +716,12 @@ onActivated(() => {
         tasks.value.forEach((task, index) => {
             task.disabled = false;
         });
-        // console.log(tasks.value);
     }
 });
+
+
+
+
 </script>
 <style lang="scss" scoped>
 .modal_background {

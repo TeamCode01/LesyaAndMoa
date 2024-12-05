@@ -11,7 +11,7 @@
                 </div>
                 <div class="task_block__time">
                     <Timer :end="end"></Timer>
-                    <p class="title-h4 FirstTask__title">
+                    <p class="title-h4 task_block__title FirstTask__title">
                         Составь рассказ про АЛФАВИТ из подходящих фраз.
                     </p>
                 </div>
@@ -341,6 +341,18 @@ onBeforeUnmount(() => {
 }
 
 .FirstTask {
+
+    &__title {
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 32.74px;
+        font-family: 'Nunito';
+        @media (max-width: 1024px) {
+            font-size: 20px;
+            line-height: 26.67px;
+        }
+    }
+
     &__wrapper {
         display: flex;
         flex-direction: column;
