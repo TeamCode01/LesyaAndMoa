@@ -154,6 +154,9 @@ const v$ = useVuelidate(rules, form);
 const isError = ref({});
 
 const cyrillicPattern = /[\u0400-\u04FF]+/;
+const emailZoneRegex = /\.(ru|su|\u0440\u0444)$/i;
+const RUSSIAN_EMAIL_ZONE_MESSAGE =
+    'В соответствии с законодательством Российской Федерации и в целях обеспечения бесперебойного доступа к вашему аккаунту регистрация возможна только с использованием почтовых адресов на российских доменах в зонах .ru, .su и .рф. Пожалуйста, укажите адрес на mail.ru, vk.ru, ya.ru или любом другом российском сервисе.';
 
 watchEffect(() => {
     isError.value = {};
@@ -174,6 +177,10 @@ watchEffect(() => {
         }
     }
 
+    if (form.value.email && !emailZoneRegex.test(form.value.email)) {
+        isError.value.email = [RUSSIAN_EMAIL_ZONE_MESSAGE];
+    }
+
 
     if (form.value?.password != form.value?.password?.replace(cyrillicPattern, '')) {
         console.log('cyrillic');
@@ -186,6 +193,7 @@ watchEffect(() => {
 const isFormValid = computed(() => {
     return (
         form.value.email !== '' &&
+        emailZoneRegex.test(form.value.email) &&
         form.value.password !== '' &&
         form.value.re_password !== '' &&
         form.value.tasks_type !== '' &&
@@ -194,8 +202,12 @@ const isFormValid = computed(() => {
 });
 
 const RegisterUser = async () => {
+    if (form.value.email && !emailZoneRegex.test(form.value.email)) {
+        isError.value.email = [RUSSIAN_EMAIL_ZONE_MESSAGE];
+        return;
+    }
     try {
-        const response = await HTTP.post('/users/', form.value);
+        await HTTP.post('/users/', form.value);
         router.push({
             name: 'Login',
         });

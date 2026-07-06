@@ -126,6 +126,17 @@ const routes: RouteRecordRaw[] = [
                     ),
             },
             {
+                path: '/change-email',
+                name: 'ChangeEmail',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
+                component: () =>
+                    import(
+                        '@pages/ChangeEmailPage/components/ChangeEmailPage.vue'
+                    ),
+            },
+            {
                 path: '/registration',
                 name: 'Registration',
                 meta: {
