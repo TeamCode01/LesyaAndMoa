@@ -80,6 +80,8 @@ const v$ = useVuelidate(rules, data);
 const isError = ref({});
 const router = useRouter();
 
+const emailZoneRegex = /\.(ru|su|рф)$/i;
+
 
 watchEffect(() => {
     console.log('Валидация')
@@ -97,12 +99,17 @@ const LoginUser = async () => {
         const response = await HTTP.post('/token/login/', data.value);
 
         localStorage.setItem('Token', response.data.auth_token);
-        userStore.getUser();
+        await userStore.getUser();
         Error.value = false;
-        router.push({
-            name: 'profile-page',
-            params: { id: response.data.id },
-        });
+
+        if (!emailZoneRegex.test(userStore.currentUser?.email || '')) {
+            router.push({ name: 'ChangeEmail' });
+        } else {
+            router.push({
+                name: 'profile-page',
+                params: { id: response.data.id },
+            });
+        }
 
         if (response.data.auth_token){
             data.value = {
